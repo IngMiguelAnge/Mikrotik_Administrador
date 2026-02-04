@@ -46,7 +46,7 @@
             this.migraciónToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(903, 33);
+            this.Menu.Size = new System.Drawing.Size(1204, 33);
             this.Menu.TabIndex = 0;
             this.Menu.Text = "menuStrip1";
             // 
@@ -59,11 +59,11 @@
             // DGVMikrotiks
             // 
             this.DGVMikrotiks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DGVMikrotiks.Location = new System.Drawing.Point(66, 147);
+            this.DGVMikrotiks.Location = new System.Drawing.Point(34, 147);
             this.DGVMikrotiks.Name = "DGVMikrotiks";
             this.DGVMikrotiks.RowHeadersWidth = 62;
             this.DGVMikrotiks.RowTemplate.Height = 28;
-            this.DGVMikrotiks.Size = new System.Drawing.Size(778, 150);
+            this.DGVMikrotiks.Size = new System.Drawing.Size(1128, 261);
             this.DGVMikrotiks.TabIndex = 1;
             this.DGVMikrotiks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVMikrotiks_CellContentClick);
             // 
@@ -100,7 +100,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(903, 371);
+            this.ClientSize = new System.Drawing.Size(1204, 420);
             this.Controls.Add(this.btnActualizar);
             this.Controls.Add(this.BtnNuevo);
             this.Controls.Add(this.lblListaMikrotiks);

@@ -67,6 +67,28 @@ namespace Mikrotik_Administrador.Data
 
         #endregion
         #region ActionsMikrotiks
+        public async Task<bool> DesactivarMikrotik(int Id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("DesactivarMikrotik", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> InsertandUpdateMikrotik(MikrotikModel obj)
         {
             try

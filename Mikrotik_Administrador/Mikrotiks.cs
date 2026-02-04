@@ -1,13 +1,5 @@
 ﻿using Mikrotik_Administrador.Data;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mikrotik_Administrador
@@ -66,7 +58,7 @@ namespace Mikrotik_Administrador
 
             // Botón Eliminar
             DataGridViewButtonColumn btnDesactivar = new DataGridViewButtonColumn();
-            btnDesactivar.Name = "btnEliminar";
+            btnDesactivar.Name = "btnDesactivar";
             btnDesactivar.HeaderText = "Acción";
             btnDesactivar.Text = "Desactivar";
             btnDesactivar.UseColumnTextForButtonValue = true;
@@ -84,14 +76,27 @@ namespace Mikrotik_Administrador
         {
             // Evitar errores si hacen click en el encabezado
             if (e.RowIndex < 0) return;
-            var id = DGVMikrotiks.Rows[e.RowIndex].Cells["Id"].Value;
+            var Id = DGVMikrotiks.Rows[e.RowIndex].Cells["Id"].Value;
 
             switch (DGVMikrotiks.Columns[e.ColumnIndex].Name)
             {
                 case "btnEditar":
                     InfoMikrotik m = new InfoMikrotik();
-                    m.IdMikrotik = Convert.ToInt32(id);
+                    m.IdMikrotik = Convert.ToInt32(Id);
                     m.Show();
+                    break;
+                case "btnDesactivar":
+                    AppRepository obj = new AppRepository();
+                    bool result = obj.DesactivarMikrotik(Convert.ToInt32(Id)).Result;
+                    if (result == true)
+                        MessageBox.Show("Desactivado");
+                    else
+                        MessageBox.Show("Error al desactivar");
+                    break;
+                case "btnUbicacion":
+                    Ubicacion u = new Ubicacion();
+                    u.IdMikrotik = Convert.ToInt32(Id);
+                    u.Show();
                     break;
             }
 
