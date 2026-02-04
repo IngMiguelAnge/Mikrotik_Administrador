@@ -1,6 +1,4 @@
-﻿using System.Security.Policy;
-
-namespace Mikrotik_Administrador.Model
+﻿namespace Mikrotik_Administrador.Model
 {
     public class UserModel
     {

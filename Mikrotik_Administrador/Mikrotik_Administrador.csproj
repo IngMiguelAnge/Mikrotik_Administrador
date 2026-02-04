@@ -172,17 +172,37 @@
   <ItemGroup>
     <Compile Include="Class\MK.cs" />
     <Compile Include="Data\AppRepository.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="InfoMikrotik.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="InfoMikrotik.Designer.cs">
+      <DependentUpon>InfoMikrotik.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Mikrotiks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mikrotiks.Designer.cs">
+      <DependentUpon>Mikrotiks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ListMikrotikModel.cs" />
+    <Compile Include="Model\MikrotikModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="InfoMikrotik.resx">
+      <DependentUpon>InfoMikrotik.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mikrotiks.resx">
+      <DependentUpon>Mikrotiks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
