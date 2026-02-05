@@ -220,6 +220,7 @@
     </Compile>
     <Compile Include="Model\ListMikrotikModel.cs" />
     <Compile Include="Model\MikrotikModel.cs" />
+    <Compile Include="Model\UbicacionModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

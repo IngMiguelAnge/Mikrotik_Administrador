@@ -4,12 +4,14 @@ using GMap.NET.WindowsForms.Markers;
 using System;
 using System.Windows.Forms;
 using System.Net;
+using Mikrotik_Administrador.Model;
+using Mikrotik_Administrador.Data;
 
 namespace Mikrotik_Administrador
 {
     public partial class Ubicacion : Form
     {
-        public int IdMikrotik = 0;
+        public int Id_Mikrotik = 0;
         GMapOverlay capaMarcadores;
         GMarkerGoogle marcador;
         bool estaArrastrando = false;
@@ -56,14 +58,30 @@ namespace Mikrotik_Administrador
         }
         private void Ubicacion_Load(object sender, EventArgs e)
         {
+            double latitude = 19.4326; // Latitud de Ciudad de México
+            double longitude = -99.1332; // Longitud de Ciudad de México
+
+            if (Id_Mikrotik > 0)
+            {
+                AppRepository app = new AppRepository();
+                var ubicacion = app.GetUbicacionByIdMikrotik(Id_Mikrotik).Result;
+                if(ubicacion != null)
+                {
+                    txtDireccionOficial.Text = ubicacion.Direccion_Oficial;
+                    txtDireccion.Text = ubicacion.Direccion;
+                    txtLatitud.Text = ubicacion.Latitud;
+                    txtLongitud.Text = ubicacion.Longitud;
+                    latitude = double.Parse(ubicacion.Latitud, System.Globalization.CultureInfo.InvariantCulture);
+                    longitude = double.Parse(ubicacion.Longitud, System.Globalization.CultureInfo.InvariantCulture);    
+                }
+            }
             // 1. Configurar el proveedor y modo (Internet)
             //gMap.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
             cmbMapas.SelectedIndex = 0;
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
 
             // 2. Posición inicial (puedes poner las de tu ciudad)
-            //gMap.Position = new PointLatLng(19.4326, -99.1332); //Ciudad inicial Mexico
-            gMap.Position = new PointLatLng(18.9218495484605, -97.7766144275665);
+            gMap.Position = new PointLatLng(latitude, longitude); //Ciudad inicial Mexico
             gMap.MinZoom = 2;
             gMap.MaxZoom = 20;
             gMap.Zoom = 18;
@@ -109,7 +127,7 @@ namespace Mikrotik_Administrador
             // 1. Cambiar cursor a espera
             this.Cursor = Cursors.WaitCursor;
             BtnBuscar.Enabled = false;
-            string direccionBuscada = txtDireccion.Text;
+            string direccionBuscada = txtDireccionOficial.Text;
             try
             {
                 if (!string.IsNullOrWhiteSpace(direccionBuscada))
@@ -145,7 +163,7 @@ namespace Mikrotik_Administrador
                 // 2. Regresar cursor a la normalidad aunque haya error
                 this.Cursor = Cursors.Default;
                 BtnBuscar.Enabled = true;
-            }       
+            }
         }
 
         private void gMap_MouseUp(object sender, MouseEventArgs e)
@@ -156,7 +174,7 @@ namespace Mikrotik_Administrador
                 string calleEncontrada = ObtenerCalleDesdeCoordenadas(marcador.Position.Lat, marcador.Position.Lng);
 
                 // Lo ponemos en tu TextBox de dirección
-                txtDireccion.Text = calleEncontrada;
+                txtDireccionSugerida.Text = calleEncontrada;
             }
         }
         private string ObtenerCalleDesdeCoordenadas(double lat, double lon)
@@ -206,6 +224,30 @@ namespace Mikrotik_Administrador
                 case "OpenStreet":
                     gMap.MapProvider = GMap.NET.MapProviders.OpenStreetMapProvider.Instance;
                     break;
+            }
+        }
+
+        private void BtnGuardar_Click(object sender, EventArgs e)
+        {
+            if (txtDireccionOficial.Text.Trim() == string.Empty || txtLatitud.Text.Trim() == string.Empty || txtLongitud.Text.Trim() == string.Empty)
+            {
+                MessageBox.Show("Faltan datos por capturar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            UbicacionModel ub = new UbicacionModel();
+            ub.Direccion = txtDireccionOficial.Text.Trim();
+            ub.Direccion_Oficial = txtDireccionOficial.Text.Trim();
+            ub.Latitud = txtLatitud.Text.Trim();
+            ub.Longitud = txtLongitud.Text.Trim();
+            ub.Id_Mikrotik = Id_Mikrotik;
+            AppRepository app = new AppRepository();    
+            if(app.InsertandUpdateUbicacionMikrotik(ub).Result == true) {
+                MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Error al guardar la ubicación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

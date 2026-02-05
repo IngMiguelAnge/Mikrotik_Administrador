@@ -26,7 +26,7 @@ namespace Mikrotik_Administrador
             var usuario = obj.GetUser(txtUser.Text, txtPassword.Text).Result;
             if (usuario is null)
             {
-                MessageBox.Show("Usuario o contraseña incorrectos");
+                MessageBox.Show("Usuario o contraseña incorrectos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {

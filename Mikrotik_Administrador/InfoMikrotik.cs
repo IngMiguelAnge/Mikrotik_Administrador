@@ -61,19 +61,19 @@ namespace Mikrotik_Administrador
         {
             if (!System.Net.IPAddress.TryParse(txtIP.Text, out _))
             {
-                MessageBox.Show("Por favor, corrige la dirección IP antes de guardar.");
+                MessageBox.Show("Por favor, corrige la dirección IP antes de guardar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtIP.Focus();
                 return;
             }
             if (!System.Net.IPAddress.TryParse(txtIpMin.Text + ".2", out _))
             {
-                MessageBox.Show("Por favor, corrige la dirección IP antes de guardar.");
+                MessageBox.Show("Por favor, corrige la dirección IP antes de guardar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtIpMin.Focus();
                 return;
             }
             if (!System.Net.IPAddress.TryParse(txtIpMax.Text + ".254", out _))
             {
-                MessageBox.Show("Por favor, corrige la dirección IP antes de guardar.");
+                MessageBox.Show("Por favor, corrige la dirección IP antes de guardar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtIpMax.Focus();
                 return;
             }
@@ -81,7 +81,7 @@ namespace Mikrotik_Administrador
               || txtPort.Text == string.Empty || txtUsuario.Text == string.Empty
               || txtIpMax.Text.Trim() == ".." || txtIpMin.Text.Trim() == "..")
             {
-                MessageBox.Show("Se requiere probar la conexión");
+                MessageBox.Show("Se requiere probar la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -112,12 +112,12 @@ namespace Mikrotik_Administrador
             mikrotik.Limite_Alcanzado = limite_alcanzado;
             if (obj.InsertandUpdateMikrotik(mikrotik).Result == true)
             {
-                MessageBox.Show("Guardado correctamente");
+                MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
                 return;
             }
 
-            MessageBox.Show("Error al guardar");
+            MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void txtPort_TextChanged(object sender, EventArgs e)

@@ -43,7 +43,7 @@ namespace Mikrotik_Administrador
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar datos: " + ex.Message);
+                MessageBox.Show("Error al cargar datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void AgregarBotones()
@@ -91,11 +91,11 @@ namespace Mikrotik_Administrador
                     if (result == true)
                         MessageBox.Show("Desactivado");
                     else
-                        MessageBox.Show("Error al desactivar");
+                        MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 case "btnUbicacion":
                     Ubicacion u = new Ubicacion();
-                    u.IdMikrotik = Convert.ToInt32(Id);
+                    u.Id_Mikrotik = Convert.ToInt32(Id);
                     u.Show();
                     break;
             }
