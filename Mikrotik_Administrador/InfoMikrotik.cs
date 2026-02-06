@@ -32,11 +32,9 @@ namespace Mikrotik_Administrador
             try
             {
                 mikrotik = new MK(txtIP.Text.ToString(), Convert.ToInt32(this.txtPort.Text));
-                //var login = mikrotik.Login(this.txtUsuario.Text.ToString(), this.txtPassword.Text.ToString());
                 // Usamos Task.Run para que la conexión no detenga la ventana
                 bool login = await Task.Run(() => {
                     // Aquí dentro va la lógica pesada que antes congelaba todo
-                    // Si el Login ya lo tienes hecho, puedes llamarlo aquí
                     return mikrotik.ConectarYLogin(txtUsuario.Text, txtPassword.Text);
                 });
                 if (login == true)
@@ -56,7 +54,7 @@ namespace Mikrotik_Administrador
             }                             
             catch (Exception ex)
             {
-                lblProbar.Text = "Error: " + ex.Message;
+                lblProbar.Text = "Error en la conexión";
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 0;
                 MessageBox.Show("No se pudo establecer la conexión. Verifique IP y Puertos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -273,18 +271,6 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("El formato de IP no es válido. Ejemplo: 192.168.1.1", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true; // No deja salir hasta que se corrija
             }
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            ProcessBar();
-        }
-        public void ProcessBar()
-        {
-            if (progressBar1.Value < 100)
-                progressBar1.Value = progressBar1.Value + 10;
-            else
-                progressBar1.Value = 0;
-        }
+        }       
     }
 }

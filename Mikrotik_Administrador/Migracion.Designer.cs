@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.mikrotiksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblMensaje = new System.Windows.Forms.Label();
@@ -36,7 +35,6 @@
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.lblMensaje2 = new System.Windows.Forms.Label();
             this.BtnBuscar = new System.Windows.Forms.Button();
-            this.Timer1 = new System.Windows.Forms.Timer(this.components);
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.dgvUsuarios = new System.Windows.Forms.DataGridView();
             this.RBBase = new System.Windows.Forms.RadioButton();
@@ -57,14 +55,14 @@
             this.mikrotiksToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(800, 36);
+            this.Menu.Size = new System.Drawing.Size(800, 33);
             this.Menu.TabIndex = 0;
             this.Menu.Text = "menuStrip1";
             // 
             // mikrotiksToolStripMenuItem
             // 
             this.mikrotiksToolStripMenuItem.Name = "mikrotiksToolStripMenuItem";
-            this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 32);
+            this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 29);
             this.mikrotiksToolStripMenuItem.Text = "Mikrotiks";
             this.mikrotiksToolStripMenuItem.Click += new System.EventHandler(this.mikrotiksToolStripMenuItem_Click);
             // 
@@ -111,10 +109,6 @@
             this.BtnBuscar.Text = "Buscar";
             this.BtnBuscar.UseVisualStyleBackColor = true;
             this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
-            // 
-            // Timer1
-            // 
-            this.Timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // progressBar1
             // 
@@ -176,6 +170,7 @@
             this.CBTodosMikrotiks.TabIndex = 1;
             this.CBTodosMikrotiks.Text = "¿Buscar en todos los mikrotiks?";
             this.CBTodosMikrotiks.UseVisualStyleBackColor = true;
+            this.CBTodosMikrotiks.CheckedChanged += new System.EventHandler(this.CBTodosMikrotiks_CheckedChanged);
             // 
             // btnExportar
             // 
@@ -185,6 +180,7 @@
             this.btnExportar.TabIndex = 7;
             this.btnExportar.Text = "Exportar";
             this.btnExportar.UseVisualStyleBackColor = true;
+            this.btnExportar.Visible = false;
             this.btnExportar.Click += new System.EventHandler(this.btnExportar_Click);
             // 
             // cbExportar
@@ -196,6 +192,7 @@
             this.cbExportar.TabIndex = 6;
             this.cbExportar.Text = "¿Exportar todo?";
             this.cbExportar.UseVisualStyleBackColor = true;
+            this.cbExportar.Visible = false;
             // 
             // Migracion
             // 
@@ -239,7 +236,6 @@
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.Label lblMensaje2;
         private System.Windows.Forms.Button BtnBuscar;
-        private System.Windows.Forms.Timer Timer1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.DataGridView dgvUsuarios;
         private System.Windows.Forms.RadioButton RBBase;

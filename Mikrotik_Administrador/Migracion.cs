@@ -15,7 +15,7 @@ namespace Mikrotik_Administrador
 {
     public partial class Migracion : Form
     {
-        MK mikrotik = new MK("172.18.1.254", 8728);
+        MK mikrotik;
         public Migracion()
         {
             InitializeComponent();
@@ -43,7 +43,7 @@ namespace Mikrotik_Administrador
             CBMikrotiks.SelectedIndex = 0;
         }
 
-        private void BtnBuscar_Click(object sender, EventArgs e)
+        private async void BtnBuscar_Click(object sender, EventArgs e)
         {
             if (CBMikrotiks.SelectedValue == null && CBTodosMikrotiks.Checked == false)
             {
@@ -58,69 +58,95 @@ namespace Mikrotik_Administrador
                     return;
                 }
             }
-            Timer1.Interval = 2500 * 10;// 60 seg
-            Timer1.Start();
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            BtnBuscar.Enabled = false; // Deshabilitar el botón para evitar múltiples clics
             dgvUsuarios.DataSource = null;
-            int Id = 0;
-            if (CBTodosMikrotiks.Checked == false)
+            try
             {
-                int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
-                if (Id_Mikrotik == 0)
+                int Id = 0;
+                if (CBTodosMikrotiks.Checked == false)
                 {
-                    MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
-                    progressBar1.Value = 100;
-                    Timer1.Stop();
-                    return;
-                }
-                Id = Id_Mikrotik;
-                AppRepository obj = new AppRepository();
-                MikrotikModel mikro = new MikrotikModel();
-                mikro = obj.GetMikrotikById(Id_Mikrotik).Result;
-                if (mikro.Estatus == false)
-                {
-                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    progressBar1.Value = 100;
-                    Timer1.Stop();
-                    return;
-                }
-                if (RBMikrotik.Checked)
-                {
-                    if (mikro.IP != "172.18.1.254")
-                        mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
-                    var login = mikrotik.Login(mikro.Usuario, mikro.Password);
-                    if (login == false)
+                    int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
+                    if (Id_Mikrotik == 0)
                     {
-                        MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
                         progressBar1.Value = 100;
-                        Timer1.Stop();
+                        MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
                         return;
                     }
-                    var lista = mikrotik.VerUsuarios(txtNombre.Text).ToList();
+                    Id = Id_Mikrotik;
+                    AppRepository obj = new AppRepository();
+                    MikrotikModel mikro = new MikrotikModel();
+                    mikro = obj.GetMikrotikById(Id_Mikrotik).Result;
+                    if (mikro.Estatus == false)
+                    {
+                        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                        progressBar1.Value = 100;
+                        MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        return;
+                    }
+                    if (RBMikrotik.Checked)
+                    {
+                        mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+                        // Usamos Task.Run para que la conexión no detenga la ventana
+                        bool login = await Task.Run(() =>
+                        {
+                            // Aquí dentro va la lógica pesada que antes congelaba todo
+                            return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                        });
+                        if (login == false)
+                        {
+                            progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                            progressBar1.Value = 100;
+                            MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        var lista = mikrotik.VerUsuarios(txtNombre.Text).ToList();
+
+                        if (lista != null && lista.Count > 0)
+                        {
+                            dgvUsuarios.DataSource = lista;
+                            if (dgvUsuarios.Columns["chSeleccionar"] == null)
+                            {
+                                AgregarBotones();
+                            }
+                        }
+                        else
+                        {
+                            progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                            progressBar1.Value = 100;
+                            MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                    }
+                }
+
+                if (RBBase.Checked)
+                {
+                    AppRepository Basse = new AppRepository();
+
+                    var lista = Basse.GetUsuariosMikrotiksByName(txtNombre.Text, Id).Result;
 
                     if (lista != null && lista.Count > 0)
                     {
                         dgvUsuarios.DataSource = lista;
-                        if (dgvUsuarios.Columns["chSeleccionar"] == null)
-                        {
-                            AgregarBotones();
-                        }
                     }
                 }
+                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                progressBar1.Value = 100;
             }
-
-            if (RBBase.Checked)
+            catch (Exception ex)
             {
-                AppRepository Basse = new AppRepository();
-
-                var lista = Basse.GetUsuariosMikrotiksByName(txtNombre.Text, Id).Result;
-
-                if (lista != null && lista.Count > 0)
-                {
-                    dgvUsuarios.DataSource = lista;
-                }
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
+                MessageBox.Show("No se pudo establecer la conexión. Verifique IP y Puertos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            progressBar1.Value = 100;
-            Timer1.Stop();
+            finally
+            {
+                BtnBuscar.Enabled = true; // Rehabilitamos el botón
+            }
         }
         private void AgregarBotones()
         {
@@ -129,17 +155,6 @@ namespace Mikrotik_Administrador
             chkSeleccionar.Name = "cbSeleccionar";
             chkSeleccionar.HeaderText = "Copiar a Base";
             dgvUsuarios.Columns.Add(chkSeleccionar);
-        }
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            ProcessBar();
-        }
-        public void ProcessBar()
-        {
-            if (progressBar1.Value < 100)
-                progressBar1.Value = progressBar1.Value + 10;
-            else
-                progressBar1.Value = 0;
         }
 
         private void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -168,60 +183,86 @@ namespace Mikrotik_Administrador
         {
             int cantidadExportada = 0;
             int cantidadNoExportada = 0;
-            Timer1.Interval = 2500 * 10;// 60 seg
-            Timer1.Start();
-            List<string> Seleccionados = new List<string>();
-            if (cbExportar.Checked)
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            btnExportar.Enabled = false; // Bloqueamos el botón para evitar múltiples clics
+            try
             {
-                Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
-                .Select(r => Convert.ToString(r.Cells["Nombre"].Value)) // Cambia "Id" por tu columna clave
-                .ToList();
-            }
-            else
-            {
-                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                .Select(r => Convert.ToString(r.Cells["Nombre"].Value)) // Cambia "Id" por tu columna clave
-                .ToList();
-            }
-            if(Seleccionados.Count == 0)
-            {
-                MessageBox.Show("No has seleccionado ningún usuario para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                progressBar1.Value = 100;
-                Timer1.Stop();
-                return;
-            }
-            else
-            {
-                int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
-                if (Id_Mikrotik == 0)
+                List<string> Seleccionados = new List<string>();
+                if (cbExportar.Checked)
                 {
-                    MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
+                    Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
+                    .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                    .Select(r => Convert.ToString(r.Cells["Nombre"].Value)) // Cambia "Id" por tu columna clave
+                    .ToList();
+                }
+                else
+                {
+                    Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
+                   .Select(r => Convert.ToString(r.Cells["Nombre"].Value)) // Cambia "Id" por tu columna clave
+                   .ToList();
+                }
+                if (Seleccionados.Count == 0)
+                {
+                    progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
                     progressBar1.Value = 100;
-                    Timer1.Stop();
+                    MessageBox.Show("No has seleccionado ningún usuario para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                foreach (string item in Seleccionados)
+                else
                 {
-                    UsuariosGeneralModel objuser = new UsuariosGeneralModel();
-                    objuser.Id_Mikrotik = Id_Mikrotik;
-                    objuser.Nombre = item;
-                    objuser.Id = 0;
-                    AppRepository obj = new AppRepository();
-                    var res = obj.InsertandUpdateUsuariosGeneral(objuser).Result;
-                    if(res)
+                    int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
+                    if (Id_Mikrotik == 0)
                     {
-                        cantidadExportada++;
+                        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                        progressBar1.Value = 100;
+                        MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
+                        return;
                     }
-                    else
+                    foreach (string item in Seleccionados)
                     {
-                        cantidadNoExportada++;
+                        UsuariosGeneralModel objuser = new UsuariosGeneralModel();
+                        objuser.Id_Mikrotik = Id_Mikrotik;
+                        objuser.Nombre = item;
+                        objuser.Id = 0;
+                        AppRepository obj = new AppRepository();
+                        var res = obj.InsertandUpdateUsuariosGeneral(objuser).Result;
+                        if (res)
+                        {
+                            cantidadExportada++;
+                        }
+                        else
+                        {
+                            cantidadNoExportada++;
+                        }
                     }
-                }               
+                }
+                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                progressBar1.Value = 100;
+                MessageBox.Show("Usuarios exportados: " + cantidadExportada.ToString() + "\nUsuarios no exportados: " + cantidadNoExportada.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            progressBar1.Value = 100;
-            Timer1.Stop();
-            MessageBox.Show("Usuarios exportados: " + cantidadExportada.ToString() + "\nUsuarios no exportados: " + cantidadNoExportada.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            catch (Exception ex)
+            {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnExportar.Enabled = true; // Rehabilitamos el botón
+            }
+        }
+
+        private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CBTodosMikrotiks.Checked)
+            {
+                CBMikrotiks.Enabled = false;
+            }
+            else
+            {
+                CBMikrotiks.Enabled = true;
+            }
         }
     }
 }
