@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Mikrotik_Administrador.Model;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-//using Mikrotik_Administrador.Model;
 
 namespace Mikrotik_Administrador.Class
 {
@@ -11,17 +12,30 @@ namespace Mikrotik_Administrador.Class
     {
         Stream connection;
         TcpClient con;
+        string _ip;
+        int _port;
+
+        // El constructor ahora solo guarda los datos, NO CONECTA
         public MK(string ip, int port)
+        {
+            _ip = ip;
+            _port = port;
+        }
+        public bool ConectarYLogin(string user, string pass)
         {
             try
             {
                 con = new TcpClient();
-                con.Connect(ip, port);// 8728);
+                // Esto es lo que tarda, pero ahora estará dentro del Task.Run
+                con.Connect(_ip, _port);
                 connection = (Stream)con.GetStream();
-            }
-            catch (Exception e)
-            {
 
+                // Llamas a tu lógica de login aquí mismo
+                return this.Login(user, pass);
+            }
+            catch
+            {
+                return false;
             }
         }
         public void Close()
@@ -35,13 +49,19 @@ namespace Mikrotik_Administrador.Class
         }
         public void Send(string co, bool endsentence)
         {
-            byte[] bajty = Encoding.ASCII.GetBytes(co.ToCharArray());
-            byte[] velikost = EncodeLength(bajty.Length);
-            connection.Write(velikost, 0, velikost.Length);
-            connection.Write(bajty, 0, bajty.Length);
-            if (endsentence)
+            try
             {
-                connection.WriteByte(0);
+                byte[] bajty = Encoding.ASCII.GetBytes(co.ToCharArray());
+                byte[] velikost = EncodeLength(bajty.Length);
+                connection.Write(velikost, 0, velikost.Length);
+                connection.Write(bajty, 0, bajty.Length);
+                if (endsentence)
+                {
+                    connection.WriteByte(0);
+                }
+            }
+            catch (Exception e)
+            {
             }
         }
         public List<string> Read()
@@ -205,6 +225,54 @@ namespace Mikrotik_Administrador.Class
 
             }
             return false;
+        }
+        public List<UsuariosModel> VerUsuarios(string name)
+        {
+            List<UsuariosModel> obj = new List<UsuariosModel>();
+            try
+            {
+                if (name == string.Empty)
+                    Send("/ip/hotspot/user/getall", true);
+                if (name != string.Empty)
+                {
+                    Send("/ip/hotspot/user/print");
+                    Send("?name=" + name, true);
+                }
+                foreach (string row in Read())
+                {
+                    string gets = string.Empty;
+                    UsuariosModel objp = new UsuariosModel();
+                    try
+                    {
+                        gets = row.Split(new string[] { "!re=.id=*" }, StringSplitOptions.None)[1];
+                        objp.id = gets.Split(new string[] { "=name=" }, StringSplitOptions.None)[0];
+
+                        string[] array = gets.Split('=');
+                        int contador = 1;
+                        while (contador < array.Count())
+                        {
+                            switch (array[contador])
+                            {
+                                case "name":
+                                    objp.name = array[contador + 1];
+                                    contador += 1;
+                                    break;
+                            }
+                            contador += 1;
+                        }
+                        obj.Add(objp);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return obj;
         }
     }
 }

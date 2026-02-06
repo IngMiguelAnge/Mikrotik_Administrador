@@ -18,21 +18,53 @@ namespace Mikrotik_Administrador
     {
         public int IdMikrotik = 0;
         public bool limite_alcanzado = false;
-        //MK mikrotik = new MK("172.18.1.254", 8728);
+        MK mikrotik;// = new MK("172.18.1.254", 8728);
         public InfoMikrotik()
         {
             InitializeComponent();
         }
 
-        private void btnProbar_Click(object sender, EventArgs e)
+        private async void btnProbar_Click(object sender, EventArgs e)
         {
-            //if (txtIP.Text.ToString() != "172.18.1.254")
-            //    mikrotik = new MK(this.txtIP.Text.ToString(), Convert.ToInt32(this.txtPort.Text));
-            //var login = mikrotik.Login(this.txtUsuario.Text.ToString(), this.txtPassword.Text.ToString());
-            //if (login == true)
-            //    lblProbar.Text = "Conexión exitosa";
-            //else
-            lblProbar.Text = "Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos";
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            btnProbar.Enabled = false; // Bloqueamos el botón para evitar múltiples clics
+            try
+            {
+                mikrotik = new MK(txtIP.Text.ToString(), Convert.ToInt32(this.txtPort.Text));
+                //var login = mikrotik.Login(this.txtUsuario.Text.ToString(), this.txtPassword.Text.ToString());
+                // Usamos Task.Run para que la conexión no detenga la ventana
+                bool login = await Task.Run(() => {
+                    // Aquí dentro va la lógica pesada que antes congelaba todo
+                    // Si el Login ya lo tienes hecho, puedes llamarlo aquí
+                    return mikrotik.ConectarYLogin(txtUsuario.Text, txtPassword.Text);
+                });
+                if (login == true)
+                {
+                    lblProbar.Text = "Conexión exitosa";
+                    progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                    progressBar1.Value = 100;
+                    MessageBox.Show("Conexión exitosa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    lblProbar.Text = "Error en la conexión";
+                    progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                    progressBar1.Value = 100;
+                    MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }                             
+            catch (Exception ex)
+            {
+                lblProbar.Text = "Error: " + ex.Message;
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
+                MessageBox.Show("No se pudo establecer la conexión. Verifique IP y Puertos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnProbar.Enabled = true; // Rehabilitamos el botón
+            }
         }
 
         private void InfoMikrotik_Load(object sender, EventArgs e)
@@ -241,6 +273,18 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("El formato de IP no es válido. Ejemplo: 192.168.1.1", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true; // No deja salir hasta que se corrija
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            ProcessBar();
+        }
+        public void ProcessBar()
+        {
+            if (progressBar1.Value < 100)
+                progressBar1.Value = progressBar1.Value + 10;
+            else
+                progressBar1.Value = 0;
         }
     }
 }

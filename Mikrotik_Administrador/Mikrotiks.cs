@@ -99,7 +99,6 @@ namespace Mikrotik_Administrador
                     u.Show();
                     break;
             }
-
         }
 
         private void btnActualizar_Click(object sender, EventArgs e)
@@ -107,5 +106,11 @@ namespace Mikrotik_Administrador
             ListaMikrotiks();
         }
 
+        private void migraciónToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Migracion m = new Migracion();
+            m.Show();
+            this.Close();
+        }
     }
 }

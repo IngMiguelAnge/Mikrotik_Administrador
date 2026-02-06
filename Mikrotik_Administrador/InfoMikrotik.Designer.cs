@@ -50,6 +50,7 @@
             this.txtIP = new System.Windows.Forms.TextBox();
             this.txtIpMin = new System.Windows.Forms.TextBox();
             this.txtIpMax = new System.Windows.Forms.TextBox();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // lblInfo
@@ -241,11 +242,19 @@
             this.txtIpMax.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtIpMax_KeyPress);
             this.txtIpMax.Validating += new System.ComponentModel.CancelEventHandler(this.txtIpMax_Validating);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(218, 37);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(126, 23);
+            this.progressBar1.TabIndex = 28;
+            // 
             // InfoMikrotik
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(541, 544);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.txtIpMax);
             this.Controls.Add(this.txtIpMin);
             this.Controls.Add(this.txtIP);
@@ -300,5 +309,6 @@
         private System.Windows.Forms.TextBox txtIP;
         private System.Windows.Forms.TextBox txtIpMin;
         private System.Windows.Forms.TextBox txtIpMax;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

@@ -174,7 +174,6 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-
         private MikrotikModel MapToMikrotik(SqlDataReader reader)
         {
             return new MikrotikModel()
@@ -271,6 +270,70 @@ namespace Mikrotik_Administrador.Data
                 Longitud = (string)reader["Longitud"],
                 Id_Mikrotik = (int)reader["Id_Mikrotik"],
             };
+        }
+
+        #endregion
+        #region UsuariosGeneral
+        public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName(string Nombre, int Id_Mikrotik)
+        {
+            List<ListUsuariosGeneralModel> list = new List<ListUsuariosGeneralModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUsuariosMikrotiksByName", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", Id_Mikrotik));
+
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToUsuariosGeneral(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListUsuariosGeneralModel MapToUsuariosGeneral(SqlDataReader reader)
+        {
+            return new ListUsuariosGeneralModel()
+            {
+                Id = (int)reader["Id"],
+                Nombre = (string)reader["Nombre"],
+                Mikrotik = (string)reader["Mikrotik"],
+            };
+        }
+        public async Task<bool> InsertandUpdateUsuariosGeneral(UsuariosGeneralModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("InsertAndUpdateUsuariosGeneral", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", obj.Id_Mikrotik));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         #endregion

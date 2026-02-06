@@ -55,6 +55,7 @@
             this.migraciónToolStripMenuItem.Name = "migraciónToolStripMenuItem";
             this.migraciónToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
             this.migraciónToolStripMenuItem.Text = "Migración";
+            this.migraciónToolStripMenuItem.Click += new System.EventHandler(this.migraciónToolStripMenuItem_Click);
             // 
             // DGVMikrotiks
             // 
