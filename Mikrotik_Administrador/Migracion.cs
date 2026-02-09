@@ -133,6 +133,13 @@ namespace Mikrotik_Administrador
                     {
                         dgvUsuarios.DataSource = lista;
                     }
+                    else
+                    {
+                        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                        progressBar1.Value = 100;
+                        MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
                 }
                 progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
                 progressBar1.Value = 100;
