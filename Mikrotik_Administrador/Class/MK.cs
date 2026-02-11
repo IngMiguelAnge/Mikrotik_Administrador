@@ -26,11 +26,13 @@ namespace Mikrotik_Administrador.Class
             try
             {
                 con = new TcpClient();
-                // Esto es lo que tarda, pero ahora estará dentro del Task.Run
+                con.NoDelay = true; // Desactiva el algoritmo de Nagle (crucial para CCR)
                 con.Connect(_ip, _port);
-                connection = (Stream)con.GetStream();
+                connection = con.GetStream();
 
-                // Llamas a tu lógica de login aquí mismo
+                // Esperamos 50ms a que el CCR estabilice la conexión antes de mandar los bytes
+                System.Threading.Thread.Sleep(50);
+
                 return this.Login(user, pass);
             }
             catch
@@ -47,132 +49,91 @@ namespace Mikrotik_Administrador.Class
         {
             Send(co, false);
         }
-        public void Send(string co, bool endsentence)
+        public void Send(string co, bool endsentence = false)
         {
-            try
+            byte[] bajty = Encoding.UTF8.GetBytes(co); // v7 prefiere UTF8
+            byte[] velikost = EncodeLength(bajty.Length);
+
+            byte[] paquete = new byte[velikost.Length + bajty.Length + (endsentence ? 1 : 0)];
+            System.Buffer.BlockCopy(velikost, 0, paquete, 0, velikost.Length);
+            System.Buffer.BlockCopy(bajty, 0, paquete, velikost.Length, bajty.Length);
+
+            if (endsentence) paquete[paquete.Length - 1] = 0;
+
+            connection.Write(paquete, 0, paquete.Length);
+            // NO uses Flush después de cada palabra, deja que el buffer de red decida
+        }
+        private byte[] EncodeLength(int delka)
+        {
+            if (delka < 128)
             {
-                byte[] bajty = Encoding.ASCII.GetBytes(co.ToCharArray());
-                byte[] velikost = EncodeLength(bajty.Length);
-                connection.Write(velikost, 0, velikost.Length);
-                connection.Write(bajty, 0, bajty.Length);
-                if (endsentence)
-                {
-                    connection.WriteByte(0);
-                }
+                return new byte[] { (byte)delka };
             }
-            catch (Exception e)
+            else if (delka < 16384)
             {
+                return new byte[] { (byte)((delka >> 8) | 0x80), (byte)(delka & 0xFF) };
             }
+            else if (delka < 2097152)
+            {
+                return new byte[] { (byte)((delka >> 16) | 0xC0), (byte)((delka >> 8) & 0xFF), (byte)(delka & 0xFF) };
+            }
+            return new byte[] { (byte)delka };
         }
         public List<string> Read()
         {
             List<string> output = new List<string>();
-            string o = "";
-            byte[] tmp = new byte[4];
-            long count;
+
+            // El CCR2116 es una bestia multinúcleo; a veces tarda en "contestar"
+            // Vamos a esperar hasta 2 segundos (40 intentos de 50ms)
+            int waitAttempts = 40;
+            while (con.Available == 0 && waitAttempts > 0)
+            {
+                System.Threading.Thread.Sleep(50);
+                waitAttempts--;
+            }
+
+            // Si después de la espera sigue en 0, es que el router recibió 
+            // el comando pero no lo entendió o no lo aceptó.
+            if (con.Available == 0)
+            {
+                System.Diagnostics.Debug.WriteLine("El router no mandó datos de respuesta.");
+                return output;
+            }
+
             while (true)
             {
-                tmp[3] = (byte)connection.ReadByte();
-                //if(tmp[3] == 220) tmp[3] = (byte)connection.ReadByte(); it sometimes happend to me that 
-                //mikrotik send 220 as some kind of "bonus" between words, this fixed things, not sure about it though
-                if (tmp[3] == 0)
+                int curByte = connection.ReadByte();
+                if (curByte == -1) break;
+
+                long count = 0;
+                if (curByte < 0x80) { count = curByte; }
+                else if (curByte < 0xC0) { count = ((curByte ^ 0x80) << 8) + connection.ReadByte(); }
+                else if (curByte < 0xE0) { count = ((curByte ^ 0xC0) << 16) + (connection.ReadByte() << 8) + connection.ReadByte(); }
+                else if (curByte < 0xF0) { count = ((curByte ^ 0xE0) << 24) + (connection.ReadByte() << 16) + (connection.ReadByte() << 8) + connection.ReadByte(); }
+                else if (curByte == 0xF0) { count = (connection.ReadByte() << 24) + (connection.ReadByte() << 16) + (connection.ReadByte() << 8) + connection.ReadByte(); }
+
+                if (count == 0)
                 {
-                    output.Add(o);
-                    if (o.Substring(0, 5) == "!done")
+                    if (output.Count > 0 && (output.Last().StartsWith("!done") || output.Last().StartsWith("!trap") || output.Last().StartsWith("!fatal")))
                     {
                         break;
                     }
-                    else
-                    {
-                        o = "";
-                        continue;
-                    }
-                }
-                else
-                {
-                    if (tmp[3] < 0x80)
-                    {
-                        count = tmp[3];
-                    }
-                    else
-                    {
-                        if (tmp[3] < 0xC0)
-                        {
-                            int tmpi = BitConverter.ToInt32(new byte[] { (byte)connection.ReadByte(), tmp[3], 0, 0 }, 0);
-                            count = tmpi ^ 0x8000;
-                        }
-                        else
-                        {
-                            if (tmp[3] < 0xE0)
-                            {
-                                tmp[2] = (byte)connection.ReadByte();
-                                int tmpi = BitConverter.ToInt32(new byte[] { (byte)connection.ReadByte(), tmp[2], tmp[3], 0 }, 0);
-                                count = tmpi ^ 0xC00000;
-                            }
-                            else
-                            {
-                                if (tmp[3] < 0xF0)
-                                {
-                                    tmp[2] = (byte)connection.ReadByte();
-                                    tmp[1] = (byte)connection.ReadByte();
-                                    int tmpi = BitConverter.ToInt32(new byte[] { (byte)connection.ReadByte(), tmp[1], tmp[2], tmp[3] }, 0);
-                                    count = tmpi ^ 0xE0000000;
-                                }
-                                else
-                                {
-                                    if (tmp[3] == 0xF0)
-                                    {
-                                        tmp[3] = (byte)connection.ReadByte();
-                                        tmp[2] = (byte)connection.ReadByte();
-                                        tmp[1] = (byte)connection.ReadByte();
-                                        tmp[0] = (byte)connection.ReadByte();
-                                        count = BitConverter.ToInt32(tmp, 0);
-                                    }
-                                    else
-                                    {
-                                        //Error in packet reception, unknown length
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    continue;
                 }
 
-                for (int i = 0; i < count; i++)
+                byte[] buffer = new byte[count];
+                int read = 0;
+                while (read < count)
                 {
-                    o += (Char)connection.ReadByte();
+                    int result = connection.Read(buffer, read, (int)count - read);
+                    if (result <= 0) break;
+                    read += result;
                 }
+
+                string word = Encoding.UTF8.GetString(buffer); // Usar UTF8 es mejor en v7
+                output.Add(word);
             }
             return output;
-        }
-        byte[] EncodeLength(int delka)
-        {
-            if (delka < 0x80)
-            {
-                byte[] tmp = BitConverter.GetBytes(delka);
-                return new byte[1] { tmp[0] };
-            }
-            if (delka < 0x4000)
-            {
-                byte[] tmp = BitConverter.GetBytes(delka | 0x8000);
-                return new byte[2] { tmp[1], tmp[0] };
-            }
-            if (delka < 0x200000)
-            {
-                byte[] tmp = BitConverter.GetBytes(delka | 0xC00000);
-                return new byte[3] { tmp[2], tmp[1], tmp[0] };
-            }
-            if (delka < 0x10000000)
-            {
-                byte[] tmp = BitConverter.GetBytes(delka | 0xE0000000);
-                return new byte[4] { tmp[3], tmp[2], tmp[1], tmp[0] };
-            }
-            else
-            {
-                byte[] tmp = BitConverter.GetBytes(delka);
-                return new byte[5] { 0xF0, tmp[3], tmp[2], tmp[1], tmp[0] };
-            }
         }
         public string EncodePassword(string Password, string hash)
         {
@@ -205,26 +166,31 @@ namespace Mikrotik_Administrador.Class
         {
             try
             {
-                Send("/login", true);
-                //var f =Read()[0];
-                string hash = Read()[0].Split(new string[] { "ret=" }, StringSplitOptions.None)[1];
+                // Forzamos el envío de los 3 parámetros en un solo Flush
                 Send("/login");
                 Send("=name=" + username);
                 Send("=password=" + password, true);
-                if (Read()[0] == "!done")
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception e)
-            {
+                connection.Flush(); // Solo un Flush al final de la frase
 
+                // Espera obligatoria para el CCR2116 (proceso de autenticación interno)
+                System.Threading.Thread.Sleep(250);
+
+                List<string> respuesta = Read();
+
+                if (respuesta.Count == 0)
+                {
+                    // Si llega vacío, intentamos una segunda lectura rápida
+                    System.Threading.Thread.Sleep(250);
+                    respuesta = Read();
+                }
+
+                return respuesta.Any(s => s.Contains("!done"));
             }
-            return false;
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error crítico: " + ex.Message);
+                return false;
+            }
         }
         public List<UsuariosModel> VerUsuarios(string name)
         {

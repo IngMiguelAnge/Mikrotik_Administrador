@@ -51,7 +51,7 @@ namespace Mikrotik_Administrador
                     progressBar1.Value = 100;
                     MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }                             
+            }
             catch (Exception ex)
             {
                 lblProbar.Text = "Error en la conexión";
@@ -271,6 +271,6 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("El formato de IP no es válido. Ejemplo: 192.168.1.1", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true; // No deja salir hasta que se corrija
             }
-        }       
+        }
     }
 }
