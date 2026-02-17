@@ -271,5 +271,10 @@ namespace Mikrotik_Administrador
                 CBMikrotiks.Enabled = true;
             }
         }
+
+        private void Migracion_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

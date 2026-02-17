@@ -119,7 +119,7 @@ namespace Mikrotik_Administrador
         {
             Migracion m = new Migracion();
             m.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void btnAddresList_Click(object sender, EventArgs e)

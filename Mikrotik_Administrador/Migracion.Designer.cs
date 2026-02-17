@@ -218,6 +218,7 @@
             this.Name = "Migracion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Migracion";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Migracion_FormClosed);
             this.Load += new System.EventHandler(this.Migracion_Load);
             this.Menu.ResumeLayout(false);
             this.Menu.PerformLayout();
