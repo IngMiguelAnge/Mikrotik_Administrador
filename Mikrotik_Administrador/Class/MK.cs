@@ -240,5 +240,59 @@ namespace Mikrotik_Administrador.Class
             }
             return obj;
         }
+        public List<Address> VerAddres()
+        {
+            List<Address> listaFinal = new List<Address>();
+            try
+            {
+                // Enviamos el comando a la ruta de IP -> Address
+                Send("/ip/address/print");
+                Send("=.proplist=.id,address,comment,network,interface,actual-interface,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
+                Address currentObj = null;
+                string ultimoComentarioEncontrado = "Sin Comentario";
+
+                // El Read() debe capturar la ráfaga completa
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        currentObj = new Address();
+                        // IMPORTANTE: Primero asumimos que hereda el comentario anterior
+                        currentObj.comment = ultimoComentarioEncontrado;
+                        listaFinal.Add(currentObj);
+                        continue;
+                    }
+
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+
+                        if (key == ".id") currentObj.id = value;
+                        if (key == "address") currentObj.address = value;
+                        if (key == "comment")
+                        {
+                            // Si la IP trae su propio comentario, actualizamos el "arrastre"
+                            currentObj.comment = value;
+                            ultimoComentarioEncontrado = value;
+                        }
+                        if (key == "network") currentObj.network = value;
+                        if (key == "interface") currentObj.@interface = value;
+                        if (key == "actual-interface") currentObj.actual_interface = value;
+                        if (key == "disabled") currentObj.disabled = value == "false"? "Desactivado": "Activado";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return listaFinal;
+        }
     }
 }

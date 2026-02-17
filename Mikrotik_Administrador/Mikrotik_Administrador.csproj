@@ -198,6 +198,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\Address.cs" />
     <Compile Include="Class\MK.cs" />
     <Compile Include="Data\AppRepository.cs" />
     <Compile Include="InfoMikrotik.cs">
@@ -224,7 +225,9 @@
     <Compile Include="Mikrotiks.Designer.cs">
       <DependentUpon>Mikrotiks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\InsertListWirelessModel.cs" />
     <Compile Include="Model\ListMikrotikModel.cs" />
+    <Compile Include="Model\ListWirelessModel.cs" />
     <Compile Include="Model\MikrotikModel.cs" />
     <Compile Include="Model\UbicacionModel.cs" />
     <Compile Include="Model\UserModel.cs" />
@@ -238,6 +241,12 @@
     </Compile>
     <Compile Include="Ubicacion.Designer.cs">
       <DependentUpon>Ubicacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WirelessMikrotik.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WirelessMikrotik.Designer.cs">
+      <DependentUpon>WirelessMikrotik.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="InfoMikrotik.resx">
       <DependentUpon>InfoMikrotik.cs</DependentUpon>
@@ -262,6 +271,9 @@
     </Compile>
     <EmbeddedResource Include="Ubicacion.resx">
       <DependentUpon>Ubicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WirelessMikrotik.resx">
+      <DependentUpon>WirelessMikrotik.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />

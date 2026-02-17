@@ -103,8 +103,6 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Port", obj.Port));
                         cmd.Parameters.Add(new SqlParameter("@Usuario", obj.Usuario));
                         cmd.Parameters.Add(new SqlParameter("@Password", obj.Password));
-                        cmd.Parameters.Add(new SqlParameter("@IpMax", obj.IpMax));
-                        cmd.Parameters.Add(new SqlParameter("@IpMin", obj.IpMin));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         cmd.Parameters.Add(new SqlParameter("@Limite_Alcanzado", obj.Limite_Alcanzado));
                         await sql.OpenAsync().ConfigureAwait(false);
@@ -184,8 +182,6 @@ namespace Mikrotik_Administrador.Data
                 Port = (string)reader["Port"],
                 Usuario = (string)reader["Usuario"],
                 Password = (string)reader["Password"],
-                IpMax = (string)reader["IpMax"],
-                IpMin = (string)reader["IpMin"],
                 Estatus = (bool)reader["Estatus"],
                 Limite_Alcanzado = (bool)reader["Limite_Alcanzado"],
             };
@@ -273,7 +269,7 @@ namespace Mikrotik_Administrador.Data
         }
 
         #endregion
-        #region UsuariosGeneral
+        #region ActionsUsuariosGeneral
         public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName(string Nombre, int Id_Mikrotik)
         {
             List<ListUsuariosGeneralModel> list = new List<ListUsuariosGeneralModel>();
@@ -324,6 +320,99 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
                         cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
                         cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", obj.Id_Mikrotik));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        #endregion
+        #region ActionsWireless
+        public async Task<List<ListWirelessModel>> GetWireless()
+        {
+            List<ListWirelessModel> list = new List<ListWirelessModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetWireless", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToWireless(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListWirelessModel MapToWireless(SqlDataReader reader)
+        {
+            return new ListWirelessModel()
+            {
+                Id = (int)reader["Id"],
+                Address = (string)reader["Address"],
+                Network = (string)reader["Network"],
+                Interface = (string)reader["Interface"],
+                Actual_Interface = (string)reader["Actual_Interface"],
+                Comment = (string)reader["Comment"],
+                Mikrotik = (string)reader["Mikrotik"],
+                Disabled = (string)reader["Disabled"],
+                Estatus = (string)reader["Estatus"],
+            };
+        }
+        public async Task<bool> InsertandUpdateWireless(InsertListWirelessModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("InsertandUpdateWireless", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Address", obj.Address));
+                        cmd.Parameters.Add(new SqlParameter("@Network", obj.Network));
+                        cmd.Parameters.Add(new SqlParameter("@Interface", obj.Interface));
+                        cmd.Parameters.Add(new SqlParameter("@Actual_Interface", obj.Actual_Interface));
+                        cmd.Parameters.Add(new SqlParameter("@Comment", obj.Comment));
+                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", obj.Id_Mikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Disabled", obj.Disabled));
+                        cmd.Parameters.Add(new SqlParameter("@Id_Interno", obj.Id_Interno));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DesactivarWireless(int Id_Mikrotik)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("DesactivarWireless", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", Id_Mikrotik));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;

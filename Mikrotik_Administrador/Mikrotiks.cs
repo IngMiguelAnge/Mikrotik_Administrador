@@ -27,6 +27,7 @@ namespace Mikrotik_Administrador
             try
             {
                 DGVMikrotiks.DataSource = null;
+                DGVMikrotiks.Columns.Clear();
                 AppRepository obj = new AppRepository();
 
                 var lista = await obj.GetMikrotiks();
@@ -56,6 +57,14 @@ namespace Mikrotik_Administrador
             btnEditar.UseColumnTextForButtonValue = true;
             DGVMikrotiks.Columns.Add(btnEditar);
 
+            // Botón LanWireless
+            DataGridViewButtonColumn btnLanWireless = new DataGridViewButtonColumn();
+            btnLanWireless.Name = "btnLanWireless";
+            btnLanWireless.HeaderText = "Acción";
+            btnLanWireless.Text = "LanWireless";
+            btnLanWireless.UseColumnTextForButtonValue = true;
+            DGVMikrotiks.Columns.Add(btnLanWireless);
+
             // Botón Eliminar
             DataGridViewButtonColumn btnDesactivar = new DataGridViewButtonColumn();
             btnDesactivar.Name = "btnDesactivar";
@@ -64,7 +73,7 @@ namespace Mikrotik_Administrador
             btnDesactivar.UseColumnTextForButtonValue = true;
             DGVMikrotiks.Columns.Add(btnDesactivar);
 
-            // Botón Configurar
+            // Botón Ubicacion
             DataGridViewButtonColumn btnConfig = new DataGridViewButtonColumn();
             btnConfig.Name = "btnUbicacion";
             btnConfig.HeaderText = "Acción";
@@ -85,6 +94,11 @@ namespace Mikrotik_Administrador
                     m.IdMikrotik = Convert.ToInt32(Id);
                     m.Show();
                     break;
+                case "btnLanWireless":
+                    WirelessMikrotik w = new WirelessMikrotik();
+                    w.Id_Mikrotik = Convert.ToInt32(Id);
+                    w.Show();
+                    break;                    
                 case "btnDesactivar":
                     AppRepository obj = new AppRepository();
                     bool result = obj.DesactivarMikrotik(Convert.ToInt32(Id)).Result;
@@ -101,16 +115,46 @@ namespace Mikrotik_Administrador
             }
         }
 
-        private void btnActualizar_Click(object sender, EventArgs e)
-        {
-            ListaMikrotiks();
-        }
-
         private void migraciónToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Migracion m = new Migracion();
             m.Show();
             this.Close();
+        }
+
+        private void btnAddresList_Click(object sender, EventArgs e)
+        {
+            ListaWireless();
+        }
+        private async void ListaWireless()
+        {
+            try
+            {
+                DGVMikrotiks.DataSource = null;
+                DGVMikrotiks.Columns.Clear();
+                AppRepository obj = new AppRepository();
+
+                var lista = await obj.GetWireless();
+
+                if (lista != null && lista.Count > 0)
+                {
+                    DGVMikrotiks.DataSource = lista;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Mikrotiks_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btnVerMirkotiks_Click(object sender, EventArgs e)
+        {
+            ListaMikrotiks();
         }
     }
 }

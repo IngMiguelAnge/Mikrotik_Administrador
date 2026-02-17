@@ -28,12 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.migraciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DGVMikrotiks = new System.Windows.Forms.DataGridView();
             this.lblListaMikrotiks = new System.Windows.Forms.Label();
             this.BtnNuevo = new System.Windows.Forms.Button();
-            this.btnActualizar = new System.Windows.Forms.Button();
+            this.btnAddresList = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnVerMirkotiks = new System.Windows.Forms.Button();
             this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).BeginInit();
             this.SuspendLayout();
@@ -79,30 +82,43 @@
             // 
             // BtnNuevo
             // 
-            this.BtnNuevo.Location = new System.Drawing.Point(34, 69);
+            this.BtnNuevo.Location = new System.Drawing.Point(34, 63);
             this.BtnNuevo.Name = "BtnNuevo";
-            this.BtnNuevo.Size = new System.Drawing.Size(84, 31);
+            this.BtnNuevo.Size = new System.Drawing.Size(84, 37);
             this.BtnNuevo.TabIndex = 3;
             this.BtnNuevo.Text = "Nuevo";
+            this.toolTip1.SetToolTip(this.BtnNuevo, "Registra nuevo mikrotik");
             this.BtnNuevo.UseVisualStyleBackColor = true;
             this.BtnNuevo.Click += new System.EventHandler(this.BtnNuevo_Click);
             // 
-            // btnActualizar
+            // btnAddresList
             // 
-            this.btnActualizar.Location = new System.Drawing.Point(197, 69);
-            this.btnActualizar.Name = "btnActualizar";
-            this.btnActualizar.Size = new System.Drawing.Size(98, 30);
-            this.btnActualizar.TabIndex = 4;
-            this.btnActualizar.Text = "Actualizar";
-            this.btnActualizar.UseVisualStyleBackColor = true;
-            this.btnActualizar.Click += new System.EventHandler(this.btnActualizar_Click);
+            this.btnAddresList.Location = new System.Drawing.Point(322, 63);
+            this.btnAddresList.Name = "btnAddresList";
+            this.btnAddresList.Size = new System.Drawing.Size(154, 37);
+            this.btnAddresList.TabIndex = 5;
+            this.btnAddresList.Text = "Ver Address List";
+            this.toolTip1.SetToolTip(this.btnAddresList, "Permite ver los Address list guardados en la base general");
+            this.btnAddresList.UseVisualStyleBackColor = true;
+            this.btnAddresList.Click += new System.EventHandler(this.btnAddresList_Click);
+            // 
+            // btnVerMirkotiks
+            // 
+            this.btnVerMirkotiks.Location = new System.Drawing.Point(146, 63);
+            this.btnVerMirkotiks.Name = "btnVerMirkotiks";
+            this.btnVerMirkotiks.Size = new System.Drawing.Size(157, 35);
+            this.btnVerMirkotiks.TabIndex = 6;
+            this.btnVerMirkotiks.Text = "Ver Mikrotiks";
+            this.btnVerMirkotiks.UseVisualStyleBackColor = true;
+            this.btnVerMirkotiks.Click += new System.EventHandler(this.btnVerMirkotiks_Click);
             // 
             // Mikrotiks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1204, 420);
-            this.Controls.Add(this.btnActualizar);
+            this.Controls.Add(this.btnVerMirkotiks);
+            this.Controls.Add(this.btnAddresList);
             this.Controls.Add(this.BtnNuevo);
             this.Controls.Add(this.lblListaMikrotiks);
             this.Controls.Add(this.DGVMikrotiks);
@@ -112,6 +128,7 @@
             this.Name = "Mikrotiks";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mikrotiks";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Mikrotiks_FormClosed);
             this.Load += new System.EventHandler(this.Mikrotiks_Load);
             this.Menu.ResumeLayout(false);
             this.Menu.PerformLayout();
@@ -128,6 +145,8 @@
         private System.Windows.Forms.DataGridView DGVMikrotiks;
         private System.Windows.Forms.Label lblListaMikrotiks;
         private System.Windows.Forms.Button BtnNuevo;
-        private System.Windows.Forms.Button btnActualizar;
+        private System.Windows.Forms.Button btnAddresList;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button btnVerMirkotiks;
     }
 }

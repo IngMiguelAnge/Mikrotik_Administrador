@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoMikrotik));
             this.lblInfo = new System.Windows.Forms.Label();
             this.lblMensaje1 = new System.Windows.Forms.Label();
             this.lblIP = new System.Windows.Forms.Label();
@@ -40,16 +39,10 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnProbar = new System.Windows.Forms.Button();
             this.lblProbar = new System.Windows.Forms.Label();
-            this.lblMensaje2 = new System.Windows.Forms.Label();
-            this.lblp1 = new System.Windows.Forms.Label();
-            this.lblp2 = new System.Windows.Forms.Label();
-            this.txtMensaje = new System.Windows.Forms.TextBox();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.lblnombre = new System.Windows.Forms.Label();
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.txtIP = new System.Windows.Forms.TextBox();
-            this.txtIpMin = new System.Windows.Forms.TextBox();
-            this.txtIpMax = new System.Windows.Forms.TextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
@@ -150,48 +143,9 @@
             this.lblProbar.TabIndex = 11;
             this.lblProbar.Text = "Sin conexión";
             // 
-            // lblMensaje2
-            // 
-            this.lblMensaje2.AutoSize = true;
-            this.lblMensaje2.Location = new System.Drawing.Point(31, 271);
-            this.lblMensaje2.Name = "lblMensaje2";
-            this.lblMensaje2.Size = new System.Drawing.Size(492, 20);
-            this.lblMensaje2.TabIndex = 12;
-            this.lblMensaje2.Text = "*Escriba la serie minima y maxima y maxima que alcanzara el mikrotik";
-            // 
-            // lblp1
-            // 
-            this.lblp1.AutoSize = true;
-            this.lblp1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblp1.Location = new System.Drawing.Point(189, 324);
-            this.lblp1.Name = "lblp1";
-            this.lblp1.Size = new System.Drawing.Size(54, 25);
-            this.lblp1.TabIndex = 23;
-            this.lblp1.Text = ".    2";
-            // 
-            // lblp2
-            // 
-            this.lblp2.AutoSize = true;
-            this.lblp2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblp2.Location = new System.Drawing.Point(450, 324);
-            this.lblp2.Name = "lblp2";
-            this.lblp2.Size = new System.Drawing.Size(78, 25);
-            this.lblp2.TabIndex = 24;
-            this.lblp2.Text = ".    254";
-            // 
-            // txtMensaje
-            // 
-            this.txtMensaje.Location = new System.Drawing.Point(35, 373);
-            this.txtMensaje.Multiline = true;
-            this.txtMensaje.Name = "txtMensaje";
-            this.txtMensaje.ReadOnly = true;
-            this.txtMensaje.Size = new System.Drawing.Size(488, 116);
-            this.txtMensaje.TabIndex = 25;
-            this.txtMensaje.Text = resources.GetString("txtMensaje.Text");
-            // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(35, 499);
+            this.btnGuardar.Location = new System.Drawing.Point(38, 305);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(87, 35);
             this.btnGuardar.TabIndex = 8;
@@ -224,24 +178,6 @@
             this.txtIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtIP_KeyPress);
             this.txtIP.Validating += new System.ComponentModel.CancelEventHandler(this.txtIP_Validating);
             // 
-            // txtIpMin
-            // 
-            this.txtIpMin.Location = new System.Drawing.Point(38, 325);
-            this.txtIpMin.Name = "txtIpMin";
-            this.txtIpMin.Size = new System.Drawing.Size(150, 26);
-            this.txtIpMin.TabIndex = 6;
-            this.txtIpMin.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtIpMin_KeyPress);
-            this.txtIpMin.Validating += new System.ComponentModel.CancelEventHandler(this.txtIpMin_Validating);
-            // 
-            // txtIpMax
-            // 
-            this.txtIpMax.Location = new System.Drawing.Point(284, 325);
-            this.txtIpMax.Name = "txtIpMax";
-            this.txtIpMax.Size = new System.Drawing.Size(160, 26);
-            this.txtIpMax.TabIndex = 7;
-            this.txtIpMax.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtIpMax_KeyPress);
-            this.txtIpMax.Validating += new System.ComponentModel.CancelEventHandler(this.txtIpMax_Validating);
-            // 
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(218, 37);
@@ -253,18 +189,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(541, 544);
+            this.ClientSize = new System.Drawing.Size(523, 344);
             this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.txtIpMax);
-            this.Controls.Add(this.txtIpMin);
             this.Controls.Add(this.txtIP);
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.lblnombre);
             this.Controls.Add(this.btnGuardar);
-            this.Controls.Add(this.txtMensaje);
-            this.Controls.Add(this.lblp2);
-            this.Controls.Add(this.lblp1);
-            this.Controls.Add(this.lblMensaje2);
             this.Controls.Add(this.lblProbar);
             this.Controls.Add(this.btnProbar);
             this.Controls.Add(this.txtPassword);
@@ -299,16 +229,10 @@
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnProbar;
         private System.Windows.Forms.Label lblProbar;
-        private System.Windows.Forms.Label lblMensaje2;
-        private System.Windows.Forms.Label lblp1;
-        private System.Windows.Forms.Label lblp2;
-        private System.Windows.Forms.TextBox txtMensaje;
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.Label lblnombre;
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.TextBox txtIP;
-        private System.Windows.Forms.TextBox txtIpMin;
-        private System.Windows.Forms.TextBox txtIpMax;
         private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

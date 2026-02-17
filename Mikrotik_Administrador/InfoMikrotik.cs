@@ -2,13 +2,8 @@
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,9 +21,9 @@ namespace Mikrotik_Administrador
 
         private async void btnProbar_Click(object sender, EventArgs e)
         {
+            btnProbar.Enabled = false; // Bloqueamos el botón para evitar múltiples clics
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-            btnProbar.Enabled = false; // Bloqueamos el botón para evitar múltiples clics
             try
             {
                 mikrotik = new MK(txtIP.Text.ToString(), Convert.ToInt32(this.txtPort.Text));
@@ -40,27 +35,23 @@ namespace Mikrotik_Administrador
                 if (login == true)
                 {
                     lblProbar.Text = "Conexión exitosa";
-                    progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                    progressBar1.Value = 100;
                     MessageBox.Show("Conexión exitosa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
                     lblProbar.Text = "Error en la conexión";
-                    progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                    progressBar1.Value = 100;
                     MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
                 lblProbar.Text = "Error en la conexión";
-                progressBar1.Style = ProgressBarStyle.Blocks;
-                progressBar1.Value = 0;
                 MessageBox.Show("No se pudo establecer la conexión. Verifique IP y Puertos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
                 btnProbar.Enabled = true; // Rehabilitamos el botón
             }
         }
@@ -77,8 +68,6 @@ namespace Mikrotik_Administrador
                 txtPort.Text = mikrotik.Port;
                 txtUsuario.Text = mikrotik.Usuario;
                 txtPassword.Text = mikrotik.Password;
-                txtIpMin.Text = mikrotik.IpMin;
-                txtIpMax.Text = mikrotik.IpMax;
                 limite_alcanzado = mikrotik.Limite_Alcanzado;
                 if (mikrotik.Estatus == true)
                     lblProbar.Text = "Conexión exitosa";
@@ -95,21 +84,8 @@ namespace Mikrotik_Administrador
                 txtIP.Focus();
                 return;
             }
-            if (!System.Net.IPAddress.TryParse(txtIpMin.Text + ".2", out _))
-            {
-                MessageBox.Show("Por favor, corrige la dirección IP antes de guardar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtIpMin.Focus();
-                return;
-            }
-            if (!System.Net.IPAddress.TryParse(txtIpMax.Text + ".254", out _))
-            {
-                MessageBox.Show("Por favor, corrige la dirección IP antes de guardar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtIpMax.Focus();
-                return;
-            }
             if (txtIP.Text.Trim() == "..." || txtPassword.Text == string.Empty
-              || txtPort.Text == string.Empty || txtUsuario.Text == string.Empty
-              || txtIpMax.Text.Trim() == ".." || txtIpMin.Text.Trim() == "..")
+              || txtPort.Text == string.Empty || txtUsuario.Text == string.Empty)
             {
                 MessageBox.Show("Se requiere probar la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -135,8 +111,6 @@ namespace Mikrotik_Administrador
             mikrotik.Port = txtPort.Text.Replace(" ", ""); ;
             mikrotik.Usuario = txtUsuario.Text;
             mikrotik.Password = txtPassword.Text;
-            mikrotik.IpMin = txtIpMin.Text.Replace(" ", "");
-            mikrotik.IpMax = txtIpMax.Text.Replace(" ", "");
             mikrotik.Id = IdMikrotik;
             mikrotik.Estatus = Estatus;
             mikrotik.Limite_Alcanzado = limite_alcanzado;
@@ -199,74 +173,6 @@ namespace Mikrotik_Administrador
 
             // Validar si el formato es de una IP real (0.0.0.0 a 255.255.255.255)
             if (!System.Net.IPAddress.TryParse(input, out System.Net.IPAddress address) || address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
-            {
-                MessageBox.Show("El formato de IP no es válido. Ejemplo: 192.168.1.1", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.Cancel = true; // No deja salir hasta que se corrija
-            }
-        }
-
-        private void txtIpMin_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
-            {
-                e.Handled = true;
-            }
-
-            // No permite un punto si ya hay 3 puntos en la IP
-            if (e.KeyChar == '.' && (sender as TextBox).Text.Count(c => c == '.') >= 3)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtIpMax_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
-            {
-                e.Handled = true;
-            }
-
-            // No permite un punto si ya hay 3 puntos en la IP
-            if (e.KeyChar == '.' && (sender as TextBox).Text.Count(c => c == '.') >= 3)
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtIpMin_Validating(object sender, CancelEventArgs e)
-        {
-            string input = txtIpMin.Text.Trim();
-
-            // Si el campo es obligatorio y está vacío
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                MessageBox.Show("La dirección IP es obligatoria.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                e.Cancel = true; // No deja salir del TextBox
-                return;
-            }
-
-            // Validar si el formato es de una IP real (0.0.0.0 a 255.255.255.255)
-            if (!System.Net.IPAddress.TryParse(input + ".2", out System.Net.IPAddress address) || address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
-            {
-                MessageBox.Show("El formato de IP no es válido. Ejemplo: 192.168.1.1", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.Cancel = true; // No deja salir hasta que se corrija
-            }
-        }
-
-        private void txtIpMax_Validating(object sender, CancelEventArgs e)
-        {
-            string input = txtIP.Text.Trim();
-
-            // Si el campo es obligatorio y está vacío
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                MessageBox.Show("La dirección IP es obligatoria.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                e.Cancel = true; // No deja salir del TextBox
-                return;
-            }
-
-            // Validar si el formato es de una IP real (0.0.0.0 a 255.255.255.255)
-            if (!System.Net.IPAddress.TryParse(input + ".254", out System.Net.IPAddress address) || address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
             {
                 MessageBox.Show("El formato de IP no es válido. Ejemplo: 192.168.1.1", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true; // No deja salir hasta que se corrija
