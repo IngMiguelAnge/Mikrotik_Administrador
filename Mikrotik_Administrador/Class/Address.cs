@@ -8,6 +8,6 @@
         public string @interface { get; set; } // Ejemplo: ether1
         public string actual_interface { get; set; }
         public string comment { get; set; }
-        public string disabled { get; set; }
+        public string estatus { get; set; }
     }
 }

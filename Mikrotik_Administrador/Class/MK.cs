@@ -240,6 +240,115 @@ namespace Mikrotik_Administrador.Class
             }
             return obj;
         }
+        public List<Antenas> VerAntenas(string name)
+        {
+            List<Antenas> listaFinal = new List<Antenas>();
+            try
+            {
+               
+                if (name == string.Empty)
+                {
+                    Send("/ip/firewall/address-list/print");
+                    Send("=.proplist=.id,address,comment,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
+                }
+
+                if (name != string.Empty)
+                {
+                    Send("/ip/firewall/address-list/print");
+                    Send("=.proplist=.id,address,comment,disabled");// Esto ayuda a que el router no se pierda enviando datos extra
+                    Send("?comment=" + name, true);                   
+                }
+                Antenas currentObj = null;
+                string ultimoComentarioEncontrado = "Sin Comentario";
+
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        currentObj = new Antenas();
+                        // IMPORTANTE: Primero asumimos que hereda el comentario anterior
+                        currentObj.comment = ultimoComentarioEncontrado;
+                        listaFinal.Add(currentObj);
+                        continue;
+                    }
+
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+
+                        if (key == ".id") currentObj.id = value;
+                        if (key == "address") currentObj.address = value;
+                        if (key == "comment")
+                        {
+                            // Si la IP trae su propio comentario, actualizamos el "arrastre"
+                            currentObj.comment = value;
+                            ultimoComentarioEncontrado = value;
+                        }
+                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return listaFinal;
+        }
+        public List<Fibra> VerFibra(string name)
+        {
+            List<Fibra> listaFinal = new List<Fibra>();
+            try
+            {
+                if (name == string.Empty)
+                {
+                    Send("/ppp/secret/print");
+                    Send("=.proplist=.id,name,remote-address,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
+                }
+                if (name != string.Empty)
+                {
+                    Send("/ppp/secret/print");
+                    Send("=.proplist=.id,name,remote-address,disabled");// Esto ayuda a que el router no se pierda enviando datos extra
+                    Send("?name=" + name, true);
+                }
+                Fibra currentObj = null;
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        currentObj = new Fibra();
+                        listaFinal.Add(currentObj);
+                        continue;
+                    }
+
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+
+                        if (key == ".id") currentObj.id = value;
+                        if (key == "name") currentObj.name = value;
+                        if (key == "remote-address") currentObj.address = value;
+                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return listaFinal;
+        }
         public List<Address> VerAddres()
         {
             List<Address> listaFinal = new List<Address>();
@@ -284,7 +393,7 @@ namespace Mikrotik_Administrador.Class
                         if (key == "network") currentObj.network = value;
                         if (key == "interface") currentObj.@interface = value;
                         if (key == "actual-interface") currentObj.actual_interface = value;
-                        if (key == "disabled") currentObj.disabled = value == "false"? "Desactivado": "Activado";
+                        if (key == "disabled") currentObj.estatus = value == "false"? "Activo": "Inactivo";
                     }
                 }
             }

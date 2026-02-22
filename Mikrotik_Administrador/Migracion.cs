@@ -2,6 +2,7 @@
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -62,6 +63,7 @@ namespace Mikrotik_Administrador
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false; // Deshabilitar el botón para evitar múltiples clics
             dgvUsuarios.DataSource = null;
+            dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
             try
             {
                 int Id = 0;
@@ -70,8 +72,6 @@ namespace Mikrotik_Administrador
                     int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
                     if (Id_Mikrotik == 0)
                     {
-                        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                        progressBar1.Value = 100;
                         MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
                         return;
                     }
@@ -81,10 +81,7 @@ namespace Mikrotik_Administrador
                     mikro = obj.GetMikrotikById(Id_Mikrotik).Result;
                     if (mikro.Estatus == false)
                     {
-                        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                        progressBar1.Value = 100;
                         MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                         return;
                     }
                     if (RBMikrotik.Checked)
@@ -98,27 +95,41 @@ namespace Mikrotik_Administrador
                         });
                         if (login == false)
                         {
-                            progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                            progressBar1.Value = 100;
                             MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-                        var lista = mikrotik.VerUsuarios(txtNombre.Text).ToList();
 
-                        if (lista != null && lista.Count > 0)
+                        if (cbAntenas.Checked == true)
                         {
-                            dgvUsuarios.DataSource = lista;
-                            if (dgvUsuarios.Columns["chSeleccionar"] == null)
+                            var lista = new List<Antenas>();
+                            lista = mikrotik.VerAntenas(txtNombre.Text).ToList();
+                            dgvUsuarios.DataSource = lista != null && lista.Count > 0
+                                ? lista : null;
+                            if (lista == null || lista.Count == 0)
                             {
+                                MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
+                            else { 
                                 AgregarBotones();
+                                MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                         }
                         else
                         {
-                            progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                            progressBar1.Value = 100;
-                            MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            return;
+                            var lista = new List<Fibra>();
+                            lista = mikrotik.VerFibra(txtNombre.Text).ToList();
+                            dgvUsuarios.DataSource = lista != null && lista.Count > 0
+                              ? lista : null;
+                            if (lista == null || lista.Count == 0)
+                            {
+                                MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                return;
+                            }
+                            else {
+                                AgregarBotones();
+                                MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
                         }
                     }
                 }
@@ -135,23 +146,19 @@ namespace Mikrotik_Administrador
                     }
                     else
                     {
-                        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                        progressBar1.Value = 100;
                         MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
                 }
-                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                progressBar1.Value = 100;
             }
             catch (Exception ex)
             {
-                progressBar1.Style = ProgressBarStyle.Blocks;
-                progressBar1.Value = 0;
                 MessageBox.Show("No se pudo establecer la conexión. Verifique IP y Puertos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
                 BtnBuscar.Enabled = true; // Rehabilitamos el botón
             }
         }

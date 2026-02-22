@@ -371,7 +371,6 @@ namespace Mikrotik_Administrador.Data
                 Actual_Interface = (string)reader["Actual_Interface"],
                 Comment = (string)reader["Comment"],
                 Mikrotik = (string)reader["Mikrotik"],
-                Disabled = (string)reader["Disabled"],
                 Estatus = (string)reader["Estatus"],
             };
         }
@@ -390,7 +389,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Actual_Interface", obj.Actual_Interface));
                         cmd.Parameters.Add(new SqlParameter("@Comment", obj.Comment));
                         cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", obj.Id_Mikrotik));
-                        cmd.Parameters.Add(new SqlParameter("@Disabled", obj.Disabled));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         cmd.Parameters.Add(new SqlParameter("@Id_Interno", obj.Id_Interno));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);

@@ -43,6 +43,7 @@
             this.CBTodosMikrotiks = new System.Windows.Forms.CheckBox();
             this.btnExportar = new System.Windows.Forms.Button();
             this.cbExportar = new System.Windows.Forms.CheckBox();
+            this.cbAntenas = new System.Windows.Forms.CheckBox();
             this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.SuspendLayout();
@@ -55,7 +56,7 @@
             this.mikrotiksToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(800, 33);
+            this.Menu.Size = new System.Drawing.Size(924, 33);
             this.Menu.TabIndex = 0;
             this.Menu.Text = "menuStrip1";
             // 
@@ -124,7 +125,7 @@
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
-            this.dgvUsuarios.Size = new System.Drawing.Size(755, 157);
+            this.dgvUsuarios.Size = new System.Drawing.Size(870, 483);
             this.dgvUsuarios.TabIndex = 7;
             this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
             // 
@@ -174,7 +175,7 @@
             // 
             // btnExportar
             // 
-            this.btnExportar.Location = new System.Drawing.Point(342, 177);
+            this.btnExportar.Location = new System.Drawing.Point(556, 176);
             this.btnExportar.Name = "btnExportar";
             this.btnExportar.Size = new System.Drawing.Size(80, 35);
             this.btnExportar.TabIndex = 7;
@@ -186,7 +187,7 @@
             // cbExportar
             // 
             this.cbExportar.AutoSize = true;
-            this.cbExportar.Location = new System.Drawing.Point(187, 182);
+            this.cbExportar.Location = new System.Drawing.Point(401, 181);
             this.cbExportar.Name = "cbExportar";
             this.cbExportar.Size = new System.Drawing.Size(149, 24);
             this.cbExportar.TabIndex = 6;
@@ -194,11 +195,22 @@
             this.cbExportar.UseVisualStyleBackColor = true;
             this.cbExportar.Visible = false;
             // 
+            // cbAntenas
+            // 
+            this.cbAntenas.AutoSize = true;
+            this.cbAntenas.Location = new System.Drawing.Point(164, 181);
+            this.cbAntenas.Name = "cbAntenas";
+            this.cbAntenas.Size = new System.Drawing.Size(187, 24);
+            this.cbAntenas.TabIndex = 11;
+            this.cbAntenas.Text = "¿Buscar en antenas?";
+            this.cbAntenas.UseVisualStyleBackColor = true;
+            // 
             // Migracion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(924, 723);
+            this.Controls.Add(this.cbAntenas);
             this.Controls.Add(this.cbExportar);
             this.Controls.Add(this.btnExportar);
             this.Controls.Add(this.CBTodosMikrotiks);
@@ -245,5 +257,6 @@
         private System.Windows.Forms.CheckBox CBTodosMikrotiks;
         private System.Windows.Forms.Button btnExportar;
         private System.Windows.Forms.CheckBox cbExportar;
+        private System.Windows.Forms.CheckBox cbAntenas;
     }
 }

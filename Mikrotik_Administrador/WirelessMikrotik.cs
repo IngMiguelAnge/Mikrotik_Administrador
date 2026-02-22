@@ -47,7 +47,7 @@ namespace Mikrotik_Administrador
                         Interface = item.@interface,
                         Actual_Interface = item.actual_interface,
                         Comment = item.comment,
-                        Disabled = item.disabled,
+                        Estatus = item.estatus,
                         Id_Interno = item.id
                     };
                     if (obj.InsertandUpdateWireless(model).Result == false)
@@ -109,7 +109,7 @@ namespace Mikrotik_Administrador
                 }
                 else BtnActualizar.Enabled = false;
 
-                MessageBox.Show("Carga completa correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
             catch (Exception ex)

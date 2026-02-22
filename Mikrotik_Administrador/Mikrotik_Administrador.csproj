@@ -199,6 +199,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\Address.cs" />
+    <Compile Include="Class\Antenas.cs" />
+    <Compile Include="Class\Fibra.cs" />
     <Compile Include="Class\MK.cs" />
     <Compile Include="Data\AppRepository.cs" />
     <Compile Include="InfoMikrotik.cs">
