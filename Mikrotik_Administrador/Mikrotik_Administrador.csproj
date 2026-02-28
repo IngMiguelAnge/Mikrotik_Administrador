@@ -234,6 +234,7 @@
       <DependentUpon>Mikrotiks.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\InsertListWirelessModel.cs" />
+    <Compile Include="Model\ListClientesModel.cs" />
     <Compile Include="Model\ListMikrotikModel.cs" />
     <Compile Include="Model\ListWirelessModel.cs" />
     <Compile Include="Model\MikrotikModel.cs" />

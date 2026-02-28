@@ -41,7 +41,9 @@ namespace Mikrotik_Administrador
             }
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-            BtnBuscar.Enabled = false; // Deshabilitar el botón para evitar múltiples clics
+            BtnBuscar.Enabled = false;
+            BtnAsignar.Enabled = false;
+            btnClientesSin.Enabled = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
             int Id_Mikrotik = CBTodosMikrotiks.Checked ==true ? 0 : (int)CBMikrotiks.SelectedValue;
@@ -54,6 +56,8 @@ namespace Mikrotik_Administrador
                     if (lista != null && lista.Count > 0)
                     {
                         dgvUsuarios.DataSource = lista;
+                        AgregarBotones();
+                        MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -70,9 +74,18 @@ namespace Mikrotik_Administrador
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 0;
                 BtnBuscar.Enabled = true; // Rehabilitamos el botón
+                BtnAsignar.Enabled = true;
+                btnClientesSin.Enabled = true;
             }
         }
-
+        private void AgregarBotones()
+        {
+            // Botón Checket
+            DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn();
+            chkSeleccionar.Name = "cbSeleccionar";
+            chkSeleccionar.HeaderText = "Asignar";
+            dgvUsuarios.Columns.Add(chkSeleccionar);
+        }
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
         {
             if (CBTodosMikrotiks.Checked)
@@ -98,6 +111,7 @@ namespace Mikrotik_Administrador
             CBMikrotiks.ValueMember = "Id";      // El dato que procesas por DETRÁS
             CBMikrotiks.DataSource = listaMikrotiks;
             CBMikrotiks.SelectedIndex = 0;
+            lblMensaje4.Text = "Clientes sin servicios encontrados: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
         }
 
         private void mikrotiksToolStripMenuItem_Click(object sender, EventArgs e)
@@ -112,6 +126,51 @@ namespace Mikrotik_Administrador
             Migracion m = new Migracion();
             m.Show();
             this.Hide();
+        }
+
+        private async void BtnAsignar_Click(object sender, EventArgs e)
+        {
+            AppRepository obj = new AppRepository();
+            lblMensaje4.Text = "Clientes sin servicios encontrados: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
+        }
+
+        private void btnClientesSin_Click(object sender, EventArgs e)
+        {
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            BtnBuscar.Enabled = false;
+            BtnAsignar.Enabled = false;
+            btnClientesSin.Enabled = false;
+            dgvUsuarios.DataSource = null;
+            dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
+            try
+            {
+                AppRepository obj = new AppRepository();
+                var lista = obj.GetClientesSinServicios().Result;
+
+                if (lista != null && lista.Count > 0)
+                {
+                    dgvUsuarios.DataSource = lista;
+                    MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
+                BtnBuscar.Enabled = true; // Rehabilitamos el botón
+                BtnAsignar.Enabled = true;
+                btnClientesSin.Enabled = true;
+            }
         }
     }
 }

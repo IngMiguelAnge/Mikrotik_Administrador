@@ -39,6 +39,12 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mikrotiksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.migracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblMensaje3 = new System.Windows.Forms.Label();
+            this.txtCliente = new System.Windows.Forms.TextBox();
+            this.CBAsignar = new System.Windows.Forms.CheckBox();
+            this.BtnAsignar = new System.Windows.Forms.Button();
+            this.lblMensaje4 = new System.Windows.Forms.Label();
+            this.btnClientesSin = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -80,7 +86,7 @@
             // 
             // BtnBuscar
             // 
-            this.BtnBuscar.Location = new System.Drawing.Point(302, 127);
+            this.BtnBuscar.Location = new System.Drawing.Point(297, 164);
             this.BtnBuscar.Name = "BtnBuscar";
             this.BtnBuscar.Size = new System.Drawing.Size(89, 39);
             this.BtnBuscar.TabIndex = 13;
@@ -108,7 +114,7 @@
             // dgvUsuarios
             // 
             this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUsuarios.Location = new System.Drawing.Point(14, 194);
+            this.dgvUsuarios.Location = new System.Drawing.Point(14, 256);
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
@@ -131,22 +137,85 @@
             // mikrotiksToolStripMenuItem
             // 
             this.mikrotiksToolStripMenuItem.Name = "mikrotiksToolStripMenuItem";
-            this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 29);
+            this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 32);
             this.mikrotiksToolStripMenuItem.Text = "Mikrotiks";
             this.mikrotiksToolStripMenuItem.Click += new System.EventHandler(this.mikrotiksToolStripMenuItem_Click);
             // 
             // migracionToolStripMenuItem
             // 
             this.migracionToolStripMenuItem.Name = "migracionToolStripMenuItem";
-            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
+            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 32);
             this.migracionToolStripMenuItem.Text = "Migración";
             this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
+            // 
+            // lblMensaje3
+            // 
+            this.lblMensaje3.AutoSize = true;
+            this.lblMensaje3.Location = new System.Drawing.Point(12, 183);
+            this.lblMensaje3.Name = "lblMensaje3";
+            this.lblMensaje3.Size = new System.Drawing.Size(211, 20);
+            this.lblMensaje3.TabIndex = 17;
+            this.lblMensaje3.Text = "Escriba el nombre del cliente";
+            // 
+            // txtCliente
+            // 
+            this.txtCliente.Location = new System.Drawing.Point(14, 206);
+            this.txtCliente.Name = "txtCliente";
+            this.txtCliente.Size = new System.Drawing.Size(261, 26);
+            this.txtCliente.TabIndex = 18;
+            // 
+            // CBAsignar
+            // 
+            this.CBAsignar.AutoSize = true;
+            this.CBAsignar.Checked = true;
+            this.CBAsignar.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CBAsignar.Location = new System.Drawing.Point(424, 208);
+            this.CBAsignar.Name = "CBAsignar";
+            this.CBAsignar.Size = new System.Drawing.Size(203, 24);
+            this.CBAsignar.TabIndex = 19;
+            this.CBAsignar.Text = "¿Clientes Automaticos?";
+            this.CBAsignar.UseVisualStyleBackColor = true;
+            // 
+            // BtnAsignar
+            // 
+            this.BtnAsignar.Location = new System.Drawing.Point(658, 206);
+            this.BtnAsignar.Name = "BtnAsignar";
+            this.BtnAsignar.Size = new System.Drawing.Size(98, 32);
+            this.BtnAsignar.TabIndex = 20;
+            this.BtnAsignar.Text = "Asignar";
+            this.BtnAsignar.UseVisualStyleBackColor = true;
+            this.BtnAsignar.Click += new System.EventHandler(this.BtnAsignar_Click);
+            // 
+            // lblMensaje4
+            // 
+            this.lblMensaje4.AutoSize = true;
+            this.lblMensaje4.Location = new System.Drawing.Point(420, 164);
+            this.lblMensaje4.Name = "lblMensaje4";
+            this.lblMensaje4.Size = new System.Drawing.Size(171, 20);
+            this.lblMensaje4.TabIndex = 21;
+            this.lblMensaje4.Text = "Clientes sin servicios: 0";
+            // 
+            // btnClientesSin
+            // 
+            this.btnClientesSin.Location = new System.Drawing.Point(658, 151);
+            this.btnClientesSin.Name = "btnClientesSin";
+            this.btnClientesSin.Size = new System.Drawing.Size(98, 33);
+            this.btnClientesSin.TabIndex = 22;
+            this.btnClientesSin.Text = "Ver";
+            this.btnClientesSin.UseVisualStyleBackColor = true;
+            this.btnClientesSin.Click += new System.EventHandler(this.btnClientesSin_Click);
             // 
             // Clientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(919, 683);
+            this.ClientSize = new System.Drawing.Size(919, 789);
+            this.Controls.Add(this.btnClientesSin);
+            this.Controls.Add(this.lblMensaje4);
+            this.Controls.Add(this.BtnAsignar);
+            this.Controls.Add(this.CBAsignar);
+            this.Controls.Add(this.txtCliente);
+            this.Controls.Add(this.lblMensaje3);
             this.Controls.Add(this.dgvUsuarios);
             this.Controls.Add(this.BtnBuscar);
             this.Controls.Add(this.lblMensaje2);
@@ -184,5 +253,11 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem mikrotiksToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem migracionToolStripMenuItem;
+        private System.Windows.Forms.Label lblMensaje3;
+        private System.Windows.Forms.TextBox txtCliente;
+        private System.Windows.Forms.CheckBox CBAsignar;
+        private System.Windows.Forms.Button BtnAsignar;
+        private System.Windows.Forms.Label lblMensaje4;
+        private System.Windows.Forms.Button btnClientesSin;
     }
 }

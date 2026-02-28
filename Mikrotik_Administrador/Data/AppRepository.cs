@@ -433,5 +433,43 @@ namespace Mikrotik_Administrador.Data
         }
 
         #endregion
+        #region Clientes
+        public async Task<List<ListClientesModel>> GetClientesSinServicios()
+        {
+            List<ListClientesModel> list = new List<ListClientesModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetClientesSinServicios", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToClientes(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListClientesModel MapToClientes(SqlDataReader reader)
+        {
+            return new ListClientesModel()
+            {
+                Id = (int)reader["Id"],
+                Nombre = (string)reader["Nombre"],
+            };
+        }
+
+        #endregion
     }
 }
