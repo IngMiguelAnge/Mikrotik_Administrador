@@ -115,7 +115,7 @@ namespace Mikrotik_Administrador
             }
         }
 
-        private void migraciónToolStripMenuItem_Click(object sender, EventArgs e)
+        private void migracionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Migracion m = new Migracion();
             m.Show();
@@ -155,6 +155,13 @@ namespace Mikrotik_Administrador
         private void btnVerMirkotiks_Click(object sender, EventArgs e)
         {
             ListaMikrotiks();
+        }
+
+        private void clientesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clientes m = new Clientes();
+            m.Show();
+            this.Hide();
         }
     }
 }

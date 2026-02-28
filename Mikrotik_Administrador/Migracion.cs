@@ -27,7 +27,7 @@ namespace Mikrotik_Administrador
         {
             Mikrotiks m = new Mikrotiks();
             m.Show();
-            this.Close();
+            this.Hide();
         }
 
         private async void Migracion_Load(object sender, EventArgs e)
@@ -47,7 +47,7 @@ namespace Mikrotik_Administrador
 
         private async void BtnBuscar_Click(object sender, EventArgs e)
         {
-            if (CBMikrotiks.SelectedValue == null && CBTodosMikrotiks.Checked == false)
+            if (CBMikrotiks.SelectedValue.ToString() == "0")
             {
                 MessageBox.Show("Por favor, selecciona un Mikrotik.");
                 return;
@@ -68,93 +68,67 @@ namespace Mikrotik_Administrador
             int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
             try
             {
-                if (CBTodosMikrotiks.Checked == false)
+                AppRepository obj = new AppRepository();
+                MikrotikModel mikro = new MikrotikModel();
+                mikro = obj.GetMikrotikById(Id_Mikrotik).Result;
+                if (mikro.Estatus == false)
                 {
-                    if (Id_Mikrotik == 0)
-                    {
-                        MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
-                        return;
-                    }
-                    AppRepository obj = new AppRepository();
-                    MikrotikModel mikro = new MikrotikModel();
-                    mikro = obj.GetMikrotikById(Id_Mikrotik).Result;
-                    if (mikro.Estatus == false)
-                    {
-                        MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    if (RBMikrotik.Checked)
-                    {
-                        mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
-                        // Usamos Task.Run para que la conexión no detenga la ventana
-                        bool login = await Task.Run(() =>
-                        {
-                            // Aquí dentro va la lógica pesada que antes congelaba todo
-                            return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
-                        });
-                        if (login == false)
-                        {
-                            MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-
-                        if (cbAntenas.Checked == true)
-                        {
-                            IsAntena = true;
-                            var lista = new List<Antenas>();
-                            lista = mikrotik.VerAntenas(txtNombre.Text).ToList();
-                            dgvUsuarios.DataSource = lista != null && lista.Count > 0
-                                ? lista : null;
-                            if (lista == null || lista.Count == 0)
-                            {
-                                MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                return;
-                            }
-                            else { 
-                                AgregarBotones();
-                                MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                        }
-                        else
-                        {
-                            IsAntena = false;
-                            var lista = new List<Fibra>();
-                            lista = mikrotik.VerFibra(txtNombre.Text).ToList();
-                            dgvUsuarios.DataSource = lista != null && lista.Count > 0
-                              ? lista : null;
-                            if (lista == null || lista.Count == 0)
-                            {
-                                MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                return;
-                            }
-                            else {
-                                AgregarBotones();
-                                MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                        }
-                    }
+                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+                // Usamos Task.Run para que la conexión no detenga la ventana
+                bool login = await Task.Run(() =>
+                {
+                    // Aquí dentro va la lógica pesada que antes congelaba todo
+                    return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                });
+                if (login == false)
+                {
+                    MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
 
-                if (RBBase.Checked)
+                if (cbAntenas.Checked == true)
                 {
-                    AppRepository Basse = new AppRepository();
-                    Id_Mikrotik = CBTodosMikrotiks.Checked ? 0 : Id_Mikrotik;
-                    var lista = Basse.GetUsuariosMikrotiksByName(txtNombre.Text, Id_Mikrotik).Result;
-
-                    if (lista != null && lista.Count > 0)
-                    {
-                        dgvUsuarios.DataSource = lista;
-                    }
-                    else
+                    IsAntena = true;
+                    var lista = new List<Antenas>();
+                    lista = mikrotik.VerAntenas(txtNombre.Text).ToList();
+                    dgvUsuarios.DataSource = lista != null && lista.Count > 0
+                        ? lista : null;
+                    if (lista == null || lista.Count == 0)
                     {
                         MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
+                    }
+                    else
+                    {
+                        AgregarBotones();
+                        MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    IsAntena = false;
+                    var lista = new List<Fibra>();
+                    lista = mikrotik.VerFibra(txtNombre.Text).ToList();
+                    dgvUsuarios.DataSource = lista != null && lista.Count > 0
+                      ? lista : null;
+                    if (lista == null || lista.Count == 0)
+                    {
+                        MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    else
+                    {
+                        AgregarBotones();
+                        MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo establecer la conexión. Verifique IP y Puertos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -172,30 +146,6 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Add(chkSeleccionar);
         }
 
-        private void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
-        private void RBBase_CheckedChanged(object sender, EventArgs e)
-        {
-            CBTodosMikrotiks.Visible = true;
-            CBTodosMikrotiks.Checked = false;
-            cbExportar.Visible = false;
-            cbExportar.Checked = false;
-            btnExportar.Visible = false;
-            cbAntenas.Visible = false;
-        }
-
-        private void RBMikrotik_CheckedChanged(object sender, EventArgs e)
-        {
-            CBTodosMikrotiks.Visible = false;
-            CBTodosMikrotiks.Checked = false;
-            cbExportar.Visible = true;
-            cbExportar.Checked = false;
-            btnExportar.Visible = true;
-            cbAntenas.Visible = true;
-        }
-
         private void btnExportar_Click(object sender, EventArgs e)
         {
             int cantidadExportada = 0;
@@ -206,17 +156,17 @@ namespace Mikrotik_Administrador
             try
             {
                 List<UsuariosExtraidosModel> Seleccionados = new List<UsuariosExtraidosModel>();
-                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                  .Where(r => cbExportar.Checked || Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
-                   .Select(r => new UsuariosExtraidosModel
-                   {
-                       id = Convert.ToString(r.Cells["id"].Value),
-                       comment = Convert.ToString(r.Cells["comment"].Value),
-                       address = Convert.ToString(r.Cells["address"].Value),
-                       estatus = Convert.ToString(r.Cells["estatus"].Value)
-                   })
-                    .ToList();
-               
+                Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
+                 .Where(r => cbExportar.Checked || Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                  .Select(r => new UsuariosExtraidosModel
+                  {
+                      id = Convert.ToString(r.Cells["id"].Value),
+                      comment = Convert.ToString(r.Cells["comment"].Value),
+                      address = Convert.ToString(r.Cells["address"].Value),
+                      estatus = Convert.ToString(r.Cells["estatus"].Value)
+                  })
+                   .ToList();
+
                 if (Seleccionados.Count == 0)
                 {
                     MessageBox.Show("No has seleccionado ningún usuario para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -226,7 +176,7 @@ namespace Mikrotik_Administrador
                 {
                     int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
                     if (Id_Mikrotik == 0)
-                    {                      
+                    {
                         MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
                         return;
                     }
@@ -255,7 +205,7 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Usuarios exportados: " + cantidadExportada.ToString() + "\nUsuarios no exportados: " + cantidadNoExportada.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
-            {         
+            {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -266,21 +216,16 @@ namespace Mikrotik_Administrador
             }
         }
 
-        private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
-        {
-            if (CBTodosMikrotiks.Checked)
-            {
-                CBMikrotiks.Enabled = false;
-            }
-            else
-            {
-                CBMikrotiks.Enabled = true;
-            }
-        }
-
         private void Migracion_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void clientesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clientes m = new Clientes();
+            m.Show();
+            this.Hide();
         }
     }
 }

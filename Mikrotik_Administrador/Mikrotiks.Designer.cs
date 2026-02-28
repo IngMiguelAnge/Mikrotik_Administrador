@@ -30,13 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             this.Menu = new System.Windows.Forms.MenuStrip();
-            this.migraciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.migracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DGVMikrotiks = new System.Windows.Forms.DataGridView();
             this.lblListaMikrotiks = new System.Windows.Forms.Label();
             this.BtnNuevo = new System.Windows.Forms.Button();
             this.btnAddresList = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnVerMirkotiks = new System.Windows.Forms.Button();
+            this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).BeginInit();
             this.SuspendLayout();
@@ -46,19 +47,20 @@
             this.Menu.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.Menu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.migraciónToolStripMenuItem});
+            this.migracionToolStripMenuItem,
+            this.clientesToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
             this.Menu.Size = new System.Drawing.Size(1204, 33);
             this.Menu.TabIndex = 0;
             this.Menu.Text = "menuStrip1";
             // 
-            // migraciónToolStripMenuItem
+            // migracionToolStripMenuItem
             // 
-            this.migraciónToolStripMenuItem.Name = "migraciónToolStripMenuItem";
-            this.migraciónToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
-            this.migraciónToolStripMenuItem.Text = "Migración";
-            this.migraciónToolStripMenuItem.Click += new System.EventHandler(this.migraciónToolStripMenuItem_Click);
+            this.migracionToolStripMenuItem.Name = "migracionToolStripMenuItem";
+            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
+            this.migracionToolStripMenuItem.Text = "Migración";
+            this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
             // 
             // DGVMikrotiks
             // 
@@ -112,6 +114,13 @@
             this.btnVerMirkotiks.UseVisualStyleBackColor = true;
             this.btnVerMirkotiks.Click += new System.EventHandler(this.btnVerMirkotiks_Click);
             // 
+            // clientesToolStripMenuItem
+            // 
+            this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
+            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
+            this.clientesToolStripMenuItem.Text = "Clientes";
+            this.clientesToolStripMenuItem.Click += new System.EventHandler(this.clientesToolStripMenuItem_Click);
+            // 
             // Mikrotiks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -141,12 +150,13 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip Menu;
-        private System.Windows.Forms.ToolStripMenuItem migraciónToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem migracionToolStripMenuItem;
         private System.Windows.Forms.DataGridView DGVMikrotiks;
         private System.Windows.Forms.Label lblListaMikrotiks;
         private System.Windows.Forms.Button BtnNuevo;
         private System.Windows.Forms.Button btnAddresList;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnVerMirkotiks;
+        private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
     }
 }

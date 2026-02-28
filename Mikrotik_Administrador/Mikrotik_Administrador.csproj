@@ -202,6 +202,12 @@
     <Compile Include="Class\Antenas.cs" />
     <Compile Include="Class\Fibra.cs" />
     <Compile Include="Class\MK.cs" />
+    <Compile Include="Clientes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Clientes.Designer.cs">
+      <DependentUpon>Clientes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\AppRepository.cs" />
     <Compile Include="InfoMikrotik.cs">
       <SubType>Form</SubType>
@@ -251,6 +257,9 @@
     <Compile Include="WirelessMikrotik.Designer.cs">
       <DependentUpon>WirelessMikrotik.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Clientes.resx">
+      <DependentUpon>Clientes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InfoMikrotik.resx">
       <DependentUpon>InfoMikrotik.cs</DependentUpon>
     </EmbeddedResource>

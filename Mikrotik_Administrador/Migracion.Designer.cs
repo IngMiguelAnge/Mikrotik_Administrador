@@ -30,6 +30,7 @@
         {
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.mikrotiksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblMensaje = new System.Windows.Forms.Label();
             this.CBMikrotiks = new System.Windows.Forms.ComboBox();
             this.txtNombre = new System.Windows.Forms.TextBox();
@@ -37,10 +38,6 @@
             this.BtnBuscar = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.dgvUsuarios = new System.Windows.Forms.DataGridView();
-            this.RBBase = new System.Windows.Forms.RadioButton();
-            this.RBMikrotik = new System.Windows.Forms.RadioButton();
-            this.lblMensaje3 = new System.Windows.Forms.Label();
-            this.CBTodosMikrotiks = new System.Windows.Forms.CheckBox();
             this.btnExportar = new System.Windows.Forms.Button();
             this.cbExportar = new System.Windows.Forms.CheckBox();
             this.cbAntenas = new System.Windows.Forms.CheckBox();
@@ -53,7 +50,8 @@
             this.Menu.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.Menu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mikrotiksToolStripMenuItem});
+            this.mikrotiksToolStripMenuItem,
+            this.clientesToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
             this.Menu.Size = new System.Drawing.Size(924, 33);
@@ -66,6 +64,13 @@
             this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 29);
             this.mikrotiksToolStripMenuItem.Text = "Mikrotiks";
             this.mikrotiksToolStripMenuItem.Click += new System.EventHandler(this.mikrotiksToolStripMenuItem_Click);
+            // 
+            // clientesToolStripMenuItem
+            // 
+            this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
+            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
+            this.clientesToolStripMenuItem.Text = "Clientes";
+            this.clientesToolStripMenuItem.Click += new System.EventHandler(this.clientesToolStripMenuItem_Click);
             // 
             // lblMensaje
             // 
@@ -86,7 +91,7 @@
             // 
             // txtNombre
             // 
-            this.txtNombre.Location = new System.Drawing.Point(378, 137);
+            this.txtNombre.Location = new System.Drawing.Point(33, 152);
             this.txtNombre.Multiline = true;
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(263, 26);
@@ -95,7 +100,7 @@
             // lblMensaje2
             // 
             this.lblMensaje2.AutoSize = true;
-            this.lblMensaje2.Location = new System.Drawing.Point(374, 105);
+            this.lblMensaje2.Location = new System.Drawing.Point(29, 125);
             this.lblMensaje2.Name = "lblMensaje2";
             this.lblMensaje2.Size = new System.Drawing.Size(286, 20);
             this.lblMensaje2.TabIndex = 4;
@@ -103,7 +108,7 @@
             // 
             // BtnBuscar
             // 
-            this.BtnBuscar.Location = new System.Drawing.Point(668, 131);
+            this.BtnBuscar.Location = new System.Drawing.Point(530, 146);
             this.BtnBuscar.Name = "BtnBuscar";
             this.BtnBuscar.Size = new System.Drawing.Size(89, 39);
             this.BtnBuscar.TabIndex = 5;
@@ -121,103 +126,51 @@
             // dgvUsuarios
             // 
             this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUsuarios.Location = new System.Drawing.Point(23, 228);
+            this.dgvUsuarios.Location = new System.Drawing.Point(23, 252);
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
             this.dgvUsuarios.Size = new System.Drawing.Size(870, 483);
             this.dgvUsuarios.TabIndex = 7;
-            this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
-            // 
-            // RBBase
-            // 
-            this.RBBase.AutoSize = true;
-            this.RBBase.Checked = true;
-            this.RBBase.Location = new System.Drawing.Point(33, 131);
-            this.RBBase.Name = "RBBase";
-            this.RBBase.Size = new System.Drawing.Size(132, 24);
-            this.RBBase.TabIndex = 2;
-            this.RBBase.TabStop = true;
-            this.RBBase.Text = "Base General";
-            this.RBBase.UseVisualStyleBackColor = true;
-            this.RBBase.CheckedChanged += new System.EventHandler(this.RBBase_CheckedChanged);
-            // 
-            // RBMikrotik
-            // 
-            this.RBMikrotik.AutoSize = true;
-            this.RBMikrotik.Location = new System.Drawing.Point(33, 182);
-            this.RBMikrotik.Name = "RBMikrotik";
-            this.RBMikrotik.Size = new System.Drawing.Size(88, 24);
-            this.RBMikrotik.TabIndex = 3;
-            this.RBMikrotik.Text = "Mikrotik";
-            this.RBMikrotik.UseVisualStyleBackColor = true;
-            this.RBMikrotik.CheckedChanged += new System.EventHandler(this.RBMikrotik_CheckedChanged);
-            // 
-            // lblMensaje3
-            // 
-            this.lblMensaje3.AutoSize = true;
-            this.lblMensaje3.Location = new System.Drawing.Point(33, 105);
-            this.lblMensaje3.Name = "lblMensaje3";
-            this.lblMensaje3.Size = new System.Drawing.Size(277, 20);
-            this.lblMensaje3.TabIndex = 10;
-            this.lblMensaje3.Text = "Seleccione el lugar donde se buscara:";
-            // 
-            // CBTodosMikrotiks
-            // 
-            this.CBTodosMikrotiks.AutoSize = true;
-            this.CBTodosMikrotiks.Location = new System.Drawing.Point(378, 61);
-            this.CBTodosMikrotiks.Name = "CBTodosMikrotiks";
-            this.CBTodosMikrotiks.Size = new System.Drawing.Size(259, 24);
-            this.CBTodosMikrotiks.TabIndex = 1;
-            this.CBTodosMikrotiks.Text = "¿Buscar en todos los mikrotiks?";
-            this.CBTodosMikrotiks.UseVisualStyleBackColor = true;
-            this.CBTodosMikrotiks.CheckedChanged += new System.EventHandler(this.CBTodosMikrotiks_CheckedChanged);
             // 
             // btnExportar
             // 
-            this.btnExportar.Location = new System.Drawing.Point(556, 176);
+            this.btnExportar.Location = new System.Drawing.Point(235, 200);
             this.btnExportar.Name = "btnExportar";
             this.btnExportar.Size = new System.Drawing.Size(80, 35);
             this.btnExportar.TabIndex = 7;
             this.btnExportar.Text = "Exportar";
             this.btnExportar.UseVisualStyleBackColor = true;
-            this.btnExportar.Visible = false;
             this.btnExportar.Click += new System.EventHandler(this.btnExportar_Click);
             // 
             // cbExportar
             // 
             this.cbExportar.AutoSize = true;
-            this.cbExportar.Location = new System.Drawing.Point(401, 181);
+            this.cbExportar.Location = new System.Drawing.Point(33, 206);
             this.cbExportar.Name = "cbExportar";
             this.cbExportar.Size = new System.Drawing.Size(149, 24);
             this.cbExportar.TabIndex = 6;
             this.cbExportar.Text = "¿Exportar todo?";
             this.cbExportar.UseVisualStyleBackColor = true;
-            this.cbExportar.Visible = false;
             // 
             // cbAntenas
             // 
             this.cbAntenas.AutoSize = true;
-            this.cbAntenas.Location = new System.Drawing.Point(164, 181);
+            this.cbAntenas.Location = new System.Drawing.Point(337, 152);
             this.cbAntenas.Name = "cbAntenas";
             this.cbAntenas.Size = new System.Drawing.Size(187, 24);
             this.cbAntenas.TabIndex = 11;
             this.cbAntenas.Text = "¿Buscar en antenas?";
             this.cbAntenas.UseVisualStyleBackColor = true;
-            this.cbAntenas.Visible = false;
             // 
             // Migracion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(924, 723);
+            this.ClientSize = new System.Drawing.Size(924, 745);
             this.Controls.Add(this.cbAntenas);
             this.Controls.Add(this.cbExportar);
             this.Controls.Add(this.btnExportar);
-            this.Controls.Add(this.CBTodosMikrotiks);
-            this.Controls.Add(this.lblMensaje3);
-            this.Controls.Add(this.RBMikrotik);
-            this.Controls.Add(this.RBBase);
             this.Controls.Add(this.dgvUsuarios);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.BtnBuscar);
@@ -252,12 +205,9 @@
         private System.Windows.Forms.Button BtnBuscar;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.DataGridView dgvUsuarios;
-        private System.Windows.Forms.RadioButton RBBase;
-        private System.Windows.Forms.RadioButton RBMikrotik;
-        private System.Windows.Forms.Label lblMensaje3;
-        private System.Windows.Forms.CheckBox CBTodosMikrotiks;
         private System.Windows.Forms.Button btnExportar;
         private System.Windows.Forms.CheckBox cbExportar;
         private System.Windows.Forms.CheckBox cbAntenas;
+        private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
     }
 }
