@@ -17,6 +17,7 @@ namespace Mikrotik_Administrador
     public partial class Migracion : Form
     {
         MK mikrotik;
+        bool IsAntena = false;
         public Migracion()
         {
             InitializeComponent();
@@ -64,18 +65,16 @@ namespace Mikrotik_Administrador
             BtnBuscar.Enabled = false; // Deshabilitar el botón para evitar múltiples clics
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
+            int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
             try
             {
-                int Id = 0;
                 if (CBTodosMikrotiks.Checked == false)
                 {
-                    int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
                     if (Id_Mikrotik == 0)
                     {
                         MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
                         return;
                     }
-                    Id = Id_Mikrotik;
                     AppRepository obj = new AppRepository();
                     MikrotikModel mikro = new MikrotikModel();
                     mikro = obj.GetMikrotikById(Id_Mikrotik).Result;
@@ -101,6 +100,7 @@ namespace Mikrotik_Administrador
 
                         if (cbAntenas.Checked == true)
                         {
+                            IsAntena = true;
                             var lista = new List<Antenas>();
                             lista = mikrotik.VerAntenas(txtNombre.Text).ToList();
                             dgvUsuarios.DataSource = lista != null && lista.Count > 0
@@ -117,6 +117,7 @@ namespace Mikrotik_Administrador
                         }
                         else
                         {
+                            IsAntena = false;
                             var lista = new List<Fibra>();
                             lista = mikrotik.VerFibra(txtNombre.Text).ToList();
                             dgvUsuarios.DataSource = lista != null && lista.Count > 0
@@ -137,8 +138,8 @@ namespace Mikrotik_Administrador
                 if (RBBase.Checked)
                 {
                     AppRepository Basse = new AppRepository();
-
-                    var lista = Basse.GetUsuariosMikrotiksByName(txtNombre.Text, Id).Result;
+                    Id_Mikrotik = CBTodosMikrotiks.Checked ? 0 : Id_Mikrotik;
+                    var lista = Basse.GetUsuariosMikrotiksByName(txtNombre.Text, Id_Mikrotik).Result;
 
                     if (lista != null && lista.Count > 0)
                     {
@@ -182,6 +183,7 @@ namespace Mikrotik_Administrador
             cbExportar.Visible = false;
             cbExportar.Checked = false;
             btnExportar.Visible = false;
+            cbAntenas.Visible = false;
         }
 
         private void RBMikrotik_CheckedChanged(object sender, EventArgs e)
@@ -191,6 +193,7 @@ namespace Mikrotik_Administrador
             cbExportar.Visible = true;
             cbExportar.Checked = false;
             btnExportar.Visible = true;
+            cbAntenas.Visible = true;
         }
 
         private void btnExportar_Click(object sender, EventArgs e)
@@ -202,24 +205,20 @@ namespace Mikrotik_Administrador
             btnExportar.Enabled = false; // Bloqueamos el botón para evitar múltiples clics
             try
             {
-                List<string> Seleccionados = new List<string>();
-                if (cbExportar.Checked)
-                {
-                    Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                    .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
-                    .Select(r => Convert.ToString(r.Cells["Nombre"].Value)) // Cambia "Id" por tu columna clave
+                List<UsuariosExtraidosModel> Seleccionados = new List<UsuariosExtraidosModel>();
+                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
+                  .Where(r => cbExportar.Checked || Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                   .Select(r => new UsuariosExtraidosModel
+                   {
+                       id = Convert.ToString(r.Cells["id"].Value),
+                       comment = Convert.ToString(r.Cells["comment"].Value),
+                       address = Convert.ToString(r.Cells["address"].Value),
+                       estatus = Convert.ToString(r.Cells["estatus"].Value)
+                   })
                     .ToList();
-                }
-                else
-                {
-                    Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                   .Select(r => Convert.ToString(r.Cells["Nombre"].Value)) // Cambia "Id" por tu columna clave
-                   .ToList();
-                }
+               
                 if (Seleccionados.Count == 0)
                 {
-                    progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                    progressBar1.Value = 100;
                     MessageBox.Show("No has seleccionado ningún usuario para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -227,19 +226,21 @@ namespace Mikrotik_Administrador
                 {
                     int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
                     if (Id_Mikrotik == 0)
-                    {
-                        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                        progressBar1.Value = 100;
+                    {                      
                         MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
                         return;
                     }
-                    foreach (string item in Seleccionados)
+                    AppRepository obj = new AppRepository();
+                    foreach (UsuariosExtraidosModel item in Seleccionados)
                     {
                         UsuariosGeneralModel objuser = new UsuariosGeneralModel();
                         objuser.Id_Mikrotik = Id_Mikrotik;
-                        objuser.Nombre = item;
+                        objuser.Nombre = item.comment;
+                        objuser.Address = item.address;
+                        objuser.Antena = IsAntena;
+                        objuser.Id_Interno = item.id;
+                        objuser.Estatus = item.estatus;
                         objuser.Id = 0;
-                        AppRepository obj = new AppRepository();
                         var res = obj.InsertandUpdateUsuariosGeneral(objuser).Result;
                         if (res)
                         {
@@ -251,19 +252,17 @@ namespace Mikrotik_Administrador
                         }
                     }
                 }
-                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                progressBar1.Value = 100;
                 MessageBox.Show("Usuarios exportados: " + cantidadExportada.ToString() + "\nUsuarios no exportados: " + cantidadNoExportada.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
-            {
-                progressBar1.Style = ProgressBarStyle.Blocks;
-                progressBar1.Value = 0;
+            {         
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 btnExportar.Enabled = true; // Rehabilitamos el botón
+                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                progressBar1.Value = 100;
             }
         }
 

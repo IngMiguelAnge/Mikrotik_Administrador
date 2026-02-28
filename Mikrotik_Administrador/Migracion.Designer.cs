@@ -204,6 +204,7 @@
             this.cbAntenas.TabIndex = 11;
             this.cbAntenas.Text = "¿Buscar en antenas?";
             this.cbAntenas.UseVisualStyleBackColor = true;
+            this.cbAntenas.Visible = false;
             // 
             // Migracion
             // 

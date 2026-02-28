@@ -43,9 +43,9 @@ namespace Mikrotik_Administrador
                     {
                         Id_Mikrotik = Id_Mikrotik,
                         Address = item.address,
-                        Network = item.network,
-                        Interface = item.@interface,
-                        Actual_Interface = item.actual_interface,
+                        //Network = item.network,
+                        //Interface = item.@interface,
+                        //Actual_Interface = item.actual_interface,
                         Comment = item.comment,
                         Estatus = item.estatus,
                         Id_Interno = item.id

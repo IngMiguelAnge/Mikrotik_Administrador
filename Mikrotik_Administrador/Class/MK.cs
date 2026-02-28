@@ -283,13 +283,13 @@ namespace Mikrotik_Administrador.Class
                         string value = parts[2];
 
                         if (key == ".id") currentObj.id = value;
-                        if (key == "address") currentObj.address = value;
                         if (key == "comment")
                         {
                             // Si la IP trae su propio comentario, actualizamos el "arrastre"
                             currentObj.comment = value;
                             ultimoComentarioEncontrado = value;
                         }
+                        if (key == "address") currentObj.address = value;
                         if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
                     }
                 }
@@ -337,7 +337,7 @@ namespace Mikrotik_Administrador.Class
                         string value = parts[2];
 
                         if (key == ".id") currentObj.id = value;
-                        if (key == "name") currentObj.name = value;
+                        if (key == "name") currentObj.comment = value;
                         if (key == "remote-address") currentObj.address = value;
                         if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
                     }
@@ -390,9 +390,9 @@ namespace Mikrotik_Administrador.Class
                             currentObj.comment = value;
                             ultimoComentarioEncontrado = value;
                         }
-                        if (key == "network") currentObj.network = value;
-                        if (key == "interface") currentObj.@interface = value;
-                        if (key == "actual-interface") currentObj.actual_interface = value;
+                        //if (key == "network") currentObj.network = value;
+                        //if (key == "interface") currentObj.@interface = value;
+                        //if (key == "actual-interface") currentObj.actual_interface = value;
                         if (key == "disabled") currentObj.estatus = value == "false"? "Activo": "Inactivo";
                     }
                 }

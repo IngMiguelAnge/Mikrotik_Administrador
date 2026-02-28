@@ -234,6 +234,7 @@
     <Compile Include="Model\UbicacionModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Model\ListUsuariosGeneralModel.cs" />
+    <Compile Include="Model\UsuariosExtraidosModel.cs" />
     <Compile Include="Model\UsuariosGeneralModel.cs" />
     <Compile Include="Model\UsuariosModel.cs" />
     <Compile Include="Program.cs" />

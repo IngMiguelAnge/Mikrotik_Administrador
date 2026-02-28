@@ -304,8 +304,13 @@ namespace Mikrotik_Administrador.Data
             return new ListUsuariosGeneralModel()
             {
                 Id = (int)reader["Id"],
+                Id_Interno = (string)reader["Id_Interno"],
+                Tipo = (string)reader["Tipo"],
                 Nombre = (string)reader["Nombre"],
+                Address = (string)reader["Address"],
+                Estatus = (string)reader["Estatus"],                
                 Mikrotik = (string)reader["Mikrotik"],
+                Id_Cliente = Convert.IsDBNull(reader["Id_Cliente"]) ? (int?)null : (int)reader["Id_Cliente"],
             };
         }
         public async Task<bool> InsertandUpdateUsuariosGeneral(UsuariosGeneralModel obj)
@@ -317,9 +322,12 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("InsertAndUpdateUsuariosGeneral", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
                         cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Address", obj.Address));
                         cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", obj.Id_Mikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Antena", obj.Antena));
+                        cmd.Parameters.Add(new SqlParameter("@Id_Interno", obj.Id_Interno));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
