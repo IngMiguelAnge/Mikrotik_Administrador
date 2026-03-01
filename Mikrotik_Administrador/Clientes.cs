@@ -1,4 +1,6 @@
-﻿using Mikrotik_Administrador.Data;
+﻿using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.Devices;
+using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -46,24 +50,24 @@ namespace Mikrotik_Administrador
             btnClientesSin.Enabled = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
-            int Id_Mikrotik = CBTodosMikrotiks.Checked ==true ? 0 : (int)CBMikrotiks.SelectedValue;
+            int Id_Mikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
             try
             {
-                    AppRepository obj = new AppRepository();
-                    Id_Mikrotik = CBTodosMikrotiks.Checked ? 0 : Id_Mikrotik;
-                    var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, Id_Mikrotik).Result;
+                AppRepository obj = new AppRepository();
+                Id_Mikrotik = CBTodosMikrotiks.Checked ? 0 : Id_Mikrotik;
+                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, Id_Mikrotik).Result;
 
-                    if (lista != null && lista.Count > 0)
-                    {
-                        dgvUsuarios.DataSource = lista;
-                        AgregarBotones();
-                        MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
+                if (lista != null && lista.Count > 0)
+                {
+                    dgvUsuarios.DataSource = lista;
+                    AgregarBotones();
+                    MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
             }
             catch (Exception ex)
             {
@@ -111,7 +115,7 @@ namespace Mikrotik_Administrador
             CBMikrotiks.ValueMember = "Id";      // El dato que procesas por DETRÁS
             CBMikrotiks.DataSource = listaMikrotiks;
             CBMikrotiks.SelectedIndex = 0;
-            lblMensaje4.Text = "Clientes sin servicios encontrados: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
+            lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
         }
 
         private void mikrotiksToolStripMenuItem_Click(object sender, EventArgs e)
@@ -130,8 +134,89 @@ namespace Mikrotik_Administrador
 
         private async void BtnAsignar_Click(object sender, EventArgs e)
         {
-            AppRepository obj = new AppRepository();
-            lblMensaje4.Text = "Clientes sin servicios encontrados: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
+            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
+            {
+                MessageBox.Show("Por favor, selecciona un Mikrotik.");
+                return;
+            }
+
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            btnClientesSin.Enabled = false;
+            BtnAsignar.Enabled = false;
+            BtnBuscar.Enabled = false;
+            try
+            {
+                AppRepository obj = new AppRepository();
+                string NombreAsignado = string.Empty;
+                if (CBAsignar.Checked == false)
+                {
+                    NombreAsignado = Interaction.InputBox("Escriba el nombre del cliente:", "Registro de Usuarios", "");
+                    if (NombreAsignado.Trim() == string.Empty)
+                    {
+                        MessageBox.Show("Se necesita un cliente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                lblMensaje4.Text = "Clientes sin servicios encontrados: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
+
+                List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
+                Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
+                 .Where(r => cbTodos.Checked || Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                  .Select(r => new UsuariosModel
+                  {
+                      id = Convert.ToString(r.Cells["Id"].Value),
+                      name = Convert.ToString(r.Cells["Nombre"].Value),
+                  })
+                  .ToList();
+                if (Seleccionados.Count() == 0)
+                {
+                    MessageBox.Show("No hay usuarios seleccionados");
+                    return;
+                }
+                bool Insert = false;
+                foreach (UsuariosModel item in Seleccionados)
+                {
+                    NombreAsignado = string.IsNullOrEmpty(NombreAsignado) ? Regex.Replace(item.name, @"[-<>]", " ").Trim().ToUpper() : NombreAsignado;
+                    Insert = obj.InsertAndUpdateClienteInGeneral(Convert.ToInt32(item.id), NombreAsignado).Result;
+                    if (Insert == false)
+                    {
+                        MessageBox.Show("Error al asignar el cliente: " + NombreAsignado, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                MessageBox.Show("Clientes asignados correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dgvUsuarios.DataSource = null;
+                dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
+                int Id_Mikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
+                Id_Mikrotik = CBTodosMikrotiks.Checked ? 0 : Id_Mikrotik;
+                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, Id_Mikrotik).Result;
+
+                if (lista != null && lista.Count > 0)
+                {
+                    dgvUsuarios.DataSource = lista;
+                    AgregarBotones();
+                    MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No hay usuarios seleccionados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnClientesSin.Enabled = true;
+                BtnAsignar.Enabled = true;
+                BtnBuscar.Enabled = true;
+                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                progressBar1.Value = 100;
+            }
         }
 
         private void btnClientesSin_Click(object sender, EventArgs e)

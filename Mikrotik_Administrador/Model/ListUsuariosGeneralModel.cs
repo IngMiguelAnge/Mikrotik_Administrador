@@ -12,6 +12,7 @@ namespace Mikrotik_Administrador.Model
         public string Estatus { get; set; }
         public string Mikrotik { get; set; }
         public int? Id_Cliente { get; set; }
+        public string Cliente { get; set; }
         public string Tipo { get; set; }
     }
 }

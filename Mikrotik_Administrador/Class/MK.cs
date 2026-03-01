@@ -240,6 +240,39 @@ namespace Mikrotik_Administrador.Class
             }
             return obj;
         }
+        public string VerQueue(string name)
+        {
+            string MaxLimit = string.Empty;
+            try
+            {
+                Send("/queue/simple/print");
+                Send("?.name=" + name);
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        continue;
+                    }
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+
+                        if (key == "Max Limit") return value;                        
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return MaxLimit;
+        }
         public List<Antenas> VerAntenas(string name)
         {
             List<Antenas> listaFinal = new List<Antenas>();
@@ -288,9 +321,11 @@ namespace Mikrotik_Administrador.Class
                             // Si la IP trae su propio comentario, actualizamos el "arrastre"
                             currentObj.comment = value;
                             ultimoComentarioEncontrado = value;
+                            currentObj.maxlimit = VerQueue(value);
                         }
                         if (key == "address") currentObj.address = value;
                         if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
+                   
                     }
                 }
             }

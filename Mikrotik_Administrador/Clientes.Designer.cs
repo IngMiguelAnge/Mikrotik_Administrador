@@ -45,8 +45,11 @@
             this.BtnAsignar = new System.Windows.Forms.Button();
             this.lblMensaje4 = new System.Windows.Forms.Label();
             this.btnClientesSin = new System.Windows.Forms.Button();
+            this.cbTodos = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // CBTodosMikrotiks
@@ -114,11 +117,12 @@
             // dgvUsuarios
             // 
             this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUsuarios.Location = new System.Drawing.Point(14, 256);
+            this.dgvUsuarios.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvUsuarios.Location = new System.Drawing.Point(3, 22);
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
-            this.dgvUsuarios.Size = new System.Drawing.Size(870, 483);
+            this.dgvUsuarios.Size = new System.Drawing.Size(771, 72);
             this.dgvUsuarios.TabIndex = 14;
             // 
             // menuStrip1
@@ -130,21 +134,21 @@
             this.migracionToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(919, 33);
+            this.menuStrip1.Size = new System.Drawing.Size(812, 33);
             this.menuStrip1.TabIndex = 15;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // mikrotiksToolStripMenuItem
             // 
             this.mikrotiksToolStripMenuItem.Name = "mikrotiksToolStripMenuItem";
-            this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 32);
+            this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 29);
             this.mikrotiksToolStripMenuItem.Text = "Mikrotiks";
             this.mikrotiksToolStripMenuItem.Click += new System.EventHandler(this.mikrotiksToolStripMenuItem_Click);
             // 
             // migracionToolStripMenuItem
             // 
             this.migracionToolStripMenuItem.Name = "migracionToolStripMenuItem";
-            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 32);
+            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
             this.migracionToolStripMenuItem.Text = "Migración";
             this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
             // 
@@ -178,7 +182,7 @@
             // 
             // BtnAsignar
             // 
-            this.BtnAsignar.Location = new System.Drawing.Point(658, 206);
+            this.BtnAsignar.Location = new System.Drawing.Point(658, 159);
             this.BtnAsignar.Name = "BtnAsignar";
             this.BtnAsignar.Size = new System.Drawing.Size(98, 32);
             this.BtnAsignar.TabIndex = 20;
@@ -189,7 +193,7 @@
             // lblMensaje4
             // 
             this.lblMensaje4.AutoSize = true;
-            this.lblMensaje4.Location = new System.Drawing.Point(420, 164);
+            this.lblMensaje4.Location = new System.Drawing.Point(420, 98);
             this.lblMensaje4.Name = "lblMensaje4";
             this.lblMensaje4.Size = new System.Drawing.Size(171, 20);
             this.lblMensaje4.TabIndex = 21;
@@ -197,7 +201,7 @@
             // 
             // btnClientesSin
             // 
-            this.btnClientesSin.Location = new System.Drawing.Point(658, 151);
+            this.btnClientesSin.Location = new System.Drawing.Point(658, 98);
             this.btnClientesSin.Name = "btnClientesSin";
             this.btnClientesSin.Size = new System.Drawing.Size(98, 33);
             this.btnClientesSin.TabIndex = 22;
@@ -205,18 +209,42 @@
             this.btnClientesSin.UseVisualStyleBackColor = true;
             this.btnClientesSin.Click += new System.EventHandler(this.btnClientesSin_Click);
             // 
+            // cbTodos
+            // 
+            this.cbTodos.AutoSize = true;
+            this.cbTodos.Location = new System.Drawing.Point(424, 164);
+            this.cbTodos.Name = "cbTodos";
+            this.cbTodos.Size = new System.Drawing.Size(154, 24);
+            this.cbTodos.TabIndex = 23;
+            this.cbTodos.Text = "Selecionar todos";
+            this.cbTodos.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.AutoSize = true;
+            this.groupBox1.Controls.Add(this.dgvUsuarios);
+            this.groupBox1.Location = new System.Drawing.Point(23, 250);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(777, 97);
+            this.groupBox1.TabIndex = 24;
+            this.groupBox1.TabStop = false;
+            // 
             // Clientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(919, 789);
+            this.ClientSize = new System.Drawing.Size(812, 380);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.cbTodos);
             this.Controls.Add(this.btnClientesSin);
             this.Controls.Add(this.lblMensaje4);
             this.Controls.Add(this.BtnAsignar);
             this.Controls.Add(this.CBAsignar);
             this.Controls.Add(this.txtCliente);
             this.Controls.Add(this.lblMensaje3);
-            this.Controls.Add(this.dgvUsuarios);
             this.Controls.Add(this.BtnBuscar);
             this.Controls.Add(this.lblMensaje2);
             this.Controls.Add(this.txtNombre);
@@ -227,14 +255,17 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Clientes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Clientes";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Clientes_FormClosed);
             this.Load += new System.EventHandler(this.Clientes_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -259,5 +290,7 @@
         private System.Windows.Forms.Button BtnAsignar;
         private System.Windows.Forms.Label lblMensaje4;
         private System.Windows.Forms.Button btnClientesSin;
+        private System.Windows.Forms.CheckBox cbTodos;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

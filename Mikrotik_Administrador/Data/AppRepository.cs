@@ -311,6 +311,7 @@ namespace Mikrotik_Administrador.Data
                 Estatus = (string)reader["Estatus"],                
                 Mikrotik = (string)reader["Mikrotik"],
                 Id_Cliente = Convert.IsDBNull(reader["Id_Cliente"]) ? (int?)null : (int)reader["Id_Cliente"],
+                Cliente = Convert.IsDBNull(reader["Cliente"]) ? string.Empty : (string)reader["Cliente"],
             };
         }
         public async Task<bool> InsertandUpdateUsuariosGeneral(UsuariosGeneralModel obj)
@@ -339,7 +340,6 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-
         #endregion
         #region ActionsWireless
         public async Task<List<ListWirelessModel>> GetWireless()
@@ -434,6 +434,29 @@ namespace Mikrotik_Administrador.Data
 
         #endregion
         #region Clientes
+        public async Task<bool> InsertAndUpdateClienteInGeneral(int IdUsuario ,string Nombre)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("InsertAndUpdateClienteInGeneral", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", IdUsuario));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public async Task<List<ListClientesModel>> GetClientesSinServicios()
         {
             List<ListClientesModel> list = new List<ListClientesModel>();
