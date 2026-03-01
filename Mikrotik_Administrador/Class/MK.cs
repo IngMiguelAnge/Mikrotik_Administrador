@@ -1,6 +1,7 @@
 ﻿using Mikrotik_Administrador.Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -240,13 +241,26 @@ namespace Mikrotik_Administrador.Class
             }
             return obj;
         }
+        private string FormatearNumero(string numeroStr)
+        {
+            if (!long.TryParse(numeroStr, out long bits)) return "0";
+
+            if (bits >= 1000000) // Si es mayor o igual a 1 Megabit
+                return (bits / 1000000) + "M";
+
+            if (bits >= 1000) // Si es mayor o igual a 1 Kilobit
+                return (bits / 1000) + "k";
+
+            return bits.ToString(); // Si es menor a 1k, lo deja igual
+        }
         public string VerQueue(string name)
         {
             string MaxLimit = string.Empty;
             try
             {
                 Send("/queue/simple/print");
-                Send("?.name=" + name);
+                Send("=.proplist=max-limit");// Esto ayuda a que el router no se pierda enviando datos extra
+                Send("?name=" + name, true);
                 foreach (string row in Read())
                 {
                     if (row.StartsWith("!re"))
@@ -263,7 +277,14 @@ namespace Mikrotik_Administrador.Class
                         string key = parts[1];
                         string value = parts[2];
 
-                        if (key == "Max Limit") return value;                        
+                        if (key == "max-limit") {
+                            if (value.Contains("/"))
+                            {
+                                string[] partes = value.Split('/');
+                                return $"{FormatearNumero(partes[0])} / {FormatearNumero(partes[1])}";
+                            }
+                            return FormatearNumero(value);
+                        }                        
                     }
                 }
             }
@@ -324,8 +345,7 @@ namespace Mikrotik_Administrador.Class
                             currentObj.maxlimit = VerQueue(value);
                         }
                         if (key == "address") currentObj.address = value;
-                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
-                   
+                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";                   
                     }
                 }
             }

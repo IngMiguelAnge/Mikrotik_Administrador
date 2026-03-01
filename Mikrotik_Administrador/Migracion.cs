@@ -92,10 +92,8 @@ namespace Mikrotik_Administrador
                 if (cbAntenas.Checked == true)
                 {
                     IsAntena = true;
-                    var lista = new List<Antenas>();
-                    lista = mikrotik.VerAntenas(txtNombre.Text).ToList();
-                    dgvUsuarios.DataSource = lista != null && lista.Count > 0
-                        ? lista : null;
+                    var lista = await Task.Run(() => mikrotik.VerAntenas(txtNombre.Text).ToList());
+                    dgvUsuarios.DataSource = lista != null && lista.Count > 0 ? lista : null;
                     if (lista == null || lista.Count == 0)
                     {
                         MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -110,8 +108,7 @@ namespace Mikrotik_Administrador
                 else
                 {
                     IsAntena = false;
-                    var lista = new List<Fibra>();
-                    lista = mikrotik.VerFibra(txtNombre.Text).ToList();
+                    var lista = await Task.Run(() => mikrotik.VerFibra(txtNombre.Text).ToList());
                     dgvUsuarios.DataSource = lista != null && lista.Count > 0
                       ? lista : null;
                     if (lista == null || lista.Count == 0)

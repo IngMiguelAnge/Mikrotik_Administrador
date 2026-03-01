@@ -31,13 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.migracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DGVMikrotiks = new System.Windows.Forms.DataGridView();
-            this.lblListaMikrotiks = new System.Windows.Forms.Label();
             this.BtnNuevo = new System.Windows.Forms.Button();
             this.btnAddresList = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnVerMirkotiks = new System.Windows.Forms.Button();
-            this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).BeginInit();
             this.SuspendLayout();
@@ -62,6 +61,13 @@
             this.migracionToolStripMenuItem.Text = "Migración";
             this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
             // 
+            // clientesToolStripMenuItem
+            // 
+            this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
+            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
+            this.clientesToolStripMenuItem.Text = "Clientes";
+            this.clientesToolStripMenuItem.Click += new System.EventHandler(this.clientesToolStripMenuItem_Click);
+            // 
             // DGVMikrotiks
             // 
             this.DGVMikrotiks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -72,15 +78,6 @@
             this.DGVMikrotiks.Size = new System.Drawing.Size(1128, 261);
             this.DGVMikrotiks.TabIndex = 1;
             this.DGVMikrotiks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVMikrotiks_CellContentClick);
-            // 
-            // lblListaMikrotiks
-            // 
-            this.lblListaMikrotiks.AutoSize = true;
-            this.lblListaMikrotiks.Location = new System.Drawing.Point(51, 124);
-            this.lblListaMikrotiks.Name = "lblListaMikrotiks";
-            this.lblListaMikrotiks.Size = new System.Drawing.Size(161, 20);
-            this.lblListaMikrotiks.TabIndex = 2;
-            this.lblListaMikrotiks.Text = "Mikrotiks Registrados";
             // 
             // BtnNuevo
             // 
@@ -114,13 +111,6 @@
             this.btnVerMirkotiks.UseVisualStyleBackColor = true;
             this.btnVerMirkotiks.Click += new System.EventHandler(this.btnVerMirkotiks_Click);
             // 
-            // clientesToolStripMenuItem
-            // 
-            this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
-            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
-            this.clientesToolStripMenuItem.Text = "Clientes";
-            this.clientesToolStripMenuItem.Click += new System.EventHandler(this.clientesToolStripMenuItem_Click);
-            // 
             // Mikrotiks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -129,7 +119,6 @@
             this.Controls.Add(this.btnVerMirkotiks);
             this.Controls.Add(this.btnAddresList);
             this.Controls.Add(this.BtnNuevo);
-            this.Controls.Add(this.lblListaMikrotiks);
             this.Controls.Add(this.DGVMikrotiks);
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
@@ -152,7 +141,6 @@
         private System.Windows.Forms.MenuStrip Menu;
         private System.Windows.Forms.ToolStripMenuItem migracionToolStripMenuItem;
         private System.Windows.Forms.DataGridView DGVMikrotiks;
-        private System.Windows.Forms.Label lblListaMikrotiks;
         private System.Windows.Forms.Button BtnNuevo;
         private System.Windows.Forms.Button btnAddresList;
         private System.Windows.Forms.ToolTip toolTip1;

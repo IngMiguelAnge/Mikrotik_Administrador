@@ -25,6 +25,11 @@ namespace Mikrotik_Administrador
 
         private void BtnActualizar_Click(object sender, EventArgs e)
         {
+            if(dgvWireless.DataSource == null)
+            {
+                MessageBox.Show("No hay datos para actualizar. Por favor extraiga los datos primero.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             BtnExtraer.Enabled = false; // Deshabilitar el botón para evitar múltiples clics
             BtnActualizar.Enabled = false;
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
@@ -100,14 +105,12 @@ namespace Mikrotik_Administrador
                     MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                
-                lista = mikrotik.VerAddres();
+
+                var lista = await Task.Run(() => mikrotik.VerAddres());
                 if (lista != null && lista.Count > 0)
                 {
                     dgvWireless.DataSource = lista;
-                    BtnActualizar.Enabled = true;
                 }
-                else BtnActualizar.Enabled = false;
 
                 MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -121,6 +124,7 @@ namespace Mikrotik_Administrador
                 progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
                 progressBar1.Value = 100;
                 BtnExtraer.Enabled = true; // Rehabilitamos el botón
+                BtnActualizar.Enabled = true;
             }
         }
     }

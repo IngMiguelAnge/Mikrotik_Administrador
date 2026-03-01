@@ -41,8 +41,10 @@
             this.btnExportar = new System.Windows.Forms.Button();
             this.cbExportar = new System.Windows.Forms.CheckBox();
             this.cbAntenas = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Menu
@@ -54,7 +56,7 @@
             this.clientesToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(924, 33);
+            this.Menu.Size = new System.Drawing.Size(699, 33);
             this.Menu.TabIndex = 0;
             this.Menu.Text = "menuStrip1";
             // 
@@ -118,7 +120,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(642, 61);
+            this.progressBar1.Location = new System.Drawing.Point(486, 64);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(133, 23);
             this.progressBar1.TabIndex = 6;
@@ -126,11 +128,12 @@
             // dgvUsuarios
             // 
             this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUsuarios.Location = new System.Drawing.Point(23, 252);
+            this.dgvUsuarios.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvUsuarios.Location = new System.Drawing.Point(3, 22);
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
-            this.dgvUsuarios.Size = new System.Drawing.Size(870, 483);
+            this.dgvUsuarios.Size = new System.Drawing.Size(616, 219);
             this.dgvUsuarios.TabIndex = 7;
             // 
             // btnExportar
@@ -163,15 +166,27 @@
             this.cbAntenas.Text = "¿Buscar en antenas?";
             this.cbAntenas.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.dgvUsuarios);
+            this.groupBox1.Location = new System.Drawing.Point(29, 254);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(622, 244);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            // 
             // Migracion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(924, 745);
+            this.ClientSize = new System.Drawing.Size(699, 523);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbAntenas);
             this.Controls.Add(this.cbExportar);
             this.Controls.Add(this.btnExportar);
-            this.Controls.Add(this.dgvUsuarios);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.BtnBuscar);
             this.Controls.Add(this.lblMensaje2);
@@ -181,14 +196,17 @@
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Migracion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Migracion";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Migracion_FormClosed);
             this.Load += new System.EventHandler(this.Migracion_Load);
             this.Menu.ResumeLayout(false);
             this.Menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -209,5 +227,6 @@
         private System.Windows.Forms.CheckBox cbExportar;
         private System.Windows.Forms.CheckBox cbAntenas;
         private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
