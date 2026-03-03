@@ -254,6 +254,7 @@
             this.Controls.Add(this.txtLatitud);
             this.Controls.Add(this.gMap);
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Ubicacion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ubicacion";

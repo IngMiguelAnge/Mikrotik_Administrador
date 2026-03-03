@@ -185,7 +185,7 @@ namespace Mikrotik_Administrador.Class
                     respuesta = Read();
                 }
 
-                return respuesta.Any(s => s.Contains("!done"));
+                return respuesta.Any(s => s.Contains("!done")) && !respuesta.Any(s => s.Contains("!trap"));
             }
             catch (Exception ex)
             {
@@ -277,14 +277,15 @@ namespace Mikrotik_Administrador.Class
                         string key = parts[1];
                         string value = parts[2];
 
-                        if (key == "max-limit") {
+                        if (key == "max-limit")
+                        {
                             if (value.Contains("/"))
                             {
                                 string[] partes = value.Split('/');
                                 return $"{FormatearNumero(partes[0])} / {FormatearNumero(partes[1])}";
                             }
                             return FormatearNumero(value);
-                        }                        
+                        }
                     }
                 }
             }
@@ -299,7 +300,6 @@ namespace Mikrotik_Administrador.Class
             List<Antenas> listaFinal = new List<Antenas>();
             try
             {
-
                 //if (name == string.Empty)
                 //{
                 Send("/ip/firewall/address-list/print");
@@ -323,10 +323,7 @@ namespace Mikrotik_Administrador.Class
                         currentObj = new Antenas();
                         // IMPORTANTE: Primero asumimos que hereda el comentario anterior
                         currentObj.comment = ultimoComentarioEncontrado;
-                        if (name == string.Empty)
-                            listaFinal.Add(currentObj);
-                        if (name != string.Empty && currentObj.comment.Contains(name))
-                            listaFinal.Add(currentObj);
+                        listaFinal.Add(currentObj);
                         continue;
                     }
 
@@ -359,23 +356,59 @@ namespace Mikrotik_Administrador.Class
             {
 
             }
-            return listaFinal;
+            return name != string.Empty ? listaFinal.Where(r=> r.comment == name).ToList():listaFinal;
         }
+        public List<LimiteModel> VerProfile()
+        {
+                List<LimiteModel> lista = new List<LimiteModel>();
+            try
+            {
+                Send("/ppp/profile/print");
+                Send("=.proplist=name,rate-limit", true);
+                LimiteModel obj = null;
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        obj = new LimiteModel();
+                        lista.Add(obj);
+                        continue;
+                    }
+                    if (row.StartsWith("!done")) break;
 
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+                        if(key == "name") obj.Name = value;
+                        if(key == "rate-limit") obj.MaxLimit = value;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return lista;
+        }
         public List<Fibra> VerFibra(string name)
         {
             List<Fibra> listaFinal = new List<Fibra>();
             try
             {
+                var Listalimites = VerProfile();
                 if (name == string.Empty)
                 {
                     Send("/ppp/secret/print");
-                    Send("=.proplist=.id,name,remote-address,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
+                    Send("=.proplist=.id,name,profile,remote-address,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
                 }
                 if (name != string.Empty)
                 {
                     Send("/ppp/secret/print");
-                    Send("=.proplist=.id,name,remote-address,disabled");// Esto ayuda a que el router no se pierda enviando datos extra
+                    Send("=.proplist=.id,name,profile,remote-address,disabled");// Esto ayuda a que el router no se pierda enviando datos extra
                     Send("?name=" + name, true);
                 }
                 Fibra currentObj = null;
@@ -402,6 +435,12 @@ namespace Mikrotik_Administrador.Class
                         if (key == "name") currentObj.comment = value;
                         if (key == "remote-address") currentObj.address = value;
                         if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
+                        if (key == "profile")
+                        {
+                            var perfil = Listalimites.FirstOrDefault(p => p.Name == value);
+                            if (perfil != null) currentObj.maxlimit = perfil.MaxLimit;
+                            else currentObj.maxlimit = string.Empty;
+                        }
                     }
                 }
             }
@@ -444,12 +483,12 @@ namespace Mikrotik_Administrador.Class
                         if (key == "address") currentObj.address = value;
                         if (key == "comment")
                         {
-                             currentObj.comment = value;
+                            currentObj.comment = value;
                         }
                         //if (key == "network") currentObj.network = value;
                         //if (key == "interface") currentObj.@interface = value;
                         //if (key == "actual-interface") currentObj.actual_interface = value;
-                        if (key == "disabled") currentObj.estatus = value == "false"? "Activo": "Inactivo";
+                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
                     }
                 }
             }

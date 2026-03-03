@@ -207,6 +207,7 @@
             this.Controls.Add(this.lblMensaje1);
             this.Controls.Add(this.lblInfo);
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "InfoMikrotik";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "InfoMikrotik";

@@ -5,6 +5,7 @@
         public string id { get; set; }
         public string comment { get; set; }
         public string address { get; set; }
+        public string maxlimit { get; set; }
         public string estatus { get; set; }
     }
 }

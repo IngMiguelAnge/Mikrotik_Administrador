@@ -196,7 +196,6 @@
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "Migracion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Migracion";
