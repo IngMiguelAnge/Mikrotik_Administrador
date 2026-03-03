@@ -299,19 +299,20 @@ namespace Mikrotik_Administrador.Class
             List<Antenas> listaFinal = new List<Antenas>();
             try
             {
-               
-                if (name == string.Empty)
-                {
-                    Send("/ip/firewall/address-list/print");
-                    Send("=.proplist=.id,address,comment,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
-                }
 
-                if (name != string.Empty)
-                {
-                    Send("/ip/firewall/address-list/print");
-                    Send("=.proplist=.id,address,comment,disabled");// Esto ayuda a que el router no se pierda enviando datos extra
-                    Send("?comment=" + name, true);                   
-                }
+                //if (name == string.Empty)
+                //{
+                Send("/ip/firewall/address-list/print");
+                Send("=.proplist=.id,address,comment,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
+                                                                      //}
+
+                //if (name != string.Empty)
+                //{
+                //    Send("/ip/firewall/address-list/print");
+                //    Send("=.proplist=.id,address,comment,disabled"); // Le decimos qué queremos ver
+                //    Send("?~comment=.*" + name + ".*");                   // Le decimos qué buscar
+                //    Send("", true);
+                //}
                 Antenas currentObj = null;
                 string ultimoComentarioEncontrado = "Sin Comentario";
 
@@ -322,11 +323,16 @@ namespace Mikrotik_Administrador.Class
                         currentObj = new Antenas();
                         // IMPORTANTE: Primero asumimos que hereda el comentario anterior
                         currentObj.comment = ultimoComentarioEncontrado;
-                        listaFinal.Add(currentObj);
+                        if (name == string.Empty)
+                            listaFinal.Add(currentObj);
+                        if (name != string.Empty && currentObj.comment.Contains(name))
+                            listaFinal.Add(currentObj);
                         continue;
                     }
 
-                    if (row.StartsWith("!done")) break;
+                    if (row.StartsWith("!done") ||
+                        row.StartsWith("!done") && (name != string.Empty && currentObj.comment.Contains(name))
+                        ) break;
 
                     if (row.StartsWith("="))
                     {
@@ -340,12 +346,12 @@ namespace Mikrotik_Administrador.Class
                         if (key == "comment")
                         {
                             // Si la IP trae su propio comentario, actualizamos el "arrastre"
-                            currentObj.comment = value;
-                            ultimoComentarioEncontrado = value;
-                            currentObj.maxlimit = VerQueue(value);
+                            currentObj.comment = value.Replace("\r", "").Replace("\n", "").Trim();
+                            ultimoComentarioEncontrado = value.Replace("\r", "").Replace("\n", "").Trim();
+                            currentObj.maxlimit = VerQueue(value.Replace("\r", "").Replace("\n", "").Trim());
                         }
                         if (key == "address") currentObj.address = value;
-                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";                   
+                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
                     }
                 }
             }
@@ -355,6 +361,7 @@ namespace Mikrotik_Administrador.Class
             }
             return listaFinal;
         }
+
         public List<Fibra> VerFibra(string name)
         {
             List<Fibra> listaFinal = new List<Fibra>();
@@ -413,16 +420,12 @@ namespace Mikrotik_Administrador.Class
                 Send("/ip/address/print");
                 Send("=.proplist=.id,address,comment,network,interface,actual-interface,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
                 Address currentObj = null;
-                string ultimoComentarioEncontrado = "Sin Comentario";
-
-                // El Read() debe capturar la ráfaga completa
                 foreach (string row in Read())
                 {
                     if (row.StartsWith("!re"))
                     {
                         currentObj = new Address();
-                        // IMPORTANTE: Primero asumimos que hereda el comentario anterior
-                        currentObj.comment = ultimoComentarioEncontrado;
+                        currentObj.comment = "Sin Comentario";
                         listaFinal.Add(currentObj);
                         continue;
                     }
@@ -441,9 +444,7 @@ namespace Mikrotik_Administrador.Class
                         if (key == "address") currentObj.address = value;
                         if (key == "comment")
                         {
-                            // Si la IP trae su propio comentario, actualizamos el "arrastre"
-                            currentObj.comment = value;
-                            ultimoComentarioEncontrado = value;
+                             currentObj.comment = value;
                         }
                         //if (key == "network") currentObj.network = value;
                         //if (key == "interface") currentObj.@interface = value;
