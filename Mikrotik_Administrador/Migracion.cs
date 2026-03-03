@@ -218,11 +218,17 @@ namespace Mikrotik_Administrador
             Application.Exit();
         }
 
-        private void clientesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AsignacionClienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clientes m = new Clientes();
             m.Show();
             this.Hide();
         }
+
+        private void InformacionClienteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

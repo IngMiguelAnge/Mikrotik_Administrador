@@ -31,6 +31,8 @@
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.mikrotiksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AsignacionClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.InformacionClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblMensaje = new System.Windows.Forms.Label();
             this.CBMikrotiks = new System.Windows.Forms.ComboBox();
             this.txtNombre = new System.Windows.Forms.TextBox();
@@ -69,10 +71,26 @@
             // 
             // clientesToolStripMenuItem
             // 
+            this.clientesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AsignacionClienteToolStripMenuItem,
+            this.InformacionClienteToolStripMenuItem});
             this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
             this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
             this.clientesToolStripMenuItem.Text = "Clientes";
-            this.clientesToolStripMenuItem.Click += new System.EventHandler(this.clientesToolStripMenuItem_Click);
+            // 
+            // AsignacionClienteToolStripMenuItem
+            // 
+            this.AsignacionClienteToolStripMenuItem.Name = "AsignacionClienteToolStripMenuItem";
+            this.AsignacionClienteToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
+            this.AsignacionClienteToolStripMenuItem.Text = "Asignación de clientes";
+            this.AsignacionClienteToolStripMenuItem.Click += new System.EventHandler(this.AsignacionClienteToolStripMenuItem_Click);
+            // 
+            // InformacionClienteToolStripMenuItem
+            // 
+            this.InformacionClienteToolStripMenuItem.Name = "InformacionClienteToolStripMenuItem";
+            this.InformacionClienteToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
+            this.InformacionClienteToolStripMenuItem.Text = "Información de clientes";
+            this.InformacionClienteToolStripMenuItem.Click += new System.EventHandler(this.InformacionClienteToolStripMenuItem_Click);
             // 
             // lblMensaje
             // 
@@ -227,5 +245,7 @@
         private System.Windows.Forms.CheckBox cbAntenas;
         private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ToolStripMenuItem AsignacionClienteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem InformacionClienteToolStripMenuItem;
     }
 }

@@ -32,6 +32,8 @@
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.migracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AsignacionClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.InformacionClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DGVMikrotiks = new System.Windows.Forms.DataGridView();
             this.BtnNuevo = new System.Windows.Forms.Button();
             this.btnAddresList = new System.Windows.Forms.Button();
@@ -63,10 +65,26 @@
             // 
             // clientesToolStripMenuItem
             // 
+            this.clientesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AsignacionClientesToolStripMenuItem,
+            this.InformacionClienteToolStripMenuItem});
             this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
             this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
             this.clientesToolStripMenuItem.Text = "Clientes";
-            this.clientesToolStripMenuItem.Click += new System.EventHandler(this.clientesToolStripMenuItem_Click);
+            // 
+            // AsignacionClientesToolStripMenuItem
+            // 
+            this.AsignacionClientesToolStripMenuItem.Name = "AsignacionClientesToolStripMenuItem";
+            this.AsignacionClientesToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
+            this.AsignacionClientesToolStripMenuItem.Text = "Asignación de clientes";
+            this.AsignacionClientesToolStripMenuItem.Click += new System.EventHandler(this.AsignacionClientesToolStripMenuItem_Click);
+            // 
+            // InformacionClienteToolStripMenuItem
+            // 
+            this.InformacionClienteToolStripMenuItem.Name = "InformacionClienteToolStripMenuItem";
+            this.InformacionClienteToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
+            this.InformacionClienteToolStripMenuItem.Text = "Información de clientes";
+            this.InformacionClienteToolStripMenuItem.Click += new System.EventHandler(this.InformacionClienteToolStripMenuItem_Click_1);
             // 
             // DGVMikrotiks
             // 
@@ -146,5 +164,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnVerMirkotiks;
         private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AsignacionClientesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem InformacionClienteToolStripMenuItem;
     }
 }

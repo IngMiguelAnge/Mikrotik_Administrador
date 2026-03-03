@@ -157,7 +157,12 @@ namespace Mikrotik_Administrador
             ListaMikrotiks();
         }
 
-        private void clientesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void InformacionClienteToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AsignacionClientesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clientes m = new Clientes();
             m.Show();
