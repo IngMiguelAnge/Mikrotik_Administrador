@@ -108,7 +108,7 @@ namespace Mikrotik_Administrador
             MikrotikModel mikrotik = new MikrotikModel();
             mikrotik.Nombre = txtNombre.Text;
             mikrotik.IP = txtIP.Text.Replace(" ", ""); ;
-            mikrotik.Port = txtPort.Text.Replace(" ", ""); ;
+            mikrotik.Port = txtPort.Text.Replace(" ", ""); 
             mikrotik.Usuario = txtUsuario.Text;
             mikrotik.Password = txtPassword.Text;
             mikrotik.Id = IdMikrotik;

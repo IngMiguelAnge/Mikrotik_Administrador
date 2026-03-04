@@ -33,7 +33,7 @@
             this.migracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AsignacionClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.InformacionClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.InformacionClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DGVMikrotiks = new System.Windows.Forms.DataGridView();
             this.BtnNuevo = new System.Windows.Forms.Button();
             this.btnAddresList = new System.Windows.Forms.Button();
@@ -52,14 +52,14 @@
             this.clientesToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(1204, 33);
+            this.Menu.Size = new System.Drawing.Size(1204, 36);
             this.Menu.TabIndex = 0;
             this.Menu.Text = "menuStrip1";
             // 
             // migracionToolStripMenuItem
             // 
             this.migracionToolStripMenuItem.Name = "migracionToolStripMenuItem";
-            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
+            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 30);
             this.migracionToolStripMenuItem.Text = "Migración";
             this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
             // 
@@ -67,9 +67,9 @@
             // 
             this.clientesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AsignacionClientesToolStripMenuItem,
-            this.InformacionClienteToolStripMenuItem});
+            this.InformacionClientesToolStripMenuItem});
             this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
-            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
+            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 30);
             this.clientesToolStripMenuItem.Text = "Clientes";
             // 
             // AsignacionClientesToolStripMenuItem
@@ -79,12 +79,12 @@
             this.AsignacionClientesToolStripMenuItem.Text = "Asignación de clientes";
             this.AsignacionClientesToolStripMenuItem.Click += new System.EventHandler(this.AsignacionClientesToolStripMenuItem_Click);
             // 
-            // InformacionClienteToolStripMenuItem
+            // InformacionClientesToolStripMenuItem
             // 
-            this.InformacionClienteToolStripMenuItem.Name = "InformacionClienteToolStripMenuItem";
-            this.InformacionClienteToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
-            this.InformacionClienteToolStripMenuItem.Text = "Información de clientes";
-            this.InformacionClienteToolStripMenuItem.Click += new System.EventHandler(this.InformacionClienteToolStripMenuItem_Click_1);
+            this.InformacionClientesToolStripMenuItem.Name = "InformacionClientesToolStripMenuItem";
+            this.InformacionClientesToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
+            this.InformacionClientesToolStripMenuItem.Text = "Información de clientes";
+            this.InformacionClientesToolStripMenuItem.Click += new System.EventHandler(this.InformacionClientesToolStripMenuItem_Click_1);
             // 
             // DGVMikrotiks
             // 
@@ -165,6 +165,6 @@
         private System.Windows.Forms.Button btnVerMirkotiks;
         private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AsignacionClientesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem InformacionClienteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem InformacionClientesToolStripMenuItem;
     }
 }

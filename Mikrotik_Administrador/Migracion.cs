@@ -227,7 +227,9 @@ namespace Mikrotik_Administrador
 
         private void InformacionClienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            InfoClientes m = new InfoClientes();
+            m.Show();
+            this.Hide();
         }
 
     }

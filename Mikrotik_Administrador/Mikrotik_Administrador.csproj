@@ -225,6 +225,18 @@
       <DependentUpon>Clientes.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\AppRepository.cs" />
+    <Compile Include="InfoCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InfoCliente.Designer.cs">
+      <DependentUpon>InfoCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InfoClientes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InfoClientes.Designer.cs">
+      <DependentUpon>InfoClientes.cs</DependentUpon>
+    </Compile>
     <Compile Include="InfoMikrotik.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -249,6 +261,7 @@
     <Compile Include="Mikrotiks.Designer.cs">
       <DependentUpon>Mikrotiks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\ClienteModel.cs" />
     <Compile Include="Model\InsertListWirelessModel.cs" />
     <Compile Include="Model\LimiteModel.cs" />
     <Compile Include="Model\ListClientesModel.cs" />
@@ -277,6 +290,12 @@
     </Compile>
     <EmbeddedResource Include="Clientes.resx">
       <DependentUpon>Clientes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InfoCliente.resx">
+      <DependentUpon>InfoCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InfoClientes.resx">
+      <DependentUpon>InfoClientes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InfoMikrotik.resx">
       <DependentUpon>InfoMikrotik.cs</DependentUpon>

@@ -456,7 +456,6 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-
         public async Task<List<ListClientesModel>> GetClientesSinServicios()
         {
             List<ListClientesModel> list = new List<ListClientesModel>();
@@ -490,9 +489,126 @@ namespace Mikrotik_Administrador.Data
             {
                 Id = (int)reader["Id"],
                 Nombre = (string)reader["Nombre"],
+                Estatus = (string)reader["Estatus"],
+                TotalServicios= Convert.IsDBNull(reader["TotalServicios"]) ? 0 : (int)reader["TotalServicios"],
             };
         }
+        public async Task<List<ListClientesModel>> GetClientesbyName(string Nombre, int Id_Mikrotik)
+        {
+            List<ListClientesModel> list = new List<ListClientesModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetClientesbyName", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", Id_Mikrotik));
 
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToClientes(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        public async Task<ClienteModel> GetClienteById(int Id)
+        {
+            ClienteModel response = new ClienteModel();
+            List<ClienteModel> list = new List<ClienteModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetClienteById", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToCliente(reader));
+                            }
+                            response = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response = null;
+            }
+            return response;
+        }
+        private ClienteModel MapToCliente(SqlDataReader reader)
+        {
+            return new ClienteModel()
+            {
+                Id = (int)reader["Id"],
+                Nombre = (string)reader["Nombre"],
+                Telefono1 = Convert.IsDBNull(reader["Telefono1"]) ? string.Empty : (string)reader["Telefono1"],
+                Telefono2 = Convert.IsDBNull(reader["Telefono2"]) ? string.Empty : (string)reader["Telefono2"],
+                Correo = Convert.IsDBNull(reader["Correo"]) ? string.Empty : (string)reader["Correo"],
+            };
+        }
+        public async Task<bool> InsertAndUpdateCliente(ClienteModel Cliente)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("InsertAndUpdateCliente", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Cliente.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Cliente.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Correo", Cliente.Correo));
+                        cmd.Parameters.Add(new SqlParameter("@Telefono1", Cliente.Telefono1));
+                        cmd.Parameters.Add(new SqlParameter("@Telefono2", Cliente.Telefono2));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> UpdateEstatusCliente(int Id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateEstatusCliente", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         #endregion
     }
 }

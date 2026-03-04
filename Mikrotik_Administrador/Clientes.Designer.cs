@@ -39,6 +39,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mikrotiksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.migracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.informaciónDeClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblMensaje3 = new System.Windows.Forms.Label();
             this.txtCliente = new System.Windows.Forms.TextBox();
             this.CBAsignar = new System.Windows.Forms.CheckBox();
@@ -122,8 +124,9 @@
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
-            this.dgvUsuarios.Size = new System.Drawing.Size(771, 72);
+            this.dgvUsuarios.Size = new System.Drawing.Size(848, 72);
             this.dgvUsuarios.TabIndex = 14;
+            this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
             // 
             // menuStrip1
             // 
@@ -131,10 +134,11 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mikrotiksToolStripMenuItem,
-            this.migracionToolStripMenuItem});
+            this.migracionToolStripMenuItem,
+            this.clientesToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(812, 33);
+            this.menuStrip1.Size = new System.Drawing.Size(889, 33);
             this.menuStrip1.TabIndex = 15;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -151,6 +155,21 @@
             this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
             this.migracionToolStripMenuItem.Text = "Migración";
             this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
+            // 
+            // clientesToolStripMenuItem
+            // 
+            this.clientesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.informaciónDeClientesToolStripMenuItem});
+            this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
+            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
+            this.clientesToolStripMenuItem.Text = "Clientes";
+            // 
+            // informaciónDeClientesToolStripMenuItem
+            // 
+            this.informaciónDeClientesToolStripMenuItem.Name = "informaciónDeClientesToolStripMenuItem";
+            this.informaciónDeClientesToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
+            this.informaciónDeClientesToolStripMenuItem.Text = "Información de clientes";
+            this.informaciónDeClientesToolStripMenuItem.Click += new System.EventHandler(this.informaciónDeClientesToolStripMenuItem_Click);
             // 
             // lblMensaje3
             // 
@@ -182,7 +201,7 @@
             // 
             // BtnAsignar
             // 
-            this.BtnAsignar.Location = new System.Drawing.Point(658, 159);
+            this.BtnAsignar.Location = new System.Drawing.Point(723, 159);
             this.BtnAsignar.Name = "BtnAsignar";
             this.BtnAsignar.Size = new System.Drawing.Size(98, 32);
             this.BtnAsignar.TabIndex = 20;
@@ -201,7 +220,7 @@
             // 
             // btnClientesSin
             // 
-            this.btnClientesSin.Location = new System.Drawing.Point(658, 98);
+            this.btnClientesSin.Location = new System.Drawing.Point(723, 98);
             this.btnClientesSin.Name = "btnClientesSin";
             this.btnClientesSin.Size = new System.Drawing.Size(98, 33);
             this.btnClientesSin.TabIndex = 22;
@@ -228,7 +247,7 @@
             this.groupBox1.Controls.Add(this.dgvUsuarios);
             this.groupBox1.Location = new System.Drawing.Point(23, 250);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(777, 97);
+            this.groupBox1.Size = new System.Drawing.Size(854, 97);
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             // 
@@ -236,7 +255,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(812, 380);
+            this.ClientSize = new System.Drawing.Size(889, 380);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbTodos);
             this.Controls.Add(this.btnClientesSin);
@@ -291,5 +310,7 @@
         private System.Windows.Forms.Button btnClientesSin;
         private System.Windows.Forms.CheckBox cbTodos;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem informaciónDeClientesToolStripMenuItem;
     }
 }

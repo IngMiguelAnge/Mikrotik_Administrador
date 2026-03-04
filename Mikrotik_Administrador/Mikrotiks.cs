@@ -20,7 +20,7 @@ namespace Mikrotik_Administrador
 
         private void Mikrotiks_Load(object sender, EventArgs e)
         {
-            ListaMikrotiks();
+         
         }
         private async void ListaMikrotiks()
         {
@@ -157,9 +157,11 @@ namespace Mikrotik_Administrador
             ListaMikrotiks();
         }
 
-        private void InformacionClienteToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void InformacionClientesToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-
+            InfoClientes m = new InfoClientes();
+            m.Show();
+            this.Hide();
         }
 
         private void AsignacionClientesToolStripMenuItem_Click(object sender, EventArgs e)
