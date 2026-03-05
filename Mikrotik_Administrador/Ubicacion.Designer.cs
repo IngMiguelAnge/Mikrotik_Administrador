@@ -41,7 +41,6 @@
             this.txtDireccionSugerida = new System.Windows.Forms.TextBox();
             this.lblUbicacion = new System.Windows.Forms.Label();
             this.lblVista = new System.Windows.Forms.Label();
-            this.lblUbicacionMikrotik = new System.Windows.Forms.Label();
             this.lblEjemplo = new System.Windows.Forms.Label();
             this.lblCalle = new System.Windows.Forms.Label();
             this.txtDireccion = new System.Windows.Forms.TextBox();
@@ -186,15 +185,6 @@
             this.lblVista.TabIndex = 12;
             this.lblVista.Text = "Seleccione la vista de mapa:";
             // 
-            // lblUbicacionMikrotik
-            // 
-            this.lblUbicacionMikrotik.AutoSize = true;
-            this.lblUbicacionMikrotik.Location = new System.Drawing.Point(34, 13);
-            this.lblUbicacionMikrotik.Name = "lblUbicacionMikrotik";
-            this.lblUbicacionMikrotik.Size = new System.Drawing.Size(162, 20);
-            this.lblUbicacionMikrotik.TabIndex = 13;
-            this.lblUbicacionMikrotik.Text = "Ubicación del mikrotik";
-            // 
             // lblEjemplo
             // 
             this.lblEjemplo.AutoSize = true;
@@ -239,7 +229,6 @@
             this.Controls.Add(this.txtDireccion);
             this.Controls.Add(this.lblCalle);
             this.Controls.Add(this.lblEjemplo);
-            this.Controls.Add(this.lblUbicacionMikrotik);
             this.Controls.Add(this.lblVista);
             this.Controls.Add(this.lblUbicacion);
             this.Controls.Add(this.txtDireccionSugerida);
@@ -279,7 +268,6 @@
         private System.Windows.Forms.TextBox txtDireccionSugerida;
         private System.Windows.Forms.Label lblUbicacion;
         private System.Windows.Forms.Label lblVista;
-        private System.Windows.Forms.Label lblUbicacionMikrotik;
         private System.Windows.Forms.Label lblEjemplo;
         private System.Windows.Forms.Label lblCalle;
         private System.Windows.Forms.TextBox txtDireccion;

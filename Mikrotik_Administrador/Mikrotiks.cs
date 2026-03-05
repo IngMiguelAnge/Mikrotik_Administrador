@@ -109,6 +109,7 @@ namespace Mikrotik_Administrador
                     break;
                 case "btnUbicacion":
                     Ubicacion u = new Ubicacion();
+                    u.IdUsuario = 0;
                     u.Id_Mikrotik = Convert.ToInt32(Id);
                     u.Show();
                     break;
@@ -166,7 +167,7 @@ namespace Mikrotik_Administrador
 
         private void AsignacionClientesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clientes m = new Clientes();
+            Usuarios m = new Usuarios();
             m.Show();
             this.Hide();
         }

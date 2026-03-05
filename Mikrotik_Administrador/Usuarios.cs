@@ -16,9 +16,9 @@ using System.Windows.Forms;
 
 namespace Mikrotik_Administrador
 {
-    public partial class Clientes : Form
+    public partial class Usuarios : Form
     {
-        public Clientes()
+        public Usuarios()
         {
             InitializeComponent();
         }
@@ -88,6 +88,14 @@ namespace Mikrotik_Administrador
             chkSeleccionar.Name = "cbSeleccionar";
             chkSeleccionar.HeaderText = "Asignar";
             dgvUsuarios.Columns.Add(chkSeleccionar);
+
+            // Botón Ubicacion
+            DataGridViewButtonColumn btnUbicacion = new DataGridViewButtonColumn();
+            btnUbicacion.Name = "btnUbicacion";
+            btnUbicacion.HeaderText = "Acción";
+            btnUbicacion.Text = "Ubicación";
+            btnUbicacion.UseColumnTextForButtonValue = true;
+            dgvUsuarios.Columns.Add(btnUbicacion);
         }
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
         {
@@ -285,7 +293,7 @@ namespace Mikrotik_Administrador
             // Evitar errores si hacen click en el encabezado
             if (e.RowIndex < 0) return;
             var Id = dgvUsuarios.Rows[e.RowIndex].Cells["Id"].Value;
-
+          
             switch (dgvUsuarios.Columns[e.ColumnIndex].Name)
             {
                 case "btnDesactivar":
@@ -298,6 +306,14 @@ namespace Mikrotik_Administrador
                     }
                     else
                         MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                case "btnUbicacion":
+                    var IdMikrotik = dgvUsuarios.Rows[e.RowIndex].Cells["Id_Mikrotik"].Value;
+
+                    Ubicacion u = new Ubicacion();
+                    u.IdUsuario = Convert.ToInt32(Id);
+                    u.Id_Mikrotik = Convert.ToInt32(IdMikrotik);
+                    u.Show();
                     break;
             }
         }

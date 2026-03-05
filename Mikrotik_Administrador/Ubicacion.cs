@@ -11,7 +11,9 @@ namespace Mikrotik_Administrador
 {
     public partial class Ubicacion : Form
     {
+        public int IdUsuario= 0;
         public int Id_Mikrotik = 0;
+
         GMapOverlay capaMarcadores;
         GMarkerGoogle marcador;
         bool estaArrastrando = false;
@@ -64,7 +66,7 @@ namespace Mikrotik_Administrador
             if (Id_Mikrotik > 0)
             {
                 AppRepository app = new AppRepository();
-                var ubicacion = app.GetUbicacionByIdMikrotik(Id_Mikrotik).Result;
+                var ubicacion = app.GetUbicacionByIds(Id_Mikrotik,IdUsuario).Result;
                 if(ubicacion != null)
                 {
                     txtDireccionOficial.Text = ubicacion.Direccion_Oficial;
@@ -240,8 +242,9 @@ namespace Mikrotik_Administrador
             ub.Latitud = txtLatitud.Text.Trim();
             ub.Longitud = txtLongitud.Text.Trim();
             ub.Id_Mikrotik = Id_Mikrotik;
+            ub.Id_Usuario = IdUsuario;
             AppRepository app = new AppRepository();    
-            if(app.InsertandUpdateUbicacionMikrotik(ub).Result == true) {
+            if(app.InsertandUpdateUbicacion(ub).Result == true) {
                 MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }

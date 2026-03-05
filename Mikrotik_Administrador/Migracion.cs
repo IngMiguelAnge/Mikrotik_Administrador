@@ -220,7 +220,7 @@ namespace Mikrotik_Administrador
 
         private void AsignacionClienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clientes m = new Clientes();
+            Usuarios m = new Usuarios();
             m.Show();
             this.Hide();
         }

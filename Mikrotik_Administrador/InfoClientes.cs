@@ -50,7 +50,7 @@ namespace Mikrotik_Administrador
 
         private void AsignacionClientesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clientes m = new Clientes();
+            Usuarios m = new Usuarios();
             m.Show();
             this.Hide();
         }

@@ -8,5 +8,6 @@
         public string Latitud { get; set; }
         public string Longitud { get; set; }
         public int Id_Mikrotik { get; set; }
+        public int Id_Usuario { get; set; }
     }
 }
