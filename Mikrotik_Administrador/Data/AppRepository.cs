@@ -2,9 +2,6 @@
 using Mikrotik_Administrador.Model;
 using System;
 using System.Collections.Generic;
-
-
-//using Mikrotik_Administrador.Model;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;

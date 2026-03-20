@@ -12,7 +12,7 @@ namespace Mikrotik_Administrador
     {
         public int Id_Mikrotik;
         MK mikrotik;
-        List<Address> lista = new List<Address>();
+        List<Address> listaaddress = new List<Address>();
         public WirelessMikrotik()
         {
             InitializeComponent();
@@ -42,7 +42,7 @@ namespace Mikrotik_Administrador
                     MessageBox.Show("Error con la comunicacion con wireless.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                foreach (var item in lista)
+                foreach (var item in listaaddress)
                 {
                     InsertListWirelessModel model = new InsertListWirelessModel
                     {
@@ -110,6 +110,7 @@ namespace Mikrotik_Administrador
                 if (lista != null && lista.Count > 0)
                 {
                     dgvWireless.DataSource = lista;
+                    listaaddress = lista;
                 }
 
                 MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
