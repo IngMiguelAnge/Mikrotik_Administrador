@@ -63,6 +63,7 @@ namespace Mikrotik_Administrador
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false; // Deshabilitar el botón para evitar múltiples clics
+            btnExportar.Enabled = false; 
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
             int IdMikrotik = (int)CBMikrotiks.SelectedValue;
@@ -92,7 +93,14 @@ namespace Mikrotik_Administrador
                 if (cbAntenas.Checked == true)
                 {
                     IsAntena = true;
-                    var lista = await Task.Run(() => mikrotik.VerAntenas(txtNombre.Text).ToList());
+                    var listaddress = await obj.GetWirelessbyIdMikrotik(IdMikrotik);
+
+                    if (listaddress == null || listaddress.Count == 0)
+                    {
+                        MessageBox.Show("No se ha guardado el Wireless del Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    var lista = await Task.Run(() => mikrotik.VerAntenas(txtNombre.Text, listaddress).ToList());
                     dgvUsuarios.DataSource = lista != null && lista.Count > 0 ? lista : null;
                     if (lista == null || lista.Count == 0)
                     {
@@ -129,9 +137,14 @@ namespace Mikrotik_Administrador
             }
             finally
             {
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                }
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 0;
-                BtnBuscar.Enabled = true; // Rehabilitamos el botón
+                BtnBuscar.Enabled = true;
+                btnExportar.Enabled = true;
             }
         }
         private void AgregarBotones()

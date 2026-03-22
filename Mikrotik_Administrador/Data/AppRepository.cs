@@ -369,6 +369,33 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
+        public async Task<List<ListWirelessModel>> GetWirelessbyIdMikrotik(int IdMikrotik)
+        {
+            List<ListWirelessModel> list = new List<ListWirelessModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetWirelessbyIdMikrotik", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToWireless(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
         private ListWirelessModel MapToWireless(SqlDataReader reader)
         {
             return new ListWirelessModel()

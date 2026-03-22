@@ -98,7 +98,7 @@ namespace Mikrotik_Administrador.Class
         {
             List<string> output = new List<string>();
 
-           int waitAttempts = 100;
+            int waitAttempts = 100;
             while (con.Available == 0 && waitAttempts > 0)
             {
                 System.Threading.Thread.Sleep(50);
@@ -307,37 +307,28 @@ namespace Mikrotik_Administrador.Class
             }
             return MaxLimit;
         }
-        public List<Antenas> VerAntenas(string name)
+        public List<Antenas> VerAntenas(string name, List<ListWirelessModel> ListWireless)
         {
             List<Antenas> listaFinal = new List<Antenas>();
             try
             {
-                //if (name == string.Empty)
-                //{
                 Send("/ip/firewall/address-list/print");
-                Send("=.proplist=.id,address,comment,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
+                Send("=.proplist=list,.id,address,comment,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
                                                                       //}
-
-                //if (name != string.Empty)
-                //{
-                //    Send("/ip/firewall/address-list/print");
-                //    Send("=.proplist=.id,address,comment,disabled"); // Le decimos qué queremos ver
-                //    Send("?~comment=.*" + name + ".*");                   // Le decimos qué buscar
-                //    Send("", true);
-                //}
                 Antenas currentObj = null;
-                string ultimoComentarioEncontrado = "Sin Comentario";
-
-                foreach (string row in Read())
+                List<string> respuesta = Read();
+                bool objetoValido = true;
+                foreach (string row in respuesta)
                 {
                     if (row.StartsWith("!re"))
                     {
                         currentObj = new Antenas();
-                        // IMPORTANTE: Primero asumimos que hereda el comentario anterior
-                        currentObj.comment = ultimoComentarioEncontrado;
-                        listaFinal.Add(currentObj);
+                        currentObj.comment = "Sin Comentario";
+                        objetoValido = true;
                         continue;
                     }
+
+                    if (!objetoValido && row.StartsWith("=")) continue;
 
                     if (row.StartsWith("!done") ||
                         row.StartsWith("!done") && (name != string.Empty && currentObj.comment.Contains(name))
@@ -350,29 +341,100 @@ namespace Mikrotik_Administrador.Class
 
                         string key = parts[1];
                         string value = parts[2];
-
-                        if (key == ".id") currentObj.id = value;
-                        if (key == "comment")
+                        //ListWireless
+                        switch (key)
                         {
-                            // Si la IP trae su propio comentario, actualizamos el "arrastre"
-                            currentObj.comment = value.Replace("\r", "").Replace("\n", "").Trim();
-                            ultimoComentarioEncontrado = value.Replace("\r", "").Replace("\n", "").Trim();
-                            currentObj.maxlimit = VerQueue(value.Replace("\r", "").Replace("\n", "").Trim());
+                            case "list": value = value.Replace("\r", "").Replace("\n", "").Trim();
+                                if (value != "PERMITIDO")
+                                {
+                                    objetoValido = false; // Marcamos que este registro no nos sirve
+                                    currentObj = null;    // Limpiamos la referencia
+                                }
+                                break;
+                            case ".id": currentObj.id = value; break;
+                            case "comment":
+                                currentObj.comment = value.Replace("\r", "").Replace("\n", "").Trim();
+                                currentObj.maxlimit = VerQueue(value.Replace("\r", "").Replace("\n", "").Trim());
+                                break;
+                            case "address": currentObj.address = value;
+                                if (currentObj != null && !string.IsNullOrEmpty(currentObj.address))
+                                {
+                                    bool coincide = ListWireless.Any(w => IpPerteneceARango(currentObj.address, w.Address));
+
+                                    if (coincide)
+                                    {
+                                        // Evitar duplicados si el !re se procesa varias veces
+                                        if (!listaFinal.Any(a => a.id == currentObj.id))
+                                        {
+                                            listaFinal.Add(currentObj);
+                                        }
+                                    }
+                                }
+
+                                break;
+                            case "disabled": currentObj.estatus = value == "false" ? "Activo" : "Inactivo"; break;
                         }
-                        if (key == "address") currentObj.address = value;
-                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
                     }
+                   
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine("Error en ver antenas: " + ex.Message);
             }
             return name != string.Empty ? listaFinal.Where(r=> r.comment == name).ToList():listaFinal;
         }
+
+        private bool IpPerteneceARango(string ipDestino, string redReferencia)
+        {
+            try
+            {
+                string ipDest = ipDestino.Split('/')[0].Trim();
+                string redRef = redReferencia.Trim();
+
+                if (!redRef.Contains("/")) return ipDest == redRef;
+
+                string[] partes = redRef.Split('/');
+                byte[] bytesDest = System.Net.IPAddress.Parse(ipDest).GetAddressBytes();
+                byte[] bytesRed = System.Net.IPAddress.Parse(partes[0]).GetAddressBytes();
+                int cidr = int.Parse(partes[1]);
+
+                // Construimos la máscara de red byte por byte (8 bits por byte)
+                byte[] maskBytes = new byte[4];
+                for (int i = 0; i < 4; i++)
+                {
+                    if (cidr >= 8)
+                    {
+                        maskBytes[i] = 0xFF;
+                        cidr -= 8;
+                    }
+                    else if (cidr > 0)
+                    {
+                        maskBytes[i] = (byte)(0xFF << (8 - cidr));
+                        cidr = 0;
+                    }
+                    else
+                    {
+                        maskBytes[i] = 0x00;
+                    }
+                }
+
+                // Comparamos cada octeto aplicando la máscara
+                for (int i = 0; i < 4; i++)
+                {
+                    if ((bytesDest[i] & maskBytes[i]) != (bytesRed[i] & maskBytes[i]))
+                    {
+                        return false; // En cuanto un octeto no coincide, fuera.
+                    }
+                }
+
+                return true;
+            }
+            catch { return false; }
+        }
         public List<LimiteModel> VerProfile()
         {
-                List<LimiteModel> lista = new List<LimiteModel>();
+            List<LimiteModel> lista = new List<LimiteModel>();
             try
             {
                 Send("/ppp/profile/print");
@@ -395,8 +457,8 @@ namespace Mikrotik_Administrador.Class
 
                         string key = parts[1];
                         string value = parts[2];
-                        if(key == "name") obj.Name = value;
-                        if(key == "rate-limit") obj.MaxLimit = value;
+                        if (key == "name") obj.Name = value;
+                        if (key == "rate-limit") obj.MaxLimit = value;
                     }
                 }
             }
