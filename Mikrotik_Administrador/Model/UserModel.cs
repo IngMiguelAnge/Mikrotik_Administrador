@@ -6,6 +6,6 @@
         public string Usuario { get; set; }
         public string Password { get; set; }
         public bool Estatus { get; set; }
-        public int Id_TipoUsuario { get; set; }
+        public int IdTipoUsuario { get; set; }
     }
 }

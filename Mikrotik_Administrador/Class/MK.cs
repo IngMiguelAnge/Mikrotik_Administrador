@@ -41,10 +41,24 @@ namespace Mikrotik_Administrador.Class
                 return false;
             }
         }
-        public void Close()
+        public bool Close()
         {
-            connection.Close();
-            con.Close();
+            try
+            {
+                if (connection != null)
+                {
+                    // Intentar enviar /quit solo si el socket sigue vivo
+                    if (con != null && con.Connected)
+                    {
+                        Send("/quit", true);
+                        System.Threading.Thread.Sleep(50);
+                    }
+                    connection.Dispose(); // Usar Dispose es más agresivo y limpio
+                }
+                if (con != null) con.Close();
+                return true;
+            }
+            catch { return false; }
         }
         public void Send(string co)
         {
@@ -84,9 +98,7 @@ namespace Mikrotik_Administrador.Class
         {
             List<string> output = new List<string>();
 
-            // El CCR2116 es una bestia multinúcleo; a veces tarda en "contestar"
-            // Vamos a esperar hasta 2 segundos (40 intentos de 50ms)
-            int waitAttempts = 40;
+           int waitAttempts = 100;
             while (con.Available == 0 && waitAttempts > 0)
             {
                 System.Threading.Thread.Sleep(50);
@@ -459,42 +471,44 @@ namespace Mikrotik_Administrador.Class
                 Send("/ip/address/print");
                 Send("=.proplist=.id,address,comment,network,interface,actual-interface,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
                 Address currentObj = null;
-                foreach (string row in Read())
+                List<string> respuesta = Read();
+                foreach (string row in respuesta)
                 {
+                    // Cada vez que aparece !re, es una nueva fila/registro
                     if (row.StartsWith("!re"))
                     {
                         currentObj = new Address();
-                        currentObj.comment = "Sin Comentario";
+                        currentObj.comment = "Sin Comentario"; // Valor por defecto
                         listaFinal.Add(currentObj);
                         continue;
                     }
 
                     if (row.StartsWith("!done")) break;
 
-                    if (row.StartsWith("="))
+                    // Procesamos las propiedades del objeto actual
+                    if (row.StartsWith("=") && currentObj != null)
                     {
-                        string[] parts = row.Split(new char[] { '=' }, 3);
-                        if (parts.Length < 3) continue;
+                        string[] parts = row.Substring(1).Split(new char[] { '=' }, 2);
+                        if (parts.Length < 2) continue;
 
-                        string key = parts[1];
-                        string value = parts[2];
+                        string key = parts[0];
+                        string value = parts[1];
 
-                        if (key == ".id") currentObj.id = value;
-                        if (key == "address") currentObj.address = value;
-                        if (key == "comment")
+                        switch (key)
                         {
-                            currentObj.comment = value;
+                            case ".id": currentObj.id = value; break;
+                            case "address": currentObj.address = value; break;
+                            case "comment": currentObj.comment = value; break;
+                            case "disabled":
+                                currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
+                                break;
                         }
-                        //if (key == "network") currentObj.network = value;
-                        //if (key == "interface") currentObj.@interface = value;
-                        //if (key == "actual-interface") currentObj.actual_interface = value;
-                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine("Error en VerAddres: " + ex.Message);
             }
             return listaFinal;
         }

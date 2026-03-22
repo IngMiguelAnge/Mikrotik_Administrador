@@ -21,7 +21,8 @@ namespace Mikrotik_Administrador
 
         private async void btnProbar_Click(object sender, EventArgs e)
         {
-            btnProbar.Enabled = false; // Bloqueamos el botón para evitar múltiples clics
+            btnProbar.Enabled = false; 
+            btnGuardar.Enabled = false;
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             try
@@ -33,7 +34,7 @@ namespace Mikrotik_Administrador
                     return mikrotik.ConectarYLogin(txtUsuario.Text, txtPassword.Text);
                 });
                 if (login == true)
-                {
+                {                    
                     lblProbar.Text = "Conexión exitosa";
                     MessageBox.Show("Conexión exitosa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -50,9 +51,14 @@ namespace Mikrotik_Administrador
             }
             finally
             {
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                }
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 0;
                 btnProbar.Enabled = true; // Rehabilitamos el botón
+                btnGuardar.Enabled = true;
             }
         }
 
@@ -114,7 +120,7 @@ namespace Mikrotik_Administrador
             mikrotik.Id = IdMikrotik;
             mikrotik.Estatus = Estatus;
             mikrotik.Limite_Alcanzado = limite_alcanzado;
-            if (obj.InsertandUpdateMikrotik(mikrotik).Result == true)
+            if (obj.SaveMikrotik(mikrotik).Result == true)
             {
                 MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();

@@ -19,7 +19,7 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region ActionsUsers
-        public async Task<UserModel> GetUser(string Usuario, string Password)
+        public async Task<UserModel> GetUserbyNameAndPassword(string Usuario, string Password)
         {
             UserModel response = new UserModel();
             List<UserModel> list = new List<UserModel>();
@@ -58,7 +58,7 @@ namespace Mikrotik_Administrador.Data
                 Usuario = (string)reader["Usuario"],
                 Password = (string)reader["Password"],
                 Estatus = (bool)reader["Estatus"],
-                Id_TipoUsuario = Convert.IsDBNull(reader["Id_TipoUsuario"]) ? 0 : (int)reader["Id_TipoUsuario"],
+                IdTipoUsuario = Convert.IsDBNull(reader["IdTipoUsuario"]) ? 0 : (int)reader["IdTipoUsuario"],
             };
         }
 
@@ -85,13 +85,13 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<bool> InsertandUpdateMikrotik(MikrotikModel obj)
+        public async Task<bool> SaveMikrotik(MikrotikModel obj)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("InsertandUpdateMikrotik", sql))
+                    using (SqlCommand cmd = new SqlCommand("SaveMikrotik", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
@@ -197,21 +197,21 @@ namespace Mikrotik_Administrador.Data
 
         #endregion
         #region ActionsUbicacion
-        public async Task<bool> InsertandUpdateUbicacion(UbicacionModel obj)
+        public async Task<bool> SaveUbicacion(UbicacionModel obj)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("InsertandUpdateUbicacion", sql))
+                    using (SqlCommand cmd = new SqlCommand("SaveUbicacion", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Direccion", obj.Direccion));
                         cmd.Parameters.Add(new SqlParameter("@Direccion_Oficial", obj.Direccion_Oficial));
                         cmd.Parameters.Add(new SqlParameter("@Latitud", obj.Latitud));  
                         cmd.Parameters.Add(new SqlParameter("@Longitud", obj.Longitud));
-                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", obj.Id_Mikrotik));
-                        cmd.Parameters.Add(new SqlParameter("@Id_Usuario", obj.Id_Usuario));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -223,7 +223,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<UbicacionModel> GetUbicacionByIds(int Id_Mikrotik, int Id_Usuario)
+        public async Task<UbicacionModel> GetUbicacionByIds(int IdMikrotik, int IdUsuario)
         {
             UbicacionModel response = new UbicacionModel();
             List<UbicacionModel> list = new List<UbicacionModel>();
@@ -234,8 +234,8 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("GetUbicacionByIds", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", Id_Mikrotik));
-                        cmd.Parameters.Add(new SqlParameter("@Id_Usuario", Id_Usuario));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", IdUsuario));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -263,14 +263,14 @@ namespace Mikrotik_Administrador.Data
                 Direccion_Oficial = (string)reader["Direccion_Oficial"],
                 Latitud = (string)reader["Latitud"],    
                 Longitud = (string)reader["Longitud"],
-                Id_Mikrotik = (int)reader["Id_Mikrotik"],
-                Id_Usuario = (int)reader["Id_Usuario"],
+                IdMikrotik = (int)reader["IdMikrotik"],
+                IdUsuario = (int)reader["IdUsuario"],
             };
         }
 
         #endregion
         #region ActionsUsuariosGeneral
-        public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName(string Nombre, int Id_Mikrotik)
+        public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName(string Nombre, int IdMikrotik)
         {
             List<ListUsuariosGeneralModel> list = new List<ListUsuariosGeneralModel>();
             try
@@ -281,7 +281,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
-                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", Id_Mikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
 
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
@@ -304,31 +304,31 @@ namespace Mikrotik_Administrador.Data
             return new ListUsuariosGeneralModel()
             {
                 Id = (int)reader["Id"],
-                Id_Interno = (string)reader["Id_Interno"],
+                IdInterno = (string)reader["IdInterno"],
                 Tipo = (string)reader["Tipo"],
                 Nombre = (string)reader["Nombre"],
                 Address = (string)reader["Address"],
                 Estatus = (string)reader["Estatus"],
-                Id_Mikrotik = (int)reader["Id_Mikrotik"],
+                IdMikrotik = (int)reader["IdMikrotik"],
                 Mikrotik = (string)reader["Mikrotik"],
-                Id_Cliente = Convert.IsDBNull(reader["Id_Cliente"]) ? (int?)null : (int)reader["Id_Cliente"],
+                IdCliente = Convert.IsDBNull(reader["IdCliente"]) ? (int?)null : (int)reader["IdCliente"],
                 Cliente = Convert.IsDBNull(reader["Cliente"]) ? string.Empty : (string)reader["Cliente"],
             };
         }
-        public async Task<bool> InsertandUpdateUsuariosGeneral(UsuariosGeneralModel obj)
+        public async Task<bool> SaveUsuariosGeneral(UsuariosGeneralModel obj)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("InsertAndUpdateUsuariosGeneral", sql))
+                    using (SqlCommand cmd = new SqlCommand("SaveUsuariosGeneral", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
                         cmd.Parameters.Add(new SqlParameter("@Address", obj.Address));
-                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", obj.Id_Mikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
                         cmd.Parameters.Add(new SqlParameter("@Antena", obj.Antena));
-                        cmd.Parameters.Add(new SqlParameter("@Id_Interno", obj.Id_Interno));
+                        cmd.Parameters.Add(new SqlParameter("@IdInterno", obj.IdInterno));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
@@ -375,31 +375,25 @@ namespace Mikrotik_Administrador.Data
             {
                 Id = (int)reader["Id"],
                 Address = (string)reader["Address"],
-                Network = (string)reader["Network"],
-                Interface = (string)reader["Interface"],
-                Actual_Interface = (string)reader["Actual_Interface"],
                 Comment = (string)reader["Comment"],
                 Mikrotik = (string)reader["Mikrotik"],
                 Estatus = (string)reader["Estatus"],
             };
         }
-        public async Task<bool> InsertandUpdateWireless(InsertListWirelessModel obj)
+        public async Task<bool> SaveWireless(InsertListWirelessModel obj)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("InsertandUpdateWireless", sql))
+                    using (SqlCommand cmd = new SqlCommand("SaveWireless", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Address", obj.Address));
-                        cmd.Parameters.Add(new SqlParameter("@Network", obj.Network));
-                        cmd.Parameters.Add(new SqlParameter("@Interface", obj.Interface));
-                        cmd.Parameters.Add(new SqlParameter("@Actual_Interface", obj.Actual_Interface));
                         cmd.Parameters.Add(new SqlParameter("@Comment", obj.Comment));
-                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", obj.Id_Mikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
-                        cmd.Parameters.Add(new SqlParameter("@Id_Interno", obj.Id_Interno));
+                        cmd.Parameters.Add(new SqlParameter("@IdInterno", obj.IdInterno));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -411,7 +405,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<bool> DesactivarWireless(int Id_Mikrotik)
+        public async Task<bool> DesactivarWireless(int IdMikrotik)
         {
             try
             {
@@ -420,7 +414,7 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("DesactivarWireless", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", Id_Mikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -435,13 +429,13 @@ namespace Mikrotik_Administrador.Data
 
         #endregion
         #region Clientes
-        public async Task<bool> InsertAndUpdateClienteInGeneral(int IdUsuario ,string Nombre)
+        public async Task<bool> SaveClienteInGeneral(int IdUsuario ,string Nombre)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("InsertAndUpdateClienteInGeneral", sql))
+                    using (SqlCommand cmd = new SqlCommand("SaveClienteInGeneral", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", IdUsuario));
@@ -494,7 +488,7 @@ namespace Mikrotik_Administrador.Data
                 TotalServicios= Convert.IsDBNull(reader["TotalServicios"]) ? 0 : (int)reader["TotalServicios"],
             };
         }
-        public async Task<List<ListClientesModel>> GetClientesbyName(string Nombre, int Id_Mikrotik)
+        public async Task<List<ListClientesModel>> GetClientesbyName(string Nombre, int IdMikrotik)
         {
             List<ListClientesModel> list = new List<ListClientesModel>();
             try
@@ -505,7 +499,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
-                        cmd.Parameters.Add(new SqlParameter("@Id_Mikrotik", Id_Mikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
 
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
@@ -564,13 +558,13 @@ namespace Mikrotik_Administrador.Data
                 Correo = Convert.IsDBNull(reader["Correo"]) ? string.Empty : (string)reader["Correo"],
             };
         }
-        public async Task<bool> InsertAndUpdateCliente(ClienteModel Cliente)
+        public async Task<bool> SaveCliente(ClienteModel Cliente)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("InsertAndUpdateCliente", sql))
+                    using (SqlCommand cmd = new SqlCommand("SaveCliente", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", Cliente.Id));

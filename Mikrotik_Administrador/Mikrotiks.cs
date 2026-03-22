@@ -96,7 +96,7 @@ namespace Mikrotik_Administrador
                     break;
                 case "btnLanWireless":
                     WirelessMikrotik w = new WirelessMikrotik();
-                    w.Id_Mikrotik = Convert.ToInt32(Id);
+                    w.IdMikrotik = Convert.ToInt32(Id);
                     w.Show();
                     break;                    
                 case "btnDesactivar":
@@ -110,7 +110,7 @@ namespace Mikrotik_Administrador
                 case "btnUbicacion":
                     Ubicacion u = new Ubicacion();
                     u.IdUsuario = 0;
-                    u.Id_Mikrotik = Convert.ToInt32(Id);
+                    u.IdMikrotik = Convert.ToInt32(Id);
                     u.Show();
                     break;
             }

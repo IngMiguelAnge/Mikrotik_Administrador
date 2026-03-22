@@ -45,6 +45,8 @@
             this.lblCalle = new System.Windows.Forms.Label();
             this.txtDireccion = new System.Windows.Forms.TextBox();
             this.BtnGuardar = new System.Windows.Forms.Button();
+            this.btnAceptarUbicacion = new System.Windows.Forms.Button();
+            this.btnCancelarDireccion = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // gMap
@@ -55,7 +57,7 @@
             this.gMap.GrayScaleMode = false;
             this.gMap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
             this.gMap.LevelsKeepInMemory = 5;
-            this.gMap.Location = new System.Drawing.Point(34, 275);
+            this.gMap.Location = new System.Drawing.Point(34, 287);
             this.gMap.MarkersEnabled = true;
             this.gMap.MaxZoom = 2;
             this.gMap.MinZoom = 2;
@@ -69,8 +71,8 @@
             this.gMap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.gMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gMap.ShowTileGridLines = false;
-            this.gMap.Size = new System.Drawing.Size(989, 354);
-            this.gMap.TabIndex = 8;
+            this.gMap.Size = new System.Drawing.Size(975, 342);
+            this.gMap.TabIndex = 17;
             this.gMap.Zoom = 0D;
             this.gMap.OnMarkerEnter += new GMap.NET.WindowsForms.MarkerEnter(this.gMap_OnMarkerEnter);
             this.gMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gMap_MouseMove);
@@ -82,7 +84,7 @@
             this.txtLatitud.Location = new System.Drawing.Point(170, 166);
             this.txtLatitud.Name = "txtLatitud";
             this.txtLatitud.Size = new System.Drawing.Size(129, 26);
-            this.txtLatitud.TabIndex = 5;
+            this.txtLatitud.TabIndex = 8;
             // 
             // txtLongitud
             // 
@@ -90,14 +92,14 @@
             this.txtLongitud.Location = new System.Drawing.Point(404, 165);
             this.txtLongitud.Name = "txtLongitud";
             this.txtLongitud.Size = new System.Drawing.Size(134, 26);
-            this.txtLongitud.TabIndex = 6;
+            this.txtLongitud.TabIndex = 10;
             // 
             // BtnBuscar
             // 
             this.BtnBuscar.Location = new System.Drawing.Point(520, 123);
             this.BtnBuscar.Name = "BtnBuscar";
             this.BtnBuscar.Size = new System.Drawing.Size(105, 33);
-            this.BtnBuscar.TabIndex = 2;
+            this.BtnBuscar.TabIndex = 5;
             this.BtnBuscar.Text = "Buscar";
             this.BtnBuscar.UseVisualStyleBackColor = true;
             this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
@@ -107,7 +109,7 @@
             this.txtDireccionOficial.Location = new System.Drawing.Point(159, 85);
             this.txtDireccionOficial.Name = "txtDireccionOficial";
             this.txtDireccionOficial.Size = new System.Drawing.Size(807, 26);
-            this.txtDireccionOficial.TabIndex = 1;
+            this.txtDireccionOficial.TabIndex = 3;
             // 
             // cmbMapas
             // 
@@ -120,7 +122,7 @@
             this.cmbMapas.Location = new System.Drawing.Point(789, 166);
             this.cmbMapas.Name = "cmbMapas";
             this.cmbMapas.Size = new System.Drawing.Size(177, 28);
-            this.cmbMapas.TabIndex = 3;
+            this.cmbMapas.TabIndex = 12;
             this.cmbMapas.SelectedIndexChanged += new System.EventHandler(this.cmbMapas_SelectedIndexChanged);
             // 
             // lblGPS
@@ -147,7 +149,7 @@
             this.lblLongitud.Location = new System.Drawing.Point(323, 171);
             this.lblLongitud.Name = "lblLongitud";
             this.lblLongitud.Size = new System.Drawing.Size(75, 20);
-            this.lblLongitud.TabIndex = 8;
+            this.lblLongitud.TabIndex = 9;
             this.lblLongitud.Text = "Longitud:";
             // 
             // lblDireccionSugerida
@@ -156,16 +158,16 @@
             this.lblDireccionSugerida.Location = new System.Drawing.Point(30, 212);
             this.lblDireccionSugerida.Name = "lblDireccionSugerida";
             this.lblDireccionSugerida.Size = new System.Drawing.Size(144, 20);
-            this.lblDireccionSugerida.TabIndex = 9;
+            this.lblDireccionSugerida.TabIndex = 13;
             this.lblDireccionSugerida.Text = "Dirección sugerida:";
             // 
             // txtDireccionSugerida
             // 
-            this.txtDireccionSugerida.Enabled = false;
             this.txtDireccionSugerida.Location = new System.Drawing.Point(185, 206);
             this.txtDireccionSugerida.Name = "txtDireccionSugerida";
+            this.txtDireccionSugerida.ReadOnly = true;
             this.txtDireccionSugerida.Size = new System.Drawing.Size(781, 26);
-            this.txtDireccionSugerida.TabIndex = 7;
+            this.txtDireccionSugerida.TabIndex = 14;
             // 
             // lblUbicacion
             // 
@@ -173,7 +175,7 @@
             this.lblUbicacion.Location = new System.Drawing.Point(30, 85);
             this.lblUbicacion.Name = "lblUbicacion";
             this.lblUbicacion.Size = new System.Drawing.Size(129, 20);
-            this.lblUbicacion.TabIndex = 11;
+            this.lblUbicacion.TabIndex = 2;
             this.lblUbicacion.Text = "*Dirección oficial:";
             // 
             // lblVista
@@ -182,7 +184,7 @@
             this.lblVista.Location = new System.Drawing.Point(568, 171);
             this.lblVista.Name = "lblVista";
             this.lblVista.Size = new System.Drawing.Size(209, 20);
-            this.lblVista.TabIndex = 12;
+            this.lblVista.TabIndex = 11;
             this.lblVista.Text = "Seleccione la vista de mapa:";
             // 
             // lblEjemplo
@@ -191,7 +193,7 @@
             this.lblEjemplo.Location = new System.Drawing.Point(34, 136);
             this.lblEjemplo.Name = "lblEjemplo";
             this.lblEjemplo.Size = new System.Drawing.Size(396, 20);
-            this.lblEjemplo.TabIndex = 14;
+            this.lblEjemplo.TabIndex = 4;
             this.lblEjemplo.Text = "Ejemplo de dirección: San Salvador Huixcolotla, Puebla";
             // 
             // lblCalle
@@ -200,7 +202,7 @@
             this.lblCalle.Location = new System.Drawing.Point(34, 43);
             this.lblCalle.Name = "lblCalle";
             this.lblCalle.Size = new System.Drawing.Size(85, 20);
-            this.lblCalle.TabIndex = 15;
+            this.lblCalle.TabIndex = 0;
             this.lblCalle.Text = "*Dirección:";
             // 
             // txtDireccion
@@ -208,23 +210,48 @@
             this.txtDireccion.Location = new System.Drawing.Point(159, 37);
             this.txtDireccion.Name = "txtDireccion";
             this.txtDireccion.Size = new System.Drawing.Size(817, 26);
-            this.txtDireccion.TabIndex = 0;
+            this.txtDireccion.TabIndex = 1;
             // 
             // BtnGuardar
             // 
-            this.BtnGuardar.Location = new System.Drawing.Point(729, 123);
+            this.BtnGuardar.Enabled = false;
+            this.BtnGuardar.Location = new System.Drawing.Point(883, 248);
             this.BtnGuardar.Name = "BtnGuardar";
             this.BtnGuardar.Size = new System.Drawing.Size(83, 33);
-            this.BtnGuardar.TabIndex = 4;
+            this.BtnGuardar.TabIndex = 16;
             this.BtnGuardar.Text = "Guardar";
             this.BtnGuardar.UseVisualStyleBackColor = true;
             this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
+            // 
+            // btnAceptarUbicacion
+            // 
+            this.btnAceptarUbicacion.Enabled = false;
+            this.btnAceptarUbicacion.Location = new System.Drawing.Point(34, 248);
+            this.btnAceptarUbicacion.Name = "btnAceptarUbicacion";
+            this.btnAceptarUbicacion.Size = new System.Drawing.Size(165, 33);
+            this.btnAceptarUbicacion.TabIndex = 15;
+            this.btnAceptarUbicacion.Text = "Confirmar dirección";
+            this.btnAceptarUbicacion.UseVisualStyleBackColor = true;
+            this.btnAceptarUbicacion.Click += new System.EventHandler(this.btnAceptarUbicacion_Click);
+            // 
+            // btnCancelarDireccion
+            // 
+            this.btnCancelarDireccion.Enabled = false;
+            this.btnCancelarDireccion.Location = new System.Drawing.Point(250, 248);
+            this.btnCancelarDireccion.Name = "btnCancelarDireccion";
+            this.btnCancelarDireccion.Size = new System.Drawing.Size(148, 33);
+            this.btnCancelarDireccion.TabIndex = 18;
+            this.btnCancelarDireccion.Text = "Cancelar dirección";
+            this.btnCancelarDireccion.UseVisualStyleBackColor = true;
+            this.btnCancelarDireccion.Click += new System.EventHandler(this.btnCancelarDireccion_Click);
             // 
             // Ubicacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1035, 660);
+            this.Controls.Add(this.btnCancelarDireccion);
+            this.Controls.Add(this.btnAceptarUbicacion);
             this.Controls.Add(this.BtnGuardar);
             this.Controls.Add(this.txtDireccion);
             this.Controls.Add(this.lblCalle);
@@ -272,5 +299,7 @@
         private System.Windows.Forms.Label lblCalle;
         private System.Windows.Forms.TextBox txtDireccion;
         private System.Windows.Forms.Button BtnGuardar;
+        private System.Windows.Forms.Button btnAceptarUbicacion;
+        private System.Windows.Forms.Button btnCancelarDireccion;
     }
 }

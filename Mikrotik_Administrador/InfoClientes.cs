@@ -80,11 +80,11 @@ namespace Mikrotik_Administrador
             BtnBuscar.Enabled = false;
             DGVClientes.DataSource = null;
             DGVClientes.Columns.Clear(); // Limpiar columnas anteriores
-            int Id_Mikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
+            int IdMikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
             try
             {
                 AppRepository obj = new AppRepository();
-                var lista = obj.GetClientesbyName(txtCliente.Text, Id_Mikrotik).Result;
+                var lista = obj.GetClientesbyName(txtCliente.Text, IdMikrotik).Result;
 
                 if (lista != null && lista.Count > 0)
                 {

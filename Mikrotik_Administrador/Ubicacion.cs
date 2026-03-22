@@ -12,7 +12,7 @@ namespace Mikrotik_Administrador
     public partial class Ubicacion : Form
     {
         public int IdUsuario= 0;
-        public int Id_Mikrotik = 0;
+        public int IdMikrotik = 0;
 
         GMapOverlay capaMarcadores;
         GMarkerGoogle marcador;
@@ -63,10 +63,10 @@ namespace Mikrotik_Administrador
             double latitude = 19.4326; // Latitud de Ciudad de México
             double longitude = -99.1332; // Longitud de Ciudad de México
 
-            if (Id_Mikrotik > 0)
+            if (IdMikrotik > 0)
             {
                 AppRepository app = new AppRepository();
-                var ubicacion = app.GetUbicacionByIds(Id_Mikrotik,IdUsuario).Result;
+                var ubicacion = app.GetUbicacionByIds(IdMikrotik,IdUsuario).Result;
                 if(ubicacion != null)
                 {
                     txtDireccionOficial.Text = ubicacion.Direccion_Oficial;
@@ -129,6 +129,8 @@ namespace Mikrotik_Administrador
             // 1. Cambiar cursor a espera
             this.Cursor = Cursors.WaitCursor;
             BtnBuscar.Enabled = false;
+            btnAceptarUbicacion.Enabled = false;
+            btnCancelarDireccion.Enabled = false;
             string direccionBuscada = txtDireccionOficial.Text;
             try
             {
@@ -146,13 +148,16 @@ namespace Mikrotik_Administrador
                         if (marcador != null)
                         {
                             marcador.Position = pos.Value;
+                            Obtenerdireccion();
                         }
 
-                        gMap.Zoom = 15;
+                        gMap.MinZoom = 2;
+                        gMap.MaxZoom = 20;
+                        gMap.Zoom = 18;
 
                         // 3. Llenar tus cuadros de texto
                         txtLatitud.Text = pos.Value.Lat.ToString();
-                        txtLongitud.Text = pos.Value.Lng.ToString();
+                        txtLongitud.Text = pos.Value.Lng.ToString();                        
                     }
                     else
                     {
@@ -165,18 +170,24 @@ namespace Mikrotik_Administrador
                 // 2. Regresar cursor a la normalidad aunque haya error
                 this.Cursor = Cursors.Default;
                 BtnBuscar.Enabled = true;
+                if(txtLatitud.Text != string.Empty)
+                {
+                    btnAceptarUbicacion.Enabled = true;
+                }
             }
         }
+        public void Obtenerdireccion() {
+            // Obtenemos la dirección de la posición final del marcador
+            string calleEncontrada = ObtenerCalleDesdeCoordenadas(marcador.Position.Lat, marcador.Position.Lng);
 
+            // Lo ponemos en tu TextBox de dirección
+            txtDireccionSugerida.Text = calleEncontrada;
+        }
         private void gMap_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && marcador != null)
             {
-                // Obtenemos la dirección de la posición final del marcador
-                string calleEncontrada = ObtenerCalleDesdeCoordenadas(marcador.Position.Lat, marcador.Position.Lng);
-
-                // Lo ponemos en tu TextBox de dirección
-                txtDireccionSugerida.Text = calleEncontrada;
+                Obtenerdireccion();
             }
         }
         private string ObtenerCalleDesdeCoordenadas(double lat, double lon)
@@ -224,6 +235,7 @@ namespace Mikrotik_Administrador
                     gMap.MapProvider = GMap.NET.MapProviders.GoogleHybridMapProvider.Instance;
                     break;
                 case "OpenStreet":
+                    GMap.NET.MapProviders.GMapProvider.UserAgent = "Mikrotik_v1.0";
                     gMap.MapProvider = GMap.NET.MapProviders.OpenStreetMapProvider.Instance;
                     break;
             }
@@ -231,20 +243,21 @@ namespace Mikrotik_Administrador
 
         private void BtnGuardar_Click(object sender, EventArgs e)
         {
-            if (txtDireccionOficial.Text.Trim() == string.Empty || txtLatitud.Text.Trim() == string.Empty || txtLongitud.Text.Trim() == string.Empty)
+            if (txtDireccionOficial.Text.Trim() == string.Empty || txtLatitud.Text.Trim() == string.Empty || txtLongitud.Text.Trim() == string.Empty ||
+                txtDireccion.Text.Trim() == string.Empty)
             {
                 MessageBox.Show("Faltan datos por capturar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             UbicacionModel ub = new UbicacionModel();
-            ub.Direccion = txtDireccionOficial.Text.Trim();
+            ub.Direccion = txtDireccion.Text.Trim();
             ub.Direccion_Oficial = txtDireccionOficial.Text.Trim();
             ub.Latitud = txtLatitud.Text.Trim();
             ub.Longitud = txtLongitud.Text.Trim();
-            ub.Id_Mikrotik = Id_Mikrotik;
-            ub.Id_Usuario = IdUsuario;
+            ub.IdMikrotik = IdMikrotik;
+            ub.IdUsuario = IdUsuario;
             AppRepository app = new AppRepository();    
-            if(app.InsertandUpdateUbicacion(ub).Result == true) {
+            if(app.SaveUbicacion(ub).Result == true) {
                 MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
@@ -252,6 +265,28 @@ namespace Mikrotik_Administrador
             {
                 MessageBox.Show("Error al guardar la ubicación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnAceptarUbicacion_Click(object sender, EventArgs e)
+        {
+            if(txtDireccionSugerida.Text.Trim() == string.Empty)
+            {
+                MessageBox.Show("No hay una dirección sugerida para aceptar, favor de mover el puntero del mapa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            txtDireccionOficial.Text = txtDireccionSugerida.Text;            
+            BtnGuardar.Enabled = true;
+            txtDireccionOficial.Enabled = false;
+            btnCancelarDireccion.Enabled = true;
+            btnAceptarUbicacion.Enabled = false;
+        }
+
+        private void btnCancelarDireccion_Click(object sender, EventArgs e)
+        {
+            txtDireccionOficial.Enabled = true;
+            BtnGuardar.Enabled = false;
+            btnAceptarUbicacion.Enabled = true;
+            btnCancelarDireccion.Enabled = false;
         }
     }
 }

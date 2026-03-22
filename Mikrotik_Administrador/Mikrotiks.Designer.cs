@@ -39,8 +39,10 @@
             this.btnAddresList = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnVerMirkotiks = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Menu
@@ -52,14 +54,14 @@
             this.clientesToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(1204, 36);
+            this.Menu.Size = new System.Drawing.Size(940, 33);
             this.Menu.TabIndex = 0;
             this.Menu.Text = "menuStrip1";
             // 
             // migracionToolStripMenuItem
             // 
             this.migracionToolStripMenuItem.Name = "migracionToolStripMenuItem";
-            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 30);
+            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
             this.migracionToolStripMenuItem.Text = "Migración";
             this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
             // 
@@ -69,7 +71,7 @@
             this.AsignacionClientesToolStripMenuItem,
             this.InformacionClientesToolStripMenuItem});
             this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
-            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 30);
+            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
             this.clientesToolStripMenuItem.Text = "Clientes";
             // 
             // AsignacionClientesToolStripMenuItem
@@ -89,11 +91,12 @@
             // DGVMikrotiks
             // 
             this.DGVMikrotiks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DGVMikrotiks.Location = new System.Drawing.Point(34, 147);
+            this.DGVMikrotiks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DGVMikrotiks.Location = new System.Drawing.Point(3, 22);
             this.DGVMikrotiks.Name = "DGVMikrotiks";
             this.DGVMikrotiks.RowHeadersWidth = 62;
             this.DGVMikrotiks.RowTemplate.Height = 28;
-            this.DGVMikrotiks.Size = new System.Drawing.Size(1128, 261);
+            this.DGVMikrotiks.Size = new System.Drawing.Size(869, 258);
             this.DGVMikrotiks.TabIndex = 1;
             this.DGVMikrotiks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVMikrotiks_CellContentClick);
             // 
@@ -129,26 +132,40 @@
             this.btnVerMirkotiks.UseVisualStyleBackColor = true;
             this.btnVerMirkotiks.Click += new System.EventHandler(this.btnVerMirkotiks_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.DGVMikrotiks);
+            this.groupBox1.Location = new System.Drawing.Point(34, 116);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(875, 283);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            // 
             // Mikrotiks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1204, 420);
+            this.ClientSize = new System.Drawing.Size(940, 429);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnVerMirkotiks);
             this.Controls.Add(this.btnAddresList);
             this.Controls.Add(this.BtnNuevo);
-            this.Controls.Add(this.DGVMikrotiks);
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
-            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Mikrotiks";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mikrotiks";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Mikrotiks_FormClosed);
             this.Load += new System.EventHandler(this.Mikrotiks_Load);
             this.Menu.ResumeLayout(false);
             this.Menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -166,5 +183,6 @@
         private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AsignacionClientesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem InformacionClientesToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

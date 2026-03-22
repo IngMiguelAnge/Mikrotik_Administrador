@@ -48,7 +48,7 @@ namespace Mikrotik_Administrador
             cliente.Correo = txtCorreo.Text.Trim() ;
             cliente.Telefono1 = txtTelefono1.Text.Trim();
             cliente.Telefono2 = txtTelefono2.Text.Trim();
-            if (obj.InsertAndUpdateCliente(cliente).Result == true)
+            if (obj.SaveCliente(cliente).Result == true)
             {
                 MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();

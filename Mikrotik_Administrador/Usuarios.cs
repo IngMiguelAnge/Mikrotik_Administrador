@@ -50,11 +50,11 @@ namespace Mikrotik_Administrador
             btnClientesSin.Enabled = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
-            int Id_Mikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
+            int IdMikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
             try
             {
                 AppRepository obj = new AppRepository();
-                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, Id_Mikrotik).Result;
+                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik).Result;
 
                 if (lista != null && lista.Count > 0)
                 {
@@ -186,7 +186,7 @@ namespace Mikrotik_Administrador
                 foreach (UsuariosModel item in Seleccionados)
                 {
                     NombreAsignado = string.IsNullOrEmpty(NombreAsignado) ? Regex.Replace(item.name, @"[-<>]", " ").Trim().ToUpper() : NombreAsignado;
-                    Insert = obj.InsertAndUpdateClienteInGeneral(Convert.ToInt32(item.id), NombreAsignado).Result;
+                    Insert = obj.SaveClienteInGeneral(Convert.ToInt32(item.id), NombreAsignado).Result;
                     if (Insert == false)
                     {
                         MessageBox.Show("Error al asignar el cliente: " + NombreAsignado, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -196,9 +196,9 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Clientes asignados correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 dgvUsuarios.DataSource = null;
                 dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
-                int Id_Mikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
-                Id_Mikrotik = CBTodosMikrotiks.Checked ? 0 : Id_Mikrotik;
-                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, Id_Mikrotik).Result;
+                int IdMikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
+                IdMikrotik = CBTodosMikrotiks.Checked ? 0 : IdMikrotik;
+                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik).Result;
 
                 if (lista != null && lista.Count > 0)
                 {
@@ -312,7 +312,7 @@ namespace Mikrotik_Administrador
 
                     Ubicacion u = new Ubicacion();
                     u.IdUsuario = Convert.ToInt32(Id);
-                    u.Id_Mikrotik = Convert.ToInt32(IdMikrotik);
+                    u.IdMikrotik = Convert.ToInt32(IdMikrotik);
                     u.Show();
                     break;
             }

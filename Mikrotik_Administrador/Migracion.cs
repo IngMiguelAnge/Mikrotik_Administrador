@@ -65,12 +65,12 @@ namespace Mikrotik_Administrador
             BtnBuscar.Enabled = false; // Deshabilitar el botón para evitar múltiples clics
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
-            int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
+            int IdMikrotik = (int)CBMikrotiks.SelectedValue;
             try
             {
                 AppRepository obj = new AppRepository();
                 MikrotikModel mikro = new MikrotikModel();
-                mikro = obj.GetMikrotikById(Id_Mikrotik).Result;
+                mikro = obj.GetMikrotikById(IdMikrotik).Result;
                 if (mikro.Estatus == false)
                 {
                     MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -171,8 +171,8 @@ namespace Mikrotik_Administrador
                 }
                 else
                 {
-                    int Id_Mikrotik = (int)CBMikrotiks.SelectedValue;
-                    if (Id_Mikrotik == 0)
+                    int IdMikrotik = (int)CBMikrotiks.SelectedValue;
+                    if (IdMikrotik == 0)
                     {
                         MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
                         return;
@@ -181,14 +181,14 @@ namespace Mikrotik_Administrador
                     foreach (UsuariosExtraidosModel item in Seleccionados)
                     {
                         UsuariosGeneralModel objuser = new UsuariosGeneralModel();
-                        objuser.Id_Mikrotik = Id_Mikrotik;
+                        objuser.IdMikrotik = IdMikrotik;
                         objuser.Nombre = item.comment;
                         objuser.Address = item.address;
                         objuser.Antena = IsAntena;
-                        objuser.Id_Interno = item.id;
+                        objuser.IdInterno = item.id;
                         objuser.Estatus = item.estatus;
                         objuser.Id = 0;
-                        var res = obj.InsertandUpdateUsuariosGeneral(objuser).Result;
+                        var res = obj.SaveUsuariosGeneral(objuser).Result;
                         if (res)
                         {
                             cantidadExportada++;

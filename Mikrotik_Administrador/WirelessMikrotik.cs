@@ -3,6 +3,7 @@ using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -10,7 +11,7 @@ namespace Mikrotik_Administrador
 {
     public partial class WirelessMikrotik : Form
     {
-        public int Id_Mikrotik;
+        public int IdMikrotik;
         MK mikrotik;
         List<Address> listaaddress = new List<Address>();
         public WirelessMikrotik()
@@ -37,25 +38,34 @@ namespace Mikrotik_Administrador
             try
             {
                 AppRepository obj = new AppRepository();
-                if (obj.DesactivarWireless(Id_Mikrotik).Result == false)
+                if (obj.DesactivarWireless(IdMikrotik).Result == false)
                 {
                     MessageBox.Show("Error con la comunicacion con wireless.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                foreach (var item in listaaddress)
+                List<Address> Seleccionados = new List<Address>();
+                Seleccionados = dgvWireless.Rows.Cast<DataGridViewRow>()
+                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                  .Select(r => new Address
+                  {
+                      id = Convert.ToString(r.Cells["id"].Value),
+                      comment = Convert.ToString(r.Cells["comment"].Value),
+                      address = Convert.ToString(r.Cells["address"].Value),
+                      estatus = Convert.ToString(r.Cells["estatus"].Value)
+                  })
+                   .ToList();
+
+                foreach (var item in Seleccionados)
                 {
                     InsertListWirelessModel model = new InsertListWirelessModel
                     {
-                        Id_Mikrotik = Id_Mikrotik,
+                        IdMikrotik = IdMikrotik,
                         Address = item.address,
-                        //Network = item.network,
-                        //Interface = item.@interface,
-                        //Actual_Interface = item.actual_interface,
                         Comment = item.comment,
                         Estatus = item.estatus,
-                        Id_Interno = item.id
+                        IdInterno = item.id
                     };
-                    if (obj.InsertandUpdateWireless(model).Result == false)
+                    if (obj.SaveWireless(model).Result == false)
                     {
                         MessageBox.Show("Error al actualizar wireless. id: " + item.id, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -83,11 +93,12 @@ namespace Mikrotik_Administrador
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             dgvWireless.DataSource = null;
+            dgvWireless.Columns.Clear();
             try
             {
                 AppRepository obj = new AppRepository();
                 MikrotikModel mikro = new MikrotikModel();
-                mikro = obj.GetMikrotikById(Id_Mikrotik).Result;
+                mikro = obj.GetMikrotikById(IdMikrotik).Result;
                 if (mikro.Estatus == false)
                 {                          
                     MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -97,7 +108,6 @@ namespace Mikrotik_Administrador
                 // Usamos Task.Run para que la conexión no detenga la ventana
                 bool login = await Task.Run(() =>
                 {
-                    // Aquí dentro va la lógica pesada que antes congelaba todo
                     return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
                 });
                 if (login == false)
@@ -111,6 +121,8 @@ namespace Mikrotik_Administrador
                 {
                     dgvWireless.DataSource = lista;
                     listaaddress = lista;
+                    AgregarBotones();
+                    BtnActualizar.Enabled = true;
                 }
 
                 MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -122,11 +134,24 @@ namespace Mikrotik_Administrador
             }
             finally
             {
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                }
                 progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
                 progressBar1.Value = 100;
-                BtnExtraer.Enabled = true; // Rehabilitamos el botón
-                BtnActualizar.Enabled = true;
+                BtnExtraer.Enabled = true;         
             }
         }
+
+        private void AgregarBotones()
+        {
+            // Botón Checket
+            DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn();
+            chkSeleccionar.Name = "cbSeleccionar";
+            chkSeleccionar.HeaderText = "Copiar a Base";
+            dgvWireless.Columns.Add(chkSeleccionar);
+        }
+
     }
 }

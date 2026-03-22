@@ -23,7 +23,7 @@ namespace Mikrotik_Administrador
         private void BtnLogin_Click(object sender, EventArgs e)
         {
             AppRepository obj = new AppRepository();
-            var usuario = obj.GetUser(txtUser.Text, txtPassword.Text).Result;
+            var usuario = obj.GetUserbyNameAndPassword(txtUser.Text, txtPassword.Text).Result;
             if (usuario is null)
             {
                 MessageBox.Show("Usuario o contraseña incorrectos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

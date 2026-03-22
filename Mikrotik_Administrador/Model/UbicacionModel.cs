@@ -7,7 +7,7 @@
         public string Direccion_Oficial { get; set; }
         public string Latitud { get; set; }
         public string Longitud { get; set; }
-        public int Id_Mikrotik { get; set; }
-        public int Id_Usuario { get; set; }
+        public int IdMikrotik { get; set; }
+        public int IdUsuario { get; set; }
     }
 }

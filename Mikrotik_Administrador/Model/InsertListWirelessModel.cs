@@ -3,12 +3,9 @@
     public class InsertListWirelessModel
     {
         public string Address { get; set; }
-        public string Network { get; set; }
-        public string Interface { get; set; }
-        public string Actual_Interface { get; set; }
         public string Comment { get; set; }
-        public int Id_Mikrotik { get; set; }
+        public int IdMikrotik { get; set; }
         public string Estatus { get; set; }
-        public string Id_Interno { get; set; } //Es el id que da el mikrotik real
+        public string IdInterno { get; set; } //Es el id que da el mikrotik real
     }
 }
