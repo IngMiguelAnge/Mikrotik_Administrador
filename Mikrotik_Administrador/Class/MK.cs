@@ -354,7 +354,7 @@ namespace Mikrotik_Administrador.Class
                             case ".id": currentObj.id = value; break;
                             case "comment":
                                 currentObj.comment = value.Replace("\r", "").Replace("\n", "").Trim();
-                                currentObj.maxlimit = VerQueue(value.Replace("\r", "").Replace("\n", "").Trim());
+                                currentObj.velocidad = VerQueue(value.Replace("\r", "").Replace("\n", "").Trim());
                                 break;
                             case "address": currentObj.address = value;
                                 if (currentObj != null && !string.IsNullOrEmpty(currentObj.address))
@@ -458,7 +458,7 @@ namespace Mikrotik_Administrador.Class
                         string key = parts[1];
                         string value = parts[2];
                         if (key == "name") obj.Name = value;
-                        if (key == "rate-limit") obj.MaxLimit = value;
+                        if (key == "rate-limit") obj.Velocidad = value;
                     }
                 }
             }
@@ -512,8 +512,8 @@ namespace Mikrotik_Administrador.Class
                         if (key == "profile")
                         {
                             var perfil = Listalimites.FirstOrDefault(p => p.Name == value);
-                            if (perfil != null) currentObj.maxlimit = perfil.MaxLimit;
-                            else currentObj.maxlimit = string.Empty;
+                            if (perfil != null) currentObj.velocidad = perfil.Velocidad;
+                            else currentObj.velocidad = string.Empty;
                         }
                     }
                 }

@@ -218,6 +218,7 @@
     <Compile Include="Class\Antenas.cs" />
     <Compile Include="Class\Fibra.cs" />
     <Compile Include="Class\MK.cs" />
+    <Compile Include="Model\PlanModel.cs" />
     <Compile Include="Usuarios.cs">
       <SubType>Form</SubType>
     </Compile>

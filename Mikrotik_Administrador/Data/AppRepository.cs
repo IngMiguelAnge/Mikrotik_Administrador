@@ -18,6 +18,30 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region ActionPlanes
+        public async Task<bool> SavePlanByMigracion(PlanModel obj, bool IsAntena)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SavePlanByMigracion", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Velocidad", obj.Velocidad));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
         #region ActionsUsers
         public async Task<UserModel> GetUserbyNameAndPassword(string Usuario, string Password)
         {

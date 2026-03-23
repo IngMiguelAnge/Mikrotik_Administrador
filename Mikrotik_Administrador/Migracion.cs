@@ -2,6 +2,7 @@
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -162,7 +163,8 @@ namespace Mikrotik_Administrador
             int cantidadNoExportada = 0;
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-            btnExportar.Enabled = false; // Bloqueamos el botón para evitar múltiples clics
+            btnExportar.Enabled = false; 
+            BtnBuscar.Enabled = false; 
             try
             {
                 List<UsuariosExtraidosModel> Seleccionados = new List<UsuariosExtraidosModel>();
@@ -173,7 +175,8 @@ namespace Mikrotik_Administrador
                       id = Convert.ToString(r.Cells["id"].Value),
                       comment = Convert.ToString(r.Cells["comment"].Value),
                       address = Convert.ToString(r.Cells["address"].Value),
-                      estatus = Convert.ToString(r.Cells["estatus"].Value)
+                      estatus = Convert.ToString(r.Cells["estatus"].Value),
+                      velocidad = Convert.ToString(r.Cells["velocidad"].Value)
                   })
                    .ToList();
 
@@ -193,6 +196,14 @@ namespace Mikrotik_Administrador
                     AppRepository obj = new AppRepository();
                     foreach (UsuariosExtraidosModel item in Seleccionados)
                     {
+                        if(string.IsNullOrEmpty(item.velocidad))
+                        {
+                            cantidadNoExportada++;
+                            continue; // Saltamos este usuario y pasamos al siguiente
+                        }
+                        PlanModel objPlan = new PlanModel();
+                        objPlan.Velocidad = item.velocidad;
+                        var result = obj.SavePlanByMigracion(objPlan,cbAntenas.Checked);
                         UsuariosGeneralModel objuser = new UsuariosGeneralModel();
                         objuser.IdMikrotik = IdMikrotik;
                         objuser.Nombre = item.comment;
@@ -203,16 +214,12 @@ namespace Mikrotik_Administrador
                         objuser.Id = 0;
                         var res = obj.SaveUsuariosGeneral(objuser).Result;
                         if (res)
-                        {
                             cantidadExportada++;
-                        }
                         else
-                        {
                             cantidadNoExportada++;
-                        }
                     }
                 }
-                MessageBox.Show("Usuarios exportados: " + cantidadExportada.ToString() + "\nUsuarios no exportados: " + cantidadNoExportada.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Usuarios exportados: " + cantidadExportada.ToString() + "\nUsuarios no exportados (Revisar que tengan una velocidad): " + cantidadNoExportada.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -220,9 +227,10 @@ namespace Mikrotik_Administrador
             }
             finally
             {
-                btnExportar.Enabled = true; // Rehabilitamos el botón
-                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                progressBar1.Style = ProgressBarStyle.Blocks; 
                 progressBar1.Value = 100;
+                BtnBuscar.Enabled = true;
+                btnExportar.Enabled = true;
             }
         }
 
