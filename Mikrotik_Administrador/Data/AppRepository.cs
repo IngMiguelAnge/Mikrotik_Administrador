@@ -331,7 +331,7 @@ namespace Mikrotik_Administrador.Data
                 Id = (int)reader["Id"],
                 IdInterno = (string)reader["IdInterno"],
                 Tipo = (string)reader["Tipo"],
-                Nombre = (string)reader["Nombre"],
+                Usuario = (string)reader["Nombre"],
                 Address = (string)reader["Address"],
                 Estatus = (string)reader["Estatus"],
                 IdMikrotik = (int)reader["IdMikrotik"],

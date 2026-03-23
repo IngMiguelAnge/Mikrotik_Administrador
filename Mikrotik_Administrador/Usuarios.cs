@@ -220,7 +220,7 @@ namespace Mikrotik_Administrador
             }
         }
 
-        public async void CargarClientesSin() {
+        public void CargarClientesSin() {
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false;
@@ -241,7 +241,7 @@ namespace Mikrotik_Administrador
                 }
                 else
                 {
-                    MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("No se encontraron clientes sin servicios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
             }
@@ -281,7 +281,7 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Add(btnDesactivar);
         }
 
-        private void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // Evitar errores si hacen click en el encabezado
             if (e.RowIndex < 0) return;
@@ -299,9 +299,11 @@ namespace Mikrotik_Administrador
                     }
                     else
                         MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
+
                     break;
                 case "btnUbicacion":
-                    var IdMikrotik = dgvUsuarios.Rows[e.RowIndex].Cells["Id_Mikrotik"].Value;
+                    var IdMikrotik = dgvUsuarios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
 
                     Ubicacion u = new Ubicacion();
                     u.IdUsuario = Convert.ToInt32(Id);
