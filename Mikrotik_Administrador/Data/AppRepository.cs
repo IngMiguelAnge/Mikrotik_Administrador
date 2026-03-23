@@ -294,7 +294,7 @@ namespace Mikrotik_Administrador.Data
 
         #endregion
         #region ActionsUsuariosGeneral
-        public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName(string Nombre, int IdMikrotik)
+        public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName(string Nombre, int IdMikrotik, string Cliente)
         {
             List<ListUsuariosGeneralModel> list = new List<ListUsuariosGeneralModel>();
             try
@@ -306,6 +306,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Cliente", Cliente));
 
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
