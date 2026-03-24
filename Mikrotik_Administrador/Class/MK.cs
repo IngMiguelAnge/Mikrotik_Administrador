@@ -345,7 +345,7 @@ namespace Mikrotik_Administrador.Class
                         switch (key)
                         {
                             case "list": value = value.Replace("\r", "").Replace("\n", "").Trim();
-                                if (value != "PERMITIDO")
+                                if (value != "PERMITIDOS")
                                 {
                                     objetoValido = false; // Marcamos que este registro no nos sirve
                                     currentObj = null;    // Limpiamos la referencia

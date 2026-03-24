@@ -155,7 +155,6 @@
             this.Controls.Add(this.BtnNuevo);
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
-            this.MinimizeBox = false;
             this.Name = "Mikrotiks";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mikrotiks";

@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Class;
+﻿using Microsoft.IdentityModel.Tokens;
+using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
@@ -212,6 +213,7 @@ namespace Mikrotik_Administrador
                         objuser.IdInterno = item.id;
                         objuser.Estatus = item.estatus;
                         objuser.Id = 0;
+                        objuser.IdPlan = result.Result;
                         var res = obj.SaveUsuariosGeneral(objuser).Result;
                         if (res)
                             cantidadExportada++;

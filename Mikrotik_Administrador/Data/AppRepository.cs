@@ -19,7 +19,7 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region ActionPlanes
-        public async Task<bool> SavePlanByMigracion(PlanModel obj, bool IsAntena)
+        public async Task<int> SavePlanByMigracion(PlanModel obj, bool IsAntena)
         {
             try
             {
@@ -30,15 +30,22 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Velocidad", obj.Velocidad));
                         cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        return true;
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+
+                        return idGenerado;
                     }
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
         #endregion
@@ -355,6 +362,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Antena", obj.Antena));
                         cmd.Parameters.Add(new SqlParameter("@IdInterno", obj.IdInterno));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
