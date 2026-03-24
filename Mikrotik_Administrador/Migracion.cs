@@ -25,13 +25,6 @@ namespace Mikrotik_Administrador
             InitializeComponent();
         }
 
-        private void mikrotiksToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Mikrotiks m = new Mikrotiks();
-            m.Show();
-            this.Hide();
-        }
-
         private async void Migracion_Load(object sender, EventArgs e)
         {
             AppRepository obj = new AppRepository();
@@ -203,7 +196,7 @@ namespace Mikrotik_Administrador
                             continue; // Saltamos este usuario y pasamos al siguiente
                         }
                         PlanModel objPlan = new PlanModel();
-                        objPlan.Velocidad = item.velocidad;
+                        objPlan.Velocidad = item.velocidad.Trim();
                         var result = obj.SavePlanByMigracion(objPlan,cbAntenas.Checked);
                         UsuariosGeneralModel objuser = new UsuariosGeneralModel();
                         objuser.IdMikrotik = IdMikrotik;
@@ -235,25 +228,5 @@ namespace Mikrotik_Administrador
                 btnExportar.Enabled = true;
             }
         }
-
-        private void Migracion_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void AsignacionClienteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Usuarios m = new Usuarios();
-            m.Show();
-            this.Hide();
-        }
-
-        private void InformacionClienteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            InfoClientes m = new InfoClientes();
-            m.Show();
-            this.Hide();
-        }
-
     }
 }

@@ -18,10 +18,6 @@ namespace Mikrotik_Administrador
             m.Show();
         }
 
-        private void Mikrotiks_Load(object sender, EventArgs e)
-        {
-         
-        }
         private async void ListaMikrotiks()
         {
             try
@@ -116,13 +112,6 @@ namespace Mikrotik_Administrador
             }
         }
 
-        private void migracionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Migracion m = new Migracion();
-            m.Show();
-            this.Hide();
-        }
-
         private void btnAddresList_Click(object sender, EventArgs e)
         {
             ListaWireless();
@@ -148,11 +137,6 @@ namespace Mikrotik_Administrador
             }
         }
 
-        private void Mikrotiks_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void btnVerMirkotiks_Click(object sender, EventArgs e)
         {
             ListaMikrotiks();
@@ -165,11 +149,5 @@ namespace Mikrotik_Administrador
             this.Hide();
         }
 
-        private void AsignacionClientesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Usuarios m = new Usuarios();
-            m.Show();
-            this.Hide();
-        }
     }
 }

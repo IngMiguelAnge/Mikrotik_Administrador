@@ -28,11 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Menu = new System.Windows.Forms.MenuStrip();
-            this.mikrotiksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AsignacionClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.InformacionClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblMensaje = new System.Windows.Forms.Label();
             this.CBMikrotiks = new System.Windows.Forms.ComboBox();
             this.txtNombre = new System.Windows.Forms.TextBox();
@@ -44,58 +39,14 @@
             this.cbExportar = new System.Windows.Forms.CheckBox();
             this.cbAntenas = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // Menu
-            // 
-            this.Menu.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
-            this.Menu.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mikrotiksToolStripMenuItem,
-            this.clientesToolStripMenuItem});
-            this.Menu.Location = new System.Drawing.Point(0, 0);
-            this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(699, 33);
-            this.Menu.TabIndex = 0;
-            this.Menu.Text = "menuStrip1";
-            // 
-            // mikrotiksToolStripMenuItem
-            // 
-            this.mikrotiksToolStripMenuItem.Name = "mikrotiksToolStripMenuItem";
-            this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 29);
-            this.mikrotiksToolStripMenuItem.Text = "Mikrotiks";
-            this.mikrotiksToolStripMenuItem.Click += new System.EventHandler(this.mikrotiksToolStripMenuItem_Click);
-            // 
-            // clientesToolStripMenuItem
-            // 
-            this.clientesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AsignacionClienteToolStripMenuItem,
-            this.InformacionClientesToolStripMenuItem});
-            this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
-            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
-            this.clientesToolStripMenuItem.Text = "Clientes";
-            // 
-            // AsignacionClienteToolStripMenuItem
-            // 
-            this.AsignacionClienteToolStripMenuItem.Name = "AsignacionClienteToolStripMenuItem";
-            this.AsignacionClienteToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
-            this.AsignacionClienteToolStripMenuItem.Text = "Asignación de clientes";
-            this.AsignacionClienteToolStripMenuItem.Click += new System.EventHandler(this.AsignacionClienteToolStripMenuItem_Click);
-            // 
-            // InformacionClientesToolStripMenuItem
-            // 
-            this.InformacionClientesToolStripMenuItem.Name = "InformacionClientesToolStripMenuItem";
-            this.InformacionClientesToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
-            this.InformacionClientesToolStripMenuItem.Text = "Información de clientes";
-            this.InformacionClientesToolStripMenuItem.Click += new System.EventHandler(this.InformacionClienteToolStripMenuItem_Click);
-            // 
             // lblMensaje
             // 
             this.lblMensaje.AutoSize = true;
-            this.lblMensaje.Location = new System.Drawing.Point(29, 64);
+            this.lblMensaje.Location = new System.Drawing.Point(31, 20);
             this.lblMensaje.Name = "lblMensaje";
             this.lblMensaje.Size = new System.Drawing.Size(105, 20);
             this.lblMensaje.TabIndex = 1;
@@ -104,14 +55,14 @@
             // CBMikrotiks
             // 
             this.CBMikrotiks.FormattingEnabled = true;
-            this.CBMikrotiks.Location = new System.Drawing.Point(164, 64);
+            this.CBMikrotiks.Location = new System.Drawing.Point(166, 20);
             this.CBMikrotiks.Name = "CBMikrotiks";
             this.CBMikrotiks.Size = new System.Drawing.Size(191, 28);
             this.CBMikrotiks.TabIndex = 0;
             // 
             // txtNombre
             // 
-            this.txtNombre.Location = new System.Drawing.Point(33, 152);
+            this.txtNombre.Location = new System.Drawing.Point(35, 108);
             this.txtNombre.Multiline = true;
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(263, 26);
@@ -120,7 +71,7 @@
             // lblMensaje2
             // 
             this.lblMensaje2.AutoSize = true;
-            this.lblMensaje2.Location = new System.Drawing.Point(29, 125);
+            this.lblMensaje2.Location = new System.Drawing.Point(31, 81);
             this.lblMensaje2.Name = "lblMensaje2";
             this.lblMensaje2.Size = new System.Drawing.Size(286, 20);
             this.lblMensaje2.TabIndex = 4;
@@ -128,7 +79,7 @@
             // 
             // BtnBuscar
             // 
-            this.BtnBuscar.Location = new System.Drawing.Point(530, 146);
+            this.BtnBuscar.Location = new System.Drawing.Point(532, 102);
             this.BtnBuscar.Name = "BtnBuscar";
             this.BtnBuscar.Size = new System.Drawing.Size(89, 39);
             this.BtnBuscar.TabIndex = 5;
@@ -138,7 +89,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(486, 64);
+            this.progressBar1.Location = new System.Drawing.Point(488, 20);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(133, 23);
             this.progressBar1.TabIndex = 6;
@@ -151,12 +102,12 @@
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
-            this.dgvUsuarios.Size = new System.Drawing.Size(616, 219);
+            this.dgvUsuarios.Size = new System.Drawing.Size(650, 276);
             this.dgvUsuarios.TabIndex = 7;
             // 
             // btnExportar
             // 
-            this.btnExportar.Location = new System.Drawing.Point(235, 200);
+            this.btnExportar.Location = new System.Drawing.Point(237, 156);
             this.btnExportar.Name = "btnExportar";
             this.btnExportar.Size = new System.Drawing.Size(80, 35);
             this.btnExportar.TabIndex = 7;
@@ -167,7 +118,7 @@
             // cbExportar
             // 
             this.cbExportar.AutoSize = true;
-            this.cbExportar.Location = new System.Drawing.Point(33, 206);
+            this.cbExportar.Location = new System.Drawing.Point(35, 162);
             this.cbExportar.Name = "cbExportar";
             this.cbExportar.Size = new System.Drawing.Size(149, 24);
             this.cbExportar.TabIndex = 6;
@@ -177,7 +128,7 @@
             // cbAntenas
             // 
             this.cbAntenas.AutoSize = true;
-            this.cbAntenas.Location = new System.Drawing.Point(337, 152);
+            this.cbAntenas.Location = new System.Drawing.Point(339, 108);
             this.cbAntenas.Name = "cbAntenas";
             this.cbAntenas.Size = new System.Drawing.Size(187, 24);
             this.cbAntenas.TabIndex = 11;
@@ -190,9 +141,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.dgvUsuarios);
-            this.groupBox1.Location = new System.Drawing.Point(29, 254);
+            this.groupBox1.Location = new System.Drawing.Point(31, 210);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(622, 244);
+            this.groupBox1.Size = new System.Drawing.Size(656, 301);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             // 
@@ -211,17 +162,12 @@
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.CBMikrotiks);
             this.Controls.Add(this.lblMensaje);
-            this.Controls.Add(this.Menu);
-            this.MainMenuStrip = this.Menu;
             this.MaximizeBox = false;
             this.Name = "Migracion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Migracion";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Migracion_FormClosed);
             this.Load += new System.EventHandler(this.Migracion_Load);
-            this.Menu.ResumeLayout(false);
-            this.Menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -230,9 +176,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.MenuStrip Menu;
-        private System.Windows.Forms.ToolStripMenuItem mikrotiksToolStripMenuItem;
         private System.Windows.Forms.Label lblMensaje;
         private System.Windows.Forms.ComboBox CBMikrotiks;
         private System.Windows.Forms.TextBox txtNombre;
@@ -243,9 +186,6 @@
         private System.Windows.Forms.Button btnExportar;
         private System.Windows.Forms.CheckBox cbExportar;
         private System.Windows.Forms.CheckBox cbAntenas;
-        private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ToolStripMenuItem AsignacionClienteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem InformacionClientesToolStripMenuItem;
     }
 }

@@ -36,11 +36,6 @@
             this.lblMensaje2 = new System.Windows.Forms.Label();
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.dgvUsuarios = new System.Windows.Forms.DataGridView();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.mikrotiksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.migracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.informaciónDeClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblMensaje3 = new System.Windows.Forms.Label();
             this.txtCliente = new System.Windows.Forms.TextBox();
             this.CBAsignar = new System.Windows.Forms.CheckBox();
@@ -50,7 +45,6 @@
             this.cbTodos = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
-            this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -124,52 +118,9 @@
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
-            this.dgvUsuarios.Size = new System.Drawing.Size(848, 72);
+            this.dgvUsuarios.Size = new System.Drawing.Size(848, 340);
             this.dgvUsuarios.TabIndex = 14;
             this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mikrotiksToolStripMenuItem,
-            this.migracionToolStripMenuItem,
-            this.clientesToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(889, 33);
-            this.menuStrip1.TabIndex = 15;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // mikrotiksToolStripMenuItem
-            // 
-            this.mikrotiksToolStripMenuItem.Name = "mikrotiksToolStripMenuItem";
-            this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 29);
-            this.mikrotiksToolStripMenuItem.Text = "Mikrotiks";
-            this.mikrotiksToolStripMenuItem.Click += new System.EventHandler(this.mikrotiksToolStripMenuItem_Click);
-            // 
-            // migracionToolStripMenuItem
-            // 
-            this.migracionToolStripMenuItem.Name = "migracionToolStripMenuItem";
-            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
-            this.migracionToolStripMenuItem.Text = "Migración";
-            this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
-            // 
-            // clientesToolStripMenuItem
-            // 
-            this.clientesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.informaciónDeClientesToolStripMenuItem});
-            this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
-            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
-            this.clientesToolStripMenuItem.Text = "Clientes";
-            // 
-            // informaciónDeClientesToolStripMenuItem
-            // 
-            this.informaciónDeClientesToolStripMenuItem.Name = "informaciónDeClientesToolStripMenuItem";
-            this.informaciónDeClientesToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
-            this.informaciónDeClientesToolStripMenuItem.Text = "Información de clientes";
-            this.informaciónDeClientesToolStripMenuItem.Click += new System.EventHandler(this.informaciónDeClientesToolStripMenuItem_Click);
             // 
             // lblMensaje3
             // 
@@ -247,7 +198,7 @@
             this.groupBox1.Controls.Add(this.dgvUsuarios);
             this.groupBox1.Location = new System.Drawing.Point(23, 250);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(854, 97);
+            this.groupBox1.Size = new System.Drawing.Size(854, 365);
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             // 
@@ -255,7 +206,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(889, 380);
+            this.ClientSize = new System.Drawing.Size(889, 648);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbTodos);
             this.Controls.Add(this.btnClientesSin);
@@ -271,18 +222,13 @@
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.CBMikrotiks);
             this.Controls.Add(this.lblMensaje);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "Usuarios";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Usuarios";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Clientes_FormClosed);
             this.Load += new System.EventHandler(this.Clientes_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -299,9 +245,6 @@
         private System.Windows.Forms.Label lblMensaje2;
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.DataGridView dgvUsuarios;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem mikrotiksToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem migracionToolStripMenuItem;
         private System.Windows.Forms.Label lblMensaje3;
         private System.Windows.Forms.TextBox txtCliente;
         private System.Windows.Forms.CheckBox CBAsignar;
@@ -310,7 +253,5 @@
         private System.Windows.Forms.Button btnClientesSin;
         private System.Windows.Forms.CheckBox cbTodos;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem informaciónDeClientesToolStripMenuItem;
     }
 }

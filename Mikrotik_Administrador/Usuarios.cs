@@ -23,11 +23,6 @@ namespace Mikrotik_Administrador
             InitializeComponent();
         }
 
-        private void Clientes_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
@@ -264,12 +259,6 @@ namespace Mikrotik_Administrador
             CargarClientesSin();
         }
 
-        private void informaciónDeClientesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            InfoClientes m = new InfoClientes();
-            m.Show();
-            this.Hide();
-        }
         private void AgregarBotones2()
         {
             // Botón cambio de estatus

@@ -30,7 +30,7 @@ namespace Mikrotik_Administrador
             }
             else
             {
-                Mikrotiks m = new Mikrotiks();
+                Menu m = new Menu();
                 m.Show();
                 this.Hide();
             }

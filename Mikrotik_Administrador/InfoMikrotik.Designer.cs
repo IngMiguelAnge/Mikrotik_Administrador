@@ -76,7 +76,7 @@
             // lblPort
             // 
             this.lblPort.AutoSize = true;
-            this.lblPort.Location = new System.Drawing.Point(280, 135);
+            this.lblPort.Location = new System.Drawing.Point(352, 135);
             this.lblPort.Name = "lblPort";
             this.lblPort.Size = new System.Drawing.Size(48, 20);
             this.lblPort.TabIndex = 4;
@@ -84,7 +84,7 @@
             // 
             // txtPort
             // 
-            this.txtPort.Location = new System.Drawing.Point(368, 135);
+            this.txtPort.Location = new System.Drawing.Point(440, 135);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(100, 26);
             this.txtPort.TabIndex = 2;
@@ -103,14 +103,14 @@
             // 
             this.txtUsuario.Location = new System.Drawing.Point(118, 179);
             this.txtUsuario.Name = "txtUsuario";
-            this.txtUsuario.Size = new System.Drawing.Size(132, 26);
+            this.txtUsuario.Size = new System.Drawing.Size(226, 26);
             this.txtUsuario.TabIndex = 3;
             this.txtUsuario.TextChanged += new System.EventHandler(this.txtUsuario_TextChanged);
             // 
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(280, 185);
+            this.lblPassword.Location = new System.Drawing.Point(352, 185);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(88, 20);
             this.lblPassword.TabIndex = 8;
@@ -118,15 +118,15 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(368, 185);
+            this.txtPassword.Location = new System.Drawing.Point(440, 185);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(136, 26);
+            this.txtPassword.Size = new System.Drawing.Size(194, 26);
             this.txtPassword.TabIndex = 4;
             this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
             // btnProbar
             // 
-            this.btnProbar.Location = new System.Drawing.Point(38, 225);
+            this.btnProbar.Location = new System.Drawing.Point(38, 232);
             this.btnProbar.Name = "btnProbar";
             this.btnProbar.Size = new System.Drawing.Size(150, 43);
             this.btnProbar.TabIndex = 5;
@@ -137,7 +137,7 @@
             // lblProbar
             // 
             this.lblProbar.AutoSize = true;
-            this.lblProbar.Location = new System.Drawing.Point(214, 232);
+            this.lblProbar.Location = new System.Drawing.Point(214, 239);
             this.lblProbar.Name = "lblProbar";
             this.lblProbar.Size = new System.Drawing.Size(99, 20);
             this.lblProbar.TabIndex = 11;
@@ -145,7 +145,7 @@
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(38, 305);
+            this.btnGuardar.Location = new System.Drawing.Point(38, 312);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(87, 35);
             this.btnGuardar.TabIndex = 8;
@@ -166,7 +166,7 @@
             // 
             this.txtNombre.Location = new System.Drawing.Point(202, 66);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(226, 26);
+            this.txtNombre.Size = new System.Drawing.Size(373, 26);
             this.txtNombre.TabIndex = 0;
             // 
             // txtIP
@@ -189,7 +189,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(523, 344);
+            this.ClientSize = new System.Drawing.Size(646, 398);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.txtIP);
             this.Controls.Add(this.txtNombre);

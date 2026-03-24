@@ -55,11 +55,6 @@ namespace Mikrotik_Administrador
             this.Hide();
         }
 
-        private void InfoClientes_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.Exit();
-        }
-
         public void CargarClientes()
         {
             if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
