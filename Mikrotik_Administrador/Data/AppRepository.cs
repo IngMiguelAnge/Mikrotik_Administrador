@@ -12,14 +12,120 @@ namespace Mikrotik_Administrador.Data
         public string MikrotikConnection { get; set; }
         public AppRepository(bool isUnitOfWork = false)
         {
-             MikrotikConnection = "Data Source=.;Initial Catalog=Mikrotiks;User ID=sa;Password=admin123;Trust Server Certificate=True";
+            MikrotikConnection = "Data Source=.;Initial Catalog=Mikrotiks;User ID=sa;Password=admin123;Trust Server Certificate=True";
         }
         public void Dispose()
         {
             GC.Collect();
         }
         #region ActionPlanes
-        public async Task<int> SavePlanByMigracion(PlanModel obj, bool IsAntena)
+        public async Task<List<ListPlanesModel>> GetPlanesbyName(string Nombre)
+        {
+            List<ListPlanesModel> list = new List<ListPlanesModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetPlanesbyName", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListPlanes(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListPlanesModel MapToListPlanes(SqlDataReader reader)
+        {
+            return new ListPlanesModel()
+            {
+                Id = (int)reader["Id"],
+                Nombre = (string)reader["Nombre"],
+                Precio = (decimal)reader["Precio"],
+                Velocidad = Convert.IsDBNull(reader["Velocidad"]) ? string.Empty : (string)reader["Velocidad"],
+                Estatus = Convert.IsDBNull(reader["Estatus"]) ? string.Empty : (string)reader["Estatus"],
+                PlanDe = Convert.IsDBNull(reader["PlanDe"]) ? string.Empty : (string)reader["PlanDe"],
+            };
+        }
+        public async Task<PlanModel> GetPlanById(int Id)
+        {
+            PlanModel response = new PlanModel();
+            List<PlanModel> list = new List<PlanModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetPlanById", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToPlan(reader));
+                            }
+                            response = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response = null;
+            }
+            return response;
+        }
+        private PlanModel MapToPlan(SqlDataReader reader)
+        {
+            return new PlanModel()
+            {
+                Id = (int)reader["Id"],
+                Nombre = (string)reader["Nombre"],
+                Precio = Convert.IsDBNull(reader["Precio"]) ? 0 : (decimal)reader["Precio"],
+                Velocidad = Convert.IsDBNull(reader["Velocidad"]) ? string.Empty : (string)reader["Velocidad"],
+                Estatus = Convert.IsDBNull(reader["Estatus"]) ? false : (bool)reader["Estatus"],
+                IsAntena = Convert.IsDBNull(reader["IsAntena"]) ? false : (bool)reader["IsAntena"],
+            };
+        }
+        public async Task<bool> SavePlan(PlanModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SavePlan", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Precio", obj.Precio));
+                        cmd.Parameters.Add(new SqlParameter("@Velocidad", obj.Velocidad));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", obj.IsAntena));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<int> SavePlanByMigracion(PlanModel obj)
         {
             try
             {
@@ -29,7 +135,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Velocidad", obj.Velocidad));
-                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", obj.IsAntena));
                         SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
                         {
                             Direction = System.Data.ParameterDirection.Output
@@ -70,7 +176,7 @@ namespace Mikrotik_Administrador.Data
                             {
                                 list.Add(MapToUser(reader));
                             }
-                            response = list.Count()> 0 ? list[0]: null;
+                            response = list.Count() > 0 ? list[0] : null;
                         }
                     }
                 }
@@ -239,7 +345,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Direccion", obj.Direccion));
                         cmd.Parameters.Add(new SqlParameter("@Direccion_Oficial", obj.Direccion_Oficial));
-                        cmd.Parameters.Add(new SqlParameter("@Latitud", obj.Latitud));  
+                        cmd.Parameters.Add(new SqlParameter("@Latitud", obj.Latitud));
                         cmd.Parameters.Add(new SqlParameter("@Longitud", obj.Longitud));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
@@ -292,7 +398,7 @@ namespace Mikrotik_Administrador.Data
                 Id = (int)reader["Id"],
                 Direccion = (string)reader["Direccion"],
                 Direccion_Oficial = (string)reader["Direccion_Oficial"],
-                Latitud = (string)reader["Latitud"],    
+                Latitud = (string)reader["Latitud"],
                 Longitud = (string)reader["Longitud"],
                 IdMikrotik = (int)reader["IdMikrotik"],
                 IdUsuario = (int)reader["IdUsuario"],
@@ -489,7 +595,7 @@ namespace Mikrotik_Administrador.Data
 
         #endregion
         #region Clientes
-        public async Task<bool> SaveClienteInGeneral(int IdUsuario ,string Nombre)
+        public async Task<bool> SaveClienteInGeneral(int IdUsuario, string Nombre)
         {
             try
             {
@@ -545,7 +651,7 @@ namespace Mikrotik_Administrador.Data
                 Id = (int)reader["Id"],
                 Nombre = (string)reader["Nombre"],
                 Estatus = (string)reader["Estatus"],
-                TotalServicios= Convert.IsDBNull(reader["TotalServicios"]) ? 0 : (int)reader["TotalServicios"],
+                TotalServicios = Convert.IsDBNull(reader["TotalServicios"]) ? 0 : (int)reader["TotalServicios"],
             };
         }
         public async Task<List<ListClientesModel>> GetClientesbyName(string Nombre, int IdMikrotik)

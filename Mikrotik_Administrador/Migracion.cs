@@ -197,7 +197,13 @@ namespace Mikrotik_Administrador
                         }
                         PlanModel objPlan = new PlanModel();
                         objPlan.Velocidad = item.velocidad.Trim();
-                        var result = obj.SavePlanByMigracion(objPlan,cbAntenas.Checked);
+                        objPlan.IsAntena = cbAntenas.Checked;
+                        var result = obj.SavePlanByMigracion(objPlan);
+                        if(result.Result == 0)
+                        {
+                            MessageBox.Show("Error al guardar los planes","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            break;
+                        }
                         UsuariosGeneralModel objuser = new UsuariosGeneralModel();
                         objuser.IdMikrotik = IdMikrotik;
                         objuser.Nombre = item.comment;
