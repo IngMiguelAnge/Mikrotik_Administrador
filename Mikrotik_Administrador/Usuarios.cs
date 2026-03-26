@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Devices;
+using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
@@ -18,26 +19,12 @@ namespace Mikrotik_Administrador
 {
     public partial class Usuarios : Form
     {
+        MK mikrotik;
         public Usuarios()
         {
             InitializeComponent();
         }
-
-        private void BtnBuscar_Click(object sender, EventArgs e)
-        {
-            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
-            {
-                MessageBox.Show("Por favor, selecciona un Mikrotik.");
-                return;
-            }
-            if (txtNombre.Text.Trim() == "")
-            {
-                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los usuarios pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (resultado == DialogResult.No)
-                {
-                    return;
-                }
-            }
+        public void BuscarUsuarios() {
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false;
@@ -49,7 +36,7 @@ namespace Mikrotik_Administrador
             try
             {
                 AppRepository obj = new AppRepository();
-                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik,txtCliente.Text).Result;
+                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik, txtCliente.Text).Result;
 
                 if (lista != null && lista.Count > 0)
                 {
@@ -76,6 +63,23 @@ namespace Mikrotik_Administrador
                 btnClientesSin.Enabled = true;
             }
         }
+        private void BtnBuscar_Click(object sender, EventArgs e)
+        {
+            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
+            {
+                MessageBox.Show("Por favor, selecciona un Mikrotik.");
+                return;
+            }
+            if (txtNombre.Text.Trim() == "")
+            {
+                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los usuarios pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (resultado == DialogResult.No)
+                {
+                    return;
+                }
+            }
+            BuscarUsuarios();
+        }
         private void AgregarBotones()
         {
             // Botón Checket
@@ -91,6 +95,14 @@ namespace Mikrotik_Administrador
             btnUbicacion.Text = "Ubicación";
             btnUbicacion.UseColumnTextForButtonValue = true;
             dgvUsuarios.Columns.Add(btnUbicacion);
+
+            // Botón Checket
+            DataGridViewButtonColumn BtnEstatus = new DataGridViewButtonColumn();
+            BtnEstatus.Name = "btnEstatus";
+            BtnEstatus.HeaderText = "Acción";
+            BtnEstatus.Text = "Cambio Estatus";
+            BtnEstatus.UseColumnTextForButtonValue = true;
+            dgvUsuarios.Columns.Add(BtnEstatus);
         }
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
         {
@@ -280,7 +292,7 @@ namespace Mikrotik_Administrador
             {
                 case "btnDesactivar":
                     AppRepository obj = new AppRepository();
-                    bool result = obj.UpdateEstatusCliente(Convert.ToInt32(Id)).Result;
+                    bool result = await obj.UpdateEstatusCliente(Convert.ToInt32(Id));
                     if (result == true)
                     {
                         MessageBox.Show("Estatus cambiado");
@@ -288,7 +300,8 @@ namespace Mikrotik_Administrador
                     }
                     else
                         MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
+                    var lista = await obj.GetClientesSinServicios();
+                    lblMensaje4.Text = "Clientes sin servicios: " + lista.Count.ToString();
 
                     break;
                 case "btnUbicacion":
@@ -299,6 +312,85 @@ namespace Mikrotik_Administrador
                     u.IdMikrotik = Convert.ToInt32(IdMikrotik);
                     u.Show();
                     break;
+                case "btnEstatus":
+                    ListUsuariosGeneralModel objUsuario = new ListUsuariosGeneralModel();
+                    objUsuario.Id = Convert.ToInt32(Id);
+                    objUsuario.IdMikrotik=(int)dgvUsuarios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
+                    objUsuario.IdInterno=(string)dgvUsuarios.Rows[e.RowIndex].Cells["IdInterno"].Value;
+                    objUsuario.Usuario=(string)dgvUsuarios.Rows[e.RowIndex].Cells["Usuario"].Value;
+                    objUsuario.Estatus =(string)dgvUsuarios.Rows[e.RowIndex].Cells["Estatus"].Value;
+                    objUsuario.Tipo = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Tipo"].Value;
+
+                    await CambiarEstatus(objUsuario);
+                    break;
+            }
+        }
+
+        public async Task CambiarEstatus(ListUsuariosGeneralModel objUsuario)
+        {
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            BtnBuscar.Enabled = false;
+            BtnAsignar.Enabled = false;
+            btnClientesSin.Enabled = false;
+            AppRepository obj = new AppRepository();
+            try
+            {
+                MikrotikModel mikro = new MikrotikModel();
+                mikro = obj.GetMikrotikById(objUsuario.IdMikrotik).Result;
+                if (mikro.Estatus == false)
+                {
+                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+
+                bool login = await Task.Run(() =>
+                {
+                    return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                });
+                if (login == false)
+                {
+                    MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                bool Result1 = false;
+                bool Result2 = false;
+                if (objUsuario.Tipo == "Antena")
+                {
+                    Result1 = mikrotik.CambiarEstatusAntena(objUsuario.IdInterno, objUsuario.Estatus);
+                    Result2 = mikrotik.CambiarEstatusQueues(objUsuario.Usuario, objUsuario.Estatus);
+                }
+                else
+                {
+                    Result1 = mikrotik.CambiarEstatusFibra(objUsuario.IdInterno, objUsuario.Estatus);
+                    Result2 = true;
+                }
+                if (Result1 == true && Result2 == true)
+                {
+                    string nuevoEstatus = objUsuario.Estatus == "Activo" ? "Inactivo" : "Activo";
+                    var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus);
+                    BuscarUsuarios();
+                }
+                else
+                    MessageBox.Show("Error al actualizar el estatus", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                }
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
+                BtnBuscar.Enabled = true; // Rehabilitamos el botón
+                BtnAsignar.Enabled = true;
+                btnClientesSin.Enabled = true;
             }
         }
     }

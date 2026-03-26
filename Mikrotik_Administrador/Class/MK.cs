@@ -148,33 +148,6 @@ namespace Mikrotik_Administrador.Class
             }
             return output;
         }
-        public string EncodePassword(string Password, string hash)
-        {
-            byte[] hash_byte = new byte[hash.Length / 2];
-            for (int i = 0; i <= hash.Length - 2; i += 2)
-            {
-                hash_byte[i / 2] = Byte.Parse(hash.Substring(i, 2), System.Globalization.NumberStyles.HexNumber);
-            }
-            byte[] heslo = new byte[1 + Password.Length + hash_byte.Length];
-            heslo[0] = 0;
-            Encoding.ASCII.GetBytes(Password.ToCharArray()).CopyTo(heslo, 1);
-            hash_byte.CopyTo(heslo, 1 + Password.Length);
-
-            Byte[] hotovo;
-            System.Security.Cryptography.MD5 md5;
-
-            md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-
-            hotovo = md5.ComputeHash(heslo);
-
-            //Convert encoded bytes back to a 'readable' string
-            string navrat = "";
-            foreach (byte h in hotovo)
-            {
-                navrat += h.ToString("x2");
-            }
-            return navrat;
-        }
         public bool Login(string username, string password)
         {
             try
@@ -204,55 +177,7 @@ namespace Mikrotik_Administrador.Class
                 System.Diagnostics.Debug.WriteLine("Error crítico: " + ex.Message);
                 return false;
             }
-        }
-        public List<UsuariosModel> VerUsuarios(string name)
-        {
-            List<UsuariosModel> obj = new List<UsuariosModel>();
-            try
-            {
-                if (name == string.Empty)
-                    Send("/ip/hotspot/user/getall", true);
-                if (name != string.Empty)
-                {
-                    Send("/ip/hotspot/user/print");
-                    Send("?name=" + name, true);
-                }
-                foreach (string row in Read())
-                {
-                    string gets = string.Empty;
-                    UsuariosModel objp = new UsuariosModel();
-                    try
-                    {
-                        gets = row.Split(new string[] { "!re=.id=*" }, StringSplitOptions.None)[1];
-                        objp.id = gets.Split(new string[] { "=name=" }, StringSplitOptions.None)[0];
-
-                        string[] array = gets.Split('=');
-                        int contador = 1;
-                        while (contador < array.Count())
-                        {
-                            switch (array[contador])
-                            {
-                                case "name":
-                                    objp.name = array[contador + 1];
-                                    contador += 1;
-                                    break;
-                            }
-                            contador += 1;
-                        }
-                        obj.Add(objp);
-                    }
-                    catch (Exception e)
-                    {
-
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-
-            }
-            return obj;
-        }
+        }        
         private string FormatearNumero(string numeroStr)
         {
             if (!long.TryParse(numeroStr, out long bits)) return "0";
@@ -265,7 +190,7 @@ namespace Mikrotik_Administrador.Class
 
             return bits.ToString(); // Si es menor a 1k, lo deja igual
         }
-        public string VerQueue(string name)
+        public string VerVelocidadQueue(string name)
         {
             string MaxLimit = string.Empty;
             try
@@ -354,7 +279,7 @@ namespace Mikrotik_Administrador.Class
                             case ".id": currentObj.id = value; break;
                             case "comment":
                                 currentObj.comment = value.Replace("\r", "").Replace("\n", "").Trim();
-                                currentObj.velocidad = VerQueue(value.Replace("\r", "").Replace("\n", "").Trim());
+                                currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
                                 break;
                             case "address": currentObj.address = value;
                                 if (currentObj != null && !string.IsNullOrEmpty(currentObj.address))
@@ -384,7 +309,6 @@ namespace Mikrotik_Administrador.Class
             }
             return name != string.Empty ? listaFinal.Where(r=> r.comment == name).ToList():listaFinal;
         }
-
         private bool IpPerteneceARango(string ipDestino, string redReferencia)
         {
             try
@@ -573,6 +497,103 @@ namespace Mikrotik_Administrador.Class
                 System.Diagnostics.Debug.WriteLine("Error en VerAddres: " + ex.Message);
             }
             return listaFinal;
+        }
+        public bool CambiarEstatusAntena(string Id, string Estatus)
+        {
+            try
+            {
+                Send("/ip/firewall/address-list/set");
+                Send("=.id=" + Id);
+                if(Estatus == "Activo")
+                    Send("=disabled=yes", true);
+                else
+                    Send("=disabled=no", true);
+
+                List<string> respuesta = Read();
+                // Si no hay errores (!trap), asumimos éxito
+                return !respuesta.Any(r => r.Contains("!trap"));
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool CambiarEstatusQueues(string Name, string Estatus)
+        {
+            try
+            {
+                string Id = VerIdQueue(Name);
+                Send("/queue/simple/set");
+                Send("=.id=" + Id);
+                if (Estatus == "Activo")
+                    Send("=disabled=yes", true);
+                else
+                    Send("=disabled=no", true);
+
+                List<string> respuesta = Read();
+                return !respuesta.Any(r => r.Contains("!trap"));
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public bool CambiarEstatusFibra(string Id, string Estatus)
+        {
+            try
+            {
+                Send("/ppp/secret/set");
+                Send("=.id=" + Id);
+                if (Estatus == "Activo")
+                    Send("=disabled=yes", true);
+                else
+                    Send("=disabled=no", true);
+
+                List<string> respuesta = Read();
+
+                // Si el router responde con !trap es que hubo un error (ej: el usuario no existe)
+                return !respuesta.Any(r => r.Contains("!trap"));
+            }
+            catch (Exception ex)
+            {
+                 return false;
+            }
+        }
+        public string VerIdQueue(string name)
+        {
+            string Id = string.Empty;
+            try
+            {
+                Send("/queue/simple/print");
+                Send("=.proplist=.id");// Esto ayuda a que el router no se pierda enviando datos extra
+                Send("?name=" + name, true);
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        continue;
+                    }
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+
+                        if (key == ".id")
+                            return value;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return Id;
         }
     }
 }
