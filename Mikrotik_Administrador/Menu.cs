@@ -50,6 +50,8 @@ namespace Mikrotik_Administrador
         private void planesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Planes m = new Planes();
+            m.IdUsuario = 0;
+            m.Tipo = string.Empty;
             m.Show();
         }
     }

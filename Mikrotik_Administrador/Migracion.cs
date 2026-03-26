@@ -44,7 +44,7 @@ namespace Mikrotik_Administrador
         {
             if (CBMikrotiks.SelectedValue.ToString() == "0")
             {
-                MessageBox.Show("Por favor, selecciona un Mikrotik.");
+                MessageBox.Show("Por favor, selecciona un Mikrotik.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (txtNombre.Text.Trim() == "")
@@ -196,7 +196,7 @@ namespace Mikrotik_Administrador
                             continue; // Saltamos este usuario y pasamos al siguiente
                         }
                         PlanModel objPlan = new PlanModel();
-                        objPlan.Velocidad = item.velocidad.Trim();
+                        objPlan.Velocidad = item.velocidad.Trim().Replace(" ","");
                         objPlan.IsAntena = cbAntenas.Checked;
                         var result = obj.SavePlanByMigracion(objPlan);
                         if(result.Result == 0)

@@ -13,6 +13,9 @@ namespace Mikrotik_Administrador
 {
     public partial class Planes : Form
     {
+        public int IdUsuario { get; set; }
+        public string Tipo { get; set; }
+        public int IdSeleccionado { get; set; } 
         public Planes()
         {
             InitializeComponent();
@@ -36,7 +39,9 @@ namespace Mikrotik_Administrador
             try
             {
                 AppRepository obj = new AppRepository();
-                var lista = obj.GetPlanesbyName(txtNombre.Text).Result;
+                bool? IsAntena = Tipo == string.Empty ? (bool?)null : 
+                    Tipo == "Antena"? true:false;
+                var lista = obj.GetPlanesbyName(txtNombre.Text, IsAntena).Result;
 
                 if (lista != null && lista.Count > 0)
                 {
@@ -65,13 +70,24 @@ namespace Mikrotik_Administrador
         private void AgregarBotones()
         {
             // Botón Editar
-            DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn();
-            btnEditar.Name = "btnEditar";
-            btnEditar.HeaderText = "Acción";
-            btnEditar.Text = "Editar";
-            btnEditar.UseColumnTextForButtonValue = true;
-            dgvPlanes.Columns.Add(btnEditar);
-
+            if (IdUsuario == 0)
+            {
+                DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn();
+                btnEditar.Name = "btnEditar";
+                btnEditar.HeaderText = "Acción";
+                btnEditar.Text = "Editar";
+                btnEditar.UseColumnTextForButtonValue = true;
+                dgvPlanes.Columns.Add(btnEditar);
+            }
+            else
+            {
+                DataGridViewButtonColumn btnAsignar = new DataGridViewButtonColumn();
+                btnAsignar.Name = "btnAsignar";
+                btnAsignar.HeaderText = "Acción";
+                btnAsignar.Text = "Asignar";
+                btnAsignar.UseColumnTextForButtonValue = true;
+                dgvPlanes.Columns.Add(btnAsignar);
+            }
         }
 
         private void dgvPlanes_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -87,6 +103,19 @@ namespace Mikrotik_Administrador
                     m.Id = Convert.ToInt32(Id);
                     m.Show();
                     break;
+                case "btnAsignar":
+                    var Nombre = (string)dgvPlanes.Rows[e.RowIndex].Cells["Nombre"].Value;
+                    if(Nombre.Trim() == string.Empty)
+                    {
+                        MessageBox.Show("Solo se pueden asignar planes con nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    // 1. Guardamos el ID en la propiedad pública
+                    this.IdSeleccionado = Convert.ToInt32(Id);
+                    // 2. Indicamos que la operación fue exitosa
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                    break;
             }
         }
 
@@ -95,6 +124,14 @@ namespace Mikrotik_Administrador
             Plan m = new Plan();
             m.Id = 0;
             m.Show();
+        }
+
+        private void Planes_Load(object sender, EventArgs e)
+        {
+            if(IdUsuario != 0)
+            {
+              btnNuevo.Visible = false;
+            }
         }
     }
 }

@@ -10,6 +10,9 @@ namespace Mikrotik_Administrador.Model
         public string Usuario { get; set; }
         public string Address { get; set; }
         public string Estatus { get; set; }
+        public int IdPlan { get; set; }
+        public string Plan { get; set; }
+        public string UploadDownload { get; set; }
         public int IdMikrotik { get; set; }
         public string Mikrotik { get; set; }
         public int? IdCliente { get; set; }

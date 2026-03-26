@@ -24,7 +24,8 @@ namespace Mikrotik_Administrador
         {
             InitializeComponent();
         }
-        public void BuscarUsuarios() {
+        public void BuscarUsuarios()
+        {
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false;
@@ -103,6 +104,13 @@ namespace Mikrotik_Administrador
             BtnEstatus.Text = "Cambio Estatus";
             BtnEstatus.UseColumnTextForButtonValue = true;
             dgvUsuarios.Columns.Add(BtnEstatus);
+
+            DataGridViewButtonColumn BtnPlan = new DataGridViewButtonColumn();
+            BtnPlan.Name = "btnPlan";
+            BtnPlan.HeaderText = "Acción";
+            BtnPlan.Text = "Cambio Plan";
+            BtnPlan.UseColumnTextForButtonValue = true;
+            dgvUsuarios.Columns.Add(BtnPlan);
         }
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
         {
@@ -162,7 +170,7 @@ namespace Mikrotik_Administrador
             try
             {
                 AppRepository obj = new AppRepository();
-               
+
                 List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
                  .Where(r => cbTodos.Checked || Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
@@ -227,7 +235,8 @@ namespace Mikrotik_Administrador
             }
         }
 
-        public void CargarClientesSin() {
+        public void CargarClientesSin()
+        {
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false;
@@ -287,7 +296,7 @@ namespace Mikrotik_Administrador
             // Evitar errores si hacen click en el encabezado
             if (e.RowIndex < 0) return;
             var Id = dgvUsuarios.Rows[e.RowIndex].Cells["Id"].Value;
-          
+
             switch (dgvUsuarios.Columns[e.ColumnIndex].Name)
             {
                 case "btnDesactivar":
@@ -315,13 +324,31 @@ namespace Mikrotik_Administrador
                 case "btnEstatus":
                     ListUsuariosGeneralModel objUsuario = new ListUsuariosGeneralModel();
                     objUsuario.Id = Convert.ToInt32(Id);
-                    objUsuario.IdMikrotik=(int)dgvUsuarios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
-                    objUsuario.IdInterno=(string)dgvUsuarios.Rows[e.RowIndex].Cells["IdInterno"].Value;
-                    objUsuario.Usuario=(string)dgvUsuarios.Rows[e.RowIndex].Cells["Usuario"].Value;
-                    objUsuario.Estatus =(string)dgvUsuarios.Rows[e.RowIndex].Cells["Estatus"].Value;
+                    objUsuario.IdMikrotik = (int)dgvUsuarios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
+                    objUsuario.IdInterno = (string)dgvUsuarios.Rows[e.RowIndex].Cells["IdInterno"].Value;
+                    objUsuario.Usuario = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Usuario"].Value;
+                    objUsuario.Estatus = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Estatus"].Value;
                     objUsuario.Tipo = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Tipo"].Value;
 
                     await CambiarEstatus(objUsuario);
+                    break;
+                case "btnPlan":
+                    Planes p = new Planes();
+                    p.IdUsuario = Convert.ToInt32(Id);
+                    p.Tipo = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Tipo"].Value;
+
+                    if (p.ShowDialog() == DialogResult.OK)
+                    {
+                        int idRecibido = p.IdSeleccionado;
+                        ListUsuariosGeneralModel objUsuario2 = new ListUsuariosGeneralModel();
+                        objUsuario2.Id = Convert.ToInt32(Id);
+                        objUsuario2.IdMikrotik = (int)dgvUsuarios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
+                        objUsuario2.IdInterno = (string)dgvUsuarios.Rows[e.RowIndex].Cells["IdInterno"].Value;
+                        objUsuario2.Usuario = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Usuario"].Value;
+                        objUsuario2.Tipo = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Tipo"].Value;
+                        objUsuario2.IdPlan = idRecibido;
+                        await CambiarPlan(objUsuario2);
+                    }
                     break;
             }
         }
@@ -388,7 +415,67 @@ namespace Mikrotik_Administrador
                 }
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 0;
-                BtnBuscar.Enabled = true; // Rehabilitamos el botón
+                BtnBuscar.Enabled = true;
+                BtnAsignar.Enabled = true;
+                btnClientesSin.Enabled = true;
+            }
+        }
+        public async Task CambiarPlan(ListUsuariosGeneralModel objUsuario)
+        {
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            BtnBuscar.Enabled = false;
+            BtnAsignar.Enabled = false;
+            btnClientesSin.Enabled = false;
+            AppRepository obj = new AppRepository();
+            try
+            {
+                MikrotikModel mikro = new MikrotikModel();
+                mikro = obj.GetMikrotikById(objUsuario.IdMikrotik).Result;
+                if (mikro.Estatus == false)
+                {
+                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+
+                bool login = await Task.Run(() =>
+                {
+                    return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                });
+                if (login == false)
+                {
+                    MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                bool Result1 = false;
+                var plan = obj.GetPlanById(objUsuario.IdPlan).Result;
+                if (objUsuario.Tipo == "Antena")
+                    Result1 = mikrotik.ActualizarVelocidadQueue(objUsuario.Usuario, plan.Velocidad);
+                else
+                    Result1 = mikrotik.ActualizarUsuarioPPP(objUsuario.IdInterno, plan.Nombre, plan.Velocidad);
+                if (Result1 == true)
+                {
+                   var Res = await obj.UpdatePlanGeneral(objUsuario.Id, plan.Id);
+                    BuscarUsuarios();
+                }
+                else
+                    MessageBox.Show("Error al actualizar el estatus", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                }
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
+                BtnBuscar.Enabled = true;
                 BtnAsignar.Enabled = true;
                 btnClientesSin.Enabled = true;
             }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Web;
 
 namespace Mikrotik_Administrador.Class
 {
@@ -177,7 +178,42 @@ namespace Mikrotik_Administrador.Class
                 System.Diagnostics.Debug.WriteLine("Error crítico: " + ex.Message);
                 return false;
             }
-        }        
+        }
+        public bool ActualizarVelocidadQueue(string Name, string Velocidad)
+        {
+            try
+            {
+                string Id = VerIdQueue(Name);
+                // El comando 'set' requiere identificar el item, usualmente por su nombre (.id o name)
+                Send("/queue/simple/set");
+
+                // Indicamos cuál queue queremos modificar usando su nombre
+                Send("=.id=" + Id);
+
+                // Construimos el string de velocidad, ej: "2M/5M" o "512k/1M"
+                // MikroTik acepta perfectamente los sufijos M y k
+                Send("=max-limit=" + Velocidad, true);
+
+                // Leemos la respuesta para confirmar que no hubo errores
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!trap"))
+                    {
+                        // Si el router devuelve !trap, hubo un error (ej. el nombre no existe)
+                        return false;
+                    }
+                    if (row.StartsWith("!done"))
+                    {
+                        return true; // Éxito
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return false;
+        }
         private string FormatearNumero(string numeroStr)
         {
             if (!long.TryParse(numeroStr, out long bits)) return "0";
@@ -356,6 +392,91 @@ namespace Mikrotik_Administrador.Class
             }
             catch { return false; }
         }
+        public bool ActualizarUsuarioPPP(string Id, string nombrePerfil, string Velocidad)
+        {
+            try
+            {
+                // Paso 1: Asegurarnos que el perfil existe
+                if (!AsegurarPerfil(nombrePerfil, Velocidad)) return false;
+
+                // Paso 2: Asignar el perfil al Secret del usuario
+                Send("/ppp/secret/set");
+                Send("=.id=" + Id); // Usamos el nombre como ID
+                Send("=profile=" + nombrePerfil, true);
+
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!trap")) return false;
+                    if (row.StartsWith("!done")) return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return false;
+        }
+        public bool AsegurarPerfil(string nombrePerfil, string velocidad)
+        {
+            string idEncontrado = string.Empty;
+            bool existe = false;
+
+            try
+            {
+                // --- PASO 1: BÚSQUEDA ---
+                Send("/ppp/profile/print");
+                Send("=.proplist=.id");
+                Send("?name=" + nombrePerfil, true);
+
+                // Leemos TODA la respuesta del print hasta el !done
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        existe = true;
+                    }
+                    else if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length >= 3 && parts[1] == ".id")
+                        {
+                            idEncontrado = parts[2];
+                        }
+                    }
+                    else if (row.StartsWith("!done"))
+                    {
+                        break; // Salimos del foreach del print
+                    }
+                }
+
+                // --- PASO 2: ACCIÓN (SET o ADD) ---
+                if (existe && !string.IsNullOrEmpty(idEncontrado))
+                {
+                    Send("/ppp/profile/set");
+                    Send("=.id=" + idEncontrado);
+                    Send("=rate-limit=" + velocidad, true);
+                }
+                else
+                {
+                    Send("/ppp/profile/add");
+                    Send("=name=" + nombrePerfil);
+                    Send("=rate-limit=" + velocidad, true);
+                }
+
+                // --- PASO 3: CONFIRMACIÓN FINAL ---
+                // Leemos la respuesta del SET o ADD
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!trap")) return false;
+                    if (row.StartsWith("!done")) return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return false;
+        }
         public List<LimiteModel> VerProfile()
         {
             List<LimiteModel> lista = new List<LimiteModel>();
@@ -518,7 +639,6 @@ namespace Mikrotik_Administrador.Class
                 return false;
             }
         }
-
         public bool CambiarEstatusQueues(string Name, string Estatus)
         {
             try

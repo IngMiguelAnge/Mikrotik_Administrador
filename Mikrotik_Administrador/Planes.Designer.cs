@@ -83,7 +83,7 @@
             this.groupBox1.Controls.Add(this.dgvPlanes);
             this.groupBox1.Location = new System.Drawing.Point(12, 86);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1012, 300);
+            this.groupBox1.Size = new System.Drawing.Size(1127, 300);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Planes";
@@ -96,7 +96,7 @@
             this.dgvPlanes.Name = "dgvPlanes";
             this.dgvPlanes.RowHeadersWidth = 62;
             this.dgvPlanes.RowTemplate.Height = 28;
-            this.dgvPlanes.Size = new System.Drawing.Size(1006, 275);
+            this.dgvPlanes.Size = new System.Drawing.Size(1121, 275);
             this.dgvPlanes.TabIndex = 5;
             this.dgvPlanes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPlanes_CellContentClick);
             // 
@@ -111,7 +111,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1047, 408);
+            this.ClientSize = new System.Drawing.Size(1162, 408);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnBuscar);
@@ -122,6 +122,7 @@
             this.Name = "Planes";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Planes";
+            this.Load += new System.EventHandler(this.Planes_Load);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPlanes)).EndInit();
             this.ResumeLayout(false);

@@ -166,7 +166,7 @@
             // 
             this.CBPerteneceA.FormattingEnabled = true;
             this.CBPerteneceA.Items.AddRange(new object[] {
-            "Antenas",
+            "Antena",
             "Fibra"});
             this.CBPerteneceA.Location = new System.Drawing.Point(191, 243);
             this.CBPerteneceA.Name = "CBPerteneceA";

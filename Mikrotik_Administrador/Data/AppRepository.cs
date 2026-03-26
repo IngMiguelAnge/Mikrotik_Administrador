@@ -19,7 +19,7 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region ActionPlanes
-        public async Task<List<ListPlanesModel>> GetPlanesbyName(string Nombre)
+        public async Task<List<ListPlanesModel>> GetPlanesbyName(string Nombre, bool? IsAntena)
         {
             List<ListPlanesModel> list = new List<ListPlanesModel>();
             try
@@ -30,6 +30,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -447,6 +448,9 @@ namespace Mikrotik_Administrador.Data
                 Usuario = (string)reader["Nombre"],
                 Address = (string)reader["Address"],
                 Estatus = (string)reader["Estatus"],
+                IdPlan = (int)reader["IdPlan"],
+                Plan = (string)reader["Plan"],
+                UploadDownload = (string)reader["UploadDownload"],
                 IdMikrotik = (int)reader["IdMikrotik"],
                 Mikrotik = (string)reader["Mikrotik"],
                 IdCliente = Convert.IsDBNull(reader["IdCliente"]) ? (int?)null : (int)reader["IdCliente"],
@@ -491,6 +495,28 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", Estatus));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> UpdatePlanGeneral(int Id, int IdPlan)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdatePlanGeneral", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", IdPlan));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
