@@ -19,6 +19,35 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region ActionPlanes
+        public async Task<int> GetCountUsuariosByPlan(int IdPlan)
+        {
+            int CantidadDUsuarios = 0;
+           try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetCountUsuariosByPlan", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", IdPlan));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        CantidadDUsuarios = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CantidadDUsuarios = 0;
+            }
+            return CantidadDUsuarios;
+        }
         public async Task<List<ListPlanesModel>> GetPlanesbyName(string Nombre, bool? IsAntena)
         {
             List<ListPlanesModel> list = new List<ListPlanesModel>();
@@ -101,7 +130,7 @@ namespace Mikrotik_Administrador.Data
                 IsAntena = Convert.IsDBNull(reader["IsAntena"]) ? false : (bool)reader["IsAntena"],
             };
         }
-        public async Task<bool> SavePlan(PlanModel obj)
+        public async Task<int> SavePlan(PlanModel obj)
         {
             try
             {
@@ -115,15 +144,22 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Precio", obj.Precio));
                         cmd.Parameters.Add(new SqlParameter("@Velocidad", obj.Velocidad));
                         cmd.Parameters.Add(new SqlParameter("@IsAntena", obj.IsAntena));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        return true;
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+
+                        return idGenerado;
                     }
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
         public async Task<int> SavePlanByMigracion(PlanModel obj)
@@ -296,7 +332,33 @@ namespace Mikrotik_Administrador.Data
                         {
                             while (await reader.ReadAsync().ConfigureAwait(false))
                             {
-                                list.Add(MapToMikrotiks(reader));
+                                list.Add(MapToListMikrotiks(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        public async Task<List<MikrotikModel>> GetMikrotiksActivos()
+        {
+            List<MikrotikModel> list = new List<MikrotikModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetMikrotiksActivos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToMikrotik(reader));
                             }
                         }
                     }
@@ -321,7 +383,7 @@ namespace Mikrotik_Administrador.Data
                 Limite_Alcanzado = (bool)reader["Limite_Alcanzado"],
             };
         }
-        private ListMikrotikModel MapToMikrotiks(SqlDataReader reader)
+        private ListMikrotikModel MapToListMikrotiks(SqlDataReader reader)
         {
             return new ListMikrotikModel()
             {
@@ -408,6 +470,45 @@ namespace Mikrotik_Administrador.Data
 
         #endregion
         #region ActionsUsuariosGeneral
+        public async Task<List<ListUsuariosByPlanModel>> GetUsuariosMikrotiksByPlan(int IdMikoritk,int IdPlan)
+        {
+            List<ListUsuariosByPlanModel> list = new List<ListUsuariosByPlanModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUsuariosMikrotiksByPlan", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", IdPlan));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikoritk));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListUsuariosMikrotikByPlanes(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListUsuariosByPlanModel MapToListUsuariosMikrotikByPlanes(SqlDataReader reader)
+        {
+            return new ListUsuariosByPlanModel()
+            {
+                Id = (int)reader["Id"],
+                IdInterno = (string)reader["IdInterno"],
+                Nombre = (string)reader["Nombre"],
+            };
+        }
+
+
         public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName(string Nombre, int IdMikrotik, string Cliente)
         {
             List<ListUsuariosGeneralModel> list = new List<ListUsuariosGeneralModel>();
@@ -528,7 +629,6 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-
         #endregion
         #region ActionsWireless
         public async Task<List<ListWirelessModel>> GetWireless()
@@ -641,7 +741,6 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-
         #endregion
         #region Clientes
         public async Task<bool> SaveClienteInGeneral(int IdUsuario, string Nombre)

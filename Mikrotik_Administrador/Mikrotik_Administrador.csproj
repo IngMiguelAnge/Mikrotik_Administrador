@@ -225,6 +225,7 @@
       <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\ListPlanesModel.cs" />
+    <Compile Include="Model\ListUsuariosByPlanModel.cs" />
     <Compile Include="Model\PlanModel.cs" />
     <Compile Include="Plan.cs">
       <SubType>Form</SubType>

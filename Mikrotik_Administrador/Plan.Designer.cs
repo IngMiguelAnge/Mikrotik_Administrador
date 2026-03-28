@@ -39,8 +39,10 @@
             this.NUDDescarga = new System.Windows.Forms.NumericUpDown();
             this.CBDescarga = new System.Windows.Forms.ComboBox();
             this.BtnGuardar = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblPerteneceA = new System.Windows.Forms.Label();
             this.CBPerteneceA = new System.Windows.Forms.ComboBox();
+            this.lblNota = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.NUDPrecio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDSubida)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDDescarga)).BeginInit();
@@ -145,7 +147,7 @@
             // 
             // BtnGuardar
             // 
-            this.BtnGuardar.Location = new System.Drawing.Point(58, 297);
+            this.BtnGuardar.Location = new System.Drawing.Point(58, 345);
             this.BtnGuardar.Name = "BtnGuardar";
             this.BtnGuardar.Size = new System.Drawing.Size(97, 31);
             this.BtnGuardar.TabIndex = 12;
@@ -153,14 +155,14 @@
             this.BtnGuardar.UseVisualStyleBackColor = true;
             this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
             // 
-            // label1
+            // lblPerteneceA
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(54, 251);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(107, 20);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "*Pertenece A:";
+            this.lblPerteneceA.AutoSize = true;
+            this.lblPerteneceA.Location = new System.Drawing.Point(54, 251);
+            this.lblPerteneceA.Name = "lblPerteneceA";
+            this.lblPerteneceA.Size = new System.Drawing.Size(107, 20);
+            this.lblPerteneceA.TabIndex = 10;
+            this.lblPerteneceA.Text = "*Pertenece A:";
             // 
             // CBPerteneceA
             // 
@@ -173,14 +175,32 @@
             this.CBPerteneceA.Size = new System.Drawing.Size(121, 28);
             this.CBPerteneceA.TabIndex = 11;
             // 
+            // lblNota
+            // 
+            this.lblNota.AutoSize = true;
+            this.lblNota.Location = new System.Drawing.Point(54, 301);
+            this.lblNota.Name = "lblNota";
+            this.lblNota.Size = new System.Drawing.Size(496, 20);
+            this.lblNota.TabIndex = 13;
+            this.lblNota.Text = "Al guardar un plan, este sera registrado en todos los mikrotiks activos";
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(343, 86);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(133, 23);
+            this.progressBar1.TabIndex = 14;
+            // 
             // Plan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(550, 358);
+            this.ClientSize = new System.Drawing.Size(555, 388);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.lblNota);
             this.Controls.Add(this.BtnGuardar);
             this.Controls.Add(this.CBPerteneceA);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblPerteneceA);
             this.Controls.Add(this.CBDescarga);
             this.Controls.Add(this.NUDDescarga);
             this.Controls.Add(this.lblDescarga);
@@ -217,7 +237,9 @@
         private System.Windows.Forms.NumericUpDown NUDDescarga;
         private System.Windows.Forms.ComboBox CBDescarga;
         private System.Windows.Forms.Button BtnGuardar;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblPerteneceA;
         private System.Windows.Forms.ComboBox CBPerteneceA;
+        private System.Windows.Forms.Label lblNota;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

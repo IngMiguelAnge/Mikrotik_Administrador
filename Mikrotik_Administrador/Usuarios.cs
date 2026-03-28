@@ -223,7 +223,7 @@ namespace Mikrotik_Administrador
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No hay usuarios seleccionados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
