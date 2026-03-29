@@ -136,20 +136,20 @@ namespace Mikrotik_Administrador
                 //            await Task.Run(() => mikrotik.Close());
                 //        }
                 //    }
-                }
-                BtnGuardar.Enabled = true;
-                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                progressBar1.Value = 100;
-                if (MensajeError != string.Empty)
-                {
-                    MessageBox.Show(MensajeError, "Errores de conexión", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
+                //}
+                //BtnGuardar.Enabled = true;
+                //progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                //progressBar1.Value = 100;
+                //if (MensajeError != string.Empty)
+                //{
+                //    MessageBox.Show(MensajeError, "Errores de conexión", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //}
+                //else
+                //{
                     MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                     return;
-                }
+                //}
 
             }
 

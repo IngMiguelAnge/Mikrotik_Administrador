@@ -315,6 +315,7 @@ namespace Mikrotik_Administrador.Class
                             case ".id": currentObj.id = value; break;
                             case "comment":
                                 currentObj.comment = value.Replace("\r", "").Replace("\n", "").Trim();
+                                currentObj.idplan = string.Empty;
                                 currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
                                 break;
                             case "address": currentObj.address = value;
@@ -483,7 +484,7 @@ namespace Mikrotik_Administrador.Class
             try
             {
                 Send("/ppp/profile/print");
-                Send("=.proplist=name,rate-limit", true);
+                Send("=.proplist=.id,name,rate-limit", true);
                 LimiteModel obj = null;
                 foreach (string row in Read())
                 {
@@ -502,6 +503,7 @@ namespace Mikrotik_Administrador.Class
 
                         string key = parts[1];
                         string value = parts[2];
+                        if (key == ".id") obj.Id = value;
                         if (key == "name") obj.Name = value;
                         if (key == "rate-limit") obj.Velocidad = value;
                     }
@@ -557,8 +559,12 @@ namespace Mikrotik_Administrador.Class
                         if (key == "profile")
                         {
                             var perfil = Listalimites.FirstOrDefault(p => p.Name == value);
-                            if (perfil != null) currentObj.velocidad = perfil.Velocidad;
-                            else currentObj.velocidad = string.Empty;
+                            if (perfil != null)
+                            { currentObj.idplan = perfil.Id;
+                                currentObj.velocidad = perfil.Velocidad; }
+                            else {
+                                currentObj.idplan = string.Empty;
+                                currentObj.velocidad = string.Empty; }
                         }
                     }
                 }

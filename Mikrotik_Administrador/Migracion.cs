@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity.Infrastructure;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -170,6 +171,7 @@ namespace Mikrotik_Administrador
                       comment = Convert.ToString(r.Cells["comment"].Value),
                       address = Convert.ToString(r.Cells["address"].Value),
                       estatus = Convert.ToString(r.Cells["estatus"].Value),
+                      idplan = Convert.ToString(r.Cells["idplan"].Value),
                       velocidad = Convert.ToString(r.Cells["velocidad"].Value)
                   })
                    .ToList();
@@ -188,6 +190,8 @@ namespace Mikrotik_Administrador
                         return;
                     }
                     AppRepository obj = new AppRepository();
+                    List<PlanModel> ListaPlanes = new List<PlanModel>();
+                    PlanModel existeplan = new PlanModel();
                     foreach (UsuariosExtraidosModel item in Seleccionados)
                     {
                         if(string.IsNullOrEmpty(item.velocidad))
@@ -195,24 +199,41 @@ namespace Mikrotik_Administrador
                             cantidadNoExportada++;
                             continue; // Saltamos este usuario y pasamos al siguiente
                         }
-                        PlanModel objPlan = new PlanModel();
-                        objPlan.Velocidad = item.velocidad.Trim().Replace(" ","");
-                        objPlan.IsAntena = cbAntenas.Checked;
-                        var result = obj.SavePlanByMigracion(objPlan);
-                        if(result.Result == 0)
+                        item.velocidad = item.velocidad.Trim().Replace(" ", "");
+                        existeplan = ListaPlanes.FirstOrDefault(p => p.Velocidad == item.velocidad
+                        && p.IsAntena == cbAntenas.Checked);
+                        if (existeplan == null)
                         {
-                            MessageBox.Show("Error al guardar los planes","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            break;
+                            PlanModel objPlan = new PlanModel();
+                            objPlan.Velocidad = item.velocidad;
+                            objPlan.IsAntena = cbAntenas.Checked;
+                            var result = obj.SavePlanByMigracion(objPlan);
+                            if (result.Result == 0)
+                            {
+                                MessageBox.Show("Error al guardar los planes", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                break;
+                            }
+                            objPlan.Id = result.Result;
+                            PlanAnidadoModel objAnidado = new PlanAnidadoModel();
+                            objAnidado.IdMikrotik = IdMikrotik;
+                            objAnidado.IdPlanInterno = item.idplan;
+                            objAnidado.IdPlan = objPlan.Id;
+                            objAnidado.IsAntena = cbAntenas.Checked;
+                            var ress = obj.SavePlanAnidadoByMigracion(objAnidado);
+                            ListaPlanes.Add(objPlan);
+                            existeplan = new PlanModel();
+                            existeplan.Id = objPlan.Id;
                         }
+                     
                         UsuariosGeneralModel objuser = new UsuariosGeneralModel();
                         objuser.IdMikrotik = IdMikrotik;
                         objuser.Nombre = item.comment;
                         objuser.Address = item.address;
-                        objuser.Antena = IsAntena;
+                        objuser.Antena = cbAntenas.Checked;
                         objuser.IdInterno = item.id;
                         objuser.Estatus = item.estatus;
                         objuser.Id = 0;
-                        objuser.IdPlan = result.Result;
+                        objuser.IdPlan = existeplan.Id;
                         var res = obj.SaveUsuariosGeneral(objuser).Result;
                         if (res)
                             cantidadExportada++;

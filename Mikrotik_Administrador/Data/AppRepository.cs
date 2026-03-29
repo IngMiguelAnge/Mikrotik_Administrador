@@ -191,6 +191,38 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
+        public async Task<int> SavePlanAnidadoByMigracion(PlanAnidadoModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SavePlanAnidadoByMigracion", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlanInterno", obj.IdPlanInterno));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", obj.IsAntena));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
         #endregion
         #region ActionsUsers
         public async Task<UserModel> GetUserbyNameAndPassword(string Usuario, string Password)
