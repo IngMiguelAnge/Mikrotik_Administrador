@@ -3,11 +3,13 @@ using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -37,10 +39,12 @@ namespace Mikrotik_Administrador
             if (Id != 0)
             {
                 var conteo = await obj.GetCountUsuariosByPlan(Id);
-                if(conteo > 0)
+                if (conteo > 0)
                 {
-                    MessageBox.Show("Este plan cuenta con usuarios: \n Al guardar se demorara en asignar la información a todos los usuarios", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Este plan cuenta con usuarios: \n " +
+                        "Al guardar se demorara en asignar la información a todos los usuarios", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CBPerteneceA.Enabled = false;
+                    lblCantidadenPlan.Text = conteo.ToString();
                 }
                 var Plan = obj.GetPlanById(Id).Result;
                 txtNombre.Text = Plan.Nombre;
@@ -93,68 +97,106 @@ namespace Mikrotik_Administrador
             plan.Velocidad = Convert.ToString(NUDSubida.Value) + cbSubida.SelectedItem +
                 "/" + Convert.ToString(NUDDescarga.Value) + CBDescarga.SelectedItem;
             plan.Id = obj.SavePlan(plan).Result;
-            if (obj.SavePlan(plan).Result != 0)
+            if (plan.Id != 0)
             {
-                //progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
-                //progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-                //BtnGuardar.Enabled = false;
-                //string MensajeError = string.Empty;
-                //foreach (var Fila in lista)
-                //{
-                //    try
-                //    {
-                //        var listUsuarios = obj.GetUsuariosMikrotiksByPlan(Fila.Id, plan.Id).Result;
-                //        if(listUsuarios.Count() == 0)
-                //        {
-                //            continue; // Si no hay usuarios para este Mikrotik, pasamos al siguiente
-                //        }
-                //        mikrotik = new MK(Fila.IP, Convert.ToInt32(Fila.Port));
-                //        bool login = await Task.Run(() =>
-                //        {
-                //            return mikrotik.ConectarYLogin(Fila.Usuario, Fila.Password);
-                //        });
-                //        if (login == true)
-                //        {//Aqui tiene que actualizar a la lista de planes de mikrotik y a los usuarios anidados
-                //            //if (objUsuario.Tipo == "Antena")
-                //            //    Result1 = mikrotik.ActualizarVelocidadQueue(objUsuario.Usuario, plan.Velocidad);
-                //            //else
-                //            //    Result1 = mikrotik.ActualizarUsuarioPPP(objUsuario.IdInterno, plan.Nombre, plan.Velocidad);
-
-                //        }
-                //        else
-                //            MensajeError += $"No se pudo conectar al Mikrotik {Fila.Nombre} con IP {Fila.IP}\n";
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //        break;
-                //    }
-                //    finally
-                //    {
-                //        if (mikrotik != null)
-                //        {
-                //            await Task.Run(() => mikrotik.Close());
-                //        }
-                //    }
-                //}
-                //BtnGuardar.Enabled = true;
-                //progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-                //progressBar1.Value = 100;
-                //if (MensajeError != string.Empty)
-                //{
-                //    MessageBox.Show(MensajeError, "Errores de conexión", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //}
-                //else
-                //{
+                string Mensaje = await EmparejarPlan(lista, plan);
+                if (Mensaje == string.Empty)
+                {
                     MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                     return;
-                //}
-
+                }
+                else
+                {
+                    MessageBox.Show(Mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
 
             MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+        }
+        public async Task<string> EmparejarPlan(List<MikrotikModel> lista, PlanModel Plan)
+        {
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            BtnGuardar.Enabled = false;
+            string MensajeError = string.Empty;
+            AppRepository obj = new AppRepository();
+            foreach (var Fila in lista)
+            {
+                try
+                {
+                    mikrotik = new MK(Fila.IP, Convert.ToInt32(Fila.Port));
+                    bool login = await Task.Run(() =>
+                    {
+                        return mikrotik.ConectarYLogin(Fila.Usuario, Fila.Password);
+                    });
+                    if (login == true)
+                    {
+                        if ((string)CBPerteneceA.SelectedItem == "Fibra")
+                        {
+                            //Cuando es fibra y se actualiza un dato este se ve afectado
+                            //en la lista de planes, si es un plan nuevo y este no 
+                            //Existe solo se crea el plan, y si se pone un nombre
+                            //Repetido este tomara el ip del mikrotik y se actualizara
+                            PlanesAnidadosModel PlanInstroducir = new PlanesAnidadosModel();
+                            PlanInstroducir.IdPlan = Plan.Id;
+                            PlanInstroducir.IdMikrotik = Fila.Id;
+                            PlanInstroducir.IsAntena = false;
+                            var Anidado = obj.GetPlanesAnidadosbyParametros(PlanInstroducir).Result;
+                            if (Anidado is null)
+                            {
+                                Anidado = new PlanesAnidadosModel();
+                                Anidado.IdPlan = Plan.Id;
+                                Anidado.IdMikrotik = Fila.Id;
+                                Anidado.IsAntena = false;
+                                Anidado.IdPlanInterno = string.Empty;
+                            }
+                            var Result1 = await Task.Run(() =>
+                            {
+                                return mikrotik.SavePerfil(Plan, Anidado);
+                            });
+                            if (Result1 == false)
+                            {
+                                MensajeError += $"No se pudo actualizar el plan en el Mikrotik {Fila.Nombre}\n";
+                            }
+                        }
+                        else
+                        {
+                            PlanAnidadoModel plansave = new PlanAnidadoModel();
+                            plansave.IdPlan = Plan.Id;
+                            plansave.IdPlanInterno = string.Empty;
+                            plansave.IsAntena = Plan.IsAntena;
+                            plansave.IdMikrotik = Fila.Id;
+                            int guardado = obj.SavePlanAnidadoByMigracion(plansave).Result;
+
+                            if (Convert.ToInt32(lblCantidadenPlan.Text) > 0)
+                            {
+                                var listausuario = obj.GetUsuariosMikrotiksByPlan(Fila.Id, Plan.Id).Result;
+                                foreach (var Filausuario in listausuario)
+                                {
+                                    var  Result1 = mikrotik.ActualizarVelocidadQueue(Filausuario.Nombre, Plan.Velocidad);
+                                }
+                            }
+                        }                           
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MensajeError += "Mikrotik: " + Fila.Nombre + " " + ex.Message;
+                }
+                finally
+                {
+                    if (mikrotik != null)
+                    {
+                        await Task.Run(() => mikrotik.Close());
+                    }
+                }
+            }
+            BtnGuardar.Enabled = true;
+            progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+            progressBar1.Value = 100;
+            return MensajeError;
         }
     }
 }

@@ -222,6 +222,49 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
+        public async Task<PlanesAnidadosModel> GetPlanesAnidadosbyParametros(PlanesAnidadosModel obj)
+        {
+            PlanesAnidadosModel response = new PlanesAnidadosModel();
+            List<PlanesAnidadosModel> list = new List<PlanesAnidadosModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetPlanesAnidadosbyParametros", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", obj.IsAntena));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToPlanesAnidados(reader));
+                            }
+                            response = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response = null;
+            }
+            return response;
+        }
+        private PlanesAnidadosModel MapToPlanesAnidados(SqlDataReader reader)
+        {
+            return new PlanesAnidadosModel()
+            {
+                Id = (int)reader["Id"],
+                IdMikrotik = (int)reader["IdMikrotik"],
+                IdPlanInterno = Convert.IsDBNull(reader["IdPlanInterno"]) ? string.Empty : (string)reader["IdPlanInterno"],
+                IdPlan = (int)reader["IdPlan"],
+                IsAntena = Convert.IsDBNull(reader["IsAntena"]) ? false : (bool)reader["IsAntena"],
+            };
+        }
 
         #endregion
         #region ActionsUsers

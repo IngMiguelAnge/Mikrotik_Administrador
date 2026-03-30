@@ -1,4 +1,6 @@
-﻿using Mikrotik_Administrador.Model;
+﻿using Microsoft.IdentityModel.Tokens;
+using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -471,6 +473,109 @@ namespace Mikrotik_Administrador.Class
                     if (row.StartsWith("!trap")) return false;
                     if (row.StartsWith("!done")) return true;
                 }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return false;
+        }
+        public bool SavePerfil(PlanModel Plan, PlanesAnidadosModel Anidado)
+        {
+            string idEncontrado = string.Empty;
+            bool existe = false;
+
+            try
+            {
+                if (Anidado.IdPlanInterno != string.Empty)
+                {
+                    Send("/ppp/profile/set");
+                    Send("=.id=" + Anidado.IdPlanInterno);
+                    Send("=name=" + Plan.Nombre);
+                    Send("=rate-limit=" + Plan.Velocidad, true);
+            
+                    foreach (string row in Read())
+                    {
+                        if (row.StartsWith("!trap")) return false;
+                        if (row.StartsWith("!done")) return true;
+                    }
+                }
+                else
+                {
+                    Send("/ppp/profile/print");
+                    Send("=.proplist=.id");
+                    Send("?name=" + Plan.Nombre, true);
+                    foreach (string row in Read())
+                    {
+                        if (row.StartsWith("!re"))
+                        {
+                            existe = true;
+                        }
+                        else if (row.StartsWith("="))
+                        {
+                            string[] parts = row.Split(new char[] { '=' }, 3);
+                            if (parts.Length >= 3 && parts[1] == ".id")
+                            {
+                                idEncontrado = parts[2];
+                            }
+                        }
+                        else if (row.StartsWith("!done"))
+                        {
+                            break; // Salimos del foreach del print
+                        }
+                    }
+
+                    // --- PASO 2: ACCIÓN (SET o ADD) ---
+                    if (existe && !string.IsNullOrEmpty(idEncontrado))
+                    {
+                        Send("/ppp/profile/set");
+                        Send("=.id=" + idEncontrado);
+                        Send("=name=" + Plan.Nombre);
+                        Send("=rate-limit=" + Plan.Velocidad, true);
+                    }
+                    else
+                    {
+                        Send("/ppp/profile/add");
+                        Send("=name=" + Plan.Nombre);
+                        Send("=rate-limit=" + Plan.Velocidad, true);
+                        Send("/ppp/profile/print");
+                        Send("=.proplist=.id");
+                        Send("?name=" + Plan.Nombre, true);
+                        foreach (string row in Read())
+                        {
+                            if (row.StartsWith("!re"))
+                            {
+                                existe = true;
+                            }
+                            else if (row.StartsWith("="))
+                            {
+                                string[] parts = row.Split(new char[] { '=' }, 3);
+                                if (parts.Length >= 3 && parts[1] == ".id")
+                                {
+                                    idEncontrado = parts[2];
+                                }
+                            }
+                            else if (row.StartsWith("!done"))
+                            {
+                                break; // Salimos del foreach del print
+                            }
+                        }
+
+                    }
+                    AppRepository obj = new AppRepository();
+                    PlanAnidadoModel plansave = new PlanAnidadoModel();
+                    plansave.IdPlan = Plan.Id;
+                    plansave.IdPlanInterno = idEncontrado;
+                    plansave.IsAntena = Plan.IsAntena;
+                    plansave.IdMikrotik = Anidado.IdMikrotik;
+                    int guardado= obj.SavePlanAnidadoByMigracion(plansave).Result;
+                    foreach (string row in Read())
+                    {
+                        if (row.StartsWith("!trap")) return false;
+                        if (row.StartsWith("!done")) return true;
+                    }
+                }
+               
             }
             catch (Exception)
             {

@@ -43,6 +43,8 @@
             this.CBPerteneceA = new System.Windows.Forms.ComboBox();
             this.lblNota = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.lblMensajeplan = new System.Windows.Forms.Label();
+            this.lblCantidadenPlan = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.NUDPrecio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDSubida)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDDescarga)).BeginInit();
@@ -147,7 +149,7 @@
             // 
             // BtnGuardar
             // 
-            this.BtnGuardar.Location = new System.Drawing.Point(58, 345);
+            this.BtnGuardar.Location = new System.Drawing.Point(58, 377);
             this.BtnGuardar.Name = "BtnGuardar";
             this.BtnGuardar.Size = new System.Drawing.Size(97, 31);
             this.BtnGuardar.TabIndex = 12;
@@ -191,11 +193,31 @@
             this.progressBar1.Size = new System.Drawing.Size(133, 23);
             this.progressBar1.TabIndex = 14;
             // 
+            // lblMensajeplan
+            // 
+            this.lblMensajeplan.AutoSize = true;
+            this.lblMensajeplan.Location = new System.Drawing.Point(54, 333);
+            this.lblMensajeplan.Name = "lblMensajeplan";
+            this.lblMensajeplan.Size = new System.Drawing.Size(326, 20);
+            this.lblMensajeplan.TabIndex = 15;
+            this.lblMensajeplan.Text = "Cantidad de usuarios registrados con el plan:";
+            // 
+            // lblCantidadenPlan
+            // 
+            this.lblCantidadenPlan.AutoSize = true;
+            this.lblCantidadenPlan.Location = new System.Drawing.Point(386, 333);
+            this.lblCantidadenPlan.Name = "lblCantidadenPlan";
+            this.lblCantidadenPlan.Size = new System.Drawing.Size(18, 20);
+            this.lblCantidadenPlan.TabIndex = 16;
+            this.lblCantidadenPlan.Text = "0";
+            // 
             // Plan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(555, 388);
+            this.ClientSize = new System.Drawing.Size(565, 437);
+            this.Controls.Add(this.lblCantidadenPlan);
+            this.Controls.Add(this.lblMensajeplan);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.lblNota);
             this.Controls.Add(this.BtnGuardar);
@@ -241,5 +263,7 @@
         private System.Windows.Forms.ComboBox CBPerteneceA;
         private System.Windows.Forms.Label lblNota;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label lblMensajeplan;
+        private System.Windows.Forms.Label lblCantidadenPlan;
     }
 }
