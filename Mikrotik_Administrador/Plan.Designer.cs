@@ -79,6 +79,11 @@
             // 
             this.NUDPrecio.DecimalPlaces = 2;
             this.NUDPrecio.Location = new System.Drawing.Point(145, 87);
+            this.NUDPrecio.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.NUDPrecio.Name = "NUDPrecio";
             this.NUDPrecio.Size = new System.Drawing.Size(120, 26);
             this.NUDPrecio.TabIndex = 3;

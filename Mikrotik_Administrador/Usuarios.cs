@@ -26,6 +26,10 @@ namespace Mikrotik_Administrador
         }
         public void BuscarUsuarios()
         {
+            BtnAsignar.Visible = true;
+            cbTodos.Visible = true;
+            CBAsignar.Visible = true;
+            BtnAsignar.Visible = true;
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false;
@@ -173,11 +177,11 @@ namespace Mikrotik_Administrador
 
                 List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                 .Where(r => cbTodos.Checked || Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
                   .Select(r => new UsuariosModel
                   {
                       id = Convert.ToString(r.Cells["Id"].Value),
-                      name = Convert.ToString(r.Cells["Nombre"].Value),
+                      name = Convert.ToString(r.Cells["Usuario"].Value),
                   })
                   .ToList();
                 if (Seleccionados.Count() == 0)
@@ -199,7 +203,7 @@ namespace Mikrotik_Administrador
                 foreach (UsuariosModel item in Seleccionados)
                 {
                     NombreAsignado = CBAsignar.Checked == false ? NombreAsignado : Regex.Replace(item.name, @"[-<>]", " ").Trim().ToUpper();
-                    Insert = obj.SaveClienteInGeneral(Convert.ToInt32(item.id), NombreAsignado).Result;
+                    Insert = obj.SaveClienteInGeneral(Convert.ToInt32(item.id), NombreAsignado.ToUpper()).Result;
                     if (Insert == false)
                     {
                         MessageBox.Show("Error al asignar el cliente: " + NombreAsignado, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -240,8 +244,11 @@ namespace Mikrotik_Administrador
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false;
-            BtnAsignar.Enabled = false;
             btnClientesSin.Enabled = false;
+            BtnAsignar.Visible = false;
+            cbTodos.Visible = false;
+            CBAsignar.Visible = false;
+            BtnAsignar.Visible = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
             AppRepository obj = new AppRepository();
@@ -478,6 +485,19 @@ namespace Mikrotik_Administrador
                 BtnBuscar.Enabled = true;
                 BtnAsignar.Enabled = true;
                 btnClientesSin.Enabled = true;
+            }
+        }
+
+        private void cbTodos_CheckedChanged(object sender, EventArgs e)
+        {
+            bool isChecked = cbTodos.Checked;
+
+            foreach (DataGridViewRow row in dgvUsuarios.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    row.Cells["cbSeleccionar"].Value = isChecked;
+                }
             }
         }
     }

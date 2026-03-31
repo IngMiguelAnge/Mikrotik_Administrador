@@ -124,6 +124,7 @@
             this.cbExportar.TabIndex = 6;
             this.cbExportar.Text = "¿Exportar todo?";
             this.cbExportar.UseVisualStyleBackColor = true;
+            this.cbExportar.CheckedChanged += new System.EventHandler(this.cbExportar_CheckedChanged);
             // 
             // cbAntenas
             // 

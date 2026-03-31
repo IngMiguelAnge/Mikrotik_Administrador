@@ -88,12 +88,14 @@ namespace Mikrotik_Administrador
                 case "btnEditar":
                     InfoMikrotik m = new InfoMikrotik();
                     m.IdMikrotik = Convert.ToInt32(Id);
-                    m.Show();
+                    m.ShowDialog();
+                    ListaMikrotiks();
                     break;
                 case "btnLanWireless":
                     WirelessMikrotik w = new WirelessMikrotik();
                     w.IdMikrotik = Convert.ToInt32(Id);
-                    w.Show();
+                    w.ShowDialog();
+                    ListaWireless();
                     break;                    
                 case "btnDesactivar":
                     AppRepository obj = new AppRepository();
@@ -102,12 +104,13 @@ namespace Mikrotik_Administrador
                         MessageBox.Show("Desactivado");
                     else
                         MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ListaMikrotiks();
                     break;
                 case "btnUbicacion":
                     Ubicacion u = new Ubicacion();
                     u.IdUsuario = 0;
                     u.IdMikrotik = Convert.ToInt32(Id);
-                    u.Show();
+                    u.ShowDialog();
                     break;
             }
         }

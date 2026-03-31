@@ -188,6 +188,7 @@
             this.cbTodos.TabIndex = 23;
             this.cbTodos.Text = "Selecionar todos";
             this.cbTodos.UseVisualStyleBackColor = true;
+            this.cbTodos.CheckedChanged += new System.EventHandler(this.cbTodos_CheckedChanged);
             // 
             // groupBox1
             // 

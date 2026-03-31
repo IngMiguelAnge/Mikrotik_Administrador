@@ -81,6 +81,11 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Datos incompletos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            if (Convert.ToInt32(cbSubida.SelectedItem) < Convert.ToInt32(CBDescarga.SelectedItem))
+            {
+                MessageBox.Show("La subida no puede ser inferior a la descarga", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             AppRepository obj = new AppRepository();
             var lista = await obj.GetMikrotiksActivos();
             if (lista.Count() == 0)

@@ -96,7 +96,9 @@ namespace Mikrotik_Administrador
                         MessageBox.Show("No se ha guardado el Wireless del Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
-                    var lista = await Task.Run(() => mikrotik.VerAntenas(txtNombre.Text, listaddress).ToList());
+                    var lista = await Task.Run(() => mikrotik.VerAntenas(txtNombre.Text, listaddress)
+                    .OrderBy(x => x.comment)
+                    .ToList());
                     dgvUsuarios.DataSource = lista != null && lista.Count > 0 ? lista : null;
                     if (lista == null || lista.Count == 0)
                     {
@@ -164,7 +166,7 @@ namespace Mikrotik_Administrador
             {
                 List<UsuariosExtraidosModel> Seleccionados = new List<UsuariosExtraidosModel>();
                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                 .Where(r => cbExportar.Checked || Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
                   .Select(r => new UsuariosExtraidosModel
                   {
                       id = Convert.ToString(r.Cells["id"].Value),
@@ -254,6 +256,22 @@ namespace Mikrotik_Administrador
                 BtnBuscar.Enabled = true;
                 btnExportar.Enabled = true;
             }
+        }
+
+        private void cbExportar_CheckedChanged(object sender, EventArgs e)
+        {
+            bool isChecked = cbExportar.Checked;
+
+            foreach (DataGridViewRow row in dgvUsuarios.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    row.Cells["cbSeleccionar"].Value = isChecked;
+                }
+            }
+
+            // Forzamos el fin de la edición para que el cambio visual sea inmediato
+            dgvUsuarios.EndEdit();
         }
     }
 }
