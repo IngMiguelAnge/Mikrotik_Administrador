@@ -20,6 +20,7 @@ namespace Mikrotik_Administrador
     public partial class Usuarios : Form
     {
         MK mikrotik;
+        public int IdCliente { get; set; }
         public Usuarios()
         {
             InitializeComponent();
@@ -30,11 +31,13 @@ namespace Mikrotik_Administrador
             cbTodos.Visible = true;
             CBAsignar.Visible = true;
             BtnAsignar.Visible = true;
+            btnPlan.Visible= true;
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false;
             BtnAsignar.Enabled = false;
             btnClientesSin.Enabled = false;
+            btnPlan.Enabled = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
             int IdMikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
@@ -66,6 +69,7 @@ namespace Mikrotik_Administrador
                 BtnBuscar.Enabled = true; // Rehabilitamos el botón
                 BtnAsignar.Enabled = true;
                 btnClientesSin.Enabled = true;
+                btnPlan.Enabled = true;
             }
         }
         private void BtnBuscar_Click(object sender, EventArgs e)
@@ -121,7 +125,6 @@ namespace Mikrotik_Administrador
                 CBMikrotiks.Enabled = true;
             }
         }
-
         private async void Clientes_Load(object sender, EventArgs e)
         {
             AppRepository obj = new AppRepository();
@@ -165,6 +168,7 @@ namespace Mikrotik_Administrador
             btnClientesSin.Enabled = false;
             BtnAsignar.Enabled = false;
             BtnBuscar.Enabled = false;
+            btnPlan.Enabled = false;
             try
             {
                 List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
@@ -213,6 +217,7 @@ namespace Mikrotik_Administrador
                 btnClientesSin.Enabled = true;
                 BtnAsignar.Enabled = true;
                 BtnBuscar.Enabled = true;
+                btnPlan.Enabled = true;
                 progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
                 progressBar1.Value = 100;
             }
@@ -228,6 +233,7 @@ namespace Mikrotik_Administrador
             cbTodos.Visible = false;
             CBAsignar.Visible = false;
             BtnAsignar.Visible = false;
+            btnPlan.Visible = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
             AppRepository obj = new AppRepository();
@@ -328,6 +334,7 @@ namespace Mikrotik_Administrador
             BtnBuscar.Enabled = false;
             BtnAsignar.Enabled = false;
             btnClientesSin.Enabled = false;
+            btnPlan.Enabled = false;
             AppRepository obj = new AppRepository();
             try
             {
@@ -386,6 +393,7 @@ namespace Mikrotik_Administrador
                 BtnBuscar.Enabled = true;
                 BtnAsignar.Enabled = true;
                 btnClientesSin.Enabled = true;
+                btnPlan.Enabled = true;
             }
         }
         
@@ -542,5 +550,6 @@ namespace Mikrotik_Administrador
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear();
         }
+
     }
 }

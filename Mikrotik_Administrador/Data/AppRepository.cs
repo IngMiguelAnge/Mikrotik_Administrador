@@ -614,6 +614,35 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
+        public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByIdCliente(int IdCliente)
+        {
+            List<ListUsuariosGeneralModel> list = new List<ListUsuariosGeneralModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUsuariosMikrotiksByIdCliente", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdCliente", IdCliente));
+
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToUsuariosGeneral(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+
         private ListUsuariosGeneralModel MapToUsuariosGeneral(SqlDataReader reader)
         {
             return new ListUsuariosGeneralModel()

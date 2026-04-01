@@ -126,6 +126,14 @@ namespace Mikrotik_Administrador
             btnDesactivar.Text = "Cambiar Estatus";
             btnDesactivar.UseColumnTextForButtonValue = true;
             DGVClientes.Columns.Add(btnDesactivar);
+
+            // Botón cambio de estatus
+            DataGridViewButtonColumn btnServicios = new DataGridViewButtonColumn();
+            btnServicios.Name = "btnServicios";
+            btnServicios.HeaderText = "Acción";
+            btnServicios.Text = "Ver Servicios";
+            btnServicios.UseColumnTextForButtonValue = true;
+            DGVClientes.Columns.Add(btnServicios);
         }
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
         {
@@ -162,6 +170,11 @@ namespace Mikrotik_Administrador
                     }                       
                     else
                         MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                case "btnServicios":
+                    ServiciosCliente s = new ServiciosCliente();
+                    s.IdCliente = Convert.ToInt32(Id);
+                    s.Show();
                     break;
             }
         }
