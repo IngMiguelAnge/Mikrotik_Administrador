@@ -45,6 +45,7 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.lblMensajeplan = new System.Windows.Forms.Label();
             this.lblCantidadenPlan = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.NUDPrecio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDSubida)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDDescarga)).BeginInit();
@@ -154,7 +155,7 @@
             // 
             // BtnGuardar
             // 
-            this.BtnGuardar.Location = new System.Drawing.Point(58, 377);
+            this.BtnGuardar.Location = new System.Drawing.Point(58, 389);
             this.BtnGuardar.Name = "BtnGuardar";
             this.BtnGuardar.Size = new System.Drawing.Size(97, 31);
             this.BtnGuardar.TabIndex = 12;
@@ -201,7 +202,7 @@
             // lblMensajeplan
             // 
             this.lblMensajeplan.AutoSize = true;
-            this.lblMensajeplan.Location = new System.Drawing.Point(54, 333);
+            this.lblMensajeplan.Location = new System.Drawing.Point(54, 360);
             this.lblMensajeplan.Name = "lblMensajeplan";
             this.lblMensajeplan.Size = new System.Drawing.Size(326, 20);
             this.lblMensajeplan.TabIndex = 15;
@@ -210,17 +211,27 @@
             // lblCantidadenPlan
             // 
             this.lblCantidadenPlan.AutoSize = true;
-            this.lblCantidadenPlan.Location = new System.Drawing.Point(386, 333);
+            this.lblCantidadenPlan.Location = new System.Drawing.Point(386, 359);
             this.lblCantidadenPlan.Name = "lblCantidadenPlan";
             this.lblCantidadenPlan.Size = new System.Drawing.Size(18, 20);
             this.lblCantidadenPlan.TabIndex = 16;
             this.lblCantidadenPlan.Text = "0";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(54, 330);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(220, 20);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "y que tengan el plan permitido";
             // 
             // Plan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(565, 437);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblCantidadenPlan);
             this.Controls.Add(this.lblMensajeplan);
             this.Controls.Add(this.progressBar1);
@@ -270,5 +281,6 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label lblMensajeplan;
         private System.Windows.Forms.Label lblCantidadenPlan;
+        private System.Windows.Forms.Label label1;
     }
 }

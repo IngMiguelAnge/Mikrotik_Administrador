@@ -29,7 +29,7 @@ namespace Mikrotik_Administrador
         private async void Plan_Load(object sender, EventArgs e)
         {
             AppRepository obj = new AppRepository();
-            var lista = await obj.GetMikrotiksActivos();
+            var lista = await obj.GetMikrotiksActivos(string.Empty);
             if (lista.Count() == 0)
             {
                 MessageBox.Show("No hay Mikrotiks activos, por favor registre uno antes de crear un plan", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -87,7 +87,7 @@ namespace Mikrotik_Administrador
                 return;
             }
             AppRepository obj = new AppRepository();
-            var lista = await obj.GetMikrotiksActivos();
+            var lista = await obj.GetMikrotiksActivos(Convert.ToString(CBPerteneceA.SelectedItem));
             if (lista.Count() == 0)
             {
                 MessageBox.Show("No hay Mikrotiks activos, por favor registre uno antes de crear un plan", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

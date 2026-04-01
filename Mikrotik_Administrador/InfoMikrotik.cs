@@ -93,7 +93,7 @@ namespace Mikrotik_Administrador
             }
             if (txtIP.Text.Trim() == "..." || txtPassword.Text == string.Empty
               || txtPort.Text == string.Empty || txtUsuario.Text == string.Empty 
-              || CBPlanes.Text == string.Empty)
+              || Convert.ToString(CBPlanes.SelectedItem) == string.Empty)
             {
                 MessageBox.Show("Se requiere probar la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

@@ -419,7 +419,7 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-        public async Task<List<MikrotikModel>> GetMikrotiksActivos()
+        public async Task<List<MikrotikModel>> GetMikrotiksActivos(string PlanAceptado)
         {
             List<MikrotikModel> list = new List<MikrotikModel>();
             try
@@ -429,6 +429,7 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("GetMikrotiksActivos", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PlanAceptado", PlanAceptado));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
