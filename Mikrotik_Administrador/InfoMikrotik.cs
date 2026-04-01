@@ -75,6 +75,7 @@ namespace Mikrotik_Administrador
                 txtUsuario.Text = mikrotik.Usuario;
                 txtPassword.Text = mikrotik.Password;
                 limite_alcanzado = mikrotik.Limite_Alcanzado;
+                CBPlanes.SelectedItem = mikrotik.PlanAceptado;
                 if (mikrotik.Estatus == true)
                     lblProbar.Text = "Conexión exitosa";
                 else
@@ -91,12 +92,13 @@ namespace Mikrotik_Administrador
                 return;
             }
             if (txtIP.Text.Trim() == "..." || txtPassword.Text == string.Empty
-              || txtPort.Text == string.Empty || txtUsuario.Text == string.Empty)
+              || txtPort.Text == string.Empty || txtUsuario.Text == string.Empty 
+              || CBPlanes.Text == string.Empty)
             {
                 MessageBox.Show("Se requiere probar la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
+            
             bool Estatus = true;
             if (lblProbar.Text != "Conexión exitosa")
             {
@@ -120,6 +122,7 @@ namespace Mikrotik_Administrador
             mikrotik.Id = IdMikrotik;
             mikrotik.Estatus = Estatus;
             mikrotik.Limite_Alcanzado = limite_alcanzado;
+            mikrotik.PlanAceptado = CBPlanes.Text;
             if (obj.SaveMikrotik(mikrotik).Result == true)
             {
                 MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);

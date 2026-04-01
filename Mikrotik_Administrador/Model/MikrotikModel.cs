@@ -10,5 +10,6 @@
         public string Password { get; set; }
         public bool Estatus { get; set; }
         public bool Limite_Alcanzado { get; set; }
+        public string PlanAceptado { get; set; }
     }
 }

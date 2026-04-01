@@ -351,6 +351,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Password", obj.Password));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         cmd.Parameters.Add(new SqlParameter("@Limite_Alcanzado", obj.Limite_Alcanzado));
+                        cmd.Parameters.Add(new SqlParameter("@PlanAceptado", obj.PlanAceptado));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -456,6 +457,7 @@ namespace Mikrotik_Administrador.Data
                 Password = (string)reader["Password"],
                 Estatus = (bool)reader["Estatus"],
                 Limite_Alcanzado = (bool)reader["Limite_Alcanzado"],
+                PlanAceptado = (string)reader["PlanAceptado"],
             };
         }
         private ListMikrotikModel MapToListMikrotiks(SqlDataReader reader)
@@ -465,6 +467,7 @@ namespace Mikrotik_Administrador.Data
                 Id = (int)reader["Id"],
                 Nombre = (string)reader["Nombre"],
                 IP = (string)reader["IP"],
+                PlanAceptado = (string)reader["PlanAceptado"],
                 Estatus = (string)reader["Estatus"],
                 Limite_Alcanzado = (string)reader["Limite"],
             };

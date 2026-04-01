@@ -44,6 +44,8 @@
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.txtIP = new System.Windows.Forms.TextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.CBPlanes = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblInfo
@@ -185,11 +187,34 @@
             this.progressBar1.Size = new System.Drawing.Size(126, 23);
             this.progressBar1.TabIndex = 28;
             // 
+            // CBPlanes
+            // 
+            this.CBPlanes.FormattingEnabled = true;
+            this.CBPlanes.Items.AddRange(new object[] {
+            "Antenas",
+            "Fibras",
+            "Ambos"});
+            this.CBPlanes.Location = new System.Drawing.Point(356, 255);
+            this.CBPlanes.Name = "CBPlanes";
+            this.CBPlanes.Size = new System.Drawing.Size(121, 28);
+            this.CBPlanes.TabIndex = 29;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(352, 232);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(161, 20);
+            this.label1.TabIndex = 30;
+            this.label1.Text = "¿Que planes acepta?";
+            // 
             // InfoMikrotik
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(646, 398);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.CBPlanes);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.txtIP);
             this.Controls.Add(this.txtNombre);
@@ -235,5 +260,7 @@
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.TextBox txtIP;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ComboBox CBPlanes;
+        private System.Windows.Forms.Label label1;
     }
 }
