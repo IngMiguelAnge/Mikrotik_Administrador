@@ -59,6 +59,7 @@
             this.CBMikrotiks.Name = "CBMikrotiks";
             this.CBMikrotiks.Size = new System.Drawing.Size(191, 28);
             this.CBMikrotiks.TabIndex = 0;
+            this.CBMikrotiks.SelectedIndexChanged += new System.EventHandler(this.CBMikrotiks_SelectedIndexChanged);
             // 
             // txtNombre
             // 

@@ -44,6 +44,7 @@
             this.btnClientesSin = new System.Windows.Forms.Button();
             this.cbTodos = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnPlan = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -73,6 +74,7 @@
             this.CBMikrotiks.Name = "CBMikrotiks";
             this.CBMikrotiks.Size = new System.Drawing.Size(191, 28);
             this.CBMikrotiks.TabIndex = 7;
+            this.CBMikrotiks.SelectedIndexChanged += new System.EventHandler(this.CBMikrotiks_SelectedIndexChanged);
             // 
             // lblMensaje
             // 
@@ -152,7 +154,7 @@
             // 
             // BtnAsignar
             // 
-            this.BtnAsignar.Location = new System.Drawing.Point(723, 159);
+            this.BtnAsignar.Location = new System.Drawing.Point(732, 133);
             this.BtnAsignar.Name = "BtnAsignar";
             this.BtnAsignar.Size = new System.Drawing.Size(98, 32);
             this.BtnAsignar.TabIndex = 20;
@@ -163,7 +165,7 @@
             // lblMensaje4
             // 
             this.lblMensaje4.AutoSize = true;
-            this.lblMensaje4.Location = new System.Drawing.Point(420, 98);
+            this.lblMensaje4.Location = new System.Drawing.Point(420, 85);
             this.lblMensaje4.Name = "lblMensaje4";
             this.lblMensaje4.Size = new System.Drawing.Size(171, 20);
             this.lblMensaje4.TabIndex = 21;
@@ -171,7 +173,7 @@
             // 
             // btnClientesSin
             // 
-            this.btnClientesSin.Location = new System.Drawing.Point(723, 98);
+            this.btnClientesSin.Location = new System.Drawing.Point(732, 85);
             this.btnClientesSin.Name = "btnClientesSin";
             this.btnClientesSin.Size = new System.Drawing.Size(98, 33);
             this.btnClientesSin.TabIndex = 22;
@@ -203,11 +205,22 @@
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             // 
+            // btnPlan
+            // 
+            this.btnPlan.Location = new System.Drawing.Point(732, 189);
+            this.btnPlan.Name = "btnPlan";
+            this.btnPlan.Size = new System.Drawing.Size(107, 60);
+            this.btnPlan.TabIndex = 25;
+            this.btnPlan.Text = "Seleccionar Plan";
+            this.btnPlan.UseVisualStyleBackColor = true;
+            this.btnPlan.Click += new System.EventHandler(this.btnPlan_Click);
+            // 
             // Usuarios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(889, 648);
+            this.Controls.Add(this.btnPlan);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbTodos);
             this.Controls.Add(this.btnClientesSin);
@@ -254,5 +267,6 @@
         private System.Windows.Forms.Button btnClientesSin;
         private System.Windows.Forms.CheckBox cbTodos;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnPlan;
     }
 }

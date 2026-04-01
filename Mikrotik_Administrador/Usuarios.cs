@@ -24,7 +24,7 @@ namespace Mikrotik_Administrador
         {
             InitializeComponent();
         }
-        public void BuscarUsuarios()
+        public async void BuscarUsuarios()
         {
             BtnAsignar.Visible = true;
             cbTodos.Visible = true;
@@ -42,7 +42,7 @@ namespace Mikrotik_Administrador
             {
                 AppRepository obj = new AppRepository();
                 var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik, txtCliente.Text).Result;
-
+                lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
                 if (lista != null && lista.Count > 0)
                 {
                     dgvUsuarios.DataSource = lista;
@@ -109,12 +109,6 @@ namespace Mikrotik_Administrador
             BtnEstatus.UseColumnTextForButtonValue = true;
             dgvUsuarios.Columns.Add(BtnEstatus);
 
-            DataGridViewButtonColumn BtnPlan = new DataGridViewButtonColumn();
-            BtnPlan.Name = "btnPlan";
-            BtnPlan.HeaderText = "Acción";
-            BtnPlan.Text = "Cambio Plan";
-            BtnPlan.UseColumnTextForButtonValue = true;
-            dgvUsuarios.Columns.Add(BtnPlan);
         }
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
         {
@@ -158,7 +152,7 @@ namespace Mikrotik_Administrador
             this.Hide();
         }
 
-        private async void BtnAsignar_Click(object sender, EventArgs e)
+        private void BtnAsignar_Click(object sender, EventArgs e)
         {
             if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
             {
@@ -173,15 +167,16 @@ namespace Mikrotik_Administrador
             BtnBuscar.Enabled = false;
             try
             {
-                AppRepository obj = new AppRepository();
-
                 List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
                  .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
                   .Select(r => new UsuariosModel
                   {
-                      id = Convert.ToString(r.Cells["Id"].Value),
+                      id = Convert.ToInt32(r.Cells["Id"].Value),
+                      idmikrotik = Convert.ToInt32(r.Cells["IdMikrotik"].Value),
+                      idinterno = Convert.ToString(r.Cells["IdInterno"].Value),
                       name = Convert.ToString(r.Cells["Usuario"].Value),
+                      tipo = Convert.ToString(r.Cells["Tipo"].Value),
                   })
                   .ToList();
                 if (Seleccionados.Count() == 0)
@@ -200,30 +195,14 @@ namespace Mikrotik_Administrador
                     }
                 }
                 bool Insert = false;
+                AppRepository obj = new AppRepository();
+
                 foreach (UsuariosModel item in Seleccionados)
                 {
                     NombreAsignado = CBAsignar.Checked == false ? NombreAsignado : Regex.Replace(item.name, @"[-<>]", " ").Trim().ToUpper();
-                    Insert = obj.SaveClienteInGeneral(Convert.ToInt32(item.id), NombreAsignado.ToUpper()).Result;
-                    if (Insert == false)
-                    {
-                        MessageBox.Show("Error al asignar el cliente: " + NombreAsignado, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                    Insert = obj.SaveClienteInGeneral(item.id, NombreAsignado.ToUpper()).Result;
                 }
-                dgvUsuarios.DataSource = null;
-                dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
-                int IdMikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
-                IdMikrotik = CBTodosMikrotiks.Checked ? 0 : IdMikrotik;
-                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik, txtCliente.Text).Result;
-
-                if (lista != null && lista.Count > 0)
-                {
-                    dgvUsuarios.DataSource = lista;
-                    AgregarBotones();
-                }
-                lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
-                MessageBox.Show("Clientes asignados correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                BuscarUsuarios();
             }
             catch (Exception ex)
             {
@@ -339,24 +318,6 @@ namespace Mikrotik_Administrador
 
                     await CambiarEstatus(objUsuario);
                     break;
-                case "btnPlan":
-                    Planes p = new Planes();
-                    p.IdUsuario = Convert.ToInt32(Id);
-                    p.Tipo = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Tipo"].Value;
-
-                    if (p.ShowDialog() == DialogResult.OK)
-                    {
-                        int idRecibido = p.IdSeleccionado;
-                        ListUsuariosGeneralModel objUsuario2 = new ListUsuariosGeneralModel();
-                        objUsuario2.Id = Convert.ToInt32(Id);
-                        objUsuario2.IdMikrotik = (int)dgvUsuarios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
-                        objUsuario2.IdInterno = (string)dgvUsuarios.Rows[e.RowIndex].Cells["IdInterno"].Value;
-                        objUsuario2.Usuario = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Usuario"].Value;
-                        objUsuario2.Tipo = (string)dgvUsuarios.Rows[e.RowIndex].Cells["Tipo"].Value;
-                        objUsuario2.IdPlan = idRecibido;
-                        await CambiarPlan(objUsuario2);
-                    }
-                    break;
             }
         }
 
@@ -427,67 +388,7 @@ namespace Mikrotik_Administrador
                 btnClientesSin.Enabled = true;
             }
         }
-        public async Task CambiarPlan(ListUsuariosGeneralModel objUsuario)
-        {
-            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
-            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-            BtnBuscar.Enabled = false;
-            BtnAsignar.Enabled = false;
-            btnClientesSin.Enabled = false;
-            AppRepository obj = new AppRepository();
-            try
-            {
-                MikrotikModel mikro = new MikrotikModel();
-                mikro = obj.GetMikrotikById(objUsuario.IdMikrotik).Result;
-                if (mikro.Estatus == false)
-                {
-                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
-
-                bool login = await Task.Run(() =>
-                {
-                    return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
-                });
-                if (login == false)
-                {
-                    MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                bool Result1 = false;
-                var plan = obj.GetPlanById(objUsuario.IdPlan).Result;
-                if (objUsuario.Tipo == "Antena")
-                    Result1 = mikrotik.ActualizarVelocidadQueue(objUsuario.Usuario, plan.Velocidad);
-                else
-                    Result1 = mikrotik.ActualizarUsuarioPPP(objUsuario.IdInterno, plan.Nombre, plan.Velocidad);
-                if (Result1 == true)
-                {
-                   var Res = await obj.UpdatePlanGeneral(objUsuario.Id, plan.Id);
-                    BuscarUsuarios();
-                }
-                else
-                    MessageBox.Show("Error al actualizar el estatus", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                if (mikrotik != null)
-                {
-                    await Task.Run(() => mikrotik.Close());
-                }
-                progressBar1.Style = ProgressBarStyle.Blocks;
-                progressBar1.Value = 0;
-                BtnBuscar.Enabled = true;
-                BtnAsignar.Enabled = true;
-                btnClientesSin.Enabled = true;
-            }
-        }
-
+        
         private void cbTodos_CheckedChanged(object sender, EventArgs e)
         {
             bool isChecked = cbTodos.Checked;
@@ -499,6 +400,147 @@ namespace Mikrotik_Administrador
                     row.Cells["cbSeleccionar"].Value = isChecked;
                 }
             }
+        }
+
+        private async void btnPlan_Click(object sender, EventArgs e)
+        {
+            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
+            {
+                MessageBox.Show("Por favor, selecciona un Mikrotik.");
+                return;
+            }
+
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            btnClientesSin.Enabled = false;
+            BtnAsignar.Enabled = false;
+            BtnBuscar.Enabled = false;
+            btnPlan.Enabled = false;
+            try
+            {
+                List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
+                Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
+                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                  .Select(r => new UsuariosModel
+                  {
+                      id = Convert.ToInt32(r.Cells["Id"].Value),
+                      idmikrotik = Convert.ToInt32(r.Cells["IdMikrotik"].Value),
+                      idinterno = Convert.ToString(r.Cells["IdInterno"].Value),
+                      name = Convert.ToString(r.Cells["Usuario"].Value),
+                      tipo = Convert.ToString(r.Cells["Tipo"].Value),
+                  })
+                  .OrderBy(u => u.idmikrotik)
+                  .ToList();
+
+
+                if (Seleccionados.Count() == 0)
+                {
+                    MessageBox.Show("No hay usuarios seleccionados");
+                    return;
+                }
+
+
+                string primerTipo = Seleccionados[0].tipo;
+                foreach (UsuariosModel item in Seleccionados)
+                {
+                    if (item.tipo != primerTipo)
+                    {
+                        MessageBox.Show("No se pueden asignar planes a usuarios que no sean " + primerTipo + "," +
+                            "por favor seleccione usuarios del mismo tipo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                Planes p = new Planes();
+                p.PorUsuarios = true;
+                p.Tipo = primerTipo;
+
+                if (p.ShowDialog() == DialogResult.OK)
+                {
+                    AppRepository obj = new AppRepository();
+                    var plan = obj.GetPlanById(p.IdSeleccionado).Result;
+                    int contadorfallos = 0;
+                    int contadorcorrecto= 0;
+                    int MikrotikActual = 0;
+                    MikrotikModel mikro;
+                    bool F = false;
+                    foreach (UsuariosModel item in Seleccionados)
+                    {
+                        if (MikrotikActual != item.idmikrotik)
+                        {
+                            F = false;
+                            mikro = new MikrotikModel();
+                            mikro = obj.GetMikrotikById(item.idmikrotik).Result;
+                            MikrotikActual = item.idmikrotik;
+                            if (mikro.Estatus == false)
+                            {
+                                contadorfallos++;
+                                F = true;
+                                continue;
+                            }
+                            if (mikrotik != null)
+                            {
+                                await Task.Run(() => mikrotik.Close());
+                            }
+                            mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+                            bool login = await Task.Run(() =>
+                            {
+                                return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                            });
+                            if (login == false)
+                            {
+                                contadorfallos++;
+                                F = true;
+                                continue;
+                            }
+                        }
+                        else {
+                            if(F == true)
+                            {
+                                contadorfallos++;
+                                continue;
+                            }
+                        }
+                        bool Result1 = false;
+                        if (item.tipo == "Antena")
+                            Result1 = mikrotik.ActualizarVelocidadQueue(item.name, plan.Velocidad);
+                        else
+                            Result1 = mikrotik.ActualizarUsuarioPPP(item.idinterno, plan.Nombre, plan.Velocidad);
+                        if (Result1 == true)
+                        {
+                            var Res = await obj.UpdatePlanGeneral(item.id, plan.Id);
+                            contadorcorrecto++;
+                        }
+                        else
+                            contadorfallos++;
+                    }                    
+                    BuscarUsuarios();
+                    MessageBox.Show("Usuarios que cambiaron plan: " + contadorcorrecto.ToString() +
+                        "\nUsuarios no cambiaron plan: " + contadorfallos.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnClientesSin.Enabled = true;
+                BtnAsignar.Enabled = true;
+                BtnBuscar.Enabled = true;
+                btnPlan.Enabled = true;
+                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                progressBar1.Value = 100;
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                }
+            }
+        }
+
+        private void CBMikrotiks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            dgvUsuarios.DataSource = null;
+            dgvUsuarios.Columns.Clear();
         }
     }
 }

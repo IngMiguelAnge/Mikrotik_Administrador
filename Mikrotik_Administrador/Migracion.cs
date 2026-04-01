@@ -273,5 +273,11 @@ namespace Mikrotik_Administrador
             // Forzamos el fin de la edición para que el cambio visual sea inmediato
             dgvUsuarios.EndEdit();
         }
+
+        private void CBMikrotiks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            dgvUsuarios.DataSource = null;
+            dgvUsuarios.Columns.Clear();
+        }
     }
 }

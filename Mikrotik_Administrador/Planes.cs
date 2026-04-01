@@ -13,7 +13,7 @@ namespace Mikrotik_Administrador
 {
     public partial class Planes : Form
     {
-        public int IdUsuario { get; set; }
+        public bool PorUsuarios { get; set; }
         public string Tipo { get; set; }
         public int IdSeleccionado { get; set; } 
         public Planes()
@@ -70,7 +70,7 @@ namespace Mikrotik_Administrador
         private void AgregarBotones()
         {
             // Botón Editar
-            if (IdUsuario == 0)
+            if (PorUsuarios == false)
             {
                 DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn();
                 btnEditar.Name = "btnEditar";
@@ -128,7 +128,7 @@ namespace Mikrotik_Administrador
 
         private void Planes_Load(object sender, EventArgs e)
         {
-            if(IdUsuario != 0)
+            if(PorUsuarios != false)
             {
               btnNuevo.Visible = false;
             }
