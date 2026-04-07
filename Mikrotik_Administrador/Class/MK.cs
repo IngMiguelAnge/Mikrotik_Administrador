@@ -277,7 +277,7 @@ namespace Mikrotik_Administrador.Class
             {
                 Send("/ip/firewall/address-list/print");
                 Send("=.proplist=list,.id,address,comment,disabled", true);// Esto ayuda a que el router no se pierda enviando datos extra
-                                                                      //}
+                                                                           //}
                 Antenas currentObj = null;
                 List<string> respuesta = Read();
                 bool objetoValido = true;
@@ -307,7 +307,8 @@ namespace Mikrotik_Administrador.Class
                         //ListWireless
                         switch (key)
                         {
-                            case "list": value = value.Replace("\r", "").Replace("\n", "").Trim();
+                            case "list":
+                                value = value.Replace("\r", "").Replace("\n", "").Trim();
                                 if (value != "PERMITIDOS")
                                 {
                                     objetoValido = false; // Marcamos que este registro no nos sirve
@@ -320,7 +321,8 @@ namespace Mikrotik_Administrador.Class
                                 currentObj.idplan = string.Empty;
                                 currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
                                 break;
-                            case "address": currentObj.address = value;
+                            case "address":
+                                currentObj.address = value;
                                 if (currentObj != null && !string.IsNullOrEmpty(currentObj.address))
                                 {
                                     bool coincide = ListWireless.Any(w => IpPerteneceARango(currentObj.address, w.Address));
@@ -339,14 +341,14 @@ namespace Mikrotik_Administrador.Class
                             case "disabled": currentObj.estatus = value == "false" ? "Activo" : "Inactivo"; break;
                         }
                     }
-                   
+
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Error en ver antenas: " + ex.Message);
             }
-            return name != string.Empty ? listaFinal.Where(r=> r.comment == name).ToList():listaFinal;
+            return name != string.Empty ? listaFinal.Where(r => r.comment == name).ToList() : listaFinal;
         }
         private bool IpPerteneceARango(string ipDestino, string redReferencia)
         {
@@ -510,7 +512,7 @@ namespace Mikrotik_Administrador.Class
                             for (int i = 0; i < partes.Length; i++)
                             {
                                 string[] rango = partes[i].Split('-');
-                               if(rango.Length == 2)
+                                if (rango.Length == 2)
                                 {
                                     ListIPs.Add(rango[0].Trim());
                                     ListIPs.Add(rango[1].Trim());
@@ -519,7 +521,7 @@ namespace Mikrotik_Administrador.Class
                                     ListIPs.Add(rango[0].Trim());
                             }
                             return ListIPs;
-                        } 
+                        }
                     }
                 }
             }
@@ -529,7 +531,71 @@ namespace Mikrotik_Administrador.Class
             }
             return ListIPs;
         }
+        public string DeleteInterface(PlanModel Plan)
+        {
+            try
+            {
+                Send("/ppp/secret/print");
+                Send("?profile=" + Plan.Nombre);
+                Send("=.proplist=name", true);
 
+                //Send("=.proplist=name", true);
+                List<string> planes = new List<string>();
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        continue;
+                    }
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+
+                        if (key == "name")
+                        {
+                            Send("/ppp/active/print");
+                            Send("?name=" + value);
+                            Send("=.proplist=.id", true);
+                            foreach (string row2 in Read())
+                            {
+                                if (row2.StartsWith("!re"))
+                                {
+                                    continue;
+                                }
+                                if (row2.StartsWith("!done")) break;
+
+                                if (row2.StartsWith("="))
+                                {
+                                    string[] parts2 = row2.Split(new char[] { '=' }, 3);
+                                    if (parts2.Length < 3) continue;
+
+                                    string key2 = parts2[1];
+                                    string value2 = parts2[2];
+
+                                    if (key2 == ".id")
+                                    {
+                                        Send("/ppp/active/remove");
+                                        Send("=.id=" + value2, true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+            return string.Empty;
+        }
         public string SavePerfil(PlanModel Plan, PlanesAnidadosModel Anidado)
         {
             string idEncontrado = string.Empty;
@@ -537,7 +603,7 @@ namespace Mikrotik_Administrador.Class
             try
             {
                 List<string> ListIpPool = VerPool();
-                if(ListIpPool.Count() == 0)
+                if (ListIpPool.Count() == 0)
                     return "No se encontro pool-PPPoE";
                 string[] segmentos = ListIpPool.First().Split('.');
                 string IPlocal = $"{segmentos[0]}.{segmentos[1]}.{segmentos[2]}.1";
@@ -549,9 +615,9 @@ namespace Mikrotik_Administrador.Class
                     Send("=remote-address=pool-PPPoE");
                     Send("=local-address=" + IPlocal);
                     Send("=dns-server=1.1.1.1,8.8.8.8");
-                    Send("=bridge-learning=default");
+                    Send("=bridge-learning=yes");
                     Send("=rate-limit=" + Plan.Velocidad, true);
-            
+
                     foreach (string row in Read())
                     {
                         if (row.StartsWith("!trap")) return "Error Mikrotik";
@@ -592,7 +658,7 @@ namespace Mikrotik_Administrador.Class
                         Send("=remote-address=pool-PPPoE");
                         Send("=local-address=" + IPlocal);
                         Send("=dns-server=1.1.1.1,8.8.8.8");
-                        Send("=bridge-learning=default");
+                        Send("=bridge-learning=yes");
                         Send("=rate-limit=" + Plan.Velocidad, true);
                         foreach (string row in Read())
                         {
@@ -607,7 +673,7 @@ namespace Mikrotik_Administrador.Class
                         Send("=remote-address=pool-PPPoE");
                         Send("=local-address=" + IPlocal);
                         Send("=dns-server=1.1.1.1,8.8.8.8");
-                        Send("=bridge-learning=default");
+                        Send("=bridge-learning=yes");
                         Send("=rate-limit=" + Plan.Velocidad, true);
                         Send("/ppp/profile/print");
                         Send("=.proplist=.id");
@@ -639,10 +705,10 @@ namespace Mikrotik_Administrador.Class
                     plansave.IdPlanInterno = idEncontrado;
                     plansave.IsAntena = Plan.IsAntena;
                     plansave.IdMikrotik = Anidado.IdMikrotik;
-                    int guardado= obj.SavePlanAnidadoByMigracion(plansave).Result;
+                    int guardado = obj.SavePlanAnidadoByMigracion(plansave).Result;
                     return string.Empty;
                 }
-               
+
             }
             catch (Exception e)
             {
@@ -732,11 +798,15 @@ namespace Mikrotik_Administrador.Class
                         {
                             var perfil = Listalimites.FirstOrDefault(p => p.Name == value);
                             if (perfil != null)
-                            { currentObj.idplan = perfil.Id;
-                                currentObj.velocidad = perfil.Velocidad; }
-                            else {
+                            {
+                                currentObj.idplan = perfil.Id;
+                                currentObj.velocidad = perfil.Velocidad;
+                            }
+                            else
+                            {
                                 currentObj.idplan = string.Empty;
-                                currentObj.velocidad = string.Empty; }
+                                currentObj.velocidad = string.Empty;
+                            }
                         }
                     }
                 }
@@ -803,7 +873,7 @@ namespace Mikrotik_Administrador.Class
             {
                 Send("/ip/firewall/address-list/set");
                 Send("=.id=" + Id);
-                if(Estatus == "Activo")
+                if (Estatus == "Activo")
                     Send("=disabled=yes", true);
                 else
                     Send("=disabled=no", true);
@@ -855,7 +925,7 @@ namespace Mikrotik_Administrador.Class
             }
             catch (Exception ex)
             {
-                 return false;
+                return false;
             }
         }
         public string VerIdQueue(string name)

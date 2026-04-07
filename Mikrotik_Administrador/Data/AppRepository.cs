@@ -739,6 +739,28 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region ActionsWireless
+        public async Task<bool> UpdateEstatusWireless(int Id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateEstatusWireless", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public async Task<List<ListWirelessModel>> GetWireless()
         {
             List<ListWirelessModel> list = new List<ListWirelessModel>();

@@ -77,6 +77,16 @@ namespace Mikrotik_Administrador
             btnConfig.UseColumnTextForButtonValue = true;
             DGVMikrotiks.Columns.Add(btnConfig);
         }
+        private void AgregarBotones2()
+        {
+            // Botón Cambio Estatus
+            DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn();
+            btnCambio.Name = "btnCambio";
+            btnCambio.HeaderText = "Acción";
+            btnCambio.Text = "Cambiar Estatus";
+            btnCambio.UseColumnTextForButtonValue = true;
+            DGVMikrotiks.Columns.Add(btnCambio);
+        }
         private void DGVMikrotiks_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // Evitar errores si hacen click en el encabezado
@@ -112,6 +122,15 @@ namespace Mikrotik_Administrador
                     u.IdMikrotik = Convert.ToInt32(Id);
                     u.ShowDialog();
                     break;
+                case "btnCambio":
+                    AppRepository obje = new AppRepository();
+                    bool resulte = obje.UpdateEstatusWireless(Convert.ToInt32(Id)).Result;
+                    if (resulte == true)
+                        MessageBox.Show("Cambiado");
+                    else
+                        MessageBox.Show("Error al cambiar el estatus", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ListaWireless();
+                    break;
             }
         }
 
@@ -132,6 +151,7 @@ namespace Mikrotik_Administrador
                 if (lista != null && lista.Count > 0)
                 {
                     DGVMikrotiks.DataSource = lista;
+                    AgregarBotones2();
                 }
             }
             catch (Exception ex)

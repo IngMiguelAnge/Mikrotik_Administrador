@@ -114,7 +114,9 @@ namespace Mikrotik_Administrador
                 else
                 {
                     IsAntena = false;
-                    var lista = await Task.Run(() => mikrotik.VerFibra(txtNombre.Text).ToList());
+                    var lista = await Task.Run(() => mikrotik.VerFibra(txtNombre.Text)
+                      .OrderBy(x => x.comment)
+                      .ToList());
                     dgvUsuarios.DataSource = lista != null && lista.Count > 0
                       ? lista : null;
                     if (lista == null || lista.Count == 0)

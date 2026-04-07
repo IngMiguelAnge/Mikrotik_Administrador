@@ -81,7 +81,7 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Datos incompletos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (Convert.ToInt32(NUDSubida.Value) < Convert.ToInt32(NUDDescarga.Value))
+            if (Convert.ToInt32(NUDDescarga.Value) < Convert.ToInt32(NUDSubida.Value))
             {
                 MessageBox.Show("La subida no puede ser inferior a la descarga", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -160,6 +160,13 @@ namespace Mikrotik_Administrador
                             if (Result1 != string.Empty)
                             {
                                 MensajeError += $"{Result1} {Fila.Nombre}\n";
+                            }
+                            else
+                            {
+                                var Result2 = await Task.Run(() =>
+                                {
+                                    return mikrotik.DeleteInterface(Plan);
+                                });
                             }
                         }
                         else

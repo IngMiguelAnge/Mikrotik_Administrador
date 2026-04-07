@@ -38,11 +38,11 @@ namespace Mikrotik_Administrador
             try
             {
                 AppRepository obj = new AppRepository();
-                if (obj.DesactivarWireless(IdMikrotik).Result == false)
-                {
-                    MessageBox.Show("Error con la comunicacion con wireless.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                //if (obj.DesactivarWireless(IdMikrotik).Result == false)
+                //{
+                //    MessageBox.Show("Error con la comunicacion con wireless.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //    return;
+                //}
                 List<Address> Seleccionados = new List<Address>();
                 Seleccionados = dgvWireless.Rows.Cast<DataGridViewRow>()
                  .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
