@@ -531,12 +531,12 @@ namespace Mikrotik_Administrador.Class
             }
             return ListIPs;
         }
-        public string DeleteInterface(PlanModel Plan)
+        public string DeleteInterface(string Plan)
         {
             try
             {
                 Send("/ppp/secret/print");
-                Send("?profile=" + Plan.Nombre);
+                Send("?profile=" + Plan);
                 Send("=.proplist=name", true);
 
                 //Send("=.proplist=name", true);

@@ -180,7 +180,7 @@ namespace Mikrotik_Administrador
                             {
                                 var Result2 = await Task.Run(() =>
                                 {
-                                    return mikrotik.DeleteInterface(Plan);
+                                    return mikrotik.DeleteInterface(Plan.Nombre);
                                 });
                             }
                         }

@@ -512,7 +512,16 @@ namespace Mikrotik_Administrador
                         if (item.tipo == "Antena")
                             Result1 = mikrotik.ActualizarVelocidadQueue(item.name, plan.Velocidad);
                         else
+                        {
                             Result1 = mikrotik.ActualizarUsuarioPPP(item.idinterno, plan.Nombre, plan.Velocidad);
+                            if (Result1 == true)
+                            {
+                                var Result2 = await Task.Run(() =>
+                                {
+                                    return mikrotik.DeleteInterface(plan.Nombre);
+                                });
+                            }
+                        }
                         if (Result1 == true)
                         {
                             var Res = await obj.UpdatePlanGeneral(item.id, plan.Id);
