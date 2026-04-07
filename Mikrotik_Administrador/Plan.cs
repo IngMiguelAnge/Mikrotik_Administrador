@@ -81,9 +81,24 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Datos incompletos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (Convert.ToInt32(NUDDescarga.Value) < Convert.ToInt32(NUDSubida.Value))
+            // 1. Convertimos la subida a una unidad base (kB)
+            double totalSubida = (double)NUDSubida.Value;
+            if (Convert.ToString(cbSubida.SelectedItem) == "M")
             {
-                MessageBox.Show("La subida no puede ser inferior a la descarga", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                totalSubida *= 1024; // Convertimos MB a kB
+            }
+
+            // 2. Convertimos la descarga a la misma unidad base (kB)
+            double totaldescarga = (double)NUDDescarga.Value;
+            if (Convert.ToString(CBDescarga.SelectedItem) == "M")
+            {
+                totaldescarga *= 1024; // Convertimos MB a kB
+            }
+
+            // 3. Ahora sí, comparamos "manzanas con manzanas"
+            if (totaldescarga < totalSubida)
+            {
+                MessageBox.Show("La descarga no puede ser inferior a la subiuda", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             AppRepository obj = new AppRepository();
