@@ -161,20 +161,27 @@ namespace Mikrotik_Administrador
                     m.Show();
                     break;
                 case "btnDesactivar":
+                    var TotalServicios = DGVClientes.Rows[e.RowIndex].Cells["TotalServicios"].Value;
+                    if (Convert.ToInt32(TotalServicios) > 0)
+                    {
+                        MessageBox.Show("No se puede cambiar el estatus del cliente porque tiene servicios activos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     AppRepository obj = new AppRepository();
                     bool result = obj.UpdateEstatusCliente(Convert.ToInt32(Id)).Result;
                     if (result == true)
                     {
                         MessageBox.Show("Estatus cambiado");
                         CargarClientes();
-                    }                       
+                    }
                     else
                         MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 case "btnServicios":
                     ServiciosCliente s = new ServiciosCliente();
                     s.IdCliente = Convert.ToInt32(Id);
-                    s.Show();
+                    s.ShowDialog();
+                    CargarClientes();
                     break;
             }
         }
