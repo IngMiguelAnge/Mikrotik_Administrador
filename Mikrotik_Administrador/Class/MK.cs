@@ -480,24 +480,82 @@ namespace Mikrotik_Administrador.Class
             }
             return false;
         }
-        public bool SavePerfil(PlanModel Plan, PlanesAnidadosModel Anidado)
+        public List<string> VerPool()
+        {
+            List<string> ListIPs = new List<string>();
+            try
+            {
+                Send("/ip/pool/print");
+                Send("=.proplist=name,ranges,available");
+                Send("?name=pool-PPPoE", true);
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        continue;
+                    }
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+
+                        if (key == "ranges")
+                        {
+                            string[] partes = value.Split(',');
+                            for (int i = 0; i < partes.Length; i++)
+                            {
+                                string[] rango = partes[i].Split('-');
+                               if(rango.Length == 2)
+                                {
+                                    ListIPs.Add(rango[0].Trim());
+                                    ListIPs.Add(rango[1].Trim());
+                                }
+                                else
+                                    ListIPs.Add(rango[0].Trim());
+                            }
+                            return ListIPs;
+                        } 
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return ListIPs;
+        }
+
+        public string SavePerfil(PlanModel Plan, PlanesAnidadosModel Anidado)
         {
             string idEncontrado = string.Empty;
             bool existe = false;
-
             try
             {
+                List<string> ListIpPool = VerPool();
+                if(ListIpPool.Count() == 0)
+                    return "No se encontro pool-PPPoE";
+                string[] segmentos = ListIpPool.First().Split('.');
+                string IPlocal = $"{segmentos[0]}.{segmentos[1]}.{segmentos[2]}.1";
                 if (Anidado.IdPlanInterno != string.Empty)
                 {
                     Send("/ppp/profile/set");
                     Send("=.id=" + Anidado.IdPlanInterno);
                     Send("=name=" + Plan.Nombre);
+                    Send("=remote-address=pool-PPPoE");
+                    Send("=local-address=" + IPlocal);
+                    Send("=dns-server=1.1.1.1,8.8.8.8");
+                    Send("=bridge-learning=default");
                     Send("=rate-limit=" + Plan.Velocidad, true);
             
                     foreach (string row in Read())
                     {
-                        if (row.StartsWith("!trap")) return false;
-                        if (row.StartsWith("!done")) return true;
+                        if (row.StartsWith("!trap")) return "Error Mikrotik";
+                        if (row.StartsWith("!done")) return string.Empty;
                     }
                 }
                 else
@@ -531,12 +589,25 @@ namespace Mikrotik_Administrador.Class
                         Send("/ppp/profile/set");
                         Send("=.id=" + idEncontrado);
                         Send("=name=" + Plan.Nombre);
+                        Send("=remote-address=pool-PPPoE");
+                        Send("=local-address=" + IPlocal);
+                        Send("=dns-server=1.1.1.1,8.8.8.8");
+                        Send("=bridge-learning=default");
                         Send("=rate-limit=" + Plan.Velocidad, true);
+                        foreach (string row in Read())
+                        {
+                            if (row.StartsWith("!trap")) return "Error Mikrotik";
+                            if (row.StartsWith("!done")) return string.Empty;
+                        }
                     }
                     else
                     {
                         Send("/ppp/profile/add");
                         Send("=name=" + Plan.Nombre);
+                        Send("=remote-address=pool-PPPoE");
+                        Send("=local-address=" + IPlocal);
+                        Send("=dns-server=1.1.1.1,8.8.8.8");
+                        Send("=bridge-learning=default");
                         Send("=rate-limit=" + Plan.Velocidad, true);
                         Send("/ppp/profile/print");
                         Send("=.proplist=.id");
@@ -569,19 +640,15 @@ namespace Mikrotik_Administrador.Class
                     plansave.IsAntena = Plan.IsAntena;
                     plansave.IdMikrotik = Anidado.IdMikrotik;
                     int guardado= obj.SavePlanAnidadoByMigracion(plansave).Result;
-                    foreach (string row in Read())
-                    {
-                        if (row.StartsWith("!trap")) return false;
-                        if (row.StartsWith("!done")) return true;
-                    }
+                    return string.Empty;
                 }
                
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return false;
+                return e.Message;
             }
-            return false;
+            return "Fallo perfil";
         }
         public List<LimiteModel> VerProfile()
         {

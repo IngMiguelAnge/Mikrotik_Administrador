@@ -20,17 +20,8 @@ namespace Mikrotik_Administrador
         {
             InitializeComponent();
         }
-
-        private void btnBuscar_Click(object sender, EventArgs e)
+        public void BuscarPlanes() 
         {
-            if (txtNombre.Text.Trim() == "")
-            {
-                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los clientes pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (resultado == DialogResult.No)
-                {
-                    return;
-                }
-            }
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             btnBuscar.Enabled = false;
@@ -39,8 +30,8 @@ namespace Mikrotik_Administrador
             try
             {
                 AppRepository obj = new AppRepository();
-                bool? IsAntena = Tipo == string.Empty ? (bool?)null : 
-                    Tipo == "Antena"? true:false;
+                bool? IsAntena = Tipo == string.Empty ? (bool?)null :
+                    Tipo == "Antena" ? true : false;
                 var lista = obj.GetPlanesbyName(txtNombre.Text, IsAntena).Result;
 
                 if (lista != null && lista.Count > 0)
@@ -65,6 +56,18 @@ namespace Mikrotik_Administrador
                 progressBar1.Value = 0;
                 btnBuscar.Enabled = true;
             }
+        }
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            if (txtNombre.Text.Trim() == "")
+            {
+                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los clientes pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (resultado == DialogResult.No)
+                {
+                    return;
+                }
+            }
+          BuscarPlanes();
         }
 
         private void AgregarBotones()
@@ -101,7 +104,8 @@ namespace Mikrotik_Administrador
                 case "btnEditar":
                     Plan m = new Plan();
                     m.Id = Convert.ToInt32(Id);
-                    m.Show();
+                    m.ShowDialog();
+                    BuscarPlanes();
                     break;
                 case "btnAsignar":
                     var Nombre = (string)dgvPlanes.Rows[e.RowIndex].Cells["Nombre"].Value;

@@ -81,7 +81,7 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Datos incompletos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (Convert.ToInt32(cbSubida.SelectedItem) < Convert.ToInt32(CBDescarga.SelectedItem))
+            if (Convert.ToInt32(NUDSubida.Value) < Convert.ToInt32(NUDDescarga.Value))
             {
                 MessageBox.Show("La subida no puede ser inferior a la descarga", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -90,8 +90,7 @@ namespace Mikrotik_Administrador
             var lista = await obj.GetMikrotiksActivos(Convert.ToString(CBPerteneceA.SelectedItem));
             if (lista.Count() == 0)
             {
-                MessageBox.Show("No hay Mikrotiks activos, por favor registre uno antes de crear un plan", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
+                MessageBox.Show("No hay Mikrotiks que permita este plan, por favor registre uno antes de crear un plan", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             PlanModel plan = new PlanModel();
@@ -114,6 +113,7 @@ namespace Mikrotik_Administrador
                 else
                 {
                     MessageBox.Show(Mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
             }
 
@@ -140,10 +140,6 @@ namespace Mikrotik_Administrador
                     {
                         if ((string)CBPerteneceA.SelectedItem == "Fibra")
                         {
-                            //Cuando es fibra y se actualiza un dato este se ve afectado
-                            //en la lista de planes, si es un plan nuevo y este no 
-                            //Existe solo se crea el plan, y si se pone un nombre
-                            //Repetido este tomara el ip del mikrotik y se actualizara
                             PlanesAnidadosModel PlanInstroducir = new PlanesAnidadosModel();
                             PlanInstroducir.IdPlan = Plan.Id;
                             PlanInstroducir.IdMikrotik = Fila.Id;
@@ -161,9 +157,9 @@ namespace Mikrotik_Administrador
                             {
                                 return mikrotik.SavePerfil(Plan, Anidado);
                             });
-                            if (Result1 == false)
+                            if (Result1 != string.Empty)
                             {
-                                MensajeError += $"No se pudo actualizar el plan en el Mikrotik {Fila.Nombre}\n";
+                                MensajeError += $"{Result1} {Fila.Nombre}\n";
                             }
                         }
                         else
