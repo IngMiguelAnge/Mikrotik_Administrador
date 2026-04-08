@@ -47,17 +47,20 @@
             this.BtnGuardar = new System.Windows.Forms.Button();
             this.btnAceptarUbicacion = new System.Windows.Forms.Button();
             this.btnCancelarDireccion = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // gMap
             // 
             this.gMap.Bearing = 0F;
             this.gMap.CanDragMap = true;
+            this.gMap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gMap.EmptyTileColor = System.Drawing.Color.Navy;
             this.gMap.GrayScaleMode = false;
             this.gMap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
             this.gMap.LevelsKeepInMemory = 5;
-            this.gMap.Location = new System.Drawing.Point(34, 287);
+            this.gMap.Location = new System.Drawing.Point(3, 22);
             this.gMap.MarkersEnabled = true;
             this.gMap.MaxZoom = 2;
             this.gMap.MinZoom = 2;
@@ -71,7 +74,7 @@
             this.gMap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.gMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gMap.ShowTileGridLines = false;
-            this.gMap.Size = new System.Drawing.Size(975, 342);
+            this.gMap.Size = new System.Drawing.Size(961, 399);
             this.gMap.TabIndex = 17;
             this.gMap.Zoom = 0D;
             this.gMap.OnMarkerEnter += new GMap.NET.WindowsForms.MarkerEnter(this.gMap_OnMarkerEnter);
@@ -96,7 +99,7 @@
             // 
             // BtnBuscar
             // 
-            this.BtnBuscar.Location = new System.Drawing.Point(520, 123);
+            this.BtnBuscar.Location = new System.Drawing.Point(450, 123);
             this.BtnBuscar.Name = "BtnBuscar";
             this.BtnBuscar.Size = new System.Drawing.Size(105, 33);
             this.BtnBuscar.TabIndex = 5;
@@ -119,7 +122,7 @@
             "Satélite",
             "Híbrido",
             "OpenStreet"});
-            this.cmbMapas.Location = new System.Drawing.Point(789, 166);
+            this.cmbMapas.Location = new System.Drawing.Point(789, 146);
             this.cmbMapas.Name = "cmbMapas";
             this.cmbMapas.Size = new System.Drawing.Size(177, 28);
             this.cmbMapas.TabIndex = 12;
@@ -181,7 +184,7 @@
             // lblVista
             // 
             this.lblVista.AutoSize = true;
-            this.lblVista.Location = new System.Drawing.Point(568, 171);
+            this.lblVista.Location = new System.Drawing.Point(640, 123);
             this.lblVista.Name = "lblVista";
             this.lblVista.Size = new System.Drawing.Size(209, 20);
             this.lblVista.TabIndex = 11;
@@ -245,11 +248,24 @@
             this.btnCancelarDireccion.UseVisualStyleBackColor = true;
             this.btnCancelarDireccion.Click += new System.EventHandler(this.btnCancelarDireccion_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.gMap);
+            this.groupBox1.Location = new System.Drawing.Point(38, 299);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(967, 424);
+            this.groupBox1.TabIndex = 19;
+            this.groupBox1.TabStop = false;
+            // 
             // Ubicacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1035, 660);
+            this.ClientSize = new System.Drawing.Size(1035, 742);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnCancelarDireccion);
             this.Controls.Add(this.btnAceptarUbicacion);
             this.Controls.Add(this.BtnGuardar);
@@ -268,13 +284,12 @@
             this.Controls.Add(this.BtnBuscar);
             this.Controls.Add(this.txtLongitud);
             this.Controls.Add(this.txtLatitud);
-            this.Controls.Add(this.gMap);
-            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Ubicacion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ubicacion";
             this.Load += new System.EventHandler(this.Ubicacion_Load);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,5 +316,6 @@
         private System.Windows.Forms.Button BtnGuardar;
         private System.Windows.Forms.Button btnAceptarUbicacion;
         private System.Windows.Forms.Button btnCancelarDireccion;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

@@ -60,8 +60,8 @@ namespace Mikrotik_Administrador
         }
         private void Ubicacion_Load(object sender, EventArgs e)
         {
-            double latitude = 19.4326; // Latitud de Ciudad de México
-            double longitude = -99.1332; // Longitud de Ciudad de México
+            double latitude = 18.68165869879; // Latitud de tlacotepect
+            double longitude = -97.64837265014; // Longitud de tlacotepect
 
             if (IdMikrotik > 0)
             {
