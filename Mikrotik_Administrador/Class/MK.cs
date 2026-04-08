@@ -281,6 +281,9 @@ namespace Mikrotik_Administrador.Class
                 Antenas currentObj = null;
                 List<string> respuesta = Read();
                 bool objetoValido = true;
+                AppRepository obj = new AppRepository();
+                List<ListCommentsModel> listComments = new List<ListCommentsModel>();
+                listComments = obj.GetCommentsActivos().Result;
                 foreach (string row in respuesta)
                 {
                     if (row.StartsWith("!re"))
@@ -309,7 +312,8 @@ namespace Mikrotik_Administrador.Class
                         {
                             case "list":
                                 value = value.Replace("\r", "").Replace("\n", "").Trim();
-                                if (value != "PERMITIDOS")
+                                
+                                if (listComments.Where(c => c.Nombre == value).ToList().Count() == 0)
                                 {
                                     objetoValido = false; // Marcamos que este registro no nos sirve
                                     currentObj = null;    // Limpiamos la referencia

@@ -119,7 +119,7 @@ namespace Mikrotik_Administrador
                     // 2. Indicamos que la operación fue exitosa
                     this.DialogResult = DialogResult.OK;
                     this.Close();
-                    break;
+                break;
             }
         }
 

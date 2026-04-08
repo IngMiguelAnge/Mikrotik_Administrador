@@ -54,5 +54,11 @@ namespace Mikrotik_Administrador
             m.Tipo = string.Empty;
             m.Show();
         }
+
+        private void commentsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Comments c = new Comments();
+            c.Show();
+        }
     }
 }

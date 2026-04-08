@@ -31,10 +31,11 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mikrotiksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.migracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.planesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.asignacionClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.informacionClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.planesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,6 +45,7 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mikrotiksToolStripMenuItem,
+            this.commentsToolStripMenuItem,
             this.migracionToolStripMenuItem,
             this.planesToolStripMenuItem,
             this.clientesToolStripMenuItem});
@@ -66,6 +68,13 @@
             this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
             this.migracionToolStripMenuItem.Text = "Migración";
             this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
+            // 
+            // planesToolStripMenuItem
+            // 
+            this.planesToolStripMenuItem.Name = "planesToolStripMenuItem";
+            this.planesToolStripMenuItem.Size = new System.Drawing.Size(78, 29);
+            this.planesToolStripMenuItem.Text = "Planes";
+            this.planesToolStripMenuItem.Click += new System.EventHandler(this.planesToolStripMenuItem_Click);
             // 
             // clientesToolStripMenuItem
             // 
@@ -90,12 +99,12 @@
             this.informacionClientesToolStripMenuItem.Text = "Información de Clientes";
             this.informacionClientesToolStripMenuItem.Click += new System.EventHandler(this.informacionClientesToolStripMenuItem_Click);
             // 
-            // planesToolStripMenuItem
+            // commentsToolStripMenuItem
             // 
-            this.planesToolStripMenuItem.Name = "planesToolStripMenuItem";
-            this.planesToolStripMenuItem.Size = new System.Drawing.Size(78, 29);
-            this.planesToolStripMenuItem.Text = "Planes";
-            this.planesToolStripMenuItem.Click += new System.EventHandler(this.planesToolStripMenuItem_Click);
+            this.commentsToolStripMenuItem.Name = "commentsToolStripMenuItem";
+            this.commentsToolStripMenuItem.Size = new System.Drawing.Size(115, 29);
+            this.commentsToolStripMenuItem.Text = "Comments";
+            this.commentsToolStripMenuItem.Click += new System.EventHandler(this.commentsToolStripMenuItem_Click);
             // 
             // Menu
             // 
@@ -125,5 +134,6 @@
         private System.Windows.Forms.ToolStripMenuItem asignacionClientesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem informacionClientesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem planesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem commentsToolStripMenuItem;
     }
 }
