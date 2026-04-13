@@ -81,6 +81,7 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Datos incompletos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            
             // 1. Convertimos la subida a una unidad base (kB)
             double totalSubida = (double)NUDSubida.Value;
             if (Convert.ToString(cbSubida.SelectedItem) == "M")
@@ -102,6 +103,8 @@ namespace Mikrotik_Administrador
                 return;
             }
             AppRepository obj = new AppRepository();
+            //var BuscarNombrePlan = await obj.GetPlanByNombre(txtNombre.Text.Trim());
+
             var lista = await obj.GetMikrotiksActivos(Convert.ToString(CBPerteneceA.SelectedItem));
             if (lista.Count() == 0)
             {

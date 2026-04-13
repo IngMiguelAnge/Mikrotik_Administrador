@@ -53,7 +53,7 @@ namespace Mikrotik_Administrador
                 }
                 else
                 {
-                    MessageBox.Show("No se encontraron Planes.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("No se encontraron comennts.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
             }

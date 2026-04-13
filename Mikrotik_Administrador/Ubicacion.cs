@@ -11,7 +11,7 @@ namespace Mikrotik_Administrador
 {
     public partial class Ubicacion : Form
     {
-        public int IdUsuario= 0;
+        public int IdUsuario = 0;
         public int IdMikrotik = 0;
 
         GMapOverlay capaMarcadores;
@@ -66,15 +66,15 @@ namespace Mikrotik_Administrador
             if (IdMikrotik > 0)
             {
                 AppRepository app = new AppRepository();
-                var ubicacion = app.GetUbicacionByIds(IdMikrotik,IdUsuario).Result;
-                if(ubicacion != null)
+                var ubicacion = app.GetUbicacionByIds(IdMikrotik, IdUsuario).Result;
+                if (ubicacion != null)
                 {
                     txtDireccionOficial.Text = ubicacion.Direccion_Oficial;
                     txtDireccion.Text = ubicacion.Direccion;
                     txtLatitud.Text = ubicacion.Latitud;
                     txtLongitud.Text = ubicacion.Longitud;
                     latitude = double.Parse(ubicacion.Latitud, System.Globalization.CultureInfo.InvariantCulture);
-                    longitude = double.Parse(ubicacion.Longitud, System.Globalization.CultureInfo.InvariantCulture);    
+                    longitude = double.Parse(ubicacion.Longitud, System.Globalization.CultureInfo.InvariantCulture);
                 }
             }
             // 1. Configurar el proveedor y modo (Internet)
@@ -123,60 +123,104 @@ namespace Mikrotik_Administrador
                 txtLongitud.Text = pos.Lng.ToString();
             }
         }
+        public void BuscarPorDireccion(string direccionBuscada)
+        {
+            PointLatLng? pos = BuscarEnOpenStreetMap(direccionBuscada);
 
+            if (pos.HasValue)
+            {
+                // 1. Centrar mapa
+                gMap.Position = pos.Value;
+
+                // 2. Mover marcador
+                if (marcador != null)
+                {
+                    marcador.Position = pos.Value;
+                    Obtenerdireccion();
+                }
+
+                gMap.MinZoom = 2;
+                gMap.MaxZoom = 20;
+                gMap.Zoom = 18;
+
+                // 3. Llenar tus cuadros de texto
+                txtLatitud.Text = pos.Value.Lat.ToString();
+                txtLongitud.Text = pos.Value.Lng.ToString();
+            }
+            else
+            {
+                MessageBox.Show("No se encontró: '" + direccionBuscada + "'. Intenta ser más específico (ej: Huixcolotla, Puebla, Mexico).", "Sin resultados");
+            }
+        }
+        private void BuscarPorCoordenadas(decimal latitud, decimal longitud)
+        {
+            try
+            {
+                if (double.TryParse(txtLatitud.Text, out double lat) && double.TryParse(txtLongitud.Text, out double lng))
+                {
+                    PointLatLng pos = new PointLatLng(lat, lng);
+                    gMap.Position = pos;
+
+                    if (marcador != null)
+                    {
+                        marcador.Position = pos;
+                        Obtenerdireccion();
+                    }
+
+                    gMap.MinZoom = 2;
+                    gMap.MaxZoom = 20;
+                    gMap.Zoom = 18;
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, ingresa coordenadas numéricas válidas.", "Error de formato");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error al posicionar las coordenadas: " + ex.Message);
+            }
+        }
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
+            if((string.IsNullOrWhiteSpace(txtDireccionOficial.Text) 
+                && CBCoordendadas.Checked == false)
+                || ((string.IsNullOrWhiteSpace(txtLatitud.Text) || 
+                string.IsNullOrWhiteSpace(txtLongitud.Text)) 
+                && CBCoordendadas.Checked == true)             
+                )
+            {
+                MessageBox.Show("Por favor, ingresa una dirección o coordenadas para buscar.", "Datos insuficientes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             // 1. Cambiar cursor a espera
             this.Cursor = Cursors.WaitCursor;
             BtnBuscar.Enabled = false;
             btnAceptarUbicacion.Enabled = false;
             btnCancelarDireccion.Enabled = false;
-            string direccionBuscada = txtDireccionOficial.Text;
+            
             try
             {
-                if (!string.IsNullOrWhiteSpace(direccionBuscada))
-                {
-                    // Usamos nuestra nueva función de búsqueda directa
-                    PointLatLng? pos = BuscarEnOpenStreetMap(direccionBuscada);
-
-                    if (pos.HasValue)
-                    {
-                        // 1. Centrar mapa
-                        gMap.Position = pos.Value;
-
-                        // 2. Mover marcador
-                        if (marcador != null)
-                        {
-                            marcador.Position = pos.Value;
-                            Obtenerdireccion();
-                        }
-
-                        gMap.MinZoom = 2;
-                        gMap.MaxZoom = 20;
-                        gMap.Zoom = 18;
-
-                        // 3. Llenar tus cuadros de texto
-                        txtLatitud.Text = pos.Value.Lat.ToString();
-                        txtLongitud.Text = pos.Value.Lng.ToString();                        
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se encontró: '" + direccionBuscada + "'. Intenta ser más específico (ej: Huixcolotla, Puebla, Mexico).", "Sin resultados");
-                    }
-                }
+                if (!string.IsNullOrWhiteSpace(txtDireccionOficial.Text) && CBCoordendadas.Checked == false)
+                    BuscarPorDireccion(txtDireccionOficial.Text);
+                if (!string.IsNullOrWhiteSpace(txtLatitud.Text) && !string.IsNullOrWhiteSpace(txtLongitud.Text) && CBCoordendadas.Checked == true)
+                    BuscarPorCoordenadas(Convert.ToDecimal(txtLatitud.Text),
+                    Convert.ToDecimal(txtLongitud.Text));
             }
             finally
             {
                 // 2. Regresar cursor a la normalidad aunque haya error
                 this.Cursor = Cursors.Default;
                 BtnBuscar.Enabled = true;
-                if(txtLatitud.Text != string.Empty)
+                if (txtLatitud.Text != string.Empty)
                 {
                     btnAceptarUbicacion.Enabled = true;
                 }
             }
         }
-        public void Obtenerdireccion() {
+        public void Obtenerdireccion()
+        {
             // Obtenemos la dirección de la posición final del marcador
             string calleEncontrada = ObtenerCalleDesdeCoordenadas(marcador.Position.Lat, marcador.Position.Lng);
 
@@ -256,8 +300,9 @@ namespace Mikrotik_Administrador
             ub.Longitud = txtLongitud.Text.Trim();
             ub.IdMikrotik = IdMikrotik;
             ub.IdUsuario = IdUsuario;
-            AppRepository app = new AppRepository();    
-            if(app.SaveUbicacion(ub).Result == true) {
+            AppRepository app = new AppRepository();
+            if (app.SaveUbicacion(ub).Result == true)
+            {
                 MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
@@ -269,12 +314,12 @@ namespace Mikrotik_Administrador
 
         private void btnAceptarUbicacion_Click(object sender, EventArgs e)
         {
-            if(txtDireccionSugerida.Text.Trim() == string.Empty)
+            if (txtDireccionSugerida.Text.Trim() == string.Empty)
             {
                 MessageBox.Show("No hay una dirección sugerida para aceptar, favor de mover el puntero del mapa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            txtDireccionOficial.Text = txtDireccionSugerida.Text;            
+            txtDireccionOficial.Text = txtDireccionSugerida.Text;
             BtnGuardar.Enabled = true;
             txtDireccionOficial.Enabled = false;
             btnCancelarDireccion.Enabled = true;

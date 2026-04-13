@@ -48,6 +48,7 @@
             this.btnAceptarUbicacion = new System.Windows.Forms.Button();
             this.btnCancelarDireccion = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.CBCoordendadas = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +84,6 @@
             // 
             // txtLatitud
             // 
-            this.txtLatitud.Enabled = false;
             this.txtLatitud.Location = new System.Drawing.Point(170, 166);
             this.txtLatitud.Name = "txtLatitud";
             this.txtLatitud.Size = new System.Drawing.Size(129, 26);
@@ -91,7 +91,6 @@
             // 
             // txtLongitud
             // 
-            this.txtLongitud.Enabled = false;
             this.txtLongitud.Location = new System.Drawing.Point(404, 165);
             this.txtLongitud.Name = "txtLongitud";
             this.txtLongitud.Size = new System.Drawing.Size(134, 26);
@@ -99,7 +98,7 @@
             // 
             // BtnBuscar
             // 
-            this.BtnBuscar.Location = new System.Drawing.Point(450, 123);
+            this.BtnBuscar.Location = new System.Drawing.Point(340, 197);
             this.BtnBuscar.Name = "BtnBuscar";
             this.BtnBuscar.Size = new System.Drawing.Size(105, 33);
             this.BtnBuscar.TabIndex = 5;
@@ -158,7 +157,7 @@
             // lblDireccionSugerida
             // 
             this.lblDireccionSugerida.AutoSize = true;
-            this.lblDireccionSugerida.Location = new System.Drawing.Point(30, 212);
+            this.lblDireccionSugerida.Location = new System.Drawing.Point(30, 242);
             this.lblDireccionSugerida.Name = "lblDireccionSugerida";
             this.lblDireccionSugerida.Size = new System.Drawing.Size(144, 20);
             this.lblDireccionSugerida.TabIndex = 13;
@@ -166,7 +165,7 @@
             // 
             // txtDireccionSugerida
             // 
-            this.txtDireccionSugerida.Location = new System.Drawing.Point(185, 206);
+            this.txtDireccionSugerida.Location = new System.Drawing.Point(185, 236);
             this.txtDireccionSugerida.Name = "txtDireccionSugerida";
             this.txtDireccionSugerida.ReadOnly = true;
             this.txtDireccionSugerida.Size = new System.Drawing.Size(781, 26);
@@ -184,7 +183,7 @@
             // lblVista
             // 
             this.lblVista.AutoSize = true;
-            this.lblVista.Location = new System.Drawing.Point(640, 123);
+            this.lblVista.Location = new System.Drawing.Point(757, 123);
             this.lblVista.Name = "lblVista";
             this.lblVista.Size = new System.Drawing.Size(209, 20);
             this.lblVista.TabIndex = 11;
@@ -218,7 +217,7 @@
             // BtnGuardar
             // 
             this.BtnGuardar.Enabled = false;
-            this.BtnGuardar.Location = new System.Drawing.Point(883, 248);
+            this.BtnGuardar.Location = new System.Drawing.Point(883, 279);
             this.BtnGuardar.Name = "BtnGuardar";
             this.BtnGuardar.Size = new System.Drawing.Size(83, 33);
             this.BtnGuardar.TabIndex = 16;
@@ -229,7 +228,7 @@
             // btnAceptarUbicacion
             // 
             this.btnAceptarUbicacion.Enabled = false;
-            this.btnAceptarUbicacion.Location = new System.Drawing.Point(34, 248);
+            this.btnAceptarUbicacion.Location = new System.Drawing.Point(34, 279);
             this.btnAceptarUbicacion.Name = "btnAceptarUbicacion";
             this.btnAceptarUbicacion.Size = new System.Drawing.Size(165, 33);
             this.btnAceptarUbicacion.TabIndex = 15;
@@ -240,7 +239,7 @@
             // btnCancelarDireccion
             // 
             this.btnCancelarDireccion.Enabled = false;
-            this.btnCancelarDireccion.Location = new System.Drawing.Point(250, 248);
+            this.btnCancelarDireccion.Location = new System.Drawing.Point(250, 279);
             this.btnCancelarDireccion.Name = "btnCancelarDireccion";
             this.btnCancelarDireccion.Size = new System.Drawing.Size(148, 33);
             this.btnCancelarDireccion.TabIndex = 18;
@@ -254,17 +253,30 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.gMap);
-            this.groupBox1.Location = new System.Drawing.Point(38, 299);
+            this.groupBox1.Location = new System.Drawing.Point(38, 322);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(967, 424);
             this.groupBox1.TabIndex = 19;
             this.groupBox1.TabStop = false;
             // 
+            // CBCoordendadas
+            // 
+            this.CBCoordendadas.AutoSize = true;
+            this.CBCoordendadas.Checked = true;
+            this.CBCoordendadas.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CBCoordendadas.Location = new System.Drawing.Point(34, 206);
+            this.CBCoordendadas.Name = "CBCoordendadas";
+            this.CBCoordendadas.Size = new System.Drawing.Size(227, 24);
+            this.CBCoordendadas.TabIndex = 20;
+            this.CBCoordendadas.Text = "¿Buscar por coordenadas?";
+            this.CBCoordendadas.UseVisualStyleBackColor = true;
+            // 
             // Ubicacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1035, 742);
+            this.ClientSize = new System.Drawing.Size(1035, 765);
+            this.Controls.Add(this.CBCoordendadas);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnCancelarDireccion);
             this.Controls.Add(this.btnAceptarUbicacion);
@@ -317,5 +329,6 @@
         private System.Windows.Forms.Button btnAceptarUbicacion;
         private System.Windows.Forms.Button btnCancelarDireccion;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox CBCoordendadas;
     }
 }
