@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -535,7 +536,36 @@ namespace Mikrotik_Administrador.Class
             }
             return ListIPs;
         }
-        public string DeleteInterface(string Plan)
+        public void DeleteInterfacebyName(string Name)
+        {
+            Send("/ppp/active/print");
+            Send("?name=" + Name);
+            Send("=.proplist=.id", true);
+            foreach (string row2 in Read())
+            {
+                if (row2.StartsWith("!re"))
+                {
+                    continue;
+                }
+                if (row2.StartsWith("!done")) break;
+
+                if (row2.StartsWith("="))
+                {
+                    string[] parts2 = row2.Split(new char[] { '=' }, 3);
+                    if (parts2.Length < 3) continue;
+
+                    string key2 = parts2[1];
+                    string value2 = parts2[2];
+
+                    if (key2 == ".id")
+                    {
+                        Send("/ppp/active/remove");
+                        Send("=.id=" + value2, true);
+                    }
+                }
+            }
+        }
+        public string DeleteInterfacebyPlan(string Plan)
         {
             try
             {
@@ -563,32 +593,7 @@ namespace Mikrotik_Administrador.Class
 
                         if (key == "name")
                         {
-                            Send("/ppp/active/print");
-                            Send("?name=" + value);
-                            Send("=.proplist=.id", true);
-                            foreach (string row2 in Read())
-                            {
-                                if (row2.StartsWith("!re"))
-                                {
-                                    continue;
-                                }
-                                if (row2.StartsWith("!done")) break;
-
-                                if (row2.StartsWith("="))
-                                {
-                                    string[] parts2 = row2.Split(new char[] { '=' }, 3);
-                                    if (parts2.Length < 3) continue;
-
-                                    string key2 = parts2[1];
-                                    string value2 = parts2[2];
-
-                                    if (key2 == ".id")
-                                    {
-                                        Send("/ppp/active/remove");
-                                        Send("=.id=" + value2, true);
-                                    }
-                                }
-                            }
+                            DeleteInterfacebyName(value);
                         }
                     }
                 }

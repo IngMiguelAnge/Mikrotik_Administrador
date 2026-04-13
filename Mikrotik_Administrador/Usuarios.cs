@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -366,6 +367,13 @@ namespace Mikrotik_Administrador
                 else
                 {
                     Result1 = mikrotik.CambiarEstatusFibra(objUsuario.IdInterno, objUsuario.Estatus);
+                    if (Result1 == true)
+                    {
+                        var Result = await Task.Run(() =>
+                        {
+                            return mikrotik.DeleteInterfacebyPlan(objUsuario.Usuario);
+                        });
+                    }
                     Result2 = true;
                 }
                 if (Result1 == true && Result2 == true)
@@ -518,7 +526,7 @@ namespace Mikrotik_Administrador
                             {
                                 var Result2 = await Task.Run(() =>
                                 {
-                                    return mikrotik.DeleteInterface(plan.Nombre);
+                                    return mikrotik.DeleteInterfacebyPlan(plan.Nombre);
                                 });
                             }
                         }

@@ -183,7 +183,7 @@ namespace Mikrotik_Administrador
                             {
                                 var Result2 = await Task.Run(() =>
                                 {
-                                    return mikrotik.DeleteInterface(Plan.Nombre);
+                                    return mikrotik.DeleteInterfacebyPlan(Plan.Nombre);
                                 });
                             }
                         }
