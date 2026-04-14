@@ -103,18 +103,30 @@ namespace Mikrotik_Administrador
                 return;
             }
             AppRepository obj = new AppRepository();
-            //var BuscarNombrePlan = await obj.GetPlanByNombre(txtNombre.Text.Trim());
-
+            
             var lista = await obj.GetMikrotiksActivos(Convert.ToString(CBPerteneceA.SelectedItem));
             if (lista.Count() == 0)
             {
                 MessageBox.Show("No hay Mikrotiks que permita este plan, por favor registre uno antes de crear un plan", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            bool IsAntena = (string)CBPerteneceA.SelectedItem == "Antena" ? true : false;
+            //var BuscarNombrePlan = await obj.GetPlanesbyName(txtNombre.Text.Trim(), IsAntena);
+            //if (BuscarNombrePlan.Count() > 0 && BuscarNombrePlan.Where(x => x.Nombre == txtNombre.Text && x.Id != Id).FirstOrDefault() != null)
+            //{
+            //    DialogResult resultado = MessageBox.Show("Este Nombre de plan ya existe, ¿Quiere combinar los planes en uno?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //    if (resultado == DialogResult.No)
+            //    {
+            //        MessageBox.Show("Se cancelo el guardado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        return;
+            //    }
+
+            //}
+           
             PlanModel plan = new PlanModel();
             plan.Id = Id;
             plan.Nombre = txtNombre.Text.Trim();
-            plan.IsAntena = (string)CBPerteneceA.SelectedItem == "Antena" ? true : false;
+            plan.IsAntena = IsAntena;
             plan.Precio = NUDPrecio.Value;
             plan.Velocidad = Convert.ToString(NUDSubida.Value) + cbSubida.SelectedItem +
                 "/" + Convert.ToString(NUDDescarga.Value) + CBDescarga.SelectedItem;

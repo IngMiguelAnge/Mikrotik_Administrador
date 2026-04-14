@@ -26,7 +26,7 @@ namespace Mikrotik_Administrador
         {
             InitializeComponent();
         }
-        public async void BuscarUsuarios()
+        public async void BuscarUsuarios(bool sinervicios)
         {
             BtnAsignar.Visible = true;
             cbTodos.Visible = true;
@@ -47,9 +47,10 @@ namespace Mikrotik_Administrador
                 AppRepository obj = new AppRepository();
                 var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik, txtCliente.Text).Result;
                 lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
+                lblServiciossin.Text = "Usuarios sin servicios: " + lista.Where(x=> x.IdCliente == null).Count();
                 if (lista != null && lista.Count > 0)
                 {
-                    dgvUsuarios.DataSource = lista;
+                    dgvUsuarios.DataSource = sinervicios== false? lista : lista.Where(x => x.IdCliente == null).ToList();
                     AgregarBotones();
                     MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -88,7 +89,7 @@ namespace Mikrotik_Administrador
                     return;
                 }
             }
-            BuscarUsuarios();
+            BuscarUsuarios(false);
         }
         private void AgregarBotones()
         {
@@ -207,7 +208,7 @@ namespace Mikrotik_Administrador
                     NombreAsignado = CBAsignar.Checked == false ? NombreAsignado : Regex.Replace(item.name, @"[-<>]", " ").Trim().ToUpper();
                     Insert = obj.SaveClienteInGeneral(item.id, NombreAsignado.ToUpper()).Result;
                 }
-                BuscarUsuarios();
+                BuscarUsuarios(false);
             }
             catch (Exception ex)
             {
@@ -380,7 +381,7 @@ namespace Mikrotik_Administrador
                 {
                     string nuevoEstatus = objUsuario.Estatus == "Activo" ? "Inactivo" : "Activo";
                     var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus);
-                    BuscarUsuarios();
+                    BuscarUsuarios(false);
                 }
                 else
                     MessageBox.Show("Error al actualizar el estatus", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -538,7 +539,7 @@ namespace Mikrotik_Administrador
                         else
                             contadorfallos++;
                     }                    
-                    BuscarUsuarios();
+                    BuscarUsuarios(false);
                     MessageBox.Show("Usuarios que cambiaron plan: " + contadorcorrecto.ToString() +
                         "\nUsuarios no cambiaron plan: " + contadorfallos.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -568,5 +569,22 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Clear();
         }
 
+        private void btnServiciosSin_Click(object sender, EventArgs e)
+        {
+            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
+            {
+                MessageBox.Show("Por favor, selecciona un Mikrotik.");
+                return;
+            }
+            if (txtNombre.Text.Trim() == "")
+            {
+                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los usuarios pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (resultado == DialogResult.No)
+                {
+                    return;
+                }
+            }
+            BuscarUsuarios(true);
+        }
     }
 }

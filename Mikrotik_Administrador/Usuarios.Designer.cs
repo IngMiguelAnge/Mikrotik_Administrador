@@ -45,6 +45,8 @@
             this.cbTodos = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnPlan = new System.Windows.Forms.Button();
+            this.lblServiciossin = new System.Windows.Forms.Label();
+            this.btnServiciosSin = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -120,7 +122,7 @@
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 62;
             this.dgvUsuarios.RowTemplate.Height = 28;
-            this.dgvUsuarios.Size = new System.Drawing.Size(848, 340);
+            this.dgvUsuarios.Size = new System.Drawing.Size(943, 340);
             this.dgvUsuarios.TabIndex = 14;
             this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
             // 
@@ -154,11 +156,11 @@
             // 
             // BtnAsignar
             // 
-            this.BtnAsignar.Location = new System.Drawing.Point(732, 133);
+            this.BtnAsignar.Location = new System.Drawing.Point(658, 189);
             this.BtnAsignar.Name = "BtnAsignar";
-            this.BtnAsignar.Size = new System.Drawing.Size(98, 32);
+            this.BtnAsignar.Size = new System.Drawing.Size(98, 55);
             this.BtnAsignar.TabIndex = 20;
-            this.BtnAsignar.Text = "Asignar";
+            this.BtnAsignar.Text = "Asignar cliente";
             this.BtnAsignar.UseVisualStyleBackColor = true;
             this.BtnAsignar.Click += new System.EventHandler(this.BtnAsignar_Click);
             // 
@@ -173,11 +175,11 @@
             // 
             // btnClientesSin
             // 
-            this.btnClientesSin.Location = new System.Drawing.Point(732, 85);
+            this.btnClientesSin.Location = new System.Drawing.Point(712, 87);
             this.btnClientesSin.Name = "btnClientesSin";
-            this.btnClientesSin.Size = new System.Drawing.Size(98, 33);
+            this.btnClientesSin.Size = new System.Drawing.Size(207, 31);
             this.btnClientesSin.TabIndex = 22;
-            this.btnClientesSin.Text = "Ver";
+            this.btnClientesSin.Text = "Ver Clientes sin servicios";
             this.btnClientesSin.UseVisualStyleBackColor = true;
             this.btnClientesSin.Click += new System.EventHandler(this.btnClientesSin_Click);
             // 
@@ -201,13 +203,13 @@
             this.groupBox1.Controls.Add(this.dgvUsuarios);
             this.groupBox1.Location = new System.Drawing.Point(23, 250);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(854, 365);
+            this.groupBox1.Size = new System.Drawing.Size(949, 365);
             this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             // 
             // btnPlan
             // 
-            this.btnPlan.Location = new System.Drawing.Point(732, 189);
+            this.btnPlan.Location = new System.Drawing.Point(762, 189);
             this.btnPlan.Name = "btnPlan";
             this.btnPlan.Size = new System.Drawing.Size(107, 60);
             this.btnPlan.TabIndex = 25;
@@ -215,11 +217,32 @@
             this.btnPlan.UseVisualStyleBackColor = true;
             this.btnPlan.Click += new System.EventHandler(this.btnPlan_Click);
             // 
+            // lblServiciossin
+            // 
+            this.lblServiciossin.AutoSize = true;
+            this.lblServiciossin.Location = new System.Drawing.Point(420, 116);
+            this.lblServiciossin.Name = "lblServiciossin";
+            this.lblServiciossin.Size = new System.Drawing.Size(171, 20);
+            this.lblServiciossin.TabIndex = 26;
+            this.lblServiciossin.Text = "Servicios sin clientes: 0";
+            // 
+            // btnServiciosSin
+            // 
+            this.btnServiciosSin.Location = new System.Drawing.Point(712, 135);
+            this.btnServiciosSin.Name = "btnServiciosSin";
+            this.btnServiciosSin.Size = new System.Drawing.Size(212, 36);
+            this.btnServiciosSin.TabIndex = 27;
+            this.btnServiciosSin.Text = "Ver Servicios sin Clientes";
+            this.btnServiciosSin.UseVisualStyleBackColor = true;
+            this.btnServiciosSin.Click += new System.EventHandler(this.btnServiciosSin_Click);
+            // 
             // Usuarios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(889, 648);
+            this.ClientSize = new System.Drawing.Size(984, 648);
+            this.Controls.Add(this.btnServiciosSin);
+            this.Controls.Add(this.lblServiciossin);
             this.Controls.Add(this.btnPlan);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbTodos);
@@ -268,5 +291,7 @@
         private System.Windows.Forms.CheckBox cbTodos;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnPlan;
+        private System.Windows.Forms.Label lblServiciossin;
+        private System.Windows.Forms.Button btnServiciosSin;
     }
 }

@@ -119,6 +119,7 @@
             this.Controls.Add(this.lblNombre);
             this.Controls.Add(this.btnNuevo);
             this.Name = "Comments";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Comments";
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvComments)).EndInit();
