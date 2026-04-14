@@ -208,6 +208,10 @@ namespace Mikrotik_Administrador
                     BuscarPorCoordenadas(Convert.ToDecimal(txtLatitud.Text),
                     Convert.ToDecimal(txtLongitud.Text));
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error revisar sus coordenadas " + ex.Message);
+            }
             finally
             {
                 // 2. Regresar cursor a la normalidad aunque haya error
