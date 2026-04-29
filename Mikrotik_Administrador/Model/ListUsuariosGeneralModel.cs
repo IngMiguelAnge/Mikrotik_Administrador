@@ -1,7 +1,4 @@
-﻿using System.IdentityModel.Protocols.WSTrust;
-using System.Security.Cryptography.X509Certificates;
-
-namespace Mikrotik_Administrador.Model
+﻿namespace Mikrotik_Administrador.Model
 {
     public class ListUsuariosGeneralModel
     {

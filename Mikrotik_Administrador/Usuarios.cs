@@ -1,17 +1,13 @@
 ﻿using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.Devices;
 using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
+using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Numerics;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,6 +21,8 @@ namespace Mikrotik_Administrador
         public Usuarios()
         {
             InitializeComponent();
+            // Forzamos la suscripción aquí por si el diseñador está fallando
+            this.dgvUsuarios.ColumnHeaderMouseClick += dgvUsuarios_ColumnHeaderMouseClick;
         }
         public async void BuscarUsuarios(bool sinervicios)
         {
@@ -41,17 +39,27 @@ namespace Mikrotik_Administrador
             btnPlan.Enabled = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
+            dgvUsuarios.AllowUserToAddRows = false;
+            dgvUsuarios.AutoGenerateColumns = true;
             int IdMikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
             try
             {
                 AppRepository obj = new AppRepository();
-                var lista = obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik, txtCliente.Text).Result;
+                var lista = await obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik, txtCliente.Text);
                 lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
                 lblServiciossin.Text = "Usuarios sin servicios: " + lista.Where(x=> x.IdCliente == null).Count();
                 if (lista != null && lista.Count > 0)
                 {
-                    dgvUsuarios.DataSource = sinervicios== false? lista : lista.Where(x => x.IdCliente == null).ToList();
+                    var source = sinervicios== false? 
+                        new SortableBindingList<ListUsuariosGeneralModel>(lista) : 
+                        new SortableBindingList<ListUsuariosGeneralModel>(lista.Where(x => x.IdCliente == null).ToList());
+                    dgvUsuarios.DataSource = source;
+                    foreach (DataGridViewColumn col in dgvUsuarios.Columns)
+                    {
+                       col.SortMode = DataGridViewColumnSortMode.Programmatic;
+                    }
                     AgregarBotones();
+                    dgvUsuarios.Refresh();
                     MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -225,7 +233,7 @@ namespace Mikrotik_Administrador
             }
         }
 
-        public void CargarClientesSin()
+        public async Task CargarClientesSin()
         {
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
@@ -238,15 +246,23 @@ namespace Mikrotik_Administrador
             btnPlan.Visible = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
+            dgvUsuarios.AllowUserToAddRows = false;
+            dgvUsuarios.AutoGenerateColumns = true;
             AppRepository obj = new AppRepository();
             try
             {
-                var lista = obj.GetClientesSinServicios().Result;
+                var lista = await obj.GetClientesSinServicios();
 
                 if (lista != null && lista.Count > 0)
-                {
-                    dgvUsuarios.DataSource = lista;
+                {     
+                    var source = new SortableBindingList<ListClientesModel>(lista);
+                    dgvUsuarios.DataSource = source;
+                    foreach (DataGridViewColumn col in dgvUsuarios.Columns)
+                    {
+                        col.SortMode = DataGridViewColumnSortMode.Programmatic;
+                    }
                     AgregarBotones2();
+                    dgvUsuarios.Refresh();
                     MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -569,22 +585,55 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Clear();
         }
 
-        private void btnServiciosSin_Click(object sender, EventArgs e)
-        {
-            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
+            private void btnServiciosSin_Click(object sender, EventArgs e)
             {
-                MessageBox.Show("Por favor, selecciona un Mikrotik.");
-                return;
-            }
-            if (txtNombre.Text.Trim() == "")
-            {
-                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los usuarios pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (resultado == DialogResult.No)
+                if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
                 {
+                    MessageBox.Show("Por favor, selecciona un Mikrotik.");
                     return;
                 }
+                if (txtNombre.Text.Trim() == "")
+                {
+                    DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los usuarios pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (resultado == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                BuscarUsuarios(true);
             }
-            BuscarUsuarios(true);
+
+        private void dgvUsuarios_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex != -1) return; // Asegurar que es clic en cabecera
+
+            DataGridViewColumn newColumn = dgvUsuarios.Columns[e.ColumnIndex];
+            if (newColumn is DataGridViewButtonColumn || newColumn is DataGridViewCheckBoxColumn)
+                return;
+
+            IBindingList list = dgvUsuarios.DataSource as IBindingList;
+
+            if (list != null && list.Count > 0)
+            {
+                ListSortDirection direction = ListSortDirection.Ascending;
+
+                // Detectar dirección actual basándose en el Glyph (la flechita)
+                if (newColumn.HeaderCell.SortGlyphDirection == SortOrder.Ascending)
+                    direction = ListSortDirection.Descending;
+
+                // Intentar obtener la propiedad por DataPropertyName o por el Nombre de la columna
+                string propName = string.IsNullOrEmpty(newColumn.DataPropertyName) ? newColumn.Name : newColumn.DataPropertyName;
+                PropertyDescriptor prop = TypeDescriptor.GetProperties(list[0].GetType())[propName];
+
+                if (prop != null)
+                {
+                    list.ApplySort(prop, direction);
+
+                    // Limpiar flechas de otras columnas y poner la nueva
+                    foreach (DataGridViewColumn c in dgvUsuarios.Columns) c.HeaderCell.SortGlyphDirection = SortOrder.None;
+                    newColumn.HeaderCell.SortGlyphDirection = direction == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
+                }
+            }
         }
     }
-}
+    }

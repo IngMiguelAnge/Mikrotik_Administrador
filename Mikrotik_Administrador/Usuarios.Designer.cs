@@ -2,6 +2,7 @@
 {
     partial class Usuarios
     {
+   
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -125,6 +126,7 @@
             this.dgvUsuarios.Size = new System.Drawing.Size(943, 340);
             this.dgvUsuarios.TabIndex = 14;
             this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
+            this.dgvUsuarios.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvUsuarios_ColumnHeaderMouseClick);
             // 
             // lblMensaje3
             // 
