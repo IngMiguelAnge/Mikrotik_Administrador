@@ -21,7 +21,6 @@ namespace Mikrotik_Administrador
         public Usuarios()
         {
             InitializeComponent();
-            // Forzamos la suscripción aquí por si el diseñador está fallando
             this.dgvUsuarios.ColumnHeaderMouseClick += dgvUsuarios_ColumnHeaderMouseClick;
         }
         public async void BuscarUsuarios(bool sinervicios)
@@ -30,13 +29,15 @@ namespace Mikrotik_Administrador
             cbTodos.Visible = true;
             CBAsignar.Visible = true;
             BtnAsignar.Visible = true;
-            btnPlan.Visible= true;
+            btnPlan.Visible = true;
+            BtnEliminar.Visible = true;
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false;
             BtnAsignar.Enabled = false;
             btnClientesSin.Enabled = false;
             btnPlan.Enabled = false;
+            BtnEliminar.Enabled = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
             dgvUsuarios.AllowUserToAddRows = false;
@@ -47,16 +48,16 @@ namespace Mikrotik_Administrador
                 AppRepository obj = new AppRepository();
                 var lista = await obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik, txtCliente.Text);
                 lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
-                lblServiciossin.Text = "Usuarios sin servicios: " + lista.Where(x=> x.IdCliente == null).Count();
+                lblServiciossin.Text = "Usuarios sin servicios: " + lista.Where(x => x.IdCliente == null).Count();
                 if (lista != null && lista.Count > 0)
                 {
-                    var source = sinervicios== false? 
-                        new SortableBindingList<ListUsuariosGeneralModel>(lista) : 
+                    var source = sinervicios == false ?
+                        new SortableBindingList<ListUsuariosGeneralModel>(lista) :
                         new SortableBindingList<ListUsuariosGeneralModel>(lista.Where(x => x.IdCliente == null).ToList());
                     dgvUsuarios.DataSource = source;
                     foreach (DataGridViewColumn col in dgvUsuarios.Columns)
                     {
-                       col.SortMode = DataGridViewColumnSortMode.Programmatic;
+                        col.SortMode = DataGridViewColumnSortMode.Programmatic;
                     }
                     AgregarBotones();
                     dgvUsuarios.Refresh();
@@ -80,6 +81,7 @@ namespace Mikrotik_Administrador
                 BtnAsignar.Enabled = true;
                 btnClientesSin.Enabled = true;
                 btnPlan.Enabled = true;
+                BtnEliminar.Enabled = true;
             }
         }
         private void BtnBuscar_Click(object sender, EventArgs e)
@@ -122,7 +124,6 @@ namespace Mikrotik_Administrador
             BtnEstatus.Text = "Cambio Estatus";
             BtnEstatus.UseColumnTextForButtonValue = true;
             dgvUsuarios.Columns.Add(BtnEstatus);
-
         }
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
         {
@@ -179,6 +180,7 @@ namespace Mikrotik_Administrador
             BtnAsignar.Enabled = false;
             BtnBuscar.Enabled = false;
             btnPlan.Enabled = false;
+            BtnEliminar.Enabled = false;
             try
             {
                 List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
@@ -228,6 +230,7 @@ namespace Mikrotik_Administrador
                 BtnAsignar.Enabled = true;
                 BtnBuscar.Enabled = true;
                 btnPlan.Enabled = true;
+                BtnEliminar.Enabled = true;
                 progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
                 progressBar1.Value = 100;
             }
@@ -244,6 +247,7 @@ namespace Mikrotik_Administrador
             CBAsignar.Visible = false;
             BtnAsignar.Visible = false;
             btnPlan.Visible = false;
+            BtnEliminar.Visible = false;
             dgvUsuarios.DataSource = null;
             dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
             dgvUsuarios.AllowUserToAddRows = false;
@@ -254,7 +258,7 @@ namespace Mikrotik_Administrador
                 var lista = await obj.GetClientesSinServicios();
 
                 if (lista != null && lista.Count > 0)
-                {     
+                {
                     var source = new SortableBindingList<ListClientesModel>(lista);
                     dgvUsuarios.DataSource = source;
                     foreach (DataGridViewColumn col in dgvUsuarios.Columns)
@@ -285,9 +289,9 @@ namespace Mikrotik_Administrador
             }
         }
 
-        private void btnClientesSin_Click(object sender, EventArgs e)
+        private async void btnClientesSin_Click(object sender, EventArgs e)
         {
-            CargarClientesSin();
+           await  CargarClientesSin();
         }
 
         private void AgregarBotones2()
@@ -315,7 +319,7 @@ namespace Mikrotik_Administrador
                     if (result == true)
                     {
                         MessageBox.Show("Estatus cambiado");
-                        CargarClientesSin();
+                       await CargarClientesSin();
                     }
                     else
                         MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -421,7 +425,7 @@ namespace Mikrotik_Administrador
                 btnPlan.Enabled = true;
             }
         }
-        
+
         private void cbTodos_CheckedChanged(object sender, EventArgs e)
         {
             bool isChecked = cbTodos.Checked;
@@ -449,6 +453,7 @@ namespace Mikrotik_Administrador
             BtnAsignar.Enabled = false;
             BtnBuscar.Enabled = false;
             btnPlan.Enabled = false;
+            BtnEliminar.Enabled = false;
             try
             {
                 List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
@@ -492,7 +497,7 @@ namespace Mikrotik_Administrador
                     AppRepository obj = new AppRepository();
                     var plan = obj.GetPlanById(p.IdSeleccionado).Result;
                     int contadorfallos = 0;
-                    int contadorcorrecto= 0;
+                    int contadorcorrecto = 0;
                     int MikrotikActual = 0;
                     MikrotikModel mikro;
                     bool F = false;
@@ -526,8 +531,9 @@ namespace Mikrotik_Administrador
                                 continue;
                             }
                         }
-                        else {
-                            if(F == true)
+                        else
+                        {
+                            if (F == true)
                             {
                                 contadorfallos++;
                                 continue;
@@ -554,7 +560,7 @@ namespace Mikrotik_Administrador
                         }
                         else
                             contadorfallos++;
-                    }                    
+                    }
                     BuscarUsuarios(false);
                     MessageBox.Show("Usuarios que cambiaron plan: " + contadorcorrecto.ToString() +
                         "\nUsuarios no cambiaron plan: " + contadorfallos.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -570,6 +576,7 @@ namespace Mikrotik_Administrador
                 BtnAsignar.Enabled = true;
                 BtnBuscar.Enabled = true;
                 btnPlan.Enabled = true;
+                BtnEliminar.Enabled = true;
                 progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
                 progressBar1.Value = 100;
                 if (mikrotik != null)
@@ -585,23 +592,23 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Clear();
         }
 
-            private void btnServiciosSin_Click(object sender, EventArgs e)
+        private void btnServiciosSin_Click(object sender, EventArgs e)
+        {
+            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
             {
-                if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
+                MessageBox.Show("Por favor, selecciona un Mikrotik.");
+                return;
+            }
+            if (txtNombre.Text.Trim() == "")
+            {
+                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los usuarios pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (resultado == DialogResult.No)
                 {
-                    MessageBox.Show("Por favor, selecciona un Mikrotik.");
                     return;
                 }
-                if (txtNombre.Text.Trim() == "")
-                {
-                    DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los usuarios pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (resultado == DialogResult.No)
-                    {
-                        return;
-                    }
-                }
-                BuscarUsuarios(true);
             }
+            BuscarUsuarios(true);
+        }
 
         private void dgvUsuarios_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -635,5 +642,97 @@ namespace Mikrotik_Administrador
                 }
             }
         }
+
+        private async void BtnEliminar_Click(object sender, EventArgs e)
+        {
+            DialogResult resultado = MessageBox.Show("Estas por eliminar de forma permanente a los usuarios del mikrotik ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (resultado == DialogResult.No)
+            {
+                return;
+            }
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            BtnBuscar.Enabled = false; 
+            BtnAsignar.Enabled = false;
+            btnClientesSin.Enabled = false;
+            btnPlan.Enabled = false;
+            BtnEliminar.Enabled = false;
+            try
+            {
+                List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
+                Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
+                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                  .Select(r => new UsuariosModel
+                  {
+                      id = Convert.ToInt32(r.Cells["Id"].Value),
+                      idmikrotik = Convert.ToInt32(r.Cells["IdMikrotik"].Value),
+                      idinterno = Convert.ToString(r.Cells["IdInterno"].Value),
+                      name = Convert.ToString(r.Cells["Usuario"].Value),
+                      tipo = Convert.ToString(r.Cells["Tipo"].Value),
+                  })
+                  .ToList();
+
+                if (Seleccionados.Count == 0)
+                {
+                    MessageBox.Show("No has seleccionado ningún usuario para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                int IdMikrotik = (int)CBMikrotiks.SelectedValue;
+                if (IdMikrotik == 0)
+                {
+                    MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
+                    return;
+                }
+                AppRepository obj = new AppRepository();
+                MikrotikModel mikro = new MikrotikModel();
+                mikro = obj.GetMikrotikById(IdMikrotik).Result;
+                if (mikro.Estatus == false)
+                {
+                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+                // Usamos Task.Run para que la conexión no detenga la ventana
+                bool login = await Task.Run(() =>
+                {
+                    return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                });
+                if (login == false)
+                {
+                    MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                foreach (UsuariosModel item in Seleccionados)
+                {
+                    if (item.tipo.ToUpper() == "ANTENA")
+                    {
+                        mikrotik.EliminarQueuePorNombre(item.name);
+                        mikrotik.EliminarAntena(item.idinterno);
+                    }
+                    else
+                    {
+                        mikrotik.EliminarFibra(item.idinterno);
+                        mikrotik.DeleteInterfacebyName(item.name);
+                    }
+                    obj.UpdateEstatusGeneral(item.id, "Eliminado").Wait();
+                }
+                MessageBox.Show("Usuarios eliminados del Mikrotik correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                BuscarUsuarios(false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 100;
+                BtnBuscar.Enabled = true; 
+                BtnAsignar.Enabled = true;
+                btnClientesSin.Enabled = true;
+                btnPlan.Enabled = true;
+                BtnEliminar.Enabled = true;
+            }
+        }
     }
-    }
+}

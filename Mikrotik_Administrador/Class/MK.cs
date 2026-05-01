@@ -147,7 +147,7 @@ namespace Mikrotik_Administrador.Class
                     read += result;
                 }
 
-                string word = Encoding.UTF8.GetString(buffer); // Usar UTF8 es mejor en v7
+                string word = Encoding.Default.GetString(buffer);// Usar UTF8 es mejor en v7
                 output.Add(word);
             }
             return output;
@@ -271,6 +271,58 @@ namespace Mikrotik_Administrador.Class
             }
             return MaxLimit;
         }
+        public void EliminarAntena(string idInterno)
+        {
+            try
+            {
+                // El comando es /path/del/modulo/remove
+                Send("/ip/firewall/address-list/remove");
+                // Se pasa el atributo .id indispensable para borrar
+                Send("=.id=" + idInterno, true);
+
+                List<string> respuesta = Read();
+                // Opcional: Verificar si MikroTik respondió con !done o !trap (error)
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error al eliminar AddressList: " + ex.Message);
+            }
+        }
+        public void EliminarQueuePorNombre(string nombreQueue)
+        {
+            try
+            {
+                // 1. Buscamos el .id de la queue que coincida con el nombre
+                Send("/queue/simple/print");
+                Send("?name=" + nombreQueue); // Filtro de búsqueda
+                Send("=.proplist=.id", true);
+
+                List<string> respuesta = Read();
+                string idEncontrado = "";
+
+                // Procesamos la respuesta para extraer el .id
+                foreach (string row in respuesta)
+                {
+                    if (row.StartsWith("=.id="))
+                    {
+                        idEncontrado = row.Split('=')[2];
+                        break;
+                    }
+                }
+
+                // 2. Si encontramos el ID, procedemos a borrar
+                if (!string.IsNullOrEmpty(idEncontrado))
+                {
+                    Send("/queue/simple/remove");
+                    Send("=.id=" + idEncontrado, true);
+                    Read(); // Limpiamos el buffer de respuesta
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error al eliminar Queue: " + ex.Message);
+            }
+        }
         public List<Antenas> VerAntenas(string name, List<ListWirelessModel> ListWireless)
         {
             List<Antenas> listaFinal = new List<Antenas>();
@@ -322,7 +374,8 @@ namespace Mikrotik_Administrador.Class
                                 break;
                             case ".id": currentObj.id = value; break;
                             case "comment":
-                                currentObj.comment = value.Replace("\r", "").Replace("\n", "").Trim();
+                                string valueLimpio = value.Replace("\r", "").Replace("\n", "").Trim();
+                                currentObj.comment = value;
                                 currentObj.idplan = string.Empty;
                                 currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
                                 break;
@@ -762,6 +815,34 @@ namespace Mikrotik_Administrador.Class
             }
             return lista;
         }
+        public bool EliminarFibra(string idInterno)
+        {
+            try
+            {
+                // 1. Enviamos el comando de remoción para el módulo PPP Secret
+                Send("/ppp/secret/remove");
+
+                // 2. Pasamos el ID del registro que queremos borrar
+                // El parámetro 'true' indica que es el final de la sentencia
+                Send("=.id=" + idInterno, true);
+
+                // 3. Leemos la respuesta para limpiar el buffer
+                List<string> respuesta = Read();
+
+                // Verificamos si hubo algún error (!trap)
+                foreach (string r in respuesta)
+                {
+                    if (r.StartsWith("!trap")) return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error al eliminar Secret: " + ex.Message);
+                return false;
+            }
+        }
         public List<Fibra> VerFibra(string name)
         {
             List<Fibra> listaFinal = new List<Fibra>();
@@ -800,7 +881,9 @@ namespace Mikrotik_Administrador.Class
                         string value = parts[2];
 
                         if (key == ".id") currentObj.id = value;
-                        if (key == "name") currentObj.comment = value;
+                        if (key == "name") {
+                            currentObj.comment = value;
+                        }
                         if (key == "remote-address") currentObj.address = value;
                         if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
                         if (key == "profile")
@@ -862,7 +945,11 @@ namespace Mikrotik_Administrador.Class
                         {
                             case ".id": currentObj.id = value; break;
                             case "address": currentObj.address = value; break;
-                            case "comment": currentObj.comment = value; break;
+                            case "comment":
+                                string valueLimpio = value.Replace("\r", "").Replace("\n", "").Trim();
+                                byte[] bytesMalos = Encoding.GetEncoding("ISO-8859-1").GetBytes(valueLimpio);
+                                currentObj.comment = Encoding.UTF8.GetString(bytesMalos);
+                                break;
                             case "disabled":
                                 currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
                                 break;

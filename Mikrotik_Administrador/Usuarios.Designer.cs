@@ -48,6 +48,7 @@
             this.btnPlan = new System.Windows.Forms.Button();
             this.lblServiciossin = new System.Windows.Forms.Label();
             this.btnServiciosSin = new System.Windows.Forms.Button();
+            this.BtnEliminar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -238,11 +239,22 @@
             this.btnServiciosSin.UseVisualStyleBackColor = true;
             this.btnServiciosSin.Click += new System.EventHandler(this.btnServiciosSin_Click);
             // 
+            // BtnEliminar
+            // 
+            this.BtnEliminar.Location = new System.Drawing.Point(812, 39);
+            this.BtnEliminar.Name = "BtnEliminar";
+            this.BtnEliminar.Size = new System.Drawing.Size(107, 35);
+            this.BtnEliminar.TabIndex = 28;
+            this.BtnEliminar.Text = "Eliminar";
+            this.BtnEliminar.UseVisualStyleBackColor = true;
+            this.BtnEliminar.Click += new System.EventHandler(this.BtnEliminar_Click);
+            // 
             // Usuarios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 648);
+            this.Controls.Add(this.BtnEliminar);
             this.Controls.Add(this.btnServiciosSin);
             this.Controls.Add(this.lblServiciossin);
             this.Controls.Add(this.btnPlan);
@@ -295,5 +307,6 @@
         private System.Windows.Forms.Button btnPlan;
         private System.Windows.Forms.Label lblServiciossin;
         private System.Windows.Forms.Button btnServiciosSin;
+        private System.Windows.Forms.Button BtnEliminar;
     }
 }

@@ -39,6 +39,7 @@
             this.cbExportar = new System.Windows.Forms.CheckBox();
             this.cbAntenas = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnEliminar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -90,7 +91,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(488, 20);
+            this.progressBar1.Location = new System.Drawing.Point(393, 25);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(133, 23);
             this.progressBar1.TabIndex = 6;
@@ -105,6 +106,7 @@
             this.dgvUsuarios.RowTemplate.Height = 28;
             this.dgvUsuarios.Size = new System.Drawing.Size(650, 276);
             this.dgvUsuarios.TabIndex = 7;
+            this.dgvUsuarios.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvUsuarios_ColumnHeaderMouseClick);
             // 
             // btnExportar
             // 
@@ -149,11 +151,22 @@
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             // 
+            // btnEliminar
+            // 
+            this.btnEliminar.Location = new System.Drawing.Point(593, 20);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(94, 35);
+            this.btnEliminar.TabIndex = 13;
+            this.btnEliminar.Text = "Eliminar";
+            this.btnEliminar.UseVisualStyleBackColor = true;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            // 
             // Migracion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(699, 523);
+            this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbAntenas);
             this.Controls.Add(this.cbExportar);
@@ -189,5 +202,6 @@
         private System.Windows.Forms.CheckBox cbExportar;
         private System.Windows.Forms.CheckBox cbAntenas;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnEliminar;
     }
 }
