@@ -70,7 +70,7 @@ namespace Mikrotik_Administrador.Class
         }
         public void Send(string co, bool endsentence = false)
         {
-            byte[] bajty = Encoding.UTF8.GetBytes(co); // v7 prefiere UTF8
+            byte[] bajty = Encoding.Default.GetBytes(co); // v7 prefiere UTF8
             byte[] velikost = EncodeLength(bajty.Length);
 
             byte[] paquete = new byte[velikost.Length + bajty.Length + (endsentence ? 1 : 0)];
