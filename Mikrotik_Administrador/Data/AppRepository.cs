@@ -18,6 +18,131 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region Bancos
+        public async Task<List<ListBancosModel>> GetBancos(string Nombre, string Tipo)
+        {
+            List<ListBancosModel> list = new List<ListBancosModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetBancos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Tipo", Tipo));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListBancos(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+        private ListBancosModel MapToListBancos(SqlDataReader reader)
+        {
+            return new ListBancosModel()
+            {
+                Id = (int)reader["Id"],
+                Nombre = (string)reader["Nombre"],
+                Tipo = (string)reader["Tipo"],
+                Estatus = (string)reader["Estatus"],
+            };
+        }
+        public async Task<bool> UpdateStatusBanco(int Id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateStatusBanco", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> SaveBanco(int Id, string Nombre, string Tipo)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveBanco", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Tipo", Tipo));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        private BancoModel MapToBanco(SqlDataReader reader)
+        {
+            return new BancoModel()
+            {
+                Id = (int)reader["Id"],
+                Nombre = (string)reader["Nombre"],
+                Tipo = (string)reader["Tipo"],
+                Estatus = (bool)reader["Estatus"],
+            };
+        }
+        public async Task<BancoModel> GetBancobyId(int Id)
+        {
+            BancoModel obj = new BancoModel();
+            List<BancoModel> list = new List<BancoModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetBancobyId", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToBanco(reader));
+                            }
+                            obj = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return obj;
+        }
+        #endregion
         #region ActionsComments
         public async Task<bool> UpdateEstatusComment(int Id)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mikrotik_Administrador.Catalogos;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,33 +22,26 @@ namespace Mikrotik_Administrador
         {
             Application.Exit();
         }
-
-        private void mikrotiksToolStripMenuItem_Click(object sender, EventArgs e)
+      
+        private void btnMikrotiks_Click(object sender, EventArgs e)
         {
             Mikrotiks m = new Mikrotiks();
             m.Show();
         }
 
-        private void migracionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void BtnComments_Click(object sender, EventArgs e)
+        {
+            Comments c = new Comments();
+            c.Show();
+        }
+
+        private void btnMigracion_Click(object sender, EventArgs e)
         {
             Migracion m = new Migracion();
             m.Show();
-            //this.Hide();
         }
 
-        private void asignacionClientesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Usuarios m = new Usuarios();
-            m.Show();
-        }
-
-        private void informacionClientesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            InfoClientes m = new InfoClientes();
-            m.Show();
-        }
-
-        private void planesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnPlanes_Click(object sender, EventArgs e)
         {
             Planes m = new Planes();
             m.PorUsuarios = false;
@@ -55,10 +49,22 @@ namespace Mikrotik_Administrador
             m.Show();
         }
 
-        private void commentsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnAsignacion_Click(object sender, EventArgs e)
         {
-            Comments c = new Comments();
-            c.Show();
+            Usuarios m = new Usuarios();
+            m.Show();
+        }
+
+        private void btnInformacion_Click(object sender, EventArgs e)
+        {
+            InfoClientes m = new InfoClientes();
+            m.Show();
+        }
+
+        private void btnBancos_Click(object sender, EventArgs e)
+        {
+            Bancos b = new Bancos();
+            b.Show();
         }
     }
 }

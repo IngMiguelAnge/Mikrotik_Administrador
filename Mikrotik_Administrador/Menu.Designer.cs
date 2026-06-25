@@ -28,112 +28,126 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.mikrotiksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.migracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.planesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.asignacionClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.informacionClientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.commentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1.SuspendLayout();
+            this.btnMikrotiks = new System.Windows.Forms.Button();
+            this.BtnComments = new System.Windows.Forms.Button();
+            this.btnMigracion = new System.Windows.Forms.Button();
+            this.btnPlanes = new System.Windows.Forms.Button();
+            this.btnAsignacion = new System.Windows.Forms.Button();
+            this.btnInformacion = new System.Windows.Forms.Button();
+            this.lblMenu = new System.Windows.Forms.Label();
+            this.btnBancos = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // btnMikrotiks
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mikrotiksToolStripMenuItem,
-            this.commentsToolStripMenuItem,
-            this.migracionToolStripMenuItem,
-            this.planesToolStripMenuItem,
-            this.clientesToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 33);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.btnMikrotiks.Location = new System.Drawing.Point(30, 72);
+            this.btnMikrotiks.Name = "btnMikrotiks";
+            this.btnMikrotiks.Size = new System.Drawing.Size(123, 61);
+            this.btnMikrotiks.TabIndex = 1;
+            this.btnMikrotiks.Text = "Mikrotiks";
+            this.btnMikrotiks.UseVisualStyleBackColor = true;
+            this.btnMikrotiks.Click += new System.EventHandler(this.btnMikrotiks_Click);
             // 
-            // mikrotiksToolStripMenuItem
+            // BtnComments
             // 
-            this.mikrotiksToolStripMenuItem.Name = "mikrotiksToolStripMenuItem";
-            this.mikrotiksToolStripMenuItem.Size = new System.Drawing.Size(101, 29);
-            this.mikrotiksToolStripMenuItem.Text = "Mikrotiks";
-            this.mikrotiksToolStripMenuItem.Click += new System.EventHandler(this.mikrotiksToolStripMenuItem_Click);
+            this.BtnComments.Location = new System.Drawing.Point(187, 72);
+            this.BtnComments.Name = "BtnComments";
+            this.BtnComments.Size = new System.Drawing.Size(124, 61);
+            this.BtnComments.TabIndex = 2;
+            this.BtnComments.Text = "Comments";
+            this.BtnComments.UseVisualStyleBackColor = true;
+            this.BtnComments.Click += new System.EventHandler(this.BtnComments_Click);
             // 
-            // migracionToolStripMenuItem
+            // btnMigracion
             // 
-            this.migracionToolStripMenuItem.Name = "migracionToolStripMenuItem";
-            this.migracionToolStripMenuItem.Size = new System.Drawing.Size(107, 29);
-            this.migracionToolStripMenuItem.Text = "Migración";
-            this.migracionToolStripMenuItem.Click += new System.EventHandler(this.migracionToolStripMenuItem_Click);
+            this.btnMigracion.Location = new System.Drawing.Point(351, 72);
+            this.btnMigracion.Name = "btnMigracion";
+            this.btnMigracion.Size = new System.Drawing.Size(121, 61);
+            this.btnMigracion.TabIndex = 3;
+            this.btnMigracion.Text = "Migración";
+            this.btnMigracion.UseVisualStyleBackColor = true;
+            this.btnMigracion.Click += new System.EventHandler(this.btnMigracion_Click);
             // 
-            // planesToolStripMenuItem
+            // btnPlanes
             // 
-            this.planesToolStripMenuItem.Name = "planesToolStripMenuItem";
-            this.planesToolStripMenuItem.Size = new System.Drawing.Size(78, 29);
-            this.planesToolStripMenuItem.Text = "Planes";
-            this.planesToolStripMenuItem.Click += new System.EventHandler(this.planesToolStripMenuItem_Click);
+            this.btnPlanes.Location = new System.Drawing.Point(497, 72);
+            this.btnPlanes.Name = "btnPlanes";
+            this.btnPlanes.Size = new System.Drawing.Size(124, 61);
+            this.btnPlanes.TabIndex = 4;
+            this.btnPlanes.Text = "Planes";
+            this.btnPlanes.UseVisualStyleBackColor = true;
+            this.btnPlanes.Click += new System.EventHandler(this.btnPlanes_Click);
             // 
-            // clientesToolStripMenuItem
+            // btnAsignacion
             // 
-            this.clientesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.asignacionClientesToolStripMenuItem,
-            this.informacionClientesToolStripMenuItem});
-            this.clientesToolStripMenuItem.Name = "clientesToolStripMenuItem";
-            this.clientesToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
-            this.clientesToolStripMenuItem.Text = "Clientes";
+            this.btnAsignacion.Location = new System.Drawing.Point(30, 156);
+            this.btnAsignacion.Name = "btnAsignacion";
+            this.btnAsignacion.Size = new System.Drawing.Size(123, 62);
+            this.btnAsignacion.TabIndex = 5;
+            this.btnAsignacion.Text = "Asignaciones";
+            this.btnAsignacion.UseVisualStyleBackColor = true;
+            this.btnAsignacion.Click += new System.EventHandler(this.btnAsignacion_Click);
             // 
-            // asignacionClientesToolStripMenuItem
+            // btnInformacion
             // 
-            this.asignacionClientesToolStripMenuItem.Name = "asignacionClientesToolStripMenuItem";
-            this.asignacionClientesToolStripMenuItem.Size = new System.Drawing.Size(301, 34);
-            this.asignacionClientesToolStripMenuItem.Text = "Asignación de Clientes";
-            this.asignacionClientesToolStripMenuItem.Click += new System.EventHandler(this.asignacionClientesToolStripMenuItem_Click);
+            this.btnInformacion.Location = new System.Drawing.Point(187, 156);
+            this.btnInformacion.Name = "btnInformacion";
+            this.btnInformacion.Size = new System.Drawing.Size(124, 62);
+            this.btnInformacion.TabIndex = 6;
+            this.btnInformacion.Text = "Información";
+            this.btnInformacion.UseVisualStyleBackColor = true;
+            this.btnInformacion.Click += new System.EventHandler(this.btnInformacion_Click);
             // 
-            // informacionClientesToolStripMenuItem
+            // lblMenu
             // 
-            this.informacionClientesToolStripMenuItem.Name = "informacionClientesToolStripMenuItem";
-            this.informacionClientesToolStripMenuItem.Size = new System.Drawing.Size(301, 34);
-            this.informacionClientesToolStripMenuItem.Text = "Información de Clientes";
-            this.informacionClientesToolStripMenuItem.Click += new System.EventHandler(this.informacionClientesToolStripMenuItem_Click);
+            this.lblMenu.AutoSize = true;
+            this.lblMenu.Location = new System.Drawing.Point(313, 34);
+            this.lblMenu.Name = "lblMenu";
+            this.lblMenu.Size = new System.Drawing.Size(56, 20);
+            this.lblMenu.TabIndex = 7;
+            this.lblMenu.Text = "MENU";
             // 
-            // commentsToolStripMenuItem
+            // btnBancos
             // 
-            this.commentsToolStripMenuItem.Name = "commentsToolStripMenuItem";
-            this.commentsToolStripMenuItem.Size = new System.Drawing.Size(115, 29);
-            this.commentsToolStripMenuItem.Text = "Comments";
-            this.commentsToolStripMenuItem.Click += new System.EventHandler(this.commentsToolStripMenuItem_Click);
+            this.btnBancos.Location = new System.Drawing.Point(351, 156);
+            this.btnBancos.Name = "btnBancos";
+            this.btnBancos.Size = new System.Drawing.Size(121, 62);
+            this.btnBancos.TabIndex = 8;
+            this.btnBancos.Text = "Bancos";
+            this.btnBancos.UseVisualStyleBackColor = true;
+            this.btnBancos.Click += new System.EventHandler(this.btnBancos_Click);
             // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.ClientSize = new System.Drawing.Size(667, 450);
+            this.Controls.Add(this.btnBancos);
+            this.Controls.Add(this.lblMenu);
+            this.Controls.Add(this.btnInformacion);
+            this.Controls.Add(this.btnAsignacion);
+            this.Controls.Add(this.btnPlanes);
+            this.Controls.Add(this.btnMigracion);
+            this.Controls.Add(this.BtnComments);
+            this.Controls.Add(this.btnMikrotiks);
             this.MaximizeBox = false;
             this.Name = "Menu";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Menu";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Menu_FormClosed);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem mikrotiksToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem migracionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem asignacionClientesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem informacionClientesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem planesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem commentsToolStripMenuItem;
+        private System.Windows.Forms.Button btnMikrotiks;
+        private System.Windows.Forms.Button BtnComments;
+        private System.Windows.Forms.Button btnMigracion;
+        private System.Windows.Forms.Button btnPlanes;
+        private System.Windows.Forms.Button btnAsignacion;
+        private System.Windows.Forms.Button btnInformacion;
+        private System.Windows.Forms.Label lblMenu;
+        private System.Windows.Forms.Button btnBancos;
     }
 }
