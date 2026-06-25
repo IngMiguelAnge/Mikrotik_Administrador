@@ -99,8 +99,8 @@
             this.Controls.Add(this.btnPlan);
             this.Controls.Add(this.cbTodos);
             this.Name = "ServiciosCliente";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ServiciosCliente";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.ServiciosCliente_Load);
             this.groupBox1.ResumeLayout(false);

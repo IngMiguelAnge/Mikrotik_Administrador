@@ -83,8 +83,16 @@ namespace Mikrotik_Administrador
 
                 if (lista != null && lista.Count > 0)
                 {
-                    DGVClientes.DataSource = lista;
+                    DGVClientes.DataSource = lista.OrderBy(x=>x.Nombre).ToList();
                     AgregarBotones();
+                    if (DGVClientes.Columns["Id"] != null)
+                    {
+                        DGVClientes.Columns["Id"].Visible = false;
+                    }
+                    if (DGVClientes.Columns["Nombre"] != null)
+                    {
+                        DGVClientes.Columns["Nombre"].Width = 300;
+                    }
                     MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else

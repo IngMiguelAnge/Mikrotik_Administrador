@@ -61,6 +61,22 @@ namespace Mikrotik_Administrador
                     }
                     AgregarBotones();
                     dgvUsuarios.Refresh();
+                    if (dgvUsuarios.Columns["Id"] != null)
+                    {
+                        dgvUsuarios.Columns["Id"].Visible = false;
+                    }
+                    if (dgvUsuarios.Columns["IdPlan"] != null)
+                    {
+                        dgvUsuarios.Columns["IdPlan"].Visible = false;
+                    }
+                    if (dgvUsuarios.Columns["IdMikrotik"] != null)
+                    {
+                        dgvUsuarios.Columns["IdMikrotik"].Visible = false;
+                    }
+                    if (dgvUsuarios.Columns["IdCliente"] != null)
+                    {
+                        dgvUsuarios.Columns["IdCliente"].Visible = false;
+                    }
                     MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else

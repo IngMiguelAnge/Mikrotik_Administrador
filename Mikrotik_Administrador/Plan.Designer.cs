@@ -46,6 +46,7 @@
             this.lblMensajeplan = new System.Windows.Forms.Label();
             this.lblCantidadenPlan = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.CBSinCosto = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.NUDPrecio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDSubida)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDDescarga)).BeginInit();
@@ -106,14 +107,26 @@
             0,
             0,
             0});
+            this.NUDSubida.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.NUDSubida.Name = "NUDSubida";
             this.NUDSubida.Size = new System.Drawing.Size(120, 26);
             this.NUDSubida.TabIndex = 5;
+            this.NUDSubida.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // cbSubida
             // 
+            this.cbSubida.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSubida.FormattingEnabled = true;
             this.cbSubida.Items.AddRange(new object[] {
+            "Seleccione",
             "M",
             "k"});
             this.cbSubida.Location = new System.Drawing.Point(366, 132);
@@ -138,14 +151,26 @@
             0,
             0,
             0});
+            this.NUDDescarga.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.NUDDescarga.Name = "NUDDescarga";
             this.NUDDescarga.Size = new System.Drawing.Size(120, 26);
             this.NUDDescarga.TabIndex = 8;
+            this.NUDDescarga.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // CBDescarga
             // 
+            this.CBDescarga.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CBDescarga.FormattingEnabled = true;
             this.CBDescarga.Items.AddRange(new object[] {
+            "Seleccione",
             "M",
             "k"});
             this.CBDescarga.Location = new System.Drawing.Point(366, 187);
@@ -174,8 +199,10 @@
             // 
             // CBPerteneceA
             // 
+            this.CBPerteneceA.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CBPerteneceA.FormattingEnabled = true;
             this.CBPerteneceA.Items.AddRange(new object[] {
+            "Seleccione",
             "Antena",
             "Fibra"});
             this.CBPerteneceA.Location = new System.Drawing.Point(191, 243);
@@ -194,7 +221,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(343, 86);
+            this.progressBar1.Location = new System.Drawing.Point(420, 33);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(133, 23);
             this.progressBar1.TabIndex = 14;
@@ -226,11 +253,23 @@
             this.label1.TabIndex = 17;
             this.label1.Text = "y que tengan el plan permitido";
             // 
+            // CBSinCosto
+            // 
+            this.CBSinCosto.AutoSize = true;
+            this.CBSinCosto.Location = new System.Drawing.Point(333, 84);
+            this.CBSinCosto.Name = "CBSinCosto";
+            this.CBSinCosto.Size = new System.Drawing.Size(137, 24);
+            this.CBSinCosto.TabIndex = 18;
+            this.CBSinCosto.Text = "No tiene costo";
+            this.CBSinCosto.UseVisualStyleBackColor = true;
+            this.CBSinCosto.CheckedChanged += new System.EventHandler(this.CBSinCosto_CheckedChanged);
+            // 
             // Plan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(565, 437);
+            this.Controls.Add(this.CBSinCosto);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblCantidadenPlan);
             this.Controls.Add(this.lblMensajeplan);
@@ -282,5 +321,6 @@
         private System.Windows.Forms.Label lblMensajeplan;
         private System.Windows.Forms.Label lblCantidadenPlan;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox CBSinCosto;
     }
 }

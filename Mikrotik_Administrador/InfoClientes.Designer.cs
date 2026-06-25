@@ -141,8 +141,8 @@
             this.Controls.Add(this.lblMensaje);
             this.MaximizeBox = false;
             this.Name = "InfoClientes";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "InfoClientes";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.InfoClientes_Load);
             this.groupBox1.ResumeLayout(false);

@@ -36,6 +36,9 @@ namespace Mikrotik_Administrador
                 this.Close();
                 return;
             }
+            cbSubida.SelectedIndex = 0;
+            CBDescarga.SelectedIndex = 0;
+            CBPerteneceA.SelectedIndex = 0;
             if (Id != 0)
             {
                 var conteo = await obj.GetCountUsuariosByPlan(Id);
@@ -49,6 +52,8 @@ namespace Mikrotik_Administrador
                 var Plan = obj.GetPlanById(Id).Result;
                 txtNombre.Text = Plan.Nombre;
                 NUDPrecio.Text = Convert.ToString(Plan.Precio);
+                if (NUDPrecio.Value <= 0 && txtNombre.Text != string.Empty)
+                    CBSinCosto.Checked = true;
                 string[] Velocidad = Plan.Velocidad.Split('/');
                 // Primera parte (ej. 12M)
                 string num1 = Regex.Match(Velocidad[0], @"\d+").Value;
@@ -74,14 +79,18 @@ namespace Mikrotik_Administrador
 
         private async void BtnGuardar_Click(object sender, EventArgs e)
         {
-            if (txtNombre.Text.Trim() == string.Empty || Convert.ToString(CBPerteneceA.SelectedItem) == string.Empty ||
-                Convert.ToString(cbSubida.SelectedItem) == string.Empty ||
-                Convert.ToString(CBDescarga.SelectedItem) == string.Empty)
+            if (txtNombre.Text.Trim() == string.Empty || CBPerteneceA.SelectedIndex == 0 ||
+                cbSubida.SelectedIndex == 0 ||
+                CBDescarga.SelectedIndex == 0)
             {
                 MessageBox.Show("Datos incompletos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+            if(CBSinCosto.Checked == false && NUDPrecio.Value <= 0)
+            {
+                MessageBox.Show("Se requiere un costo para el plan", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             // 1. Convertimos la subida a una unidad base (kB)
             double totalSubida = (double)NUDSubida.Value;
             if (Convert.ToString(cbSubida.SelectedItem) == "M")
@@ -236,5 +245,28 @@ namespace Mikrotik_Administrador
             progressBar1.Value = 100;
             return MensajeError;
         }
+
+        private void CBSinCosto_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CBSinCosto.Checked)
+            {
+                NUDDescarga.Value = 1;
+                NUDSubida.Value = 1;
+                NUDDescarga.Enabled = false;
+                NUDSubida.Enabled = false;      
+                cbSubida.Enabled = false;
+                cbSubida.SelectedIndex = 2;
+                CBDescarga.Enabled = false;
+                CBDescarga.SelectedIndex = 2;
+            }
+            else
+            {
+                NUDDescarga.Enabled = true;
+                NUDSubida.Enabled = true;
+                cbSubida.Enabled=true;
+                CBDescarga.Enabled = true;
+            }
+        }
+
     }
 }

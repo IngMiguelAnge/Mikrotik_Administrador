@@ -41,6 +41,22 @@ namespace Mikrotik_Administrador
                 {
                     DGVServicios.DataSource = lista;
                     AgregarBotones();
+                    if (DGVServicios.Columns["Id"] != null)
+                    {
+                        DGVServicios.Columns["Id"].Visible = false;
+                    }
+                    if (DGVServicios.Columns["IdPlan"] != null)
+                    {
+                        DGVServicios.Columns["IdPlan"].Visible = false;
+                    }
+                    if (DGVServicios.Columns["IdMikrotik"] != null)
+                    {
+                        DGVServicios.Columns["IdMikrotik"].Visible = false;
+                    }
+                    if (DGVServicios.Columns["IdCliente"] != null)
+                    {
+                        DGVServicios.Columns["IdCliente"].Visible = false;
+                    }
                     MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -76,13 +92,19 @@ namespace Mikrotik_Administrador
             btnUbicacion.UseColumnTextForButtonValue = true;
             DGVServicios.Columns.Add(btnUbicacion);
 
-            // Botón Checket
             DataGridViewButtonColumn BtnEstatus = new DataGridViewButtonColumn();
             BtnEstatus.Name = "btnEstatus";
             BtnEstatus.HeaderText = "Acción";
             BtnEstatus.Text = "Cambio Estatus";
             BtnEstatus.UseColumnTextForButtonValue = true;
             DGVServicios.Columns.Add(BtnEstatus);
+
+            DataGridViewButtonColumn BtnPagos = new DataGridViewButtonColumn();
+            BtnPagos.Name = "btnPagos";
+            BtnPagos.HeaderText = "Acción";
+            BtnPagos.Text = "Pagos";
+            BtnPagos.UseColumnTextForButtonValue = true;
+            DGVServicios.Columns.Add(BtnPagos);
         }
         private void cbTodos_CheckedChanged(object sender, EventArgs e)
         {
@@ -101,21 +123,31 @@ namespace Mikrotik_Administrador
         {
             // Evitar errores si hacen click en el encabezado
             if (e.RowIndex < 0) return;
-            var Id = DGVServicios.Rows[e.RowIndex].Cells["Id"].Value;
+            int Id = (int)DGVServicios.Rows[e.RowIndex].Cells["Id"].Value;
 
             switch (DGVServicios.Columns[e.ColumnIndex].Name)
             {
+                case "btnPagos":
+                    int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
+                    string Plan = (string)DGVServicios.Rows[e.RowIndex].Cells["Plan"].Value;
+
+                    if (Plan.Trim() == string.Empty)
+                    {
+                        MessageBox.Show("Se requiere un plan asignado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    break;
                 case "btnUbicacion":
                     var IdMikrotik = DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
 
                     Ubicacion u = new Ubicacion();
-                    u.IdUsuario = Convert.ToInt32(Id);
+                    u.IdUsuario = Id;
                     u.IdMikrotik = Convert.ToInt32(IdMikrotik);
                     u.Show();
                     break;
                 case "btnEstatus":
                     ListUsuariosGeneralModel objUsuario = new ListUsuariosGeneralModel();
-                    objUsuario.Id = Convert.ToInt32(Id);
+                    objUsuario.Id = Id;
                     objUsuario.IdMikrotik = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
                     objUsuario.IdInterno = (string)DGVServicios.Rows[e.RowIndex].Cells["IdInterno"].Value;
                     objUsuario.Usuario = (string)DGVServicios.Rows[e.RowIndex].Cells["Usuario"].Value;
