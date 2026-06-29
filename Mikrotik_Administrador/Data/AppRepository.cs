@@ -19,6 +19,33 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region Pagos
+        public async Task<bool> SaveMensualidad(MensualidadModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveMensualidad", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@FechaLimite", obj.FechaLimite));
+                        cmd.Parameters.Add(new SqlParameter("@Pagado", obj.Pagado));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
+                        cmd.Parameters.Add(new SqlParameter("@PlanCerrado", obj.PlanCerrado));
+                        cmd.Parameters.Add(new SqlParameter("@CantidadCerrada", obj.CantidadCerrada));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<List<UsuariosandPlanesModel>> GetUsuariosandPlanes(string Cliente, string Usuario, int IdPlan, int IdMikrotik)
         {
             List<UsuariosandPlanesModel> list = new List<UsuariosandPlanesModel>();
@@ -55,12 +82,16 @@ namespace Mikrotik_Administrador.Data
             return new UsuariosandPlanesModel()
             {
                 Cliente = (string)reader["Cliente"],
+                IdUser = (int)reader["IdUser"],
                 Usuario = (string)reader["Usuario"],
+                IdPlan = (int)reader["IdPlan"],
                 Plan = (string)reader["Plan"],
                 Precio = (decimal)reader["Precio"],
                 Velocidad = (string)reader["Velocidad"],
                 EstatusServicio = (string)reader["EstatusServicio"],
                 Mikrotik = (string)reader["Mikrotik"],
+                IdMes = (int)reader["IdMes"],
+                FechaLimite = (string)reader["FechaLimite"]
             };
         }
         #endregion

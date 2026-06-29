@@ -271,6 +271,7 @@
     <Compile Include="Model\ListCommentsModel.cs" />
     <Compile Include="Model\ListPlanesModel.cs" />
     <Compile Include="Model\ListUsuariosByPlanModel.cs" />
+    <Compile Include="Model\MensualidadModel.cs" />
     <Compile Include="Model\PlanAnidadoModel.cs" />
     <Compile Include="Model\PlanesAnidadosModel.cs" />
     <Compile Include="Model\PlanesModel.cs" />

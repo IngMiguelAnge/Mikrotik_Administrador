@@ -12,9 +12,16 @@ namespace Mikrotik_Administrador.Items
 {
     public partial class IniciarPagos : Form
     {
+        public DateTime FechaInicio = DateTime.Now;
         public IniciarPagos()
         {
             InitializeComponent();
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            FechaInicio = dtpFecha.Value;
+            this.Close();
         }
     }
 }

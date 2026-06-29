@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Data;
+﻿using Microsoft.VisualBasic;
+using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using System;
@@ -50,7 +51,11 @@ namespace Mikrotik_Administrador.Catalogos
             }
         }
 
-        private async void btnBuscar_Click(object sender, EventArgs e)
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {       
+            Buscar();
+        }
+        public async void Buscar()
         {
             CrearGridView();
             AppRepository obj = new AppRepository();
@@ -58,8 +63,8 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 int IdPlan = CBPlan.SelectedIndex <= 0 ? 0 : (int)CBPlan.SelectedValue;
                 int IdMikrotik = CBMikrotik.SelectedIndex <= 0 ? 0 : (int)CBMikrotik.SelectedValue;
-                var Tickets = await obj.GetUsuariosandPlanes(txtCliente.Text.Trim(), txtUsuario.Text.Trim(), IdPlan, IdMikrotik);
-                var listaFinal = Tickets?.ToList() ?? new List<UsuariosandPlanesModel>();
+                var Servicios = await obj.GetUsuariosandPlanes(txtCliente.Text.Trim(), txtUsuario.Text.Trim(), IdPlan, IdMikrotik);
+                var listaFinal = Servicios?.ToList() ?? new List<UsuariosandPlanesModel>();
                 dgvClientes.DataSource = new BindingList<UsuariosandPlanesModel>(listaFinal);
             }
             catch (Exception ex)
@@ -81,10 +86,28 @@ namespace Mikrotik_Administrador.Catalogos
             });
             dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
+                Name = "IdUser",
+                HeaderText = "IdUser",
+                DataPropertyName = "IdUser",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 Name = "Usuario",
                 HeaderText = "Usuario",
                 DataPropertyName = "Usuario",
                 ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdPlan",
+                HeaderText = "IdPlan",
+                DataPropertyName = "IdPlan",
+                ReadOnly = true,
+                Visible = false,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
             });
             dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
@@ -108,6 +131,23 @@ namespace Mikrotik_Administrador.Catalogos
                 Name = "Velocidad",
                 HeaderText = "Velocidad",
                 DataPropertyName = "Velocidad",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdMes",
+                HeaderText = "IdMes",
+                DataPropertyName = "IdMes",
+                Visible = false,
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "FechaLimite",
+                HeaderText = "Fecha Limite",
+                DataPropertyName = "FechaLimite",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
             });
@@ -176,13 +216,41 @@ namespace Mikrotik_Administrador.Catalogos
             if (e.RowIndex < 0) return;
             try
             {
+                int IdMes = (int)dgvClientes.Rows[e.RowIndex].Cells["IdMes"].Value;
+                int IdPlan = (int)dgvClientes.Rows[e.RowIndex].Cells["IdPlan"].Value;
+                int IdUser = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
                 dgvClientes.Enabled = false;
-
+                AppRepository r = new AppRepository();
                 switch (dgvClientes.Columns[e.ColumnIndex].Name)
                 {
                     case "Iniciar":
+                        if(IdMes != 0)
+                        {
+                            MessageBox.Show("Este servicio ya tiene una fecha limite para el pago", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                         IniciarPagos ini = new IniciarPagos();
                         ini.ShowDialog();
+                        MensualidadModel model = new MensualidadModel
+                        {
+                            Id = 0,
+                            FechaLimite = ini.FechaInicio,
+                            Pagado = false,
+                            IdPlan = IdPlan,
+                            PlanCerrado = string.Empty,
+                            CantidadCerrada = 0,
+                            IdUsuarioM = IdUser
+                        };
+                        AppRepository obj = new AppRepository();
+                        bool result = obj.SaveMensualidad(model).Result;
+                        if(result)
+                        {
+                            MessageBox.Show("Guardado correctamente.", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Buscar();
+                        }
+                        else
+                            MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                         break;
                     case "Pagar":
                         Pagar Pa = new Pagar();
