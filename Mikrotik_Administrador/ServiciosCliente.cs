@@ -99,12 +99,6 @@ namespace Mikrotik_Administrador
             BtnEstatus.UseColumnTextForButtonValue = true;
             DGVServicios.Columns.Add(BtnEstatus);
 
-            DataGridViewButtonColumn BtnPagos = new DataGridViewButtonColumn();
-            BtnPagos.Name = "btnPagos";
-            BtnPagos.HeaderText = "Acción";
-            BtnPagos.Text = "Pagos";
-            BtnPagos.UseColumnTextForButtonValue = true;
-            DGVServicios.Columns.Add(BtnPagos);
         }
         private void cbTodos_CheckedChanged(object sender, EventArgs e)
         {
@@ -127,16 +121,6 @@ namespace Mikrotik_Administrador
 
             switch (DGVServicios.Columns[e.ColumnIndex].Name)
             {
-                case "btnPagos":
-                    int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
-                    string Plan = (string)DGVServicios.Rows[e.RowIndex].Cells["Plan"].Value;
-
-                    if (Plan.Trim() == string.Empty)
-                    {
-                        MessageBox.Show("Se requiere un plan asignado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    break;
                 case "btnUbicacion":
                     var IdMikrotik = DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
 
@@ -256,7 +240,7 @@ namespace Mikrotik_Administrador
                 {
                     if (item.tipo != primerTipo)
                     {
-                        MessageBox.Show("No se pueden asignar planes a usuarios que no sean " + primerTipo + "," +
+                        MessageBox.Show("No se pueden asignar este plan a usuarios que no sean " + primerTipo + "," +
                             "por favor seleccione usuarios del mismo tipo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }

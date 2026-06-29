@@ -36,6 +36,7 @@
             this.btnInformacion = new System.Windows.Forms.Button();
             this.lblMenu = new System.Windows.Forms.Label();
             this.btnBancos = new System.Windows.Forms.Button();
+            this.btnPagos = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnMikrotiks
@@ -117,11 +118,22 @@
             this.btnBancos.UseVisualStyleBackColor = true;
             this.btnBancos.Click += new System.EventHandler(this.btnBancos_Click);
             // 
+            // btnPagos
+            // 
+            this.btnPagos.Location = new System.Drawing.Point(500, 156);
+            this.btnPagos.Name = "btnPagos";
+            this.btnPagos.Size = new System.Drawing.Size(121, 62);
+            this.btnPagos.TabIndex = 9;
+            this.btnPagos.Text = "Pagos";
+            this.btnPagos.UseVisualStyleBackColor = true;
+            this.btnPagos.Click += new System.EventHandler(this.btnPagos_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(667, 450);
+            this.Controls.Add(this.btnPagos);
             this.Controls.Add(this.btnBancos);
             this.Controls.Add(this.lblMenu);
             this.Controls.Add(this.btnInformacion);
@@ -149,5 +161,6 @@
         private System.Windows.Forms.Button btnInformacion;
         private System.Windows.Forms.Label lblMenu;
         private System.Windows.Forms.Button btnBancos;
+        private System.Windows.Forms.Button btnPagos;
     }
 }

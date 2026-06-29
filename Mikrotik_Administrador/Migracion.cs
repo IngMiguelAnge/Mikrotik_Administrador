@@ -252,7 +252,6 @@ namespace Mikrotik_Administrador
                     objuser.IdMikrotik = IdMikrotik;
                     objuser.Nombre = item.comment;
                     objuser.Address = item.address;
-                    objuser.Antena = cbAntenas.Checked;
                     objuser.IdInterno = item.id;
                     objuser.Estatus = item.estatus;
                     objuser.Id = 0;

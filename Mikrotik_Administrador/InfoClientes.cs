@@ -57,19 +57,6 @@ namespace Mikrotik_Administrador
 
         public void CargarClientes()
         {
-            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
-            {
-                MessageBox.Show("Por favor, selecciona un Mikrotik.");
-                return;
-            }
-            if (txtCliente.Text.Trim() == "")
-            {
-                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los clientes pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (resultado == DialogResult.No)
-                {
-                    return;
-                }
-            }
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false;
@@ -114,6 +101,19 @@ namespace Mikrotik_Administrador
         }
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
+            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
+            {
+                MessageBox.Show("Por favor, selecciona un Mikrotik.");
+                return;
+            }
+            if (txtCliente.Text.Trim() == "")
+            {
+                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los clientes pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (resultado == DialogResult.No)
+                {
+                    return;
+                }
+            }
             CargarClientes();
         }
 

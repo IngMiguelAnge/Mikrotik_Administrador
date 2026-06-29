@@ -59,7 +59,7 @@
             // 
             // BtnBuscar
             // 
-            this.BtnBuscar.Location = new System.Drawing.Point(339, 102);
+            this.BtnBuscar.Location = new System.Drawing.Point(335, 95);
             this.BtnBuscar.Name = "BtnBuscar";
             this.BtnBuscar.Size = new System.Drawing.Size(89, 39);
             this.BtnBuscar.TabIndex = 30;
@@ -70,7 +70,7 @@
             // CBTodosMikrotiks
             // 
             this.CBTodosMikrotiks.AutoSize = true;
-            this.CBTodosMikrotiks.Location = new System.Drawing.Point(373, 18);
+            this.CBTodosMikrotiks.Location = new System.Drawing.Point(286, 44);
             this.CBTodosMikrotiks.Name = "CBTodosMikrotiks";
             this.CBTodosMikrotiks.Size = new System.Drawing.Size(259, 24);
             this.CBTodosMikrotiks.TabIndex = 25;
@@ -88,7 +88,7 @@
             // CBMikrotiks
             // 
             this.CBMikrotiks.FormattingEnabled = true;
-            this.CBMikrotiks.Location = new System.Drawing.Point(159, 21);
+            this.CBMikrotiks.Location = new System.Drawing.Point(21, 44);
             this.CBMikrotiks.Name = "CBMikrotiks";
             this.CBMikrotiks.Size = new System.Drawing.Size(191, 28);
             this.CBMikrotiks.TabIndex = 24;

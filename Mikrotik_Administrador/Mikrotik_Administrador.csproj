@@ -226,6 +226,12 @@
     <Compile Include="Catalogos\Bancos.Designer.cs">
       <DependentUpon>Bancos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\Pagos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\Pagos.Designer.cs">
+      <DependentUpon>Pagos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Class\Address.cs" />
     <Compile Include="Class\Antenas.cs" />
     <Compile Include="Class\Fibra.cs" />
@@ -235,6 +241,24 @@
     </Compile>
     <Compile Include="Comments.Designer.cs">
       <DependentUpon>Comments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Items\IniciarPagos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\IniciarPagos.Designer.cs">
+      <DependentUpon>IniciarPagos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Items\Pagar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\Pagar.Designer.cs">
+      <DependentUpon>Pagar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Items\Prorroga.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\Prorroga.Designer.cs">
+      <DependentUpon>Prorroga.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu.cs">
       <SubType>Form</SubType>
@@ -249,7 +273,9 @@
     <Compile Include="Model\ListUsuariosByPlanModel.cs" />
     <Compile Include="Model\PlanAnidadoModel.cs" />
     <Compile Include="Model\PlanesAnidadosModel.cs" />
+    <Compile Include="Model\PlanesModel.cs" />
     <Compile Include="Model\PlanModel.cs" />
+    <Compile Include="Model\UsuariosandPlanesModel.cs" />
     <Compile Include="Plan.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -345,8 +371,20 @@
     <EmbeddedResource Include="Catalogos\Bancos.resx">
       <DependentUpon>Bancos.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\Pagos.resx">
+      <DependentUpon>Pagos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Comments.resx">
       <DependentUpon>Comments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\IniciarPagos.resx">
+      <DependentUpon>IniciarPagos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\Pagar.resx">
+      <DependentUpon>Pagar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\Prorroga.resx">
+      <DependentUpon>Prorroga.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>

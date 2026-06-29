@@ -108,7 +108,7 @@ namespace Mikrotik_Administrador
             // 3. Ahora sí, comparamos "manzanas con manzanas"
             if (totaldescarga < totalSubida)
             {
-                MessageBox.Show("La descarga no puede ser inferior a la subiuda", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("La descarga no puede ser inferior a la subida", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             AppRepository obj = new AppRepository();
@@ -151,7 +151,7 @@ namespace Mikrotik_Administrador
                 }
                 else
                 {
-                    MessageBox.Show(Mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Se guardo el plan en base pero, " + Mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
             }
@@ -230,7 +230,7 @@ namespace Mikrotik_Administrador
                 }
                 catch (Exception ex)
                 {
-                    MensajeError += "Mikrotik: " + Fila.Nombre + " " + ex.Message;
+                    MensajeError += " Mikrotik: " + Fila.Nombre + " dio error " + ex.Message;
                 }
                 finally
                 {
@@ -258,6 +258,7 @@ namespace Mikrotik_Administrador
                 cbSubida.SelectedIndex = 2;
                 CBDescarga.Enabled = false;
                 CBDescarga.SelectedIndex = 2;
+                NUDPrecio.Value = 0M;
             }
             else
             {

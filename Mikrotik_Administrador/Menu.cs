@@ -66,5 +66,11 @@ namespace Mikrotik_Administrador
             Bancos b = new Bancos();
             b.Show();
         }
+
+        private void btnPagos_Click(object sender, EventArgs e)
+        {
+            Pagos pagos = new Pagos();
+            pagos.Show();
+        }
     }
 }

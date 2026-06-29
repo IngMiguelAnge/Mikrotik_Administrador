@@ -499,7 +499,7 @@ namespace Mikrotik_Administrador
                 {
                     if (item.tipo != primerTipo)
                     {
-                        MessageBox.Show("No se pueden asignar planes a usuarios que no sean " + primerTipo + "," +
+                        MessageBox.Show("No se pueden asignar este plan a usuarios que no sean " + primerTipo + "," +
                             "por favor seleccione usuarios del mismo tipo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }

@@ -98,7 +98,7 @@
             // 
             // BtnBuscar
             // 
-            this.BtnBuscar.Location = new System.Drawing.Point(340, 197);
+            this.BtnBuscar.Location = new System.Drawing.Point(325, 206);
             this.BtnBuscar.Name = "BtnBuscar";
             this.BtnBuscar.Size = new System.Drawing.Size(105, 33);
             this.BtnBuscar.TabIndex = 5;
@@ -121,7 +121,7 @@
             "Satélite",
             "Híbrido",
             "OpenStreet"});
-            this.cmbMapas.Location = new System.Drawing.Point(789, 146);
+            this.cmbMapas.Location = new System.Drawing.Point(789, 163);
             this.cmbMapas.Name = "cmbMapas";
             this.cmbMapas.Size = new System.Drawing.Size(177, 28);
             this.cmbMapas.TabIndex = 12;
@@ -183,7 +183,7 @@
             // lblVista
             // 
             this.lblVista.AutoSize = true;
-            this.lblVista.Location = new System.Drawing.Point(757, 123);
+            this.lblVista.Location = new System.Drawing.Point(757, 136);
             this.lblVista.Name = "lblVista";
             this.lblVista.Size = new System.Drawing.Size(209, 20);
             this.lblVista.TabIndex = 11;
@@ -298,8 +298,8 @@
             this.Controls.Add(this.txtLatitud);
             this.MinimizeBox = false;
             this.Name = "Ubicacion";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Ubicacion";
             this.Load += new System.EventHandler(this.Ubicacion_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
