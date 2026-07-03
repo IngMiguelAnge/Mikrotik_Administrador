@@ -18,7 +18,129 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region Pagina
+        public async Task<List<ListConfigImpressionsModel>> GetConfigImpressions(string Tipo)
+        {
+            List<ListConfigImpressionsModel> list = new List<ListConfigImpressionsModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetConfigImpressions", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Tipo", Tipo));
+
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToConfigImpressions(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListConfigImpressionsModel MapToConfigImpressions(SqlDataReader reader)
+        {
+            return new ListConfigImpressionsModel()
+            {
+                Name = (string)reader["Name"],
+                FontSize = (int)reader["FontSize"],
+                FontStyle = (string)reader["FontStyle"],
+                FontColor = (string)reader["FontColor"],
+            };
+        }
+        public async Task<ConfigPageModel> GetConfigPage()
+        {
+            ConfigPageModel Result = new ConfigPageModel();
+            List<ConfigPageModel> list = new List<ConfigPageModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetConfigPage", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToConfigPage(reader));
+                            }
+                            Result = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Result = null;
+            }
+            return Result;
+        }
+        private ConfigPageModel MapToConfigPage(SqlDataReader reader)
+        {
+            return new ConfigPageModel()
+            {
+                Page = (string)reader["Page"],
+                Spacing = 0,
+                Align = string.Empty,
+                Width = 0,
+                HightLine = 0,
+                ColorLine = string.Empty,
+                WidthPage = (decimal)reader["WidthPage"],
+                HightPage = (decimal)reader["HightPage"],
+            };
+        }
+        #endregion
         #region Pagos
+        public async Task<List<ListDetallesMensualidadModel>> GetDetallesMensualidad(int IdUsuarioM)
+        {
+            List<ListDetallesMensualidadModel> list = new List<ListDetallesMensualidadModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetDetallesMensualidad", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListDetallesMensualidad(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+        private ListDetallesMensualidadModel MapToListDetallesMensualidad(SqlDataReader reader)
+        {
+            return new ListDetallesMensualidadModel()
+            {
+                Descripcion = (string)reader["Descripcion"],
+                Cantidad = (decimal)reader["Cantidad"],
+                Estatus = (string)reader["Estatus"],
+                FechaOrden = (DateTime)reader["FechaOrden"],
+                OrdenVisual = (int)reader["OrdenVisual"],
+            };
+        }
         public async Task<bool> SaveMensualidad(MensualidadModel obj)
         {
             try
@@ -96,6 +218,33 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region Bancos
+        public async Task<List<ListBancosModel>> GetBancosActivos()
+        {
+            List<ListBancosModel> list = new List<ListBancosModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetBancosActivos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListBancos(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
         public async Task<List<ListBancosModel>> GetBancos(string Nombre, string Tipo)
         {
             List<ListBancosModel> list = new List<ListBancosModel>();

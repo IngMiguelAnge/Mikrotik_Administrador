@@ -219,6 +219,7 @@ namespace Mikrotik_Administrador.Catalogos
                 int IdMes = (int)dgvClientes.Rows[e.RowIndex].Cells["IdMes"].Value;
                 int IdPlan = (int)dgvClientes.Rows[e.RowIndex].Cells["IdPlan"].Value;
                 int IdUser = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
+                string Cliente = (string)dgvClientes.Rows[e.RowIndex].Cells["Cliente"].Value;
                 dgvClientes.Enabled = false;
                 AppRepository r = new AppRepository();
                 switch (dgvClientes.Columns[e.ColumnIndex].Name)
@@ -226,7 +227,7 @@ namespace Mikrotik_Administrador.Catalogos
                     case "Iniciar":
                         if(IdMes != 0)
                         {
-                            MessageBox.Show("Este servicio ya tiene una fecha limite para el pago", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Este servicio ya tiene una fecha limite", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                         IniciarPagos ini = new IniciarPagos();
@@ -253,7 +254,14 @@ namespace Mikrotik_Administrador.Catalogos
 
                         break;
                     case "Pagar":
+                        if (IdMes == 0)
+                        {
+                            MessageBox.Show("Este servicio no cuenta con una fecha limite", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                         Pagar Pa = new Pagar();
+                        Pa.IdUsuarioM = IdUser;
+                        Pa.Cliente = Cliente;
                         Pa.ShowDialog();
                         break;
                     case "Prorroga":
