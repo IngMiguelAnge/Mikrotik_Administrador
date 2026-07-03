@@ -198,7 +198,7 @@ namespace Mikrotik_Administrador.Class
                                 totalCol.Item().PaddingTop(2).AlignRight().Text($"RECIBIDO: {venta.Recibido:C2}").Style(EstiloTotal);
                                 totalCol.Item().AlignRight().Text($"TOTAL: {venta.Total:C2}").Style(EstiloTotal);
 
-                                decimal cambio = venta.Recibido - venta.Total <0 ? 0 : venta.Recibido - venta.Total;
+                                decimal cambio = venta.Recibido - venta.Total < 0 ? 0 : venta.Recibido - venta.Total;
                                 totalCol.Item().AlignRight().Text($"CAMBIO: {cambio:C2}").Style(EstiloTotal);
 
                                 totalCol.Item().PaddingTop(8).AlignCenter().Text("¡Gracias por su compra!").Style(EstiloTabla);

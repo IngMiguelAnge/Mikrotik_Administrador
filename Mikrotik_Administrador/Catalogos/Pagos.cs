@@ -231,7 +231,9 @@ namespace Mikrotik_Administrador.Catalogos
                             return;
                         }
                         IniciarPagos ini = new IniciarPagos();
+
                         ini.ShowDialog();
+                        if (!ini.Guardar) return;   
                         MensualidadModel model = new MensualidadModel
                         {
                             Id = 0,

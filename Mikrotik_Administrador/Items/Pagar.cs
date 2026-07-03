@@ -189,8 +189,47 @@ namespace Mikrotik_Administrador.Items
                 Total = TotalReal,
                 Title = string.Empty
             };
-            Impresiones im = new Impresiones();
-            im.GenerarTicket(venta);
+            SaveHistorialPagosModel sv = new SaveHistorialPagosModel
+            {
+                IdUsuarioM = IdUsuarioM,
+                FechaRecibido = dtpFechaPago.Value,
+                Cantidad = confirmacion.Recibido - TotalReal < 0 ? confirmacion.Recibido : TotalReal,
+                Comentario = txtComentario.Text.Trim(),
+                IdBanco = (int)CBBanco.SelectedValue,
+                Referencia = txtReferencia.Text.Trim(),
+                Imagen = ImageToByteArray()
+            };
+            AppRepository obj = new AppRepository();
+            var result = obj.SaveHistorialPagos(sv).Result;
+            if (result)
+            {
+                MessageBox.Show("Pago registrado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Impresiones im = new Impresiones();
+                im.GenerarTicket(venta);
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Error al registrar el pago", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        
+        }
+        public byte[] ImageToByteArray()
+        {
+            if (PBImagen.Image == null) return null;
+
+            // Creamos una copia de la imagen para evitar bloqueos de GDI+
+            using (Bitmap tempImage = new Bitmap(PBImagen.Image))
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    // Forzamos el guardado en un formato específico (ej. Png o Jpeg)
+                    // Esto es mucho más seguro que usar RawFormat
+                    tempImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+                    return ms.ToArray();
+                }
+            }
         }
     }
 }

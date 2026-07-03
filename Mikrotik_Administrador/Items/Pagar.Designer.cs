@@ -38,7 +38,7 @@
             this.btnSubir = new System.Windows.Forms.Button();
             this.PBImagen = new System.Windows.Forms.PictureBox();
             this.lblComentario = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtComentario = new System.Windows.Forms.TextBox();
             this.GBDetalles = new System.Windows.Forms.GroupBox();
             this.dgvDetalles = new System.Windows.Forms.DataGridView();
             this.BGRPagos = new System.Windows.Forms.GroupBox();
@@ -96,9 +96,11 @@
             // 
             // dtpFechaPago
             // 
+            this.dtpFechaPago.CustomFormat = "dd/MM/yyyy HH:mm:ss";
+            this.dtpFechaPago.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpFechaPago.Location = new System.Drawing.Point(27, 149);
             this.dtpFechaPago.Name = "dtpFechaPago";
-            this.dtpFechaPago.Size = new System.Drawing.Size(325, 26);
+            this.dtpFechaPago.Size = new System.Drawing.Size(219, 26);
             this.dtpFechaPago.TabIndex = 22;
             // 
             // btnGuardar
@@ -139,14 +141,14 @@
             this.lblComentario.TabIndex = 26;
             this.lblComentario.Text = "Comentario:";
             // 
-            // textBox1
+            // txtComentario
             // 
-            this.textBox1.Location = new System.Drawing.Point(440, 137);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(292, 186);
-            this.textBox1.TabIndex = 27;
+            this.txtComentario.Location = new System.Drawing.Point(440, 137);
+            this.txtComentario.Multiline = true;
+            this.txtComentario.Name = "txtComentario";
+            this.txtComentario.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtComentario.Size = new System.Drawing.Size(292, 186);
+            this.txtComentario.TabIndex = 27;
             // 
             // GBDetalles
             // 
@@ -180,7 +182,7 @@
             this.BGRPagos.Controls.Add(this.lblFechaPago);
             this.BGRPagos.Location = new System.Drawing.Point(23, 22);
             this.BGRPagos.Name = "BGRPagos";
-            this.BGRPagos.Size = new System.Drawing.Size(396, 308);
+            this.BGRPagos.Size = new System.Drawing.Size(298, 308);
             this.BGRPagos.TabIndex = 29;
             this.BGRPagos.TabStop = false;
             this.BGRPagos.Text = "Datos complementarios";
@@ -200,11 +202,11 @@
             this.GBReferencias.Controls.Add(this.PBImagen);
             this.GBReferencias.Controls.Add(this.lblMensaje2);
             this.GBReferencias.Controls.Add(this.btnSubir);
-            this.GBReferencias.Controls.Add(this.textBox1);
+            this.GBReferencias.Controls.Add(this.txtComentario);
             this.GBReferencias.Controls.Add(this.txtReferencia);
             this.GBReferencias.Controls.Add(this.lblComentario);
             this.GBReferencias.Controls.Add(this.lblReferencia);
-            this.GBReferencias.Location = new System.Drawing.Point(454, 12);
+            this.GBReferencias.Location = new System.Drawing.Point(338, 12);
             this.GBReferencias.Name = "GBReferencias";
             this.GBReferencias.Size = new System.Drawing.Size(746, 391);
             this.GBReferencias.TabIndex = 31;
@@ -247,7 +249,7 @@
         private System.Windows.Forms.Button btnSubir;
         private System.Windows.Forms.PictureBox PBImagen;
         private System.Windows.Forms.Label lblComentario;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtComentario;
         private System.Windows.Forms.GroupBox GBDetalles;
         private System.Windows.Forms.GroupBox BGRPagos;
         private System.Windows.Forms.Label lblMensaje2;

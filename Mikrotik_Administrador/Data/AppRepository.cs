@@ -102,6 +102,34 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region Pagos
+        public async Task<bool> SaveHistorialPagos(SaveHistorialPagosModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveHistorialPagos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@FechaRecibido", obj.FechaRecibido));
+                        cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
+                        cmd.Parameters.Add(new SqlParameter("@Comentario", obj.Comentario));
+                        cmd.Parameters.Add(new SqlParameter("@IdBanco", obj.IdBanco));
+                        cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
+                        cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<List<ListDetallesMensualidadModel>> GetDetallesMensualidad(int IdUsuarioM)
         {
             List<ListDetallesMensualidadModel> list = new List<ListDetallesMensualidadModel>();
