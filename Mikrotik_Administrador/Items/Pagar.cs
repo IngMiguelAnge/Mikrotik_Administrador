@@ -101,7 +101,7 @@ namespace Mikrotik_Administrador.Items
                 var Servicios = await obj.GetDetallesMensualidad(IdUsuarioM);
                 var listaFinal = Servicios?.ToList() ?? new List<ListDetallesMensualidadModel>();
                 dgvDetalles.DataSource = new BindingList<ListDetallesMensualidadModel>(listaFinal);
-                TotalReal = listaFinal.Where(c=> c.OrdenVisual == 3).Sum(x => x.Cantidad);
+                TotalReal = listaFinal.Where(c=> c.Estatus == "Saldo Pendiente").Select(x => Convert.ToDecimal(x.Cantidad)).FirstOrDefault();
             }
             catch (Exception ex)
             {

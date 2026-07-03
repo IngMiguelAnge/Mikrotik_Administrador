@@ -162,11 +162,11 @@ namespace Mikrotik_Administrador.Data
         {
             return new ListDetallesMensualidadModel()
             {
-                Descripcion = (string)reader["Descripcion"],
-                Cantidad = (decimal)reader["Cantidad"],
-                Estatus = (string)reader["Estatus"],
-                FechaOrden = (DateTime)reader["FechaOrden"],
-                OrdenVisual = (int)reader["OrdenVisual"],
+                Descripcion = (string)reader["descripcion"],
+                Cantidad = (string)reader["cantidad"],
+                Estatus = (string)reader["estatus"],
+                FechaOrden = (DateTime)reader["fechaorden"],
+                OrdenVisual = (int)reader["ordenvisual"],
             };
         }
         public async Task<bool> SaveMensualidad(MensualidadModel obj)
