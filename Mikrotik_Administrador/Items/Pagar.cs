@@ -80,16 +80,7 @@ namespace Mikrotik_Administrador.Items
             CBBanco.DisplayMember = "Nombre";
             CBBanco.ValueMember = "Id";
             CBBanco.DataSource = ListBancos;
-            CBBanco.SelectedIndex = 0;
-
-            //if (Article.Image != null)
-            //{
-            //    using (MemoryStream ms = new MemoryStream(Article.Image))
-            //    {
-            //        PBImagen.Image = Image.FromStream(ms);
-            //        PBImagen.SizeMode = PictureBoxSizeMode.Zoom;
-            //    }
-            //}
+            CBBanco.SelectedIndex = 0;    
             Buscar();
         }
         public async void Buscar()

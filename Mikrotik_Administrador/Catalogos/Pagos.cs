@@ -225,7 +225,7 @@ namespace Mikrotik_Administrador.Catalogos
                 switch (dgvClientes.Columns[e.ColumnIndex].Name)
                 {
                     case "Iniciar":
-                        if(IdMes != 0)
+                        if (IdMes != 0)
                         {
                             MessageBox.Show("Este servicio ya tiene una fecha limite", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
@@ -233,7 +233,7 @@ namespace Mikrotik_Administrador.Catalogos
                         IniciarPagos ini = new IniciarPagos();
 
                         ini.ShowDialog();
-                        if (!ini.Guardar) return;   
+                        if (!ini.Guardar) return;
                         MensualidadModel model = new MensualidadModel
                         {
                             Id = 0,
@@ -246,7 +246,7 @@ namespace Mikrotik_Administrador.Catalogos
                         };
                         AppRepository obj = new AppRepository();
                         bool result = obj.SaveMensualidad(model).Result;
-                        if(result)
+                        if (result)
                         {
                             MessageBox.Show("Guardado correctamente.", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             Buscar();
@@ -270,7 +270,10 @@ namespace Mikrotik_Administrador.Catalogos
                         Prorroga Pr = new Prorroga();
                         Pr.ShowDialog();
                         break;
-                    case "Historial":
+                    case "Historial": 
+                        HistorialPagos H = new HistorialPagos();
+                        H.IdUser = IdUser;
+                        H.ShowDialog();
                         break;
                     default:
                         break;

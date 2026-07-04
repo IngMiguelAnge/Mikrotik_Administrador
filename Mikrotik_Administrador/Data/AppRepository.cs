@@ -18,6 +18,56 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region HistorialPagos
+        public async Task<List<ListHistorialPagosModel>> GetHistorialPagos(int IdUser, string Referencia, int Id, int IdBanco)
+        {
+             List<ListHistorialPagosModel> list = new List<ListHistorialPagosModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetHistorialPagos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUser", IdUser));
+                        cmd.Parameters.Add(new SqlParameter("@Referencia", Referencia));
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@IdBanco", IdBanco));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListHistorialPagos(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+        private ListHistorialPagosModel MapToListHistorialPagos(SqlDataReader reader)
+        {
+            return new ListHistorialPagosModel()
+            {
+                Id = (int)reader["Id"],
+                FechaRecibido = (DateTime)reader["FechaRecibido"],
+                Cantidad = (decimal)reader["Cantidad"],
+                Estatus = (string)reader["Estatus"],
+                Comentario = (string)reader["Comentario"],
+                Banco = (string)reader["Banco"],
+                Referencia = (string)reader["Referencia"],
+                Imagen = (byte[])reader["Imagen"],
+                FechaLimite = (DateTime)reader["FechaLimite"],
+                Plan = (string)reader["Plan"],
+                Precio = (decimal)reader["Precio"],
+            };
+        }
+        #endregion
         #region Pagina
         public async Task<List<ListConfigImpressionsModel>> GetConfigImpressions(string Tipo)
         {

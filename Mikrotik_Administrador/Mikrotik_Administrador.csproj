@@ -244,6 +244,12 @@
     <Compile Include="Catalogos\Bancos.Designer.cs">
       <DependentUpon>Bancos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\HistorialPagos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\HistorialPagos.Designer.cs">
+      <DependentUpon>HistorialPagos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\Pagos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -285,6 +291,18 @@
     <Compile Include="Items\Prorroga.Designer.cs">
       <DependentUpon>Prorroga.cs</DependentUpon>
     </Compile>
+    <Compile Include="Items\VerComentario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\VerComentario.Designer.cs">
+      <DependentUpon>VerComentario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Items\VerImagen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\VerImagen.Designer.cs">
+      <DependentUpon>VerImagen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -297,6 +315,7 @@
     <Compile Include="Model\ListCommentsModel.cs" />
     <Compile Include="Model\ListConfigImpressionsModel.cs" />
     <Compile Include="Model\ListDetallesMensualidadModel.cs" />
+    <Compile Include="Model\ListHistorialPagosModel.cs" />
     <Compile Include="Model\ListPlanesModel.cs" />
     <Compile Include="Model\ListUsuariosByPlanModel.cs" />
     <Compile Include="Model\MensualidadModel.cs" />
@@ -402,6 +421,9 @@
     <EmbeddedResource Include="Catalogos\Bancos.resx">
       <DependentUpon>Bancos.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\HistorialPagos.resx">
+      <DependentUpon>HistorialPagos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Pagos.resx">
       <DependentUpon>Pagos.cs</DependentUpon>
     </EmbeddedResource>
@@ -419,6 +441,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Items\Prorroga.resx">
       <DependentUpon>Prorroga.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\VerComentario.resx">
+      <DependentUpon>VerComentario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\VerImagen.resx">
+      <DependentUpon>VerImagen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
