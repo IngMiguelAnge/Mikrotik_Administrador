@@ -45,205 +45,271 @@
             this.txtIP = new System.Windows.Forms.TextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.CBPlanes = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblAcepta = new System.Windows.Forms.Label();
+            this.panelHeader = new System.Windows.Forms.Panel();
+            this.groupBoxCredenciales = new System.Windows.Forms.GroupBox();
+            this.panelHeader.SuspendLayout();
+            this.groupBoxCredenciales.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblInfo
             // 
             this.lblInfo.AutoSize = true;
-            this.lblInfo.Location = new System.Drawing.Point(31, 37);
+            this.lblInfo.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInfo.ForeColor = System.Drawing.Color.White;
+            this.lblInfo.Location = new System.Drawing.Point(20, 15);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(173, 20);
+            this.lblInfo.Size = new System.Drawing.Size(326, 38);
             this.lblInfo.TabIndex = 0;
             this.lblInfo.Text = "Información de Mikrotik";
             // 
             // lblMensaje1
             // 
             this.lblMensaje1.AutoSize = true;
-            this.lblMensaje1.Location = new System.Drawing.Point(31, 105);
+            this.lblMensaje1.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMensaje1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMensaje1.Location = new System.Drawing.Point(25, 151);
             this.lblMensaje1.Name = "lblMensaje1";
-            this.lblMensaje1.Size = new System.Drawing.Size(219, 20);
+            this.lblMensaje1.Size = new System.Drawing.Size(252, 25);
             this.lblMensaje1.TabIndex = 1;
-            this.lblMensaje1.Text = "Escriba los datos de conexión";
+            this.lblMensaje1.Text = "Escriba los datos de conexión:";
             // 
             // lblIP
             // 
             this.lblIP.AutoSize = true;
-            this.lblIP.Location = new System.Drawing.Point(34, 135);
+            this.lblIP.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblIP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblIP.Location = new System.Drawing.Point(20, 35);
             this.lblIP.Name = "lblIP";
-            this.lblIP.Size = new System.Drawing.Size(34, 20);
+            this.lblIP.Size = new System.Drawing.Size(115, 25);
             this.lblIP.TabIndex = 2;
-            this.lblIP.Text = "*IP:";
+            this.lblIP.Text = "Dirección IP:";
             // 
             // lblPort
             // 
             this.lblPort.AutoSize = true;
-            this.lblPort.Location = new System.Drawing.Point(352, 135);
+            this.lblPort.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblPort.Location = new System.Drawing.Point(230, 35);
             this.lblPort.Name = "lblPort";
-            this.lblPort.Size = new System.Drawing.Size(48, 20);
+            this.lblPort.Size = new System.Drawing.Size(74, 25);
             this.lblPort.TabIndex = 4;
-            this.lblPort.Text = "*Port:";
+            this.lblPort.Text = "Puerto:";
             // 
             // txtPort
             // 
-            this.txtPort.Location = new System.Drawing.Point(440, 135);
+            this.txtPort.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtPort.Location = new System.Drawing.Point(233, 64);
             this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(100, 26);
+            this.txtPort.Size = new System.Drawing.Size(90, 33);
             this.txtPort.TabIndex = 2;
             this.txtPort.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
             // 
             // lblUsuario
             // 
             this.lblUsuario.AutoSize = true;
-            this.lblUsuario.Location = new System.Drawing.Point(34, 185);
+            this.lblUsuario.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblUsuario.Location = new System.Drawing.Point(20, 104);
             this.lblUsuario.Name = "lblUsuario";
-            this.lblUsuario.Size = new System.Drawing.Size(74, 20);
+            this.lblUsuario.Size = new System.Drawing.Size(80, 25);
             this.lblUsuario.TabIndex = 6;
-            this.lblUsuario.Text = "*Usuario:";
+            this.lblUsuario.Text = "Usuario:";
             // 
             // txtUsuario
             // 
-            this.txtUsuario.Location = new System.Drawing.Point(118, 179);
+            this.txtUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtUsuario.Location = new System.Drawing.Point(23, 132);
             this.txtUsuario.Name = "txtUsuario";
-            this.txtUsuario.Size = new System.Drawing.Size(226, 26);
+            this.txtUsuario.Size = new System.Drawing.Size(185, 33);
             this.txtUsuario.TabIndex = 3;
             this.txtUsuario.TextChanged += new System.EventHandler(this.txtUsuario_TextChanged);
             // 
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(352, 185);
+            this.lblPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblPassword.Location = new System.Drawing.Point(230, 104);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(88, 20);
+            this.lblPassword.Size = new System.Drawing.Size(110, 25);
             this.lblPassword.TabIndex = 8;
-            this.lblPassword.Text = "*Password:";
+            this.lblPassword.Text = "Contraseña:";
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(440, 185);
+            this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtPassword.Location = new System.Drawing.Point(233, 132);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(194, 26);
+            this.txtPassword.Size = new System.Drawing.Size(185, 33);
             this.txtPassword.TabIndex = 4;
+            this.txtPassword.UseSystemPasswordChar = true;
             this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
             // btnProbar
             // 
-            this.btnProbar.Location = new System.Drawing.Point(38, 232);
+            this.btnProbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.btnProbar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnProbar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.btnProbar.ForeColor = System.Drawing.Color.White;
+            this.btnProbar.Location = new System.Drawing.Point(25, 391);
             this.btnProbar.Name = "btnProbar";
-            this.btnProbar.Size = new System.Drawing.Size(150, 43);
+            this.btnProbar.Size = new System.Drawing.Size(130, 35);
             this.btnProbar.TabIndex = 5;
             this.btnProbar.Text = "Probar Conexión";
-            this.btnProbar.UseVisualStyleBackColor = true;
+            this.btnProbar.UseVisualStyleBackColor = false;
             this.btnProbar.Click += new System.EventHandler(this.btnProbar_Click);
             // 
             // lblProbar
             // 
             this.lblProbar.AutoSize = true;
-            this.lblProbar.Location = new System.Drawing.Point(214, 239);
+            this.lblProbar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblProbar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
+            this.lblProbar.Location = new System.Drawing.Point(165, 401);
             this.lblProbar.Name = "lblProbar";
-            this.lblProbar.Size = new System.Drawing.Size(99, 20);
+            this.lblProbar.Size = new System.Drawing.Size(119, 25);
             this.lblProbar.TabIndex = 11;
             this.lblProbar.Text = "Sin conexión";
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(38, 312);
+            this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnGuardar.ForeColor = System.Drawing.Color.White;
+            this.btnGuardar.Location = new System.Drawing.Point(475, 386);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(87, 35);
+            this.btnGuardar.Size = new System.Drawing.Size(140, 42);
             this.btnGuardar.TabIndex = 8;
-            this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = true;
+            this.btnGuardar.Text = "Guardar Registro";
+            this.btnGuardar.UseVisualStyleBackColor = false;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
             // lblnombre
             // 
             this.lblnombre.AutoSize = true;
-            this.lblnombre.Location = new System.Drawing.Point(34, 73);
+            this.lblnombre.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblnombre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblnombre.Location = new System.Drawing.Point(25, 80);
             this.lblnombre.Name = "lblnombre";
-            this.lblnombre.Size = new System.Drawing.Size(149, 20);
+            this.lblnombre.Size = new System.Drawing.Size(187, 25);
             this.lblnombre.TabIndex = 27;
-            this.lblnombre.Text = "Nombre de mikrotik:";
+            this.lblnombre.Text = "Nombre de Mikrotik:";
             // 
             // txtNombre
             // 
-            this.txtNombre.Location = new System.Drawing.Point(202, 66);
+            this.txtNombre.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNombre.Location = new System.Drawing.Point(25, 111);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(373, 26);
+            this.txtNombre.Size = new System.Drawing.Size(350, 34);
             this.txtNombre.TabIndex = 0;
             // 
             // txtIP
             // 
-            this.txtIP.Location = new System.Drawing.Point(118, 135);
+            this.txtIP.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtIP.Location = new System.Drawing.Point(23, 64);
             this.txtIP.Name = "txtIP";
-            this.txtIP.Size = new System.Drawing.Size(132, 26);
+            this.txtIP.Size = new System.Drawing.Size(185, 33);
             this.txtIP.TabIndex = 1;
             this.txtIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtIP_KeyPress);
             this.txtIP.Validating += new System.ComponentModel.CancelEventHandler(this.txtIP_Validating);
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(218, 37);
+            this.progressBar1.Location = new System.Drawing.Point(460, 21);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(126, 23);
+            this.progressBar1.Size = new System.Drawing.Size(155, 15);
             this.progressBar1.TabIndex = 28;
             // 
             // CBPlanes
             // 
+            this.CBPlanes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBPlanes.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.CBPlanes.FormattingEnabled = true;
             this.CBPlanes.Items.AddRange(new object[] {
             "Antenas",
             "Fibras",
             "Ambos"});
-            this.CBPlanes.Location = new System.Drawing.Point(356, 255);
+            this.CBPlanes.Location = new System.Drawing.Point(415, 111);
             this.CBPlanes.Name = "CBPlanes";
-            this.CBPlanes.Size = new System.Drawing.Size(121, 28);
+            this.CBPlanes.Size = new System.Drawing.Size(200, 33);
             this.CBPlanes.TabIndex = 29;
             // 
-            // label1
+            // lblAcepta
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(352, 232);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(161, 20);
-            this.label1.TabIndex = 30;
-            this.label1.Text = "¿Que planes acepta?";
+            this.lblAcepta.AutoSize = true;
+            this.lblAcepta.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblAcepta.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblAcepta.Location = new System.Drawing.Point(412, 80);
+            this.lblAcepta.Name = "lblAcepta";
+            this.lblAcepta.Size = new System.Drawing.Size(181, 25);
+            this.lblAcepta.TabIndex = 30;
+            this.lblAcepta.Text = "¿Qué planes acepta?";
+            // 
+            // panelHeader
+            // 
+            this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.panelHeader.Controls.Add(this.lblInfo);
+            this.panelHeader.Controls.Add(this.progressBar1);
+            this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelHeader.Location = new System.Drawing.Point(0, 0);
+            this.panelHeader.Name = "panelHeader";
+            this.panelHeader.Size = new System.Drawing.Size(644, 55);
+            this.panelHeader.TabIndex = 31;
+            // 
+            // groupBoxCredenciales
+            // 
+            this.groupBoxCredenciales.Controls.Add(this.lblIP);
+            this.groupBoxCredenciales.Controls.Add(this.txtIP);
+            this.groupBoxCredenciales.Controls.Add(this.lblPort);
+            this.groupBoxCredenciales.Controls.Add(this.txtPort);
+            this.groupBoxCredenciales.Controls.Add(this.lblUsuario);
+            this.groupBoxCredenciales.Controls.Add(this.txtUsuario);
+            this.groupBoxCredenciales.Controls.Add(this.lblPassword);
+            this.groupBoxCredenciales.Controls.Add(this.txtPassword);
+            this.groupBoxCredenciales.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxCredenciales.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.groupBoxCredenciales.Location = new System.Drawing.Point(25, 176);
+            this.groupBoxCredenciales.Name = "groupBoxCredenciales";
+            this.groupBoxCredenciales.Size = new System.Drawing.Size(590, 190);
+            this.groupBoxCredenciales.TabIndex = 32;
+            this.groupBoxCredenciales.TabStop = false;
+            this.groupBoxCredenciales.Text = " ";
             // 
             // InfoMikrotik
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(646, 398);
-            this.Controls.Add(this.label1);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(644, 442);
+            this.Controls.Add(this.groupBoxCredenciales);
+            this.Controls.Add(this.panelHeader);
+            this.Controls.Add(this.lblAcepta);
             this.Controls.Add(this.CBPlanes);
-            this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.txtIP);
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.lblnombre);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.lblProbar);
             this.Controls.Add(this.btnProbar);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.lblPassword);
-            this.Controls.Add(this.txtUsuario);
-            this.Controls.Add(this.lblUsuario);
-            this.Controls.Add(this.txtPort);
-            this.Controls.Add(this.lblPort);
-            this.Controls.Add(this.lblIP);
             this.Controls.Add(this.lblMensaje1);
-            this.Controls.Add(this.lblInfo);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "InfoMikrotik";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "InfoMikrotik";
             this.Load += new System.EventHandler(this.InfoMikrotik_Load);
+            this.panelHeader.ResumeLayout(false);
+            this.panelHeader.PerformLayout();
+            this.groupBoxCredenciales.ResumeLayout(false);
+            this.groupBoxCredenciales.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
         private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.Label lblMensaje1;
         private System.Windows.Forms.Label lblIP;
@@ -261,6 +327,8 @@
         private System.Windows.Forms.TextBox txtIP;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.ComboBox CBPlanes;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblAcepta;
+        private System.Windows.Forms.Panel panelHeader;
+        private System.Windows.Forms.GroupBox groupBoxCredenciales;
     }
 }

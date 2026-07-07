@@ -27,6 +27,9 @@ namespace Mikrotik_Administrador
 
         private async void ListaMikrotiks()
         {
+            btnAddresList.Enabled = false;
+            btnVerMirkotiks.Enabled = false;
+            BtnNuevo.Enabled = false;
             try
             {
                 CrearGridView();
@@ -41,6 +44,12 @@ namespace Mikrotik_Administrador
             catch (Exception ex)
             {
                 MessageBox.Show("Error al cargar datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnAddresList.Enabled = true;
+                btnVerMirkotiks.Enabled = true;
+                BtnNuevo.Enabled = true;
             }
         }
        
