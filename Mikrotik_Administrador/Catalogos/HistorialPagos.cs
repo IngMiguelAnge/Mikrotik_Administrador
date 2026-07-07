@@ -1,6 +1,7 @@
 ﻿using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
+using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,30 +42,59 @@ namespace Mikrotik_Administrador.Catalogos
         }
         public async void Buscar()
         {
+            btnBuscar.Enabled = false;
             CrearGridView();
             AppRepository obj = new AppRepository();
             try
             {
                 var Pagos = await obj.GetHistorialPagos(IdUser, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
                 var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosModel>();
-                dgvPagos.DataSource = new BindingList<ListHistorialPagosModel>(listaFinal);
+                dgvPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
+                if (dgvPagos.Columns["Imagen"] != null)
+                    dgvPagos.Columns["Imagen"].Visible = false;
+                if (dgvPagos.Columns["Comentario"] != null)
+                    dgvPagos.Columns["Comentario"].Visible = false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnBuscar.Enabled = true;
             }
         }
         public void CrearGridView()
         {
             dgvPagos.Columns.Clear();
             dgvPagos.AutoGenerateColumns = false;
+            dgvPagos.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            dgvPagos.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            dgvPagos.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvPagos.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            dgvPagos.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dgvPagos.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            dgvPagos.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Id",
                 HeaderText = "NoTicket",
                 DataPropertyName = "Id",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -72,7 +102,8 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Fecha en que se recibe",
                 DataPropertyName = "FechaRecibido",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -80,7 +111,8 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Cantidad",
                 DataPropertyName = "Cantidad",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -88,7 +120,8 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -105,7 +138,8 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Banco",
                 DataPropertyName = "Banco",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -121,7 +155,8 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Fecha Límite",
                 DataPropertyName = "FechaLimite",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -129,7 +164,8 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Plan",
                 DataPropertyName = "Plan",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -137,7 +173,8 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Precio",
                 DataPropertyName = "Precio",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -146,7 +183,8 @@ namespace Mikrotik_Administrador.Catalogos
                 DataPropertyName = "Imagen",
                 Visible = false,
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DataGridViewButtonColumn btnVerComentario = new DataGridViewButtonColumn
             {
@@ -154,8 +192,9 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Acción",
                 Text = "Ver Comentario",
                 UseColumnTextForButtonValue = true,
-                Width = 90,
-                FlatStyle = FlatStyle.Flat
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
             };
             dgvPagos.Columns.Add(btnVerComentario);
             DataGridViewButtonColumn btnVerImagen = new DataGridViewButtonColumn
@@ -164,8 +203,9 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Acción",
                 Text = "Ver Imagen",
                 UseColumnTextForButtonValue = true,
-                Width = 90,
-                FlatStyle = FlatStyle.Flat
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
             };
             dgvPagos.Columns.Add(btnVerImagen);
 

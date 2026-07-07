@@ -126,6 +126,7 @@ namespace Mikrotik_Administrador.Catalogos
         }
         public async Task BuscarBancos()
         {
+            CrearGridView();
             btnNuevo.Enabled = false;
             btnBuscar.Enabled = false;
 
@@ -138,7 +139,6 @@ namespace Mikrotik_Administrador.Catalogos
                 dgvBancos.DataSource = new SortableBindingList<ListBancosModel>(listaFinal);
                 if (dgvBancos.Columns["Id"] != null)
                     dgvBancos.Columns["Id"].Visible = false;
-                dgvBancos.DataSource = lista != null && lista.Count > 0 ? lista : null;
             }
             catch (Exception ex)
             {
