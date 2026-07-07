@@ -1,5 +1,6 @@
 ﻿using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
+using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,7 +34,9 @@ namespace Mikrotik_Administrador
 
                 var lista = await obj.GetMikrotiks();
                 var listaFinal = lista?.ToList() ?? new List<ListMikrotikModel>();
-                DGVMikrotiks.DataSource = new BindingList<ListMikrotikModel>(listaFinal);
+                 DGVMikrotiks.DataSource = new SortableBindingList<ListMikrotikModel>(listaFinal);
+                if (DGVMikrotiks.Columns["Id"] != null)
+                DGVMikrotiks.Columns["Id"].Visible = false;
             }
             catch (Exception ex)
             {
@@ -96,13 +99,33 @@ namespace Mikrotik_Administrador
         {
             DGVMikrotiks.Columns.Clear();
             DGVMikrotiks.AutoGenerateColumns = false;
+            DGVMikrotiks.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            DGVMikrotiks.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            DGVMikrotiks.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            DGVMikrotiks.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            DGVMikrotiks.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            DGVMikrotiks.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            DGVMikrotiks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196); 
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110); 
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Id",
                 HeaderText = "Id",
                 DataPropertyName = "Id",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -110,7 +133,8 @@ namespace Mikrotik_Administrador
                 HeaderText = "Address",
                 DataPropertyName = "Address",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -118,7 +142,8 @@ namespace Mikrotik_Administrador
                 HeaderText = "Comment",
                 DataPropertyName = "Comment",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -126,7 +151,8 @@ namespace Mikrotik_Administrador
                 HeaderText = "Mikrotik",
                 DataPropertyName = "Mikrotik",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -134,7 +160,8 @@ namespace Mikrotik_Administrador
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn
             {
@@ -142,10 +169,10 @@ namespace Mikrotik_Administrador
                 HeaderText = "Acción",
                 Text = "Cambiar Estatus",
                 UseColumnTextForButtonValue = true,
-                Width = 90,
-                FlatStyle = FlatStyle.Flat
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
             };
-
             DGVMikrotiks.Columns.Add(btnCambio);
             DGVMikrotiks.AllowUserToAddRows = false;
         }
@@ -160,6 +187,8 @@ namespace Mikrotik_Administrador
 
                 var listaFinal = lista?.ToList() ?? new List<ListWirelessModel>();
                 DGVMikrotiks.DataSource = new BindingList<ListWirelessModel>(listaFinal);
+                if (DGVMikrotiks.Columns["Id"] != null)
+                    DGVMikrotiks.Columns["Id"].Visible = false;
             }
             catch (Exception ex)
             {
@@ -171,13 +200,33 @@ namespace Mikrotik_Administrador
         {
             DGVMikrotiks.Columns.Clear();
             DGVMikrotiks.AutoGenerateColumns = false;
+            DGVMikrotiks.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            DGVMikrotiks.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            DGVMikrotiks.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            DGVMikrotiks.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            DGVMikrotiks.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            DGVMikrotiks.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            DGVMikrotiks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Id",
                 HeaderText = "Id",
                 DataPropertyName = "Id",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -185,7 +234,8 @@ namespace Mikrotik_Administrador
                 HeaderText = "Mikrotik",
                 DataPropertyName = "Nombre",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -193,7 +243,8 @@ namespace Mikrotik_Administrador
                 HeaderText = "IP",
                 DataPropertyName = "IP",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -201,7 +252,8 @@ namespace Mikrotik_Administrador
                 HeaderText = "Planes",
                 DataPropertyName = "PlanAceptado",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -209,7 +261,8 @@ namespace Mikrotik_Administrador
                 HeaderText = "Limite Alcanzado",
                 DataPropertyName = "Limite_Alcanzado",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -217,7 +270,8 @@ namespace Mikrotik_Administrador
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn
             {
@@ -225,8 +279,9 @@ namespace Mikrotik_Administrador
                 HeaderText = "Acción",
                 Text = "Editar",
                 UseColumnTextForButtonValue = true,
-                Width = 90,
-                FlatStyle = FlatStyle.Flat
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
             };
 
             DGVMikrotiks.Columns.Add(btnEditar);
@@ -236,8 +291,9 @@ namespace Mikrotik_Administrador
                 HeaderText = "Acción",
                 Text = "LanWireless",
                 UseColumnTextForButtonValue = true,
-                Width = 90,
-                FlatStyle = FlatStyle.Flat
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
             };
 
             DGVMikrotiks.Columns.Add(btnLanWireless);
@@ -247,9 +303,10 @@ namespace Mikrotik_Administrador
                 HeaderText = "Acción",
                 Text = "Cambiar Estatus",
                 UseColumnTextForButtonValue = true,
-                Width = 90,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 Visible = false,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
             };
 
             DGVMikrotiks.Columns.Add(btnDesactivar);
@@ -259,22 +316,16 @@ namespace Mikrotik_Administrador
                 HeaderText = "Acción",
                 Text = "Ubicación",
                 UseColumnTextForButtonValue = true,
-                Width = 90,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 Visible = false,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
             };
 
             DGVMikrotiks.Columns.Add(btnUbicacion);
 
             DGVMikrotiks.AllowUserToAddRows = false;
         }
-        private void InformacionClientesToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            InfoClientes m = new InfoClientes();
-            m.Show();
-            this.Hide();
-        }
-
         private void btnVerMirkotiks_Click(object sender, EventArgs e)
         {
             ListaMikrotiks();

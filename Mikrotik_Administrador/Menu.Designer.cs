@@ -45,12 +45,12 @@
             // 
             this.lblMenu.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblMenu.Font = new System.Drawing.Font("Segoe UI Semibold", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.lblMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.lblMenu.Location = new System.Drawing.Point(0, 0);
             this.lblMenu.Name = "lblMenu";
             this.lblMenu.Size = new System.Drawing.Size(684, 60);
             this.lblMenu.TabIndex = 7;
-            this.lblMenu.Text = "Menú Principal";
+            this.lblMenu.Text = "Menú";
             this.lblMenu.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // flowLayoutPanel1
@@ -73,14 +73,14 @@
             // 
             // btnMikrotiks
             // 
-            this.btnMikrotiks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnMikrotiks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
             this.btnMikrotiks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMikrotiks.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnMikrotiks.ForeColor = System.Drawing.Color.White;
             this.btnMikrotiks.Location = new System.Drawing.Point(30, 15);
             this.btnMikrotiks.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
             this.btnMikrotiks.Name = "btnMikrotiks";
-            this.btnMikrotiks.Size = new System.Drawing.Size(135, 75);
+            this.btnMikrotiks.Size = new System.Drawing.Size(145, 75);
             this.btnMikrotiks.TabIndex = 1;
             this.btnMikrotiks.Text = "Mikrotiks";
             this.btnMikrotiks.UseVisualStyleBackColor = false;
@@ -88,14 +88,14 @@
             // 
             // BtnComments
             // 
-            this.BtnComments.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.BtnComments.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
             this.BtnComments.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnComments.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.BtnComments.ForeColor = System.Drawing.Color.White;
-            this.BtnComments.Location = new System.Drawing.Point(185, 15);
+            this.BtnComments.Location = new System.Drawing.Point(195, 15);
             this.BtnComments.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
             this.BtnComments.Name = "BtnComments";
-            this.BtnComments.Size = new System.Drawing.Size(135, 75);
+            this.BtnComments.Size = new System.Drawing.Size(145, 75);
             this.BtnComments.TabIndex = 2;
             this.BtnComments.Text = "Comments";
             this.BtnComments.UseVisualStyleBackColor = false;
@@ -103,14 +103,14 @@
             // 
             // btnMigracion
             // 
-            this.btnMigracion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnMigracion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
             this.btnMigracion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMigracion.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnMigracion.ForeColor = System.Drawing.Color.White;
-            this.btnMigracion.Location = new System.Drawing.Point(340, 15);
+            this.btnMigracion.Location = new System.Drawing.Point(360, 15);
             this.btnMigracion.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
             this.btnMigracion.Name = "btnMigracion";
-            this.btnMigracion.Size = new System.Drawing.Size(135, 75);
+            this.btnMigracion.Size = new System.Drawing.Size(145, 75);
             this.btnMigracion.TabIndex = 3;
             this.btnMigracion.Text = "Migración";
             this.btnMigracion.UseVisualStyleBackColor = false;
@@ -118,14 +118,14 @@
             // 
             // btnPlanes
             // 
-            this.btnPlanes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnPlanes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
             this.btnPlanes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPlanes.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnPlanes.ForeColor = System.Drawing.Color.White;
-            this.btnPlanes.Location = new System.Drawing.Point(495, 15);
+            this.btnPlanes.Location = new System.Drawing.Point(30, 110);
             this.btnPlanes.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
             this.btnPlanes.Name = "btnPlanes";
-            this.btnPlanes.Size = new System.Drawing.Size(135, 75);
+            this.btnPlanes.Size = new System.Drawing.Size(145, 75);
             this.btnPlanes.TabIndex = 4;
             this.btnPlanes.Text = "Planes";
             this.btnPlanes.UseVisualStyleBackColor = false;
@@ -133,14 +133,14 @@
             // 
             // btnAsignacion
             // 
-            this.btnAsignacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnAsignacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
             this.btnAsignacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAsignacion.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnAsignacion.ForeColor = System.Drawing.Color.White;
-            this.btnAsignacion.Location = new System.Drawing.Point(30, 110);
+            this.btnAsignacion.Location = new System.Drawing.Point(195, 110);
             this.btnAsignacion.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
             this.btnAsignacion.Name = "btnAsignacion";
-            this.btnAsignacion.Size = new System.Drawing.Size(135, 75);
+            this.btnAsignacion.Size = new System.Drawing.Size(145, 75);
             this.btnAsignacion.TabIndex = 5;
             this.btnAsignacion.Text = "Asignaciones";
             this.btnAsignacion.UseVisualStyleBackColor = false;
@@ -148,14 +148,14 @@
             // 
             // btnInformacion
             // 
-            this.btnInformacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnInformacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
             this.btnInformacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInformacion.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnInformacion.ForeColor = System.Drawing.Color.White;
-            this.btnInformacion.Location = new System.Drawing.Point(185, 110);
+            this.btnInformacion.Location = new System.Drawing.Point(360, 110);
             this.btnInformacion.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
             this.btnInformacion.Name = "btnInformacion";
-            this.btnInformacion.Size = new System.Drawing.Size(135, 75);
+            this.btnInformacion.Size = new System.Drawing.Size(145, 75);
             this.btnInformacion.TabIndex = 6;
             this.btnInformacion.Text = "Información";
             this.btnInformacion.UseVisualStyleBackColor = false;
@@ -163,14 +163,14 @@
             // 
             // btnBancos
             // 
-            this.btnBancos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnBancos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
             this.btnBancos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBancos.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnBancos.ForeColor = System.Drawing.Color.White;
-            this.btnBancos.Location = new System.Drawing.Point(340, 110);
+            this.btnBancos.Location = new System.Drawing.Point(30, 205);
             this.btnBancos.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
             this.btnBancos.Name = "btnBancos";
-            this.btnBancos.Size = new System.Drawing.Size(135, 75);
+            this.btnBancos.Size = new System.Drawing.Size(145, 75);
             this.btnBancos.TabIndex = 8;
             this.btnBancos.Text = "Bancos";
             this.btnBancos.UseVisualStyleBackColor = false;
@@ -178,14 +178,14 @@
             // 
             // btnPagos
             // 
-            this.btnPagos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnPagos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
             this.btnPagos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPagos.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnPagos.ForeColor = System.Drawing.Color.White;
-            this.btnPagos.Location = new System.Drawing.Point(495, 110);
+            this.btnPagos.Location = new System.Drawing.Point(195, 205);
             this.btnPagos.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
             this.btnPagos.Name = "btnPagos";
-            this.btnPagos.Size = new System.Drawing.Size(135, 75);
+            this.btnPagos.Size = new System.Drawing.Size(145, 75);
             this.btnPagos.TabIndex = 9;
             this.btnPagos.Text = "Pagos";
             this.btnPagos.UseVisualStyleBackColor = false;
@@ -205,6 +205,7 @@
             this.Name = "Menu";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Menu_FormClosed);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
