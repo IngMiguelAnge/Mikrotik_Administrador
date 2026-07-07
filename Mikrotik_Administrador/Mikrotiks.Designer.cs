@@ -28,84 +28,138 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DGVMikrotiks = new System.Windows.Forms.DataGridView();
             this.BtnNuevo = new System.Windows.Forms.Button();
             this.btnAddresList = new System.Windows.Forms.Button();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.panelContenedor = new System.Windows.Forms.Panel();
             this.btnVerMirkotiks = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.panelTop.SuspendLayout();
+            this.panelContenedor.SuspendLayout();
             this.SuspendLayout();
             // 
             // DGVMikrotiks
             // 
-            this.DGVMikrotiks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DGVMikrotiks.AllowUserToAddRows = false;
+            this.DGVMikrotiks.BackgroundColor = System.Drawing.Color.White;
+            this.DGVMikrotiks.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.DGVMikrotiks.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.DGVMikrotiks.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DGVMikrotiks.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            this.DGVMikrotiks.ColumnHeadersHeight = 35;
+            this.DGVMikrotiks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DGVMikrotiks.DefaultCellStyle = dataGridViewCellStyle6;
             this.DGVMikrotiks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DGVMikrotiks.Location = new System.Drawing.Point(3, 22);
+            this.DGVMikrotiks.EnableHeadersVisualStyles = false;
+            this.DGVMikrotiks.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.DGVMikrotiks.Location = new System.Drawing.Point(20, 20);
             this.DGVMikrotiks.Name = "DGVMikrotiks";
-            this.DGVMikrotiks.RowHeadersWidth = 62;
-            this.DGVMikrotiks.RowTemplate.Height = 28;
-            this.DGVMikrotiks.Size = new System.Drawing.Size(869, 315);
+            this.DGVMikrotiks.RowHeadersVisible = false;
+            this.DGVMikrotiks.RowHeadersWidth = 51;
+            this.DGVMikrotiks.RowTemplate.Height = 30;
+            this.DGVMikrotiks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DGVMikrotiks.Size = new System.Drawing.Size(900, 319);
             this.DGVMikrotiks.TabIndex = 1;
             this.DGVMikrotiks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVMikrotiks_CellContentClick);
             // 
             // BtnNuevo
             // 
-            this.BtnNuevo.Location = new System.Drawing.Point(34, 24);
+            this.BtnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.BtnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.BtnNuevo.ForeColor = System.Drawing.Color.White;
+            this.BtnNuevo.Location = new System.Drawing.Point(20, 16);
             this.BtnNuevo.Name = "BtnNuevo";
-            this.BtnNuevo.Size = new System.Drawing.Size(84, 37);
+            this.BtnNuevo.Size = new System.Drawing.Size(100, 38);
             this.BtnNuevo.TabIndex = 3;
-            this.BtnNuevo.Text = "Nuevo";
-            this.BtnNuevo.UseVisualStyleBackColor = true;
+            this.BtnNuevo.Text = "+ Nuevo";
+            this.BtnNuevo.UseVisualStyleBackColor = false;
             this.BtnNuevo.Click += new System.EventHandler(this.BtnNuevo_Click);
             // 
             // btnAddresList
             // 
-            this.btnAddresList.Location = new System.Drawing.Point(322, 24);
+            this.btnAddresList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnAddresList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddresList.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnAddresList.ForeColor = System.Drawing.Color.White;
+            this.btnAddresList.Location = new System.Drawing.Point(300, 16);
             this.btnAddresList.Name = "btnAddresList";
-            this.btnAddresList.Size = new System.Drawing.Size(154, 37);
+            this.btnAddresList.Size = new System.Drawing.Size(160, 38);
             this.btnAddresList.TabIndex = 5;
             this.btnAddresList.Text = "Ver Address List";
-            this.btnAddresList.UseVisualStyleBackColor = true;
+            this.btnAddresList.UseVisualStyleBackColor = false;
             this.btnAddresList.Click += new System.EventHandler(this.btnAddresList_Click);
+            // 
+            // panelTop
+            // 
+            this.panelTop.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelTop.Controls.Add(this.BtnNuevo);
+            this.panelTop.Controls.Add(this.btnVerMirkotiks);
+            this.panelTop.Controls.Add(this.btnAddresList);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(940, 70);
+            this.panelTop.TabIndex = 8;
+            // 
+            // panelContenedor
+            // 
+            this.panelContenedor.Controls.Add(this.DGVMikrotiks);
+            this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContenedor.Location = new System.Drawing.Point(0, 70);
+            this.panelContenedor.Name = "panelContenedor";
+            this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
+            this.panelContenedor.Size = new System.Drawing.Size(940, 359);
+            this.panelContenedor.TabIndex = 9;
             // 
             // btnVerMirkotiks
             // 
-            this.btnVerMirkotiks.Location = new System.Drawing.Point(146, 24);
+            this.btnVerMirkotiks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnVerMirkotiks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVerMirkotiks.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnVerMirkotiks.ForeColor = System.Drawing.Color.White;
+            this.btnVerMirkotiks.Location = new System.Drawing.Point(135, 16);
             this.btnVerMirkotiks.Name = "btnVerMirkotiks";
-            this.btnVerMirkotiks.Size = new System.Drawing.Size(157, 35);
+            this.btnVerMirkotiks.Size = new System.Drawing.Size(150, 38);
             this.btnVerMirkotiks.TabIndex = 6;
-            this.btnVerMirkotiks.Text = "Ver Mikrotiks";
-            this.btnVerMirkotiks.UseVisualStyleBackColor = true;
+            this.btnVerMirkotiks.Text = "Actualizar Lista";
+            this.btnVerMirkotiks.UseVisualStyleBackColor = false;
             this.btnVerMirkotiks.Click += new System.EventHandler(this.btnVerMirkotiks_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.DGVMikrotiks);
-            this.groupBox1.Location = new System.Drawing.Point(34, 77);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(875, 340);
-            this.groupBox1.TabIndex = 7;
-            this.groupBox1.TabStop = false;
             // 
             // Mikrotiks
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(940, 429);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btnVerMirkotiks);
-            this.Controls.Add(this.btnAddresList);
-            this.Controls.Add(this.BtnNuevo);
+            this.Controls.Add(this.panelContenedor);
+            this.Controls.Add(this.panelTop);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MaximizeBox = false;
             this.Name = "Mikrotiks";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Mikrotiks";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).EndInit();
-            this.groupBox1.ResumeLayout(false);
+            this.panelTop.ResumeLayout(false);
+            this.panelContenedor.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -114,7 +168,8 @@
         private System.Windows.Forms.DataGridView DGVMikrotiks;
         private System.Windows.Forms.Button BtnNuevo;
         private System.Windows.Forms.Button btnAddresList;
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Panel panelContenedor;
         private System.Windows.Forms.Button btnVerMirkotiks;
-        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

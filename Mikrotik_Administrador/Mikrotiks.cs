@@ -1,6 +1,11 @@
 ﻿using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Model;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace Mikrotik_Administrador
 {
@@ -15,78 +20,27 @@ namespace Mikrotik_Administrador
         {
             InfoMikrotik m = new InfoMikrotik();
             m.IdMikrotik = 0;
-            m.Show();
+            m.ShowDialog();
+            ListaMikrotiks();
         }
 
         private async void ListaMikrotiks()
         {
             try
             {
-                DGVMikrotiks.DataSource = null;
-                DGVMikrotiks.Columns.Clear();
+                CrearGridView();
                 AppRepository obj = new AppRepository();
 
                 var lista = await obj.GetMikrotiks();
-
-                if (lista != null && lista.Count > 0)
-                {
-                    DGVMikrotiks.DataSource = lista;
-
-                    if (DGVMikrotiks.Columns["btnEditar"] == null)
-                    {
-                        AgregarBotones();
-                    }
-                }
+                var listaFinal = lista?.ToList() ?? new List<ListMikrotikModel>();
+                DGVMikrotiks.DataSource = new BindingList<ListMikrotikModel>(listaFinal);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al cargar datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void AgregarBotones()
-        {
-            // Botón Editar
-            DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn();
-            btnEditar.Name = "btnEditar";
-            btnEditar.HeaderText = "Acción";
-            btnEditar.Text = "Editar";
-            btnEditar.UseColumnTextForButtonValue = true;
-            DGVMikrotiks.Columns.Add(btnEditar);
-
-            // Botón LanWireless
-            DataGridViewButtonColumn btnLanWireless = new DataGridViewButtonColumn();
-            btnLanWireless.Name = "btnLanWireless";
-            btnLanWireless.HeaderText = "Acción";
-            btnLanWireless.Text = "LanWireless";
-            btnLanWireless.UseColumnTextForButtonValue = true;
-            DGVMikrotiks.Columns.Add(btnLanWireless);
-
-            // Botón Eliminar
-            DataGridViewButtonColumn btnDesactivar = new DataGridViewButtonColumn();
-            btnDesactivar.Name = "btnDesactivar";
-            btnDesactivar.HeaderText = "Acción";
-            btnDesactivar.Text = "Desactivar";
-            btnDesactivar.UseColumnTextForButtonValue = true;
-            DGVMikrotiks.Columns.Add(btnDesactivar);
-
-            // Botón Ubicacion
-            DataGridViewButtonColumn btnConfig = new DataGridViewButtonColumn();
-            btnConfig.Name = "btnUbicacion";
-            btnConfig.HeaderText = "Acción";
-            btnConfig.Text = "Ubicación";
-            btnConfig.UseColumnTextForButtonValue = true;
-            DGVMikrotiks.Columns.Add(btnConfig);
-        }
-        private void AgregarBotones2()
-        {
-            // Botón Cambio Estatus
-            DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn();
-            btnCambio.Name = "btnCambio";
-            btnCambio.HeaderText = "Acción";
-            btnCambio.Text = "Cambiar Estatus";
-            btnCambio.UseColumnTextForButtonValue = true;
-            DGVMikrotiks.Columns.Add(btnCambio);
-        }
+       
         private void DGVMikrotiks_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // Evitar errores si hacen click en el encabezado
@@ -138,21 +92,74 @@ namespace Mikrotik_Administrador
         {
             ListaWireless();
         }
+        public void CrearGridViewListaWireless()
+        {
+            DGVMikrotiks.Columns.Clear();
+            DGVMikrotiks.AutoGenerateColumns = false;
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "Id",
+                DataPropertyName = "Id",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Address",
+                HeaderText = "Address",
+                DataPropertyName = "Address",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Comment",
+                HeaderText = "Comment",
+                DataPropertyName = "Comment",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Mikrotik",
+                HeaderText = "Mikrotik",
+                DataPropertyName = "Mikrotik",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn
+            {
+                Name = "btnCambio",
+                HeaderText = "Acción",
+                Text = "Cambiar Estatus",
+                UseColumnTextForButtonValue = true,
+                Width = 90,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            DGVMikrotiks.Columns.Add(btnCambio);
+            DGVMikrotiks.AllowUserToAddRows = false;
+        }
         private async void ListaWireless()
         {
+            CrearGridViewListaWireless();
             try
             {
-                DGVMikrotiks.DataSource = null;
-                DGVMikrotiks.Columns.Clear();
                 AppRepository obj = new AppRepository();
 
                 var lista = await obj.GetWireless();
 
-                if (lista != null && lista.Count > 0)
-                {
-                    DGVMikrotiks.DataSource = lista;
-                    AgregarBotones2();
-                }
+                var listaFinal = lista?.ToList() ?? new List<ListWirelessModel>();
+                DGVMikrotiks.DataSource = new BindingList<ListWirelessModel>(listaFinal);
             }
             catch (Exception ex)
             {
@@ -160,11 +167,107 @@ namespace Mikrotik_Administrador
             }
         }
 
-        private void btnVerMirkotiks_Click(object sender, EventArgs e)
+        public void CrearGridView()
         {
-            ListaMikrotiks();
-        }
+            DGVMikrotiks.Columns.Clear();
+            DGVMikrotiks.AutoGenerateColumns = false;
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "Id",
+                DataPropertyName = "Id",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Nombre",
+                HeaderText = "Mikrotik",
+                DataPropertyName = "Nombre",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IP",
+                HeaderText = "IP",
+                DataPropertyName = "IP",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "PlanAceptado",
+                HeaderText = "Planes",
+                DataPropertyName = "PlanAceptado",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Limite_Alcanzado",
+                HeaderText = "Limite Alcanzado",
+                DataPropertyName = "Limite_Alcanzado",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn
+            {
+                Name = "btnEditar",
+                HeaderText = "Acción",
+                Text = "Editar",
+                UseColumnTextForButtonValue = true,
+                Width = 90,
+                FlatStyle = FlatStyle.Flat
+            };
 
+            DGVMikrotiks.Columns.Add(btnEditar);
+            DataGridViewButtonColumn btnLanWireless = new DataGridViewButtonColumn
+            {
+                Name = "btnLanWireless",
+                HeaderText = "Acción",
+                Text = "LanWireless",
+                UseColumnTextForButtonValue = true,
+                Width = 90,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            DGVMikrotiks.Columns.Add(btnLanWireless);
+            DataGridViewButtonColumn btnDesactivar = new DataGridViewButtonColumn
+            {
+                Name = "btnDesactivar",
+                HeaderText = "Acción",
+                Text = "Cambiar Estatus",
+                UseColumnTextForButtonValue = true,
+                Width = 90,
+                Visible = false,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            DGVMikrotiks.Columns.Add(btnDesactivar);
+            DataGridViewButtonColumn btnUbicacion = new DataGridViewButtonColumn
+            {
+                Name = "btnUbicacion",
+                HeaderText = "Acción",
+                Text = "Ubicación",
+                UseColumnTextForButtonValue = true,
+                Width = 90,
+                Visible = false,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            DGVMikrotiks.Columns.Add(btnUbicacion);
+
+            DGVMikrotiks.AllowUserToAddRows = false;
+        }
         private void InformacionClientesToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             InfoClientes m = new InfoClientes();
@@ -172,5 +275,9 @@ namespace Mikrotik_Administrador
             this.Hide();
         }
 
+        private void btnVerMirkotiks_Click(object sender, EventArgs e)
+        {
+            ListaMikrotiks();
+        }
     }
 }
