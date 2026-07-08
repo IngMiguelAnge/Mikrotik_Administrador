@@ -1,7 +1,9 @@
 ﻿using ImageMagick;
+using Mikrotik_Administrador.Catalogos;
 using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
+using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -91,7 +93,11 @@ namespace Mikrotik_Administrador.Items
             {
                 var Servicios = await obj.GetDetallesMensualidad(IdUsuarioM);
                 var listaFinal = Servicios?.ToList() ?? new List<ListDetallesMensualidadModel>();
-                dgvDetalles.DataSource = new BindingList<ListDetallesMensualidadModel>(listaFinal);
+                dgvDetalles.DataSource = new SortableBindingList<ListDetallesMensualidadModel>(listaFinal);
+                if (dgvDetalles.Columns["FechaOrden"] != null)
+                    dgvDetalles.Columns["FechaOrden"].Visible = false;
+                if (dgvDetalles.Columns["OrdenVisual"] != null)
+                    dgvDetalles.Columns["OrdenVisual"].Visible = false;
                 TotalReal = listaFinal.Where(c=> c.Estatus == "Saldo Pendiente").Select(x => Convert.ToDecimal(x.Cantidad)).FirstOrDefault();
             }
             catch (Exception ex)
@@ -103,6 +109,25 @@ namespace Mikrotik_Administrador.Items
         {
             dgvDetalles.Columns.Clear();
             dgvDetalles.AutoGenerateColumns = false;
+            dgvDetalles.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            dgvDetalles.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            dgvDetalles.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvDetalles.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            dgvDetalles.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dgvDetalles.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            dgvDetalles.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
             dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "FechaOrden",
@@ -110,7 +135,8 @@ namespace Mikrotik_Administrador.Items
                 DataPropertyName = "FechaOrden",
                 Visible = false,
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -119,7 +145,8 @@ namespace Mikrotik_Administrador.Items
                 DataPropertyName = "OrdenVisual",
                 Visible = false,
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -127,7 +154,8 @@ namespace Mikrotik_Administrador.Items
                 HeaderText = "Descripción",
                 DataPropertyName = "Descripcion",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -135,7 +163,8 @@ namespace Mikrotik_Administrador.Items
                 HeaderText = "Cantidad",
                 DataPropertyName = "Cantidad",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -143,18 +172,9 @@ namespace Mikrotik_Administrador.Items
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
-            //DataGridViewButtonColumn btnVer = new DataGridViewButtonColumn
-            //{
-            //    Name = "Motivo",
-            //    HeaderText = "Acción",
-            //    Text = "Ver",
-            //    UseColumnTextForButtonValue = true,
-            //    Width = 90,
-            //    FlatStyle = FlatStyle.Flat
-            //};
-            //dgvDetalles.Columns.Add(btnVer);
             dgvDetalles.AllowUserToAddRows = false;
         }
 

@@ -1,6 +1,7 @@
 ﻿using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
+using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,8 +27,187 @@ namespace Mikrotik_Administrador
         {
             BuscarServicios();
         }
+        public void CrearGridView()
+        {
+            DGVServicios.Columns.Clear();
+            DGVServicios.AutoGenerateColumns = false;
+            DGVServicios.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            DGVServicios.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            DGVServicios.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            DGVServicios.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            DGVServicios.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            DGVServicios.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            DGVServicios.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "Id",
+                DataPropertyName = "Id",
+                Visible = false,
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdInterno",
+                HeaderText = "IdInterno",
+                DataPropertyName = "IdInterno",
+                Visible = false,
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Usuario",
+                HeaderText = "Usuario",
+                DataPropertyName = "Usuario",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Address",
+                HeaderText = "IP",
+                DataPropertyName = "Address",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdPlan",
+                HeaderText = "IdPlan",
+                DataPropertyName = "IdPlan",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Plan",
+                HeaderText = "Plan",
+                DataPropertyName = "Plan",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "UploadDownload",
+                HeaderText = "UploadDownload",
+                DataPropertyName = "UploadDownload",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdMikrotik",
+                HeaderText = "IdMikrotik",
+                DataPropertyName = "IdMikrotik",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Mikrotik",
+                HeaderText = "Mikrotik",
+                DataPropertyName = "Mikrotik",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdCliente",
+                HeaderText = "IdCliente",
+                DataPropertyName = "IdCliente",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Cliente",
+                HeaderText = "Cliente",
+                DataPropertyName = "Cliente",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Tipo",
+                HeaderText = "Tipo",
+                DataPropertyName = "Tipo",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn
+            {
+                Name = "chkSeleccionar",
+                HeaderText = "Asignar",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVServicios.Columns.Add(chkSeleccionar);
+            DataGridViewButtonColumn btnUbicacion = new DataGridViewButtonColumn
+            {
+                Name = "btnUbicacion",
+                HeaderText = "Acción",
+                Text = "Ubicación",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVServicios.Columns.Add(btnUbicacion);
+            DataGridViewButtonColumn BtnEstatus = new DataGridViewButtonColumn
+            {
+                Name = "BtnEstatus",
+                HeaderText = "Acción",
+                Text = "Cambio Estatus",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVServicios.Columns.Add(BtnEstatus);
+            DGVServicios.AllowUserToAddRows = false;
+        }
         public void BuscarServicios()
         {
+            CrearGridView();
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             btnPlan.Enabled = false;
@@ -37,32 +217,23 @@ namespace Mikrotik_Administrador
             {
                 AppRepository obj = new AppRepository();
                 var lista = obj.GetUsuariosMikrotiksByIdCliente(IdCliente).Result;
-                if (lista != null && lista.Count > 0)
+                var listaFinal = lista?.ToList() ?? new List<ListUsuariosGeneralModel>();
+                DGVServicios.DataSource = new SortableBindingList<ListUsuariosGeneralModel>(listaFinal);
+                if (DGVServicios.Columns["Id"] != null)
                 {
-                    DGVServicios.DataSource = lista;
-                    AgregarBotones();
-                    if (DGVServicios.Columns["Id"] != null)
-                    {
-                        DGVServicios.Columns["Id"].Visible = false;
-                    }
-                    if (DGVServicios.Columns["IdPlan"] != null)
-                    {
-                        DGVServicios.Columns["IdPlan"].Visible = false;
-                    }
-                    if (DGVServicios.Columns["IdMikrotik"] != null)
-                    {
-                        DGVServicios.Columns["IdMikrotik"].Visible = false;
-                    }
-                    if (DGVServicios.Columns["IdCliente"] != null)
-                    {
-                        DGVServicios.Columns["IdCliente"].Visible = false;
-                    }
-                    MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DGVServicios.Columns["Id"].Visible = false;
                 }
-                else
+                if (DGVServicios.Columns["IdPlan"] != null)
                 {
-                    MessageBox.Show("No se encontraron usuarios en el Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
+                    DGVServicios.Columns["IdPlan"].Visible = false;
+                }
+                if (DGVServicios.Columns["IdMikrotik"] != null)
+                {
+                    DGVServicios.Columns["IdMikrotik"].Visible = false;
+                }
+                if (DGVServicios.Columns["IdCliente"] != null)
+                {
+                    DGVServicios.Columns["IdCliente"].Visible = false;
                 }
             }
             catch (Exception ex)
@@ -73,33 +244,10 @@ namespace Mikrotik_Administrador
             {
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 0;
-                btnPlan.Enabled = true; 
+                btnPlan.Enabled = true;
             }
         }
-        private void AgregarBotones()
-        {
-            // Botón Checket
-            DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn();
-            chkSeleccionar.Name = "cbSeleccionar";
-            chkSeleccionar.HeaderText = "Asignar";
-            DGVServicios.Columns.Add(chkSeleccionar);
-
-            // Botón Ubicacion
-            DataGridViewButtonColumn btnUbicacion = new DataGridViewButtonColumn();
-            btnUbicacion.Name = "btnUbicacion";
-            btnUbicacion.HeaderText = "Acción";
-            btnUbicacion.Text = "Ubicación";
-            btnUbicacion.UseColumnTextForButtonValue = true;
-            DGVServicios.Columns.Add(btnUbicacion);
-
-            DataGridViewButtonColumn BtnEstatus = new DataGridViewButtonColumn();
-            BtnEstatus.Name = "btnEstatus";
-            BtnEstatus.HeaderText = "Acción";
-            BtnEstatus.Text = "Cambio Estatus";
-            BtnEstatus.UseColumnTextForButtonValue = true;
-            DGVServicios.Columns.Add(BtnEstatus);
-
-        }
+     
         private void cbTodos_CheckedChanged(object sender, EventArgs e)
         {
             bool isChecked = cbTodos.Checked;

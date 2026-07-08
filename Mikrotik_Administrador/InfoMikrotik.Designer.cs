@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblInfo = new System.Windows.Forms.Label();
             this.lblMensaje1 = new System.Windows.Forms.Label();
             this.lblIP = new System.Windows.Forms.Label();
             this.lblPort = new System.Windows.Forms.Label();
@@ -46,29 +45,16 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.CBPlanes = new System.Windows.Forms.ComboBox();
             this.lblAcepta = new System.Windows.Forms.Label();
-            this.panelHeader = new System.Windows.Forms.Panel();
             this.groupBoxCredenciales = new System.Windows.Forms.GroupBox();
-            this.panelHeader.SuspendLayout();
             this.groupBoxCredenciales.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lblInfo
-            // 
-            this.lblInfo.AutoSize = true;
-            this.lblInfo.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInfo.ForeColor = System.Drawing.Color.White;
-            this.lblInfo.Location = new System.Drawing.Point(20, 15);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(326, 38);
-            this.lblInfo.TabIndex = 0;
-            this.lblInfo.Text = "Información de Mikrotik";
             // 
             // lblMensaje1
             // 
             this.lblMensaje1.AutoSize = true;
             this.lblMensaje1.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMensaje1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblMensaje1.Location = new System.Drawing.Point(25, 151);
+            this.lblMensaje1.Location = new System.Drawing.Point(25, 106);
             this.lblMensaje1.Name = "lblMensaje1";
             this.lblMensaje1.Size = new System.Drawing.Size(252, 25);
             this.lblMensaje1.TabIndex = 1;
@@ -152,9 +138,9 @@
             this.btnProbar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnProbar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.btnProbar.ForeColor = System.Drawing.Color.White;
-            this.btnProbar.Location = new System.Drawing.Point(25, 391);
+            this.btnProbar.Location = new System.Drawing.Point(25, 377);
             this.btnProbar.Name = "btnProbar";
-            this.btnProbar.Size = new System.Drawing.Size(130, 35);
+            this.btnProbar.Size = new System.Drawing.Size(150, 36);
             this.btnProbar.TabIndex = 5;
             this.btnProbar.Text = "Probar Conexión";
             this.btnProbar.UseVisualStyleBackColor = false;
@@ -165,7 +151,7 @@
             this.lblProbar.AutoSize = true;
             this.lblProbar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblProbar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
-            this.lblProbar.Location = new System.Drawing.Point(165, 401);
+            this.lblProbar.Location = new System.Drawing.Point(185, 356);
             this.lblProbar.Name = "lblProbar";
             this.lblProbar.Size = new System.Drawing.Size(119, 25);
             this.lblProbar.TabIndex = 11;
@@ -177,9 +163,9 @@
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(475, 386);
+            this.btnGuardar.Location = new System.Drawing.Point(465, 372);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(140, 42);
+            this.btnGuardar.Size = new System.Drawing.Size(150, 42);
             this.btnGuardar.TabIndex = 8;
             this.btnGuardar.Text = "Guardar Registro";
             this.btnGuardar.UseVisualStyleBackColor = false;
@@ -190,7 +176,7 @@
             this.lblnombre.AutoSize = true;
             this.lblnombre.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblnombre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblnombre.Location = new System.Drawing.Point(25, 80);
+            this.lblnombre.Location = new System.Drawing.Point(25, 25);
             this.lblnombre.Name = "lblnombre";
             this.lblnombre.Size = new System.Drawing.Size(187, 25);
             this.lblnombre.TabIndex = 27;
@@ -199,7 +185,7 @@
             // txtNombre
             // 
             this.txtNombre.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNombre.Location = new System.Drawing.Point(25, 111);
+            this.txtNombre.Location = new System.Drawing.Point(25, 56);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(350, 34);
             this.txtNombre.TabIndex = 0;
@@ -216,9 +202,9 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(460, 21);
+            this.progressBar1.Location = new System.Drawing.Point(190, 396);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(155, 15);
+            this.progressBar1.Size = new System.Drawing.Size(235, 12);
             this.progressBar1.TabIndex = 28;
             // 
             // CBPlanes
@@ -230,7 +216,7 @@
             "Antenas",
             "Fibras",
             "Ambos"});
-            this.CBPlanes.Location = new System.Drawing.Point(415, 111);
+            this.CBPlanes.Location = new System.Drawing.Point(415, 56);
             this.CBPlanes.Name = "CBPlanes";
             this.CBPlanes.Size = new System.Drawing.Size(200, 33);
             this.CBPlanes.TabIndex = 29;
@@ -240,22 +226,11 @@
             this.lblAcepta.AutoSize = true;
             this.lblAcepta.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblAcepta.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblAcepta.Location = new System.Drawing.Point(412, 80);
+            this.lblAcepta.Location = new System.Drawing.Point(412, 25);
             this.lblAcepta.Name = "lblAcepta";
             this.lblAcepta.Size = new System.Drawing.Size(181, 25);
             this.lblAcepta.TabIndex = 30;
             this.lblAcepta.Text = "¿Qué planes acepta?";
-            // 
-            // panelHeader
-            // 
-            this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
-            this.panelHeader.Controls.Add(this.lblInfo);
-            this.panelHeader.Controls.Add(this.progressBar1);
-            this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelHeader.Location = new System.Drawing.Point(0, 0);
-            this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(644, 55);
-            this.panelHeader.TabIndex = 31;
             // 
             // groupBoxCredenciales
             // 
@@ -268,8 +243,8 @@
             this.groupBoxCredenciales.Controls.Add(this.lblPassword);
             this.groupBoxCredenciales.Controls.Add(this.txtPassword);
             this.groupBoxCredenciales.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxCredenciales.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.groupBoxCredenciales.Location = new System.Drawing.Point(25, 176);
+            this.groupBoxCredenciales.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.groupBoxCredenciales.Location = new System.Drawing.Point(25, 136);
             this.groupBoxCredenciales.Name = "groupBoxCredenciales";
             this.groupBoxCredenciales.Size = new System.Drawing.Size(590, 190);
             this.groupBoxCredenciales.TabIndex = 32;
@@ -281,18 +256,19 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(644, 442);
+            this.ClientSize = new System.Drawing.Size(644, 427);
             this.Controls.Add(this.groupBoxCredenciales);
-            this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.lblAcepta);
             this.Controls.Add(this.CBPlanes);
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.lblnombre);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.lblProbar);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.btnProbar);
             this.Controls.Add(this.lblMensaje1);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -300,8 +276,6 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.InfoMikrotik_Load);
-            this.panelHeader.ResumeLayout(false);
-            this.panelHeader.PerformLayout();
             this.groupBoxCredenciales.ResumeLayout(false);
             this.groupBoxCredenciales.PerformLayout();
             this.ResumeLayout(false);
@@ -310,7 +284,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.Label lblMensaje1;
         private System.Windows.Forms.Label lblIP;
         private System.Windows.Forms.Label lblPort;

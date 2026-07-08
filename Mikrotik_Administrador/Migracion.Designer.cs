@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lblMensaje = new System.Windows.Forms.Label();
             this.CBMikrotiks = new System.Windows.Forms.ComboBox();
             this.txtNombre = new System.Windows.Forms.TextBox();
@@ -38,92 +40,133 @@
             this.btnExportar = new System.Windows.Forms.Button();
             this.cbExportar = new System.Windows.Forms.CheckBox();
             this.cbAntenas = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.panelContenedor = new System.Windows.Forms.Panel();
             this.btnEliminar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.panelContenedor.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblMensaje
             // 
             this.lblMensaje.AutoSize = true;
-            this.lblMensaje.Location = new System.Drawing.Point(31, 20);
+            this.lblMensaje.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblMensaje.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMensaje.Location = new System.Drawing.Point(30, 20);
             this.lblMensaje.Name = "lblMensaje";
-            this.lblMensaje.Size = new System.Drawing.Size(105, 20);
+            this.lblMensaje.Size = new System.Drawing.Size(132, 25);
             this.lblMensaje.TabIndex = 1;
             this.lblMensaje.Text = "Mikrotik a ver:";
             // 
             // CBMikrotiks
             // 
+            this.CBMikrotiks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBMikrotiks.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.CBMikrotiks.FormattingEnabled = true;
-            this.CBMikrotiks.Location = new System.Drawing.Point(166, 20);
+            this.CBMikrotiks.Location = new System.Drawing.Point(34, 46);
             this.CBMikrotiks.Name = "CBMikrotiks";
-            this.CBMikrotiks.Size = new System.Drawing.Size(191, 28);
+            this.CBMikrotiks.Size = new System.Drawing.Size(220, 33);
             this.CBMikrotiks.TabIndex = 0;
             this.CBMikrotiks.SelectedIndexChanged += new System.EventHandler(this.CBMikrotiks_SelectedIndexChanged);
             // 
             // txtNombre
             // 
-            this.txtNombre.Location = new System.Drawing.Point(35, 108);
-            this.txtNombre.Multiline = true;
+            this.txtNombre.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtNombre.Location = new System.Drawing.Point(34, 134);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(263, 26);
+            this.txtNombre.Size = new System.Drawing.Size(280, 34);
             this.txtNombre.TabIndex = 4;
             // 
             // lblMensaje2
             // 
             this.lblMensaje2.AutoSize = true;
-            this.lblMensaje2.Location = new System.Drawing.Point(31, 81);
+            this.lblMensaje2.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblMensaje2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMensaje2.Location = new System.Drawing.Point(30, 106);
             this.lblMensaje2.Name = "lblMensaje2";
-            this.lblMensaje2.Size = new System.Drawing.Size(286, 20);
+            this.lblMensaje2.Size = new System.Drawing.Size(336, 25);
             this.lblMensaje2.TabIndex = 4;
             this.lblMensaje2.Text = "Escriba el nombre del usuario a buscar:";
             // 
             // BtnBuscar
             // 
-            this.BtnBuscar.Location = new System.Drawing.Point(532, 102);
+            this.BtnBuscar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.BtnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnBuscar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.BtnBuscar.ForeColor = System.Drawing.Color.White;
+            this.BtnBuscar.Location = new System.Drawing.Point(544, 132);
             this.BtnBuscar.Name = "BtnBuscar";
-            this.BtnBuscar.Size = new System.Drawing.Size(89, 39);
+            this.BtnBuscar.Size = new System.Drawing.Size(100, 36);
             this.BtnBuscar.TabIndex = 5;
             this.BtnBuscar.Text = "Buscar";
-            this.BtnBuscar.UseVisualStyleBackColor = true;
+            this.BtnBuscar.UseVisualStyleBackColor = false;
             this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(393, 25);
+            this.progressBar1.Location = new System.Drawing.Point(355, 188);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(133, 23);
+            this.progressBar1.Size = new System.Drawing.Size(235, 12);
             this.progressBar1.TabIndex = 6;
             // 
             // dgvUsuarios
             // 
-            this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvUsuarios.AllowUserToAddRows = false;
+            this.dgvUsuarios.BackgroundColor = System.Drawing.Color.White;
+            this.dgvUsuarios.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvUsuarios.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvUsuarios.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvUsuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            this.dgvUsuarios.ColumnHeadersHeight = 35;
+            this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvUsuarios.DefaultCellStyle = dataGridViewCellStyle8;
             this.dgvUsuarios.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvUsuarios.Location = new System.Drawing.Point(3, 22);
+            this.dgvUsuarios.EnableHeadersVisualStyles = false;
+            this.dgvUsuarios.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dgvUsuarios.Location = new System.Drawing.Point(20, 20);
             this.dgvUsuarios.Name = "dgvUsuarios";
-            this.dgvUsuarios.RowHeadersWidth = 62;
-            this.dgvUsuarios.RowTemplate.Height = 28;
-            this.dgvUsuarios.Size = new System.Drawing.Size(650, 276);
+            this.dgvUsuarios.RowHeadersVisible = false;
+            this.dgvUsuarios.RowHeadersWidth = 51;
+            this.dgvUsuarios.RowTemplate.Height = 30;
+            this.dgvUsuarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvUsuarios.Size = new System.Drawing.Size(716, 261);
             this.dgvUsuarios.TabIndex = 7;
             this.dgvUsuarios.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvUsuarios_ColumnHeaderMouseClick);
             // 
             // btnExportar
             // 
-            this.btnExportar.Location = new System.Drawing.Point(237, 156);
+            this.btnExportar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(233)))), ((int)(((byte)(240)))));
+            this.btnExportar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExportar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.btnExportar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.btnExportar.Location = new System.Drawing.Point(221, 184);
             this.btnExportar.Name = "btnExportar";
-            this.btnExportar.Size = new System.Drawing.Size(80, 35);
+            this.btnExportar.Size = new System.Drawing.Size(100, 34);
             this.btnExportar.TabIndex = 7;
             this.btnExportar.Text = "Exportar";
-            this.btnExportar.UseVisualStyleBackColor = true;
+            this.btnExportar.UseVisualStyleBackColor = false;
             this.btnExportar.Click += new System.EventHandler(this.btnExportar_Click);
             // 
             // cbExportar
             // 
             this.cbExportar.AutoSize = true;
-            this.cbExportar.Location = new System.Drawing.Point(35, 162);
+            this.cbExportar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cbExportar.Location = new System.Drawing.Point(34, 188);
             this.cbExportar.Name = "cbExportar";
-            this.cbExportar.Size = new System.Drawing.Size(149, 24);
+            this.cbExportar.Size = new System.Drawing.Size(164, 29);
             this.cbExportar.TabIndex = 6;
             this.cbExportar.Text = "¿Exportar todo?";
             this.cbExportar.UseVisualStyleBackColor = true;
@@ -132,42 +175,49 @@
             // cbAntenas
             // 
             this.cbAntenas.AutoSize = true;
-            this.cbAntenas.Location = new System.Drawing.Point(339, 108);
+            this.cbAntenas.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cbAntenas.Location = new System.Drawing.Point(340, 137);
             this.cbAntenas.Name = "cbAntenas";
-            this.cbAntenas.Size = new System.Drawing.Size(187, 24);
+            this.cbAntenas.Size = new System.Drawing.Size(195, 29);
             this.cbAntenas.TabIndex = 11;
             this.cbAntenas.Text = "¿Buscar en antenas?";
             this.cbAntenas.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // panelContenedor
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.panelContenedor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.dgvUsuarios);
-            this.groupBox1.Location = new System.Drawing.Point(31, 210);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(656, 301);
-            this.groupBox1.TabIndex = 12;
-            this.groupBox1.TabStop = false;
+            this.panelContenedor.Controls.Add(this.dgvUsuarios);
+            this.panelContenedor.Location = new System.Drawing.Point(14, 230);
+            this.panelContenedor.Name = "panelContenedor";
+            this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
+            this.panelContenedor.Size = new System.Drawing.Size(756, 301);
+            this.panelContenedor.TabIndex = 12;
             // 
             // btnEliminar
             // 
-            this.btnEliminar.Location = new System.Drawing.Point(593, 20);
+            this.btnEliminar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEliminar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEliminar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.btnEliminar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
+            this.btnEliminar.Location = new System.Drawing.Point(544, 44);
             this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(94, 35);
+            this.btnEliminar.Size = new System.Drawing.Size(100, 35);
             this.btnEliminar.TabIndex = 13;
             this.btnEliminar.Text = "Eliminar";
-            this.btnEliminar.UseVisualStyleBackColor = true;
+            this.btnEliminar.UseVisualStyleBackColor = false;
             this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
             // 
             // Migracion
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(699, 523);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(784, 546);
             this.Controls.Add(this.btnEliminar);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.panelContenedor);
             this.Controls.Add(this.cbAntenas);
             this.Controls.Add(this.cbExportar);
             this.Controls.Add(this.btnExportar);
@@ -177,14 +227,16 @@
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.CBMikrotiks);
             this.Controls.Add(this.lblMensaje);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.MaximizeBox = false;
             this.Name = "Migracion";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Migracion";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Migracion_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();
-            this.groupBox1.ResumeLayout(false);
+            this.panelContenedor.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -201,7 +253,7 @@
         private System.Windows.Forms.Button btnExportar;
         private System.Windows.Forms.CheckBox cbExportar;
         private System.Windows.Forms.CheckBox cbAntenas;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Panel panelContenedor; // Reemplaza al GroupBox para diseño plano e higiénico
         private System.Windows.Forms.Button btnEliminar;
     }
 }

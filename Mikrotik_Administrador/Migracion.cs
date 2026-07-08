@@ -43,7 +43,95 @@ namespace Mikrotik_Administrador
             CBMikrotiks.DataSource = listaMikrotiks;
             CBMikrotiks.SelectedIndex = 0;
         }
+        public void CrearGridView()
+        {
+            dgvUsuarios.Columns.Clear();
+            dgvUsuarios.AutoGenerateColumns = false;
+            dgvUsuarios.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            dgvUsuarios.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            dgvUsuarios.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvUsuarios.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
 
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            dgvUsuarios.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dgvUsuarios.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            dgvUsuarios.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "id",
+                HeaderText = "id",
+                DataPropertyName = "id",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "comment",
+                HeaderText = "comment",
+                DataPropertyName = "comment",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "address",
+                HeaderText = "address",
+                DataPropertyName = "address",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "idplan",
+                HeaderText = "idplan",
+                DataPropertyName = "idplan",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "velocidad",
+                HeaderText = "velocidad",
+                DataPropertyName = "velocidad",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "estatus",
+                HeaderText = "estatus",
+                DataPropertyName = "estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn
+            {
+                Name = "cbSeleccionar",
+                HeaderText = "Copiar a Base",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvUsuarios.Columns.Add(chkSeleccionar);
+         
+            dgvUsuarios.AllowUserToAddRows = false;
+        }
         public async void BuscarUsuarios() {
             if (CBMikrotiks.SelectedValue.ToString() == "0")
             {
@@ -58,15 +146,12 @@ namespace Mikrotik_Administrador
                     return;
                 }
             }
+            CrearGridView();
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             BtnBuscar.Enabled = false; // Deshabilitar el botón para evitar múltiples clics
             btnExportar.Enabled = false;
             btnEliminar.Enabled = false;
-            dgvUsuarios.DataSource = null;
-            dgvUsuarios.Columns.Clear(); // Limpiar columnas anteriores
-            dgvUsuarios.AllowUserToAddRows = false;
-            dgvUsuarios.AutoGenerateColumns = true;
             int IdMikrotik = (int)CBMikrotiks.SelectedValue;
             try
             {
@@ -110,15 +195,8 @@ namespace Mikrotik_Administrador
                     }
                     else
                     {
-                        var source = new SortableBindingList<Antenas>(lista);
-                        dgvUsuarios.DataSource = source;
-                        foreach (DataGridViewColumn col in dgvUsuarios.Columns)
-                        {
-                            col.SortMode = DataGridViewColumnSortMode.Programmatic;
-                        }
-                        AgregarBotones();
-                        dgvUsuarios.Refresh();
-                        MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        var listaFinal = lista?.ToList() ?? new List<Antenas>();
+                        dgvUsuarios.DataSource = new SortableBindingList<Antenas>(listaFinal);
                     }
                 }
                 else
@@ -134,15 +212,8 @@ namespace Mikrotik_Administrador
                     }
                     else
                     {
-                        var source = new SortableBindingList<Fibra>(lista);
-                        dgvUsuarios.DataSource = source;
-                        foreach (DataGridViewColumn col in dgvUsuarios.Columns)
-                        {
-                            col.SortMode = DataGridViewColumnSortMode.Programmatic;
-                        }
-                        AgregarBotones();
-                        dgvUsuarios.Refresh();
-                        MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        var listaFinal = lista?.ToList() ?? new List<Fibra>();
+                        dgvUsuarios.DataSource = new SortableBindingList<Fibra>(listaFinal);
                     }
                 }
             }
@@ -166,14 +237,6 @@ namespace Mikrotik_Administrador
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             BuscarUsuarios();
-        }
-        private void AgregarBotones()
-        {
-            // Botón Checket
-            DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn();
-            chkSeleccionar.Name = "cbSeleccionar";
-            chkSeleccionar.HeaderText = "Copiar a Base";
-            dgvUsuarios.Columns.Add(chkSeleccionar);
         }
 
         private void btnExportar_Click(object sender, EventArgs e)

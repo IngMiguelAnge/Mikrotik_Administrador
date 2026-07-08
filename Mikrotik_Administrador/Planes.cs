@@ -1,4 +1,6 @@
 ﻿using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Model;
+using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,29 +24,20 @@ namespace Mikrotik_Administrador
         }
         public void BuscarPlanes() 
         {
+            CrearGridView();
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             btnBuscar.Enabled = false;
-            dgvPlanes.DataSource = null;
-            dgvPlanes.Columns.Clear();
             try
             {
                 AppRepository obj = new AppRepository();
                 bool? IsAntena = Tipo == string.Empty ? (bool?)null :
                     Tipo == "Antena" ? true : false;
                 var lista = obj.GetPlanesbyName(txtNombre.Text, IsAntena).Result;
-
-                if (lista != null && lista.Count > 0)
-                {
-                    dgvPlanes.DataSource = lista;
-                    AgregarBotones();
-                    MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("No se encontraron Planes.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
+                var listaFinal = lista?.ToList() ?? new List<ListPlanesModel>();
+                dgvPlanes.DataSource = new SortableBindingList<ListPlanesModel>(listaFinal);
+                if (dgvPlanes.Columns["Id"] != null)
+                    dgvPlanes.Columns["Id"].Visible = false;              
             }
             catch (Exception ex)
             {
@@ -69,29 +62,115 @@ namespace Mikrotik_Administrador
             }
           BuscarPlanes();
         }
-
-        private void AgregarBotones()
+        public void CrearGridView()
         {
-            // Botón Editar
+            dgvPlanes.Columns.Clear();
+            dgvPlanes.AutoGenerateColumns = false;
+            dgvPlanes.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            dgvPlanes.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            dgvPlanes.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvPlanes.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            dgvPlanes.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dgvPlanes.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            dgvPlanes.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+            dgvPlanes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "Id",
+                DataPropertyName = "Id",
+                Visible = false,
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvPlanes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Nombre",
+                HeaderText = "Nombre",
+                DataPropertyName = "Nombre",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvPlanes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Precio",
+                HeaderText = "Precio",
+                DataPropertyName = "Precio",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvPlanes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Velocidad",
+                HeaderText = "Velocidad",
+                DataPropertyName = "Velocidad",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvPlanes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvPlanes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "PlanDe",
+                HeaderText = "Tipo de plan",
+                DataPropertyName = "PlanDe",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
             if (PorUsuarios == false)
             {
-                DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn();
-                btnEditar.Name = "btnEditar";
-                btnEditar.HeaderText = "Acción";
-                btnEditar.Text = "Editar";
-                btnEditar.UseColumnTextForButtonValue = true;
+                DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn
+                {
+                    Name = "btnEditar",
+                    HeaderText = "Acción",
+                    Text = "Editar",
+                    UseColumnTextForButtonValue = true,
+                    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = estiloBotones
+                };
                 dgvPlanes.Columns.Add(btnEditar);
             }
-            else
-            {
-                DataGridViewButtonColumn btnAsignar = new DataGridViewButtonColumn();
-                btnAsignar.Name = "btnAsignar";
-                btnAsignar.HeaderText = "Acción";
-                btnAsignar.Text = "Asignar";
-                btnAsignar.UseColumnTextForButtonValue = true;
+            else {
+                DataGridViewButtonColumn btnAsignar = new DataGridViewButtonColumn
+                {
+                    Name = "btnAsignar",
+                    HeaderText = "Acción",
+                    Text = "Asignar",
+                    UseColumnTextForButtonValue = true,
+                    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = estiloBotones
+                };
                 dgvPlanes.Columns.Add(btnAsignar);
-            }
+            }   
+            dgvPlanes.AllowUserToAddRows = false;
         }
+
+       
 
         private void dgvPlanes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

@@ -3,6 +3,7 @@ using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,7 +14,6 @@ namespace Mikrotik_Administrador
     {
         public int IdMikrotik;
         MK mikrotik;
-        List<Address> listaaddress = new List<Address>();
         public WirelessMikrotik()
         {
             InitializeComponent();
@@ -86,14 +86,83 @@ namespace Mikrotik_Administrador
             }
         }
 
+        public void CrearGridView()
+        {
+            dgvWireless.Columns.Clear();
+            dgvWireless.AutoGenerateColumns = false;
+            dgvWireless.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            dgvWireless.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            dgvWireless.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvWireless.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            dgvWireless.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dgvWireless.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            dgvWireless.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+            dgvWireless.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "id",
+                HeaderText = "Id",
+                DataPropertyName = "id",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvWireless.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "address",
+                HeaderText = "IP",
+                DataPropertyName = "address",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvWireless.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "comment",
+                HeaderText = "Comment",
+                DataPropertyName = "comment",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvWireless.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn
+            {
+                Name = "chkSeleccionar",
+                HeaderText = "Acción",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvWireless.Columns.Add(chkSeleccionar);
+            dgvWireless.AllowUserToAddRows = false;
+        }
         private async void BtnExtraer_Click(object sender, EventArgs e)
         {
+            CrearGridView();
             BtnExtraer.Enabled = false; // Deshabilitar el botón para evitar múltiples clics
             BtnActualizar.Enabled = false;
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-            dgvWireless.DataSource = null;
-            dgvWireless.Columns.Clear();
             try
             {
                 AppRepository obj = new AppRepository();
@@ -117,16 +186,12 @@ namespace Mikrotik_Administrador
                 }
 
                 var lista = await Task.Run(() => mikrotik.VerAddres());
+                var listaFinal = lista?.ToList() ?? new List<Address>();
+                dgvWireless.DataSource = new BindingList<Address>(listaFinal);
                 if (lista != null && lista.Count > 0)
                 {
-                    dgvWireless.DataSource = lista;
-                    listaaddress = lista;
-                    AgregarBotones();
                     BtnActualizar.Enabled = true;
                 }
-
-                MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             }
             catch (Exception ex)
             {
@@ -142,16 +207,7 @@ namespace Mikrotik_Administrador
                 progressBar1.Value = 100;
                 BtnExtraer.Enabled = true;         
             }
-        }
-
-        private void AgregarBotones()
-        {
-            // Botón Checket
-            DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn();
-            chkSeleccionar.Name = "cbSeleccionar";
-            chkSeleccionar.HeaderText = "Copiar a Base";
-            dgvWireless.Columns.Add(chkSeleccionar);
-        }
+        } 
 
     }
 }

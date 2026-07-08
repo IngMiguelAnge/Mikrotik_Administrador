@@ -34,23 +34,29 @@
             // 
             // PBImagen
             // 
-            this.PBImagen.Location = new System.Drawing.Point(54, 28);
+            this.PBImagen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250))))); // Fondo gris muy claro neutro para contrastar la imagen
+            this.PBImagen.Dock = System.Windows.Forms.DockStyle.Fill; // CORREGIDO: Se expande por completo en el contenedor
+            this.PBImagen.Location = new System.Drawing.Point(20, 20); // Margen estético respetando el Padding
             this.PBImagen.Name = "PBImagen";
-            this.PBImagen.Size = new System.Drawing.Size(396, 347);
+            this.PBImagen.Size = new System.Drawing.Size(560, 460);
             this.PBImagen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PBImagen.TabIndex = 0;
             this.PBImagen.TabStop = false;
             // 
             // VerImagen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(501, 404);
+            this.BackColor = System.Drawing.Color.White; // CORREGIDO: Fondo blanco plano
+            this.ClientSize = new System.Drawing.Size(600, 500); // Ajustado para una mejor proporción inicial del comprobante
             this.Controls.Add(this.PBImagen);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "VerImagen";
+            this.Padding = new System.Windows.Forms.Padding(20); // AGREGADO: Margen interno para que la imagen no toque los bordes rectos de la ventana
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.VerImagen_Load);

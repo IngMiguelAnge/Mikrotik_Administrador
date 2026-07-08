@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
+using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,29 +34,96 @@ namespace Mikrotik_Administrador
             }
             BuscarComments();
         }
-        public void BuscarComments()
+        public void CrearGridView()
+        {
+            dgvComments.Columns.Clear();
+            dgvComments.AutoGenerateColumns = false;
+            dgvComments.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            dgvComments.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            dgvComments.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvComments.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            dgvComments.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dgvComments.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            dgvComments.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+            dgvComments.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "Id",
+                DataPropertyName = "Id",
+                Visible = false,
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvComments.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Nombre",
+                HeaderText = "Nombre",
+                DataPropertyName = "Nombre",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvComments.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn
+            {
+                Name = "btnEditar",
+                HeaderText = "Acción",
+                Text = "Editar",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvComments.Columns.Add(btnEditar);
+            DataGridViewButtonColumn btnCambiar = new DataGridViewButtonColumn
+            {
+                Name = "btnCambiar",
+                HeaderText = "Acción",
+                Text = "Cambiar Estatus",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvComments.Columns.Add(btnCambiar);
+            dgvComments.AllowUserToAddRows = false;
+        }
+
+        public async void BuscarComments()
         {
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             btnBuscar.Enabled = false;
-            dgvComments.DataSource = null;
-            dgvComments.Columns.Clear();
             try
             {
+                CrearGridView();
                 AppRepository obj = new AppRepository();
-                var lista = obj.GetComments(txtNombre.Text).Result;
-
-                if (lista != null && lista.Count > 0)
-                {
-                    dgvComments.DataSource = lista;
-                    AgregarBotones();
-                    MessageBox.Show("Carga completa", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("No se encontraron comennts.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
+                var lista = await Task.Run(() => obj.GetComments(txtNombre.Text));
+                var listaFinal = lista?.ToList() ?? new List<ListCommentsModel>();
+                dgvComments.DataSource = new SortableBindingList<ListCommentsModel>(listaFinal);
+                if (dgvComments.Columns["Id"] != null)
+                    dgvComments.Columns["Id"].Visible = false;             
             }
             catch (Exception ex)
             {
@@ -67,21 +135,6 @@ namespace Mikrotik_Administrador
                 progressBar1.Value = 0;
                 btnBuscar.Enabled = true;
             }
-        }
-        private void AgregarBotones()
-        {
-            DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn();
-            btnEditar.Name = "btnEditar";
-            btnEditar.HeaderText = "Acción";
-            btnEditar.Text = "Editar";
-            btnEditar.UseColumnTextForButtonValue = true;
-            dgvComments.Columns.Add(btnEditar);
-            DataGridViewButtonColumn btnCambiar = new DataGridViewButtonColumn();
-            btnCambiar.Name = "btnCambiar";
-            btnCambiar.HeaderText = "Acción";
-            btnCambiar.Text = "Editar";
-            btnCambiar.UseColumnTextForButtonValue = true;
-            dgvComments.Columns.Add(btnCambiar);
         }
 
         private void dgvComments_CellContentClick(object sender, DataGridViewCellEventArgs e)
