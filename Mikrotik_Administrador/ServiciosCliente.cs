@@ -178,7 +178,9 @@ namespace Mikrotik_Administrador
                 HeaderText = "Asignar",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
+                TrueValue = true,
+                FalseValue = false,
+                IndeterminateValue = false
             };
             DGVServicios.Columns.Add(chkSeleccionar);
             DataGridViewButtonColumn btnUbicacion = new DataGridViewButtonColumn

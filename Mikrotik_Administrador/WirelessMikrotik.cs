@@ -151,7 +151,9 @@ namespace Mikrotik_Administrador
                 HeaderText = "Acción",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
+                TrueValue = true,
+                FalseValue = false,
+                IndeterminateValue = false
             };
             dgvWireless.Columns.Add(chkSeleccionar);
             dgvWireless.AllowUserToAddRows = false;

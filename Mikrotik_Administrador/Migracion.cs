@@ -126,7 +126,9 @@ namespace Mikrotik_Administrador
                 HeaderText = "Copiar a Base",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
+                TrueValue = true,
+                FalseValue = false,
+                IndeterminateValue = false
             };
             dgvUsuarios.Columns.Add(chkSeleccionar);
          
