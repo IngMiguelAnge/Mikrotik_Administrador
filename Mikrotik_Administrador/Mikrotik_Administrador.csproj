@@ -261,10 +261,10 @@
     <Compile Include="Class\Fibra.cs" />
     <Compile Include="Class\Impresiones.cs" />
     <Compile Include="Class\MK.cs" />
-    <Compile Include="Comments.cs">
+    <Compile Include="Catalogos\Comments.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Comments.Designer.cs">
+    <Compile Include="Catalogos\Comments.Designer.cs">
       <DependentUpon>Comments.cs</DependentUpon>
     </Compile>
     <Compile Include="Items\ConfirmarPago.cs">
@@ -326,48 +326,48 @@
     <Compile Include="Model\SaveHistorialPagosModel.cs" />
     <Compile Include="Model\UsuariosandPlanesModel.cs" />
     <Compile Include="Model\VentaModel.cs" />
-    <Compile Include="Plan.cs">
+    <Compile Include="Catalogos\Plan.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Plan.Designer.cs">
+    <Compile Include="Catalogos\Plan.Designer.cs">
       <DependentUpon>Plan.cs</DependentUpon>
     </Compile>
-    <Compile Include="Planes.cs">
+    <Compile Include="Catalogos\Planes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Planes.Designer.cs">
+    <Compile Include="Catalogos\Planes.Designer.cs">
       <DependentUpon>Planes.cs</DependentUpon>
     </Compile>
-    <Compile Include="ServiciosCliente.cs">
+    <Compile Include="Catalogos\ServiciosCliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ServiciosCliente.Designer.cs">
+    <Compile Include="Catalogos\ServiciosCliente.Designer.cs">
       <DependentUpon>ServiciosCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings\SortableBindingList.cs" />
-    <Compile Include="Usuarios.cs">
+    <Compile Include="Catalogos\Usuarios.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Usuarios.Designer.cs">
+    <Compile Include="Catalogos\Usuarios.Designer.cs">
       <DependentUpon>Usuarios.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\AppRepository.cs" />
-    <Compile Include="InfoCliente.cs">
+    <Compile Include="Catalogos\InfoCliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InfoCliente.Designer.cs">
+    <Compile Include="Catalogos\InfoCliente.Designer.cs">
       <DependentUpon>InfoCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="InfoClientes.cs">
+    <Compile Include="Catalogos\InfoClientes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InfoClientes.Designer.cs">
+    <Compile Include="Catalogos\InfoClientes.Designer.cs">
       <DependentUpon>InfoClientes.cs</DependentUpon>
     </Compile>
-    <Compile Include="InfoMikrotik.cs">
+    <Compile Include="Catalogos\InfoMikrotik.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InfoMikrotik.Designer.cs">
+    <Compile Include="Catalogos\InfoMikrotik.Designer.cs">
       <DependentUpon>InfoMikrotik.cs</DependentUpon>
     </Compile>
     <Compile Include="Login.cs">
@@ -376,16 +376,16 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migracion.cs">
+    <Compile Include="Catalogos\Migracion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Migracion.Designer.cs">
+    <Compile Include="Catalogos\Migracion.Designer.cs">
       <DependentUpon>Migracion.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mikrotiks.cs">
+    <Compile Include="Catalogos\Mikrotiks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Mikrotiks.Designer.cs">
+    <Compile Include="Catalogos\Mikrotiks.Designer.cs">
       <DependentUpon>Mikrotiks.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\ClienteModel.cs" />
@@ -403,16 +403,16 @@
     <Compile Include="Model\UsuariosModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Ubicacion.cs">
+    <Compile Include="Catalogos\Ubicacion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Ubicacion.Designer.cs">
+    <Compile Include="Catalogos\Ubicacion.Designer.cs">
       <DependentUpon>Ubicacion.cs</DependentUpon>
     </Compile>
-    <Compile Include="WirelessMikrotik.cs">
+    <Compile Include="Catalogos\WirelessMikrotik.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WirelessMikrotik.Designer.cs">
+    <Compile Include="Catalogos\WirelessMikrotik.Designer.cs">
       <DependentUpon>WirelessMikrotik.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Catalogos\Banco.resx">
@@ -427,7 +427,7 @@
     <EmbeddedResource Include="Catalogos\Pagos.resx">
       <DependentUpon>Pagos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Comments.resx">
+    <EmbeddedResource Include="Catalogos\Comments.resx">
       <DependentUpon>Comments.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\ConfirmarPago.resx">
@@ -451,34 +451,34 @@
     <EmbeddedResource Include="Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Plan.resx">
+    <EmbeddedResource Include="Catalogos\Plan.resx">
       <DependentUpon>Plan.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Planes.resx">
+    <EmbeddedResource Include="Catalogos\Planes.resx">
       <DependentUpon>Planes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ServiciosCliente.resx">
+    <EmbeddedResource Include="Catalogos\ServiciosCliente.resx">
       <DependentUpon>ServiciosCliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Usuarios.resx">
+    <EmbeddedResource Include="Catalogos\Usuarios.resx">
       <DependentUpon>Usuarios.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoCliente.resx">
+    <EmbeddedResource Include="Catalogos\InfoCliente.resx">
       <DependentUpon>InfoCliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoClientes.resx">
+    <EmbeddedResource Include="Catalogos\InfoClientes.resx">
       <DependentUpon>InfoClientes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoMikrotik.resx">
+    <EmbeddedResource Include="Catalogos\InfoMikrotik.resx">
       <DependentUpon>InfoMikrotik.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migracion.resx">
+    <EmbeddedResource Include="Catalogos\Migracion.resx">
       <DependentUpon>Migracion.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Mikrotiks.resx">
+    <EmbeddedResource Include="Catalogos\Mikrotiks.resx">
       <DependentUpon>Mikrotiks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -490,10 +490,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Ubicacion.resx">
+    <EmbeddedResource Include="Catalogos\Ubicacion.resx">
       <DependentUpon>Ubicacion.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WirelessMikrotik.resx">
+    <EmbeddedResource Include="Catalogos\WirelessMikrotik.resx">
       <DependentUpon>WirelessMikrotik.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
