@@ -266,6 +266,7 @@
             // btnPlan
             // 
             this.btnPlan.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.btnPlan.Enabled = false;
             this.btnPlan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPlan.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.btnPlan.ForeColor = System.Drawing.Color.White;
@@ -273,8 +274,9 @@
             this.btnPlan.Name = "btnPlan";
             this.btnPlan.Size = new System.Drawing.Size(160, 42);
             this.btnPlan.TabIndex = 25;
-            this.btnPlan.Text = "Seleccionar Plan";
+            this.btnPlan.Text = "Cambiar Plan";
             this.btnPlan.UseVisualStyleBackColor = false;
+            this.btnPlan.Visible = false;
             this.btnPlan.Click += new System.EventHandler(this.btnPlan_Click);
             // 
             // lblServiciossin

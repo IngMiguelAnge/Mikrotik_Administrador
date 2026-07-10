@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace Mikrotik_Administrador.Data
 {
-    public class AppRepository
+    public class AppRepository : IDisposable
     {
         public string MikrotikConnection { get; set; }
         public AppRepository(bool isUnitOfWork = false)
@@ -1244,6 +1244,8 @@ namespace Mikrotik_Administrador.Data
                 Mikrotik = (string)reader["Mikrotik"],
                 IdCliente = Convert.IsDBNull(reader["IdCliente"]) ? (int?)null : (int)reader["IdCliente"],
                 Cliente = Convert.IsDBNull(reader["Cliente"]) ? string.Empty : (string)reader["Cliente"],
+                MinFechaInicio = Convert.IsDBNull(reader["MinFechaInicio"]) ? (DateTime?)null : (DateTime)reader["MinFechaInicio"],
+                MaxFechaFin = Convert.IsDBNull(reader["MaxFechaFin"]) ? (DateTime?)null : (DateTime)reader["MaxFechaFin"],
             };
         }
         public async Task<bool> SaveUsuariosGeneral(UsuariosGeneralModel obj)

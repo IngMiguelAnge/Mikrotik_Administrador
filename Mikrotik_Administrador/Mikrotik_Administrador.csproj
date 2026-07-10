@@ -291,6 +291,12 @@
     <Compile Include="Items\Prorroga.Designer.cs">
       <DependentUpon>Prorroga.cs</DependentUpon>
     </Compile>
+    <Compile Include="Items\TiempoDefinido.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\TiempoDefinido.Designer.cs">
+      <DependentUpon>TiempoDefinido.cs</DependentUpon>
+    </Compile>
     <Compile Include="Items\VerComentario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -441,6 +447,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Items\Prorroga.resx">
       <DependentUpon>Prorroga.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\TiempoDefinido.resx">
+      <DependentUpon>TiempoDefinido.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\VerComentario.resx">
       <DependentUpon>VerComentario.cs</DependentUpon>

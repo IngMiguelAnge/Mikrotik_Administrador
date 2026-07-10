@@ -1,4 +1,6 @@
-﻿namespace Mikrotik_Administrador.Model
+﻿using System;
+
+namespace Mikrotik_Administrador.Model
 {
     public class ListUsuariosGeneralModel
     {
@@ -15,5 +17,7 @@
         public int? IdCliente { get; set; }
         public string Cliente { get; set; }
         public string Tipo { get; set; }
+        public DateTime? MinFechaInicio { get; set; }
+        public DateTime? MaxFechaFin { get; set; }
     }
 }

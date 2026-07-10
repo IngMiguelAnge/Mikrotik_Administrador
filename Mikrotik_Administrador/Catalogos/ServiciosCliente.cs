@@ -1,5 +1,6 @@
 ﻿using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
@@ -172,6 +173,24 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "MinFechaInicio",
+                HeaderText = "Cambio de plan inicia",
+                DataPropertyName = "MinFechaInicio",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "MaxFechaFin",
+                HeaderText = "Cambio de plan termina",
+                DataPropertyName = "MaxFechaFin",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
             DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn
             {
                 Name = "chkSeleccionar",
@@ -213,8 +232,7 @@ namespace Mikrotik_Administrador
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             btnPlan.Enabled = false;
-            DGVServicios.DataSource = null;
-            DGVServicios.Columns.Clear();
+
             try
             {
                 AppRepository obj = new AppRepository();
@@ -373,6 +391,10 @@ namespace Mikrotik_Administrador
                       idinterno = Convert.ToString(r.Cells["IdInterno"].Value),
                       name = Convert.ToString(r.Cells["Usuario"].Value),
                       tipo = Convert.ToString(r.Cells["Tipo"].Value),
+                      minFechaInicio = r.Cells["MinFechaInicio"].Value == DBNull.Value || r.Cells["MinFechaInicio"].Value == null
+                      ? (DateTime?)null : Convert.ToDateTime(r.Cells["MinFechaInicio"].Value),
+                      maxFechaFin = r.Cells["MaxFechaFin"].Value == DBNull.Value || r.Cells["MaxFechaFin"].Value == null
+                      ? (DateTime?)null : Convert.ToDateTime(r.Cells["MaxFechaFin"].Value),
                   })
                   .OrderBy(u => u.idmikrotik)
                   .ToList();
@@ -395,6 +417,7 @@ namespace Mikrotik_Administrador
                         return;
                     }
                 }
+                            
                 Planes p = new Planes();
                 p.PorUsuarios = true;
                 p.Tipo = primerTipo;
@@ -403,6 +426,16 @@ namespace Mikrotik_Administrador
                 {
                     AppRepository obj = new AppRepository();
                     var plan = obj.GetPlanById(p.IdSeleccionado).Result;
+                    TiempoDefinido td = new TiempoDefinido();
+                    td.Plan = plan.Nombre;
+                    td.FechaInicio = Seleccionados.Min(u => u.minFechaInicio) ?? null;
+                    td.FechaFin = Seleccionados.Max(u => u.maxFechaFin) ?? null;
+                    if (td.ShowDialog() == DialogResult.Cancel)
+                    {
+                        MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        return;
+                    }
                     int contadorfallos = 0;
                     int contadorcorrecto = 0;
                     int MikrotikActual = 0;

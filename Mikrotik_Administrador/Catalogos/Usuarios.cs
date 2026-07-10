@@ -163,6 +163,26 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "MinFechaInicio",
+                HeaderText = "Cambio de plan inicia",
+                DataPropertyName = "MinFechaInicio",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "MaxFechaFin",
+                HeaderText = "Cambio de plan termina",
+                DataPropertyName = "MaxFechaFin",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
             DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn
             {
                 Name = "chkSeleccionar",
@@ -240,6 +260,14 @@ namespace Mikrotik_Administrador
                 if (dgvUsuarios.Columns["IdCliente"] != null)
                 {
                     dgvUsuarios.Columns["IdCliente"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["MinFechaInicio"] != null)
+                {
+                    dgvUsuarios.Columns["MinFechaInicio"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["MaxFechaFin"] != null)
+                {
+                    dgvUsuarios.Columns["MaxFechaFin"].Visible = false;
                 }
             }
             catch (Exception ex)
