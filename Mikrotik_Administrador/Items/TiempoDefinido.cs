@@ -7,17 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.Animation;
 
 namespace Mikrotik_Administrador.Items
 {
     public partial class TiempoDefinido : Form
     {
         public string Plan { get; set; }
-        public bool Test { get; set; }
+        public string Modo { get; set; }
         public int Horas { get; set; }
         public int Dias { get; set; }
         public DateTime? FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
+        private bool primera = true;
         public TiempoDefinido()
         {
             InitializeComponent();
@@ -25,56 +27,53 @@ namespace Mikrotik_Administrador.Items
 
         private void TiempoDefinido_Load(object sender, EventArgs e)
         {
+            CBModo.SelectedIndex = 0;
             lblTiempo.Text = "Tiempo que desea que dure el plan " + Plan;
             NUDDias.Value = 8;
             dtpFechaInicio.Value = DateTime.Now;
+            dtpFechaInicio.MinDate = DateTime.Now;
+            lblFechaFin.Text = string.Empty;
             CambiarFinal();
+            primera = false;
         }
 
-        private void btnTEST_Click(object sender, EventArgs e)
-        {
-            Test = true;
-            if (!checarfechas())
-            {
-                return;
-            }
-            this.DialogResult = DialogResult.OK;
-            this.Close();
-        }
-
-        private void btnCobro_Click(object sender, EventArgs e)
-        {
-            Test = false;
-            if (!checarfechas())
-            {
-                return;
-            }
-            this.DialogResult = DialogResult.OK;
-            this.Close();
-        }
         public bool checarfechas()
         {
-            if (NUDDias.Value == 0 && NUDHoras.Value == 0)
+            if (CBModo.SelectedIndex == 0)
+            {
+                MessageBox.Show("Debe seleccionar de que forma aplicara el cambio.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (CBModo.SelectedIndex != 3 && (NUDDias.Value == 0 && NUDHoras.Value == 0))
             {
                 MessageBox.Show("Debe seleccionar al menos un día o una hora para el plan de prueba.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            if (dtpFechaInicio.Value >= FechaInicio && dtpFechaInicio.Value <= FechaFin)
+            if(FechaInicio != null && FechaFin != null)
             {
-                MessageBox.Show("La fecha de inicio seleccionada no es válida. No debe estar entre " + FechaInicio?.ToString("dd/MM/yyyy HH:mm:ss") + " y " + FechaFin?.ToString("dd/MM/yyyy HH:mm:ss"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                if (dtpFechaInicio.Value >= FechaInicio && dtpFechaInicio.Value <= FechaFin)
+                {
+                    MessageBox.Show("La fecha de inicio seleccionada no es válida. No debe estar entre " + FechaInicio?.ToString("dd/MM/yyyy HH:mm:ss") + " y " + FechaFin?.ToString("dd/MM/yyyy HH:mm:ss"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                if (Convert.ToDateTime(lblFechaFin.Text) >= FechaInicio && Convert.ToDateTime(lblFechaFin.Text) <= FechaFin)
+                {
+                    MessageBox.Show("La fecha que termina no es válida. No debe estar entre " + FechaInicio?.ToString("dd/MM/yyyy HH:mm:ss") + " y " + FechaFin?.ToString("dd/MM/yyyy HH:mm:ss"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
             }
-            if (Convert.ToDateTime(lblFechaFin.Text) >= FechaInicio && Convert.ToDateTime(lblFechaFin.Text) <= FechaFin)
-            {
-                MessageBox.Show("La fecha que termina es válida. No debe estar entre " + FechaInicio?.ToString("dd/MM/yyyy HH:mm:ss") + " y " + FechaFin?.ToString("dd/MM/yyyy HH:mm:ss"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
+       
             Dias = (int)NUDDias.Value;
-            Horas = (int)NUDHoras.Value;       
+            Horas = (int)NUDHoras.Value;
             return true;
         }
         public void CambiarFinal()
         {
+            if (primera || CBModo.SelectedIndex == 0)
+            {
+                lblFechaFin.Text = string.Empty;
+                return;
+            }
             lblFechaFin.Text = dtpFechaInicio.Value.AddDays((int)NUDDias.Value).AddHours((int)NUDHoras.Value).ToString("dd/MM/yyyy HH:mm:ss");
         }
         private void dtpFechaInicio_ValueChanged(object sender, EventArgs e)
@@ -90,6 +89,44 @@ namespace Mikrotik_Administrador.Items
         private void NUDHoras_ValueChanged(object sender, EventArgs e)
         {
             CambiarFinal();
+        }
+
+        private void CBModo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (CBModo.SelectedIndex == 0)
+            {
+                NUDDias.Enabled = false;
+                NUDHoras.Enabled = false;
+                dtpFechaInicio.Enabled = false;
+                lblFechaFin.Text = string.Empty;
+            }
+            else
+            { 
+                dtpFechaInicio.Enabled = true;
+                if(CBModo.SelectedIndex == 3)
+                {
+                    NUDDias.Enabled = false;
+                    NUDHoras.Enabled = false;
+                    lblFechaFin.Text = "Es para plan mensual";
+                }
+                else
+                {
+                    NUDDias.Enabled = true;
+                    NUDHoras.Enabled = true;
+                    CambiarFinal();
+                }
+            }
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            Modo = CBModo.Text;
+            if (!checarfechas())
+            {
+                return;
+            }
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }

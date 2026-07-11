@@ -18,6 +18,36 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region TiempoDefinido
+        public async Task<bool> SaveTiempoDefinido(TiempoDefinidosModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveTiempoDefinido", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@FechaRecibido", obj.FechaRecibido));
+                        cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
+                        cmd.Parameters.Add(new SqlParameter("@Comentario", obj.Comentario));
+                        cmd.Parameters.Add(new SqlParameter("@IdBanco", obj.IdBanco));
+                        cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
+                        cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
         #region HistorialPagos
         public async Task<List<ListHistorialPagosModel>> GetHistorialPagos(int IdUser, string Referencia, int Id, int IdBanco)
         {
@@ -152,7 +182,7 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region Pagos
-        public async Task<bool> SaveHistorialPagos(SaveHistorialPagosModel obj)
+        public async Task<bool> SaveHistorialPagos(HistorialPagosModel obj)
         {
             try
             {
@@ -1238,6 +1268,7 @@ namespace Mikrotik_Administrador.Data
                 Address = (string)reader["Address"],
                 Estatus = (string)reader["Estatus"],
                 IdPlan = (int)reader["IdPlan"],
+                IdPlanOriginal = (int)reader["IdPlanOriginal"],
                 Plan = (string)reader["Plan"],
                 UploadDownload = (string)reader["UploadDownload"],
                 IdMikrotik = (int)reader["IdMikrotik"],

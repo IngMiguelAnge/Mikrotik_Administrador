@@ -200,7 +200,7 @@ namespace Mikrotik_Administrador.Items
                 Total = TotalReal,
                 Title = string.Empty
             };
-            SaveHistorialPagosModel sv = new SaveHistorialPagosModel
+            HistorialPagosModel sv = new HistorialPagosModel
             {
                 IdUsuarioM = IdUsuarioM,
                 FechaRecibido = dtpFechaPago.Value,

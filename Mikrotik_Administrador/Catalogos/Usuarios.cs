@@ -52,6 +52,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "Id",
                 DataPropertyName = "Id",
                 ReadOnly = true,
+                Visible = false,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
@@ -61,6 +62,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "IdInterno",
                 DataPropertyName = "IdInterno",
                 ReadOnly = true,
+                Visible = false,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
@@ -97,6 +99,17 @@ namespace Mikrotik_Administrador
                 HeaderText = "IdPlan",
                 DataPropertyName = "IdPlan",
                 ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdPlanOriginal",
+                HeaderText = "IdPlanOriginal",
+                DataPropertyName = "IdPlanOriginal",
+                ReadOnly = true,
+                Visible = false,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
@@ -124,6 +137,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "IdMikrotik",
                 DataPropertyName = "IdMikrotik",
                 ReadOnly = true,
+                Visible = false,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
@@ -142,6 +156,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "IdCliente",
                 DataPropertyName = "IdCliente",
                 ReadOnly = true,
+                Visible = false,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
@@ -252,6 +267,10 @@ namespace Mikrotik_Administrador
                 if (dgvUsuarios.Columns["IdPlan"] != null)
                 {
                     dgvUsuarios.Columns["IdPlan"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["IdPlanOriginal"] != null)
+                {
+                    dgvUsuarios.Columns["IdPlanOriginal"].Visible = false;
                 }
                 if (dgvUsuarios.Columns["IdMikrotik"] != null)
                 {

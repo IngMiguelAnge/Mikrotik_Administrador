@@ -329,7 +329,8 @@
     <Compile Include="Model\PlanesAnidadosModel.cs" />
     <Compile Include="Model\PlanesModel.cs" />
     <Compile Include="Model\PlanModel.cs" />
-    <Compile Include="Model\SaveHistorialPagosModel.cs" />
+    <Compile Include="Model\HistorialPagosModel.cs" />
+    <Compile Include="Model\TiempoDefinidosModel.cs" />
     <Compile Include="Model\UsuariosandPlanesModel.cs" />
     <Compile Include="Model\VentaModel.cs" />
     <Compile Include="Catalogos\Plan.cs">

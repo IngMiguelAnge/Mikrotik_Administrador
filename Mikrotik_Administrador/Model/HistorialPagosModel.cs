@@ -2,7 +2,7 @@
 
 namespace Mikrotik_Administrador.Model
 {
-    public class SaveHistorialPagosModel
+    public class HistorialPagosModel
     {
         public int Id { get; set; }
         public int IdUsuarioM { get; set; }

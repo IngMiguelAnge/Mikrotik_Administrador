@@ -33,12 +33,13 @@
             this.lblHoras = new System.Windows.Forms.Label();
             this.NUDDias = new System.Windows.Forms.NumericUpDown();
             this.NUDHoras = new System.Windows.Forms.NumericUpDown();
-            this.btnTEST = new System.Windows.Forms.Button();
-            this.btnCobro = new System.Windows.Forms.Button();
+            this.btnGuardar = new System.Windows.Forms.Button();
             this.lblFechaInicio = new System.Windows.Forms.Label();
             this.dtpFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.lblFechaFinal = new System.Windows.Forms.Label();
             this.lblFechaFin = new System.Windows.Forms.Label();
+            this.CBModo = new System.Windows.Forms.ComboBox();
+            this.lblModo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.NUDDias)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDHoras)).BeginInit();
             this.SuspendLayout();
@@ -48,7 +49,7 @@
             this.lblTiempo.AutoSize = true;
             this.lblTiempo.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.lblTiempo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblTiempo.Location = new System.Drawing.Point(40, 35);
+            this.lblTiempo.Location = new System.Drawing.Point(40, 117);
             this.lblTiempo.Name = "lblTiempo";
             this.lblTiempo.Size = new System.Drawing.Size(268, 28);
             this.lblTiempo.TabIndex = 0;
@@ -59,7 +60,7 @@
             this.lblDias.AutoSize = true;
             this.lblDias.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblDias.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblDias.Location = new System.Drawing.Point(40, 85);
+            this.lblDias.Location = new System.Drawing.Point(40, 167);
             this.lblDias.Name = "lblDias";
             this.lblDias.Size = new System.Drawing.Size(52, 25);
             this.lblDias.TabIndex = 1;
@@ -70,7 +71,7 @@
             this.lblHoras.AutoSize = true;
             this.lblHoras.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblHoras.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblHoras.Location = new System.Drawing.Point(195, 85);
+            this.lblHoras.Location = new System.Drawing.Point(195, 167);
             this.lblHoras.Name = "lblHoras";
             this.lblHoras.Size = new System.Drawing.Size(72, 25);
             this.lblHoras.TabIndex = 2;
@@ -78,8 +79,9 @@
             // 
             // NUDDias
             // 
+            this.NUDDias.Enabled = false;
             this.NUDDias.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.NUDDias.Location = new System.Drawing.Point(44, 115);
+            this.NUDDias.Location = new System.Drawing.Point(44, 197);
             this.NUDDias.Maximum = new decimal(new int[] {
             30,
             0,
@@ -97,47 +99,34 @@
             // 
             // NUDHoras
             // 
+            this.NUDHoras.Enabled = false;
             this.NUDHoras.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.NUDHoras.Location = new System.Drawing.Point(199, 115);
+            this.NUDHoras.Location = new System.Drawing.Point(199, 197);
             this.NUDHoras.Name = "NUDHoras";
             this.NUDHoras.Size = new System.Drawing.Size(130, 33);
             this.NUDHoras.TabIndex = 4;
             this.NUDHoras.ValueChanged += new System.EventHandler(this.NUDHoras_ValueChanged);
             // 
-            // btnTEST
+            // btnGuardar
             // 
-            this.btnTEST.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.btnTEST.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTEST.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnTEST.ForeColor = System.Drawing.Color.White;
-            this.btnTEST.Location = new System.Drawing.Point(45, 370);
-            this.btnTEST.Name = "btnTEST";
-            this.btnTEST.Size = new System.Drawing.Size(110, 38);
-            this.btnTEST.TabIndex = 5;
-            this.btnTEST.Text = "TEST";
-            this.btnTEST.UseVisualStyleBackColor = false;
-            this.btnTEST.Click += new System.EventHandler(this.btnTEST_Click);
-            // 
-            // btnCobro
-            // 
-            this.btnCobro.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
-            this.btnCobro.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCobro.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnCobro.ForeColor = System.Drawing.Color.White;
-            this.btnCobro.Location = new System.Drawing.Point(210, 370);
-            this.btnCobro.Name = "btnCobro";
-            this.btnCobro.Size = new System.Drawing.Size(120, 38);
-            this.btnCobro.TabIndex = 6;
-            this.btnCobro.Text = "COBRO";
-            this.btnCobro.UseVisualStyleBackColor = false;
-            this.btnCobro.Click += new System.EventHandler(this.btnCobro_Click);
+            this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnGuardar.ForeColor = System.Drawing.Color.White;
+            this.btnGuardar.Location = new System.Drawing.Point(210, 438);
+            this.btnGuardar.Name = "btnGuardar";
+            this.btnGuardar.Size = new System.Drawing.Size(120, 38);
+            this.btnGuardar.TabIndex = 6;
+            this.btnGuardar.Text = "Guardar";
+            this.btnGuardar.UseVisualStyleBackColor = false;
+            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
             // lblFechaInicio
             // 
             this.lblFechaInicio.AutoSize = true;
             this.lblFechaInicio.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.lblFechaInicio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFechaInicio.Location = new System.Drawing.Point(39, 174);
+            this.lblFechaInicio.Location = new System.Drawing.Point(39, 246);
             this.lblFechaInicio.Name = "lblFechaInicio";
             this.lblFechaInicio.Size = new System.Drawing.Size(250, 28);
             this.lblFechaInicio.TabIndex = 7;
@@ -146,9 +135,10 @@
             // dtpFechaInicio
             // 
             this.dtpFechaInicio.CustomFormat = "dd/MM/yyyy hh:mm tt";
+            this.dtpFechaInicio.Enabled = false;
             this.dtpFechaInicio.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.dtpFechaInicio.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpFechaInicio.Location = new System.Drawing.Point(44, 221);
+            this.dtpFechaInicio.Location = new System.Drawing.Point(44, 289);
             this.dtpFechaInicio.Name = "dtpFechaInicio";
             this.dtpFechaInicio.Size = new System.Drawing.Size(285, 33);
             this.dtpFechaInicio.TabIndex = 8;
@@ -159,7 +149,7 @@
             this.lblFechaFinal.AutoSize = true;
             this.lblFechaFinal.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.lblFechaFinal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFechaFinal.Location = new System.Drawing.Point(40, 274);
+            this.lblFechaFinal.Location = new System.Drawing.Point(40, 342);
             this.lblFechaFinal.Name = "lblFechaFinal";
             this.lblFechaFinal.Size = new System.Drawing.Size(186, 28);
             this.lblFechaFinal.TabIndex = 9;
@@ -170,24 +160,52 @@
             this.lblFechaFin.AutoSize = true;
             this.lblFechaFin.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.lblFechaFin.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFechaFin.Location = new System.Drawing.Point(40, 321);
+            this.lblFechaFin.Location = new System.Drawing.Point(40, 389);
             this.lblFechaFin.Name = "lblFechaFin";
             this.lblFechaFin.Size = new System.Drawing.Size(186, 28);
             this.lblFechaFin.TabIndex = 10;
             this.lblFechaFin.Text = "Fecha que termina:";
+            // 
+            // CBModo
+            // 
+            this.CBModo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBModo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBModo.FormattingEnabled = true;
+            this.CBModo.Items.AddRange(new object[] {
+            "Seleccione",
+            "Test",
+            "Temporal",
+            "Permanente"});
+            this.CBModo.Location = new System.Drawing.Point(44, 65);
+            this.CBModo.Name = "CBModo";
+            this.CBModo.Size = new System.Drawing.Size(285, 33);
+            this.CBModo.TabIndex = 11;
+            this.CBModo.SelectedIndexChanged += new System.EventHandler(this.CBModo_SelectedIndexChanged);
+            // 
+            // lblModo
+            // 
+            this.lblModo.AutoSize = true;
+            this.lblModo.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblModo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblModo.Location = new System.Drawing.Point(40, 23);
+            this.lblModo.Name = "lblModo";
+            this.lblModo.Size = new System.Drawing.Size(138, 25);
+            this.lblModo.TabIndex = 12;
+            this.lblModo.Text = "Aplicar cambio:";
             // 
             // TiempoDefinido
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(375, 421);
+            this.ClientSize = new System.Drawing.Size(375, 490);
+            this.Controls.Add(this.CBModo);
+            this.Controls.Add(this.lblModo);
             this.Controls.Add(this.lblFechaFin);
             this.Controls.Add(this.lblFechaFinal);
             this.Controls.Add(this.dtpFechaInicio);
             this.Controls.Add(this.lblFechaInicio);
-            this.Controls.Add(this.btnCobro);
-            this.Controls.Add(this.btnTEST);
+            this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.NUDHoras);
             this.Controls.Add(this.NUDDias);
             this.Controls.Add(this.lblHoras);
@@ -215,11 +233,12 @@
         private System.Windows.Forms.Label lblHoras;
         private System.Windows.Forms.NumericUpDown NUDDias;
         private System.Windows.Forms.NumericUpDown NUDHoras;
-        private System.Windows.Forms.Button btnTEST;
-        private System.Windows.Forms.Button btnCobro;
+        private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.Label lblFechaInicio;
         private System.Windows.Forms.DateTimePicker dtpFechaInicio;
         private System.Windows.Forms.Label lblFechaFinal;
         private System.Windows.Forms.Label lblFechaFin;
+        private System.Windows.Forms.ComboBox CBModo;
+        private System.Windows.Forms.Label lblModo;
     }
 }

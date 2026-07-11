@@ -9,6 +9,7 @@ namespace Mikrotik_Administrador.Model
         public string idinterno { get; set; }
         public string name { get; set; }
         public string tipo { get; set; }
+        public int idplanoriginal { get; set; }
         public DateTime? minFechaInicio { get; set; }
         public DateTime? maxFechaFin { get; set; }
     }

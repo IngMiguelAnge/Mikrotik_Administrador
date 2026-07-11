@@ -110,6 +110,16 @@ namespace Mikrotik_Administrador
             });
             DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
             {
+                Name = "IdPlanOriginal",
+                HeaderText = "IdPlanOriginal",
+                DataPropertyName = "IdPlanOriginal",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 Name = "Plan",
                 HeaderText = "Plan",
                 DataPropertyName = "Plan",
@@ -246,6 +256,10 @@ namespace Mikrotik_Administrador
                 if (DGVServicios.Columns["IdPlan"] != null)
                 {
                     DGVServicios.Columns["IdPlan"].Visible = false;
+                }
+                if (DGVServicios.Columns["IdPlanOriginal"] != null)
+                {
+                    DGVServicios.Columns["IdPlanOriginal"].Visible = false;
                 }
                 if (DGVServicios.Columns["IdMikrotik"] != null)
                 {
@@ -391,6 +405,7 @@ namespace Mikrotik_Administrador
                       idinterno = Convert.ToString(r.Cells["IdInterno"].Value),
                       name = Convert.ToString(r.Cells["Usuario"].Value),
                       tipo = Convert.ToString(r.Cells["Tipo"].Value),
+                      idplanoriginal = Convert.ToInt32(r.Cells["IdPlanOriginal"].Value),                      
                       minFechaInicio = r.Cells["MinFechaInicio"].Value == DBNull.Value || r.Cells["MinFechaInicio"].Value == null
                       ? (DateTime?)null : Convert.ToDateTime(r.Cells["MinFechaInicio"].Value),
                       maxFechaFin = r.Cells["MaxFechaFin"].Value == DBNull.Value || r.Cells["MaxFechaFin"].Value == null
@@ -433,68 +448,85 @@ namespace Mikrotik_Administrador
                     if (td.ShowDialog() == DialogResult.Cancel)
                     {
                         MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                         return;
                     }
                     int contadorfallos = 0;
-                    int contadorcorrecto = 0;
-                    int MikrotikActual = 0;
-                    MikrotikModel mikro;
-                    bool F = false;
+                    //int contadorcorrecto = 0;
+                    //int MikrotikActual = 0;
+                    //MikrotikModel mikro;
+                    //bool F = false;
                     foreach (UsuariosModel item in Seleccionados)
                     {
-                        if (MikrotikActual != item.idmikrotik)
+                        if(item.idplanoriginal == plan.Id) //No tiene caso designar el mismo plan
                         {
-                            F = false;
-                            mikro = new MikrotikModel();
-                            mikro = obj.GetMikrotikById(item.idmikrotik).Result;
-                            MikrotikActual = item.idmikrotik;
-                            if (mikro.Estatus == false)
-                            {
-                                contadorfallos++;
-                                F = true;
-                                continue;
-                            }
-                            if (mikrotik != null)
-                            {
-                                await Task.Run(() => mikrotik.Close());
-                            }
-                            mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
-                            bool login = await Task.Run(() =>
-                            {
-                                return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
-                            });
-                            if (login == false)
-                            {
-                                contadorfallos++;
-                                F = true;
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            if (F == true)
-                            {
-                                contadorfallos++;
-                                continue;
-                            }
-                        }
-                        bool Result1 = false;
-                        if (item.tipo == "Antena")
-                            Result1 = mikrotik.ActualizarVelocidadQueue(item.name, plan.Velocidad);
-                        else
-                            Result1 = mikrotik.ActualizarUsuarioPPP(item.idinterno, plan.Nombre, plan.Velocidad);
-                        if (Result1 == true)
-                        {
-                            var Res = await obj.UpdatePlanGeneral(item.id, plan.Id);
-                            contadorcorrecto++;
-                        }
-                        else
                             contadorfallos++;
+                            continue;
+                        }
+                        TiempoDefinidosModel TD = new TiempoDefinidosModel 
+                        {
+                            Dias = td.Dias,
+                            Horas = td.Horas,
+                            FechaInicio = td.FechaInicio ?? DateTime.Now,
+                            FechaFin = td.FechaFin ?? DateTime.Now.AddDays(td.Dias).AddHours(td.Horas),
+                            Modo = td.Modo,
+                            IdUsuarioM = item.id,
+                            Estatus = "Pendiente"
+                        };
+
+                        var result = obj.SaveTiempoDefinido(TD);
+                        //if (MikrotikActual != item.idmikrotik)
+                        //{
+                        //    F = false;
+                        //    mikro = new MikrotikModel();
+                        //    mikro = obj.GetMikrotikById(item.idmikrotik).Result;
+                        //    MikrotikActual = item.idmikrotik;
+                        //    if (mikro.Estatus == false)
+                        //    {
+                        //        contadorfallos++;
+                        //        F = true;
+                        //        continue;
+                        //    }
+                        //    if (mikrotik != null)
+                        //    {
+                        //        await Task.Run(() => mikrotik.Close());
+                        //    }
+                        //    mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+                        //    bool login = await Task.Run(() =>
+                        //    {
+                        //        return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                        //    });
+                        //    if (login == false)
+                        //    {
+                        //        contadorfallos++;
+                        //        F = true;
+                        //        continue;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    if (F == true)
+                        //    {
+                        //        contadorfallos++;
+                        //        continue;
+                        //    }
+                        //}
+                        //bool Result1 = false;
+                        //if (item.tipo == "Antena")
+                        //    Result1 = mikrotik.ActualizarVelocidadQueue(item.name, plan.Velocidad);
+                        //else
+                        //    Result1 = mikrotik.ActualizarUsuarioPPP(item.idinterno, plan.Nombre, plan.Velocidad);
+                        //if (Result1 == true)
+                        //{
+                        //    var Res = await obj.UpdatePlanGeneral(item.id, plan.Id);
+                        //    contadorcorrecto++;
+                        //}
+                        //else
+                        //    contadorfallos++;
                     }
+                    MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     BuscarServicios();
-                    MessageBox.Show("Usuarios que cambiaron plan: " + contadorcorrecto.ToString() +
-                        "\nUsuarios no cambiaron plan: " + contadorfallos.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //MessageBox.Show("Usuarios que cambiaron plan: " + contadorcorrecto.ToString() +
+                    //    "\nUsuarios no cambiaron plan: " + contadorfallos.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
