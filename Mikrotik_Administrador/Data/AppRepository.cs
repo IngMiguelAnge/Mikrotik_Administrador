@@ -29,13 +29,13 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Dias", obj.Dias));
+                        cmd.Parameters.Add(new SqlParameter("@Horas", obj.Horas));
+                        cmd.Parameters.Add(new SqlParameter("@FechaInicio", obj.FechaInicio));
+                        cmd.Parameters.Add(new SqlParameter("@FechaFin", obj.FechaFin));
+                        cmd.Parameters.Add(new SqlParameter("@Modo", obj.Modo));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
-                        cmd.Parameters.Add(new SqlParameter("@FechaRecibido", obj.FechaRecibido));
-                        cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
-                        cmd.Parameters.Add(new SqlParameter("@Comentario", obj.Comentario));
-                        cmd.Parameters.Add(new SqlParameter("@IdBanco", obj.IdBanco));
-                        cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
-                        cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
