@@ -170,6 +170,7 @@ namespace Mikrotik_Administrador
             {
                 try
                 {
+                    await obj.UpdateStatusPlanesAnidado(Fila.Id,false);
                     mikrotik = new MK(Fila.IP, Convert.ToInt32(Fila.Port));
                     bool login = await Task.Run(() =>
                     {
@@ -177,6 +178,7 @@ namespace Mikrotik_Administrador
                     });
                     if (login == true)
                     {
+                        await obj.UpdateStatusPlanesAnidado(Fila.Id,true);
                         if ((string)CBPerteneceA.SelectedItem == "Fibra")
                         {
                             PlanesAnidadosModel PlanInstroducir = new PlanesAnidadosModel();
@@ -222,15 +224,19 @@ namespace Mikrotik_Administrador
                                 var listausuario = obj.GetUsuariosMikrotiksByPlan(Fila.Id, Plan.Id).Result;
                                 foreach (var Filausuario in listausuario)
                                 {
-                                    var  Result1 = mikrotik.ActualizarVelocidadQueue(Filausuario.Nombre, Plan.Velocidad);
+                                    var Result1 = mikrotik.ActualizarVelocidadQueue(Filausuario.Nombre, Plan.Velocidad);
                                 }
                             }
-                        }                           
+                        }
+                    }
+                    else {
+                        MensajeError = MensajeError == string.Empty ? "No se pudo comunicar con algunos mikrotik, revisar" :
+                            MensajeError;
                     }
                 }
                 catch (Exception ex)
                 {
-                    MensajeError += " Mikrotik: " + Fila.Nombre + " dio error " + ex.Message;
+                    MensajeError = "No se pudo comunicar con algunos mikrotik, revisar";
                 }
                 finally
                 {

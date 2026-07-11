@@ -122,7 +122,7 @@ namespace Mikrotik_Administrador
             });
             DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn
             {
-                Name = "cbSeleccionar",
+                Name = "chkSeleccionar",
                 HeaderText = "Copiar a Base",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
@@ -254,7 +254,7 @@ namespace Mikrotik_Administrador
             {
                 List<UsuariosExtraidosModel> Seleccionados = new List<UsuariosExtraidosModel>();
                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                 .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
                   .Select(r => new UsuariosExtraidosModel
                   {
                       id = Convert.ToString(r.Cells["id"].Value),
@@ -351,7 +351,7 @@ namespace Mikrotik_Administrador
             {
                 if (!row.IsNewRow)
                 {
-                    row.Cells["cbSeleccionar"].Value = isChecked;
+                    row.Cells["chkSeleccionar"].Value = isChecked;
                 }
             }
 
@@ -414,7 +414,7 @@ namespace Mikrotik_Administrador
             {
                 List<UsuariosExtraidosModel> Seleccionados = new List<UsuariosExtraidosModel>();
                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                 .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
                   .Select(r => new UsuariosExtraidosModel
                   {
                       id = Convert.ToString(r.Cells["id"].Value),

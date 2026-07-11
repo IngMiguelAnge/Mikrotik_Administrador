@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Data;
+﻿using Mikrotik_Administrador.Catalogos;
+using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
@@ -140,6 +141,24 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            dgvPlanes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Correctos",
+                HeaderText = "Mikrotiks conectados",
+                DataPropertyName = "Correctos",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvPlanes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Erroneos",
+                HeaderText = "Mikrotiks que fallaron",
+                DataPropertyName = "Erroneos",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
             if (PorUsuarios == false)
             {
                 DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn
@@ -153,6 +172,18 @@ namespace Mikrotik_Administrador
                     DefaultCellStyle = estiloBotones
                 };
                 dgvPlanes.Columns.Add(btnEditar);
+
+                DataGridViewButtonColumn btnVerMikrotiks = new DataGridViewButtonColumn
+                {
+                    Name = "btnVerMikrotiks",
+                    HeaderText = "Acción",
+                    Text = "Ver Mikrotiks",
+                    UseColumnTextForButtonValue = true,
+                    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = estiloBotones
+                };
+                dgvPlanes.Columns.Add(btnVerMikrotiks);
             }
             else {
                 DataGridViewButtonColumn btnAsignar = new DataGridViewButtonColumn
@@ -198,7 +229,18 @@ namespace Mikrotik_Administrador
                     // 2. Indicamos que la operación fue exitosa
                     this.DialogResult = DialogResult.OK;
                     this.Close();
-                break;
+                    break;
+                case "btnVerMikrotiks":
+                    var NombrePlan = (string)dgvPlanes.Rows[e.RowIndex].Cells["Nombre"].Value;
+                    if (NombrePlan.Trim() == string.Empty)
+                    {
+                        MessageBox.Show("Solo se pueden ver mikrotiks de planes con nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    MikrotiksAnidados MA = new MikrotiksAnidados();
+                    MA.IdPlan = Convert.ToInt32(Id);
+                    MA.ShowDialog();
+                    break;
             }
         }
 

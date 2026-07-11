@@ -8,5 +8,7 @@
         public string Velocidad { get; set; }
         public string Estatus { get; set; }
         public string PlanDe { get; set; }
+        public int Correctos { get; set; }
+        public int Erroneos { get; set; }
     }
 }

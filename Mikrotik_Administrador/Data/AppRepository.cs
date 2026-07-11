@@ -19,13 +19,13 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region TiempoDefinido
-        public async Task<bool> SaveTiempoDefinido(TiempoDefinidosModel obj)
+        public async Task<bool> SaveTiempoCambio(TiempoDefinidosModel obj)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("SaveTiempoDefinido", sql))
+                    using (SqlCommand cmd = new SqlCommand("SaveTiempoCambio", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
@@ -699,8 +699,48 @@ namespace Mikrotik_Administrador.Data
                 Velocidad = Convert.IsDBNull(reader["Velocidad"]) ? string.Empty : (string)reader["Velocidad"],
                 Estatus = Convert.IsDBNull(reader["Estatus"]) ? string.Empty : (string)reader["Estatus"],
                 PlanDe = Convert.IsDBNull(reader["PlanDe"]) ? string.Empty : (string)reader["PlanDe"],
+                Correctos = (int)reader["Correctos"],
+                Erroneos = (int)reader["Erroneos"],
             };
         }
+        public async Task<List<ListPlanesAnidadosDetalleModel>> GetPlanesAnidadosDetalles(int IdPlan)
+        {
+            List<ListPlanesAnidadosDetalleModel> list = new List<ListPlanesAnidadosDetalleModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetPlanesAnidadosDetalles", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", IdPlan));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListPlanesAnidadosDetalle(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListPlanesAnidadosDetalleModel MapToListPlanesAnidadosDetalle(SqlDataReader reader)
+        {
+            return new ListPlanesAnidadosDetalleModel()
+            {
+                Id = (int)reader["Id"],
+                Mikrotik = (string)reader["Mikrotik"],
+                IP = (string)reader["IP"],
+                Estatus = (string)reader["Estatus"],
+            };
+        }
+
         public async Task<PlanModel> GetPlanById(int Id)
         {
             PlanModel response = new PlanModel();
@@ -833,6 +873,28 @@ namespace Mikrotik_Administrador.Data
             catch (Exception ex)
             {
                 return 0;
+            }
+        }
+        public async Task<bool> UpdateStatusPlanesAnidado(int IdMikrotik, bool Estatus)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("ResetStatusPlanesAnidado", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", Estatus));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
         public async Task<PlanesAnidadosModel> GetPlanesAnidadosbyParametros(PlanesAnidadosModel obj)

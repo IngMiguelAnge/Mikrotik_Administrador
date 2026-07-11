@@ -250,6 +250,12 @@
     <Compile Include="Catalogos\HistorialPagos.Designer.cs">
       <DependentUpon>HistorialPagos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\MikrotiksAnidados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\MikrotiksAnidados.Designer.cs">
+      <DependentUpon>MikrotiksAnidados.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\Pagos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -322,6 +328,7 @@
     <Compile Include="Model\ListConfigImpressionsModel.cs" />
     <Compile Include="Model\ListDetallesMensualidadModel.cs" />
     <Compile Include="Model\ListHistorialPagosModel.cs" />
+    <Compile Include="Model\ListPlanesAnidadosDetalleModel.cs" />
     <Compile Include="Model\ListPlanesModel.cs" />
     <Compile Include="Model\ListUsuariosByPlanModel.cs" />
     <Compile Include="Model\MensualidadModel.cs" />
@@ -430,6 +437,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\HistorialPagos.resx">
       <DependentUpon>HistorialPagos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\MikrotiksAnidados.resx">
+      <DependentUpon>MikrotiksAnidados.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Pagos.resx">
       <DependentUpon>Pagos.cs</DependentUpon>

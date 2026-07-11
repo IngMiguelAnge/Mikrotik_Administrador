@@ -381,7 +381,7 @@ namespace Mikrotik_Administrador
             {
                 List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                 .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
                   .Select(r => new UsuariosModel
                   {
                       id = Convert.ToInt32(r.Cells["Id"].Value),
@@ -669,7 +669,7 @@ namespace Mikrotik_Administrador
             {
                 if (!row.IsNewRow)
                 {
-                    row.Cells["cbSeleccionar"].Value = isChecked;
+                    row.Cells["chkSeleccionar"].Value = isChecked;
                 }
             }
         }
@@ -693,7 +693,7 @@ namespace Mikrotik_Administrador
             {
                 List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                 .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
                   .Select(r => new UsuariosModel
                   {
                       id = Convert.ToInt32(r.Cells["Id"].Value),
@@ -895,7 +895,7 @@ namespace Mikrotik_Administrador
             {
                 List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
                 Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                 .Where(r => Convert.ToBoolean(r.Cells["cbSeleccionar"].Value))
+                 .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
                   .Select(r => new UsuariosModel
                   {
                       id = Convert.ToInt32(r.Cells["Id"].Value),
