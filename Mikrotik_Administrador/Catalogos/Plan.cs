@@ -41,12 +41,13 @@ namespace Mikrotik_Administrador
             CBPerteneceA.SelectedIndex = 0;
             if (Id != 0)
             {
+                CBPerteneceA.Enabled = false;
                 var conteo = await obj.GetCountUsuariosByPlan(Id);
                 if (conteo > 0)
                 {
                     MessageBox.Show("Este plan cuenta con usuarios: \n " +
                         "Al guardar se demorara en asignar la información a todos los usuarios", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    CBPerteneceA.Enabled = false;
+                  
                     lblCantidadenPlan.Text = conteo.ToString();
                 }
                 var Plan = obj.GetPlanById(Id).Result;
@@ -170,6 +171,22 @@ namespace Mikrotik_Administrador
             {
                 try
                 {
+                    PlanAnidadoModel PlanInstroducir = new PlanAnidadoModel();
+                    PlanInstroducir.IdPlan = Plan.Id;
+                    PlanInstroducir.IdMikrotik = Fila.Id;
+                    PlanInstroducir.IsAntena = false;
+                    var Anidado = obj.GetPlanesAnidadosbyParametros(PlanInstroducir).Result;
+                    int IdPlanAnidado = Anidado?.Id ?? 0;
+                    if (Anidado is null)
+                    {
+                        Anidado = new PlanAnidadoModel();
+                        Anidado.IdMikrotik = Fila.Id;
+                        Anidado.IdPlanInterno = string.Empty;
+                        Anidado.IdPlan = Plan.Id;                  
+                        Anidado.IsAntena = (string)CBPerteneceA.SelectedItem == "Fibra" ? false : true;
+                        IdPlanAnidado = obj.SavePlanAnidadoByMigracion(Anidado).Result;
+                    }
+
                     await obj.UpdateStatusPlanesAnidado(Fila.Id,false);
                     mikrotik = new MK(Fila.IP, Convert.ToInt32(Fila.Port));
                     bool login = await Task.Run(() =>
@@ -180,20 +197,7 @@ namespace Mikrotik_Administrador
                     {
                         await obj.UpdateStatusPlanesAnidado(Fila.Id,true);
                         if ((string)CBPerteneceA.SelectedItem == "Fibra")
-                        {
-                            PlanesAnidadosModel PlanInstroducir = new PlanesAnidadosModel();
-                            PlanInstroducir.IdPlan = Plan.Id;
-                            PlanInstroducir.IdMikrotik = Fila.Id;
-                            PlanInstroducir.IsAntena = false;
-                            var Anidado = obj.GetPlanesAnidadosbyParametros(PlanInstroducir).Result;
-                            if (Anidado is null)
-                            {
-                                Anidado = new PlanesAnidadosModel();
-                                Anidado.IdPlan = Plan.Id;
-                                Anidado.IdMikrotik = Fila.Id;
-                                Anidado.IsAntena = false;
-                                Anidado.IdPlanInterno = string.Empty;
-                            }
+                        {                         
                             var Result1 = await Task.Run(() =>
                             {
                                 return mikrotik.SavePerfil(Plan, Anidado);
@@ -209,16 +213,18 @@ namespace Mikrotik_Administrador
                                     return mikrotik.DeleteInterfacebyPlan(Plan.Nombre);
                                 });
                             }
+                            var ListaPlanes = await Task.Run(() =>
+                            { 
+                                return mikrotik.VerProfile();
+                            });
+                            var perfil = ListaPlanes.FirstOrDefault(p => p.Name == Plan.Nombre);
+                            if (perfil != null)
+                            {
+                                var result = obj.UpdateIdPlanInterno(IdPlanAnidado, perfil.Id).Result;
+                            }
                         }
                         else
                         {
-                            PlanAnidadoModel plansave = new PlanAnidadoModel();
-                            plansave.IdPlan = Plan.Id;
-                            plansave.IdPlanInterno = string.Empty;
-                            plansave.IsAntena = Plan.IsAntena;
-                            plansave.IdMikrotik = Fila.Id;
-                            int guardado = obj.SavePlanAnidadoByMigracion(plansave).Result;
-
                             if (Convert.ToInt32(lblCantidadenPlan.Text) > 0)
                             {
                                 var listausuario = obj.GetUsuariosMikrotiksByPlan(Fila.Id, Plan.Id).Result;

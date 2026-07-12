@@ -199,7 +199,7 @@
             this.BtnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.BtnGuardar.ForeColor = System.Drawing.Color.White;
-            this.BtnGuardar.Location = new System.Drawing.Point(45, 534);
+            this.BtnGuardar.Location = new System.Drawing.Point(378, 534);
             this.BtnGuardar.Name = "BtnGuardar";
             this.BtnGuardar.Size = new System.Drawing.Size(120, 38);
             this.BtnGuardar.TabIndex = 12;
@@ -245,7 +245,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(186, 534);
+            this.progressBar1.Location = new System.Drawing.Point(44, 534);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(235, 12);
             this.progressBar1.TabIndex = 14;

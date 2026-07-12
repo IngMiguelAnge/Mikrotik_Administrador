@@ -45,6 +45,7 @@ namespace Mikrotik_Administrador
         {
             Planes m = new Planes();
             m.PorUsuarios = false;
+            m.IdMikrotik = 0;
             m.Tipo = string.Empty;
             m.Show();
         }

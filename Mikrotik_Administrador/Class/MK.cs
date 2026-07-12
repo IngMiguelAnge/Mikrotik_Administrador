@@ -658,7 +658,7 @@ namespace Mikrotik_Administrador.Class
             }
             return string.Empty;
         }
-        public string SavePerfil(PlanModel Plan, PlanesAnidadosModel Anidado)
+        public string SavePerfil(PlanModel Plan, PlanAnidadoModel Anidado)
         {
             string idEncontrado = string.Empty;
             bool existe = false;

@@ -201,17 +201,17 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DataGridViewCheckBoxColumn chkSeleccionar = new DataGridViewCheckBoxColumn
+            DataGridViewButtonColumn btnPlan = new DataGridViewButtonColumn
             {
-                Name = "chkSeleccionar",
-                HeaderText = "Asignar",
+                Name = "btnPlan",
+                HeaderText = "Acción",
+                Text = "Cambiar Plan",
+                UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
-                TrueValue = true,
-                FalseValue = false,
-                IndeterminateValue = false
+                DefaultCellStyle = estiloBotones
             };
-            DGVServicios.Columns.Add(chkSeleccionar);
+            DGVServicios.Columns.Add(btnPlan);
             DataGridViewButtonColumn btnUbicacion = new DataGridViewButtonColumn
             {
                 Name = "btnUbicacion",
@@ -282,19 +282,6 @@ namespace Mikrotik_Administrador
             }
         }
      
-        private void cbTodos_CheckedChanged(object sender, EventArgs e)
-        {
-            bool isChecked = cbTodos.Checked;
-
-            foreach (DataGridViewRow row in DGVServicios.Rows)
-            {
-                if (!row.IsNewRow)
-                {
-                    row.Cells["chkSeleccionar"].Value = isChecked;
-                }
-            }
-        }
-
         private async void DGVServicios_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // Evitar errores si hacen click en el encabezado
@@ -321,6 +308,45 @@ namespace Mikrotik_Administrador
                     objUsuario.Tipo = (string)DGVServicios.Rows[e.RowIndex].Cells["Tipo"].Value;
 
                     await CambiarEstatus(objUsuario);
+                    break;
+
+                case "btnPlan":
+
+                    Planes p = new Planes();
+                    p.PorUsuarios = true;
+                    p.Tipo = (string)DGVServicios.Rows[e.RowIndex].Cells["Tipo"].Value;
+                    p.IdMikrotik = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
+                    if (p.ShowDialog() == DialogResult.OK)
+                    {
+                        AppRepository obj = new AppRepository();
+                        var plan = obj.GetPlanById(p.IdSeleccionado).Result;
+                        TiempoDefinido td = new TiempoDefinido();
+                        td.Plan = plan.Nombre;
+                        td.FechaInicio = DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == null
+                            ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value);
+                        td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
+                            ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value);
+                       
+                        if (td.ShowDialog() == DialogResult.Cancel)
+                        {
+                            MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        TiempoDefinidosModel TD = new TiempoDefinidosModel
+                        {
+                            Dias = td.Dias,
+                            Horas = td.Horas,
+                            FechaInicio = td.FechaInicio ?? DateTime.Now,
+                            FechaFin = td.FechaFin ?? DateTime.Now.AddDays(td.Dias).AddHours(td.Horas),
+                            Modo = td.Modo,
+                            IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value),
+                            Estatus = "Pendiente"
+                        };
+
+                        var result = obj.SaveTiempoCambio(TD);
+                        MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        BuscarServicios();
+                    }
                     break;
             }
         }
@@ -388,7 +414,7 @@ namespace Mikrotik_Administrador
             }
         }
 
-        private async void btnPlan_Click(object sender, EventArgs e)
+        private async void btnplanviejo()
         {
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación

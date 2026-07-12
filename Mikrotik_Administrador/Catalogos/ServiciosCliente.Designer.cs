@@ -30,7 +30,6 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.cbTodos = new System.Windows.Forms.CheckBox();
             this.btnPlan = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.panelContenedor = new System.Windows.Forms.Panel();
@@ -39,31 +38,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.DGVServicios)).BeginInit();
             this.SuspendLayout();
             // 
-            // cbTodos
-            // 
-            this.cbTodos.AutoSize = true;
-            this.cbTodos.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cbTodos.Location = new System.Drawing.Point(24, 25);
-            this.cbTodos.Name = "cbTodos";
-            this.cbTodos.Size = new System.Drawing.Size(178, 29);
-            this.cbTodos.TabIndex = 24;
-            this.cbTodos.Text = "Seleccionar todos";
-            this.cbTodos.UseVisualStyleBackColor = true;
-            this.cbTodos.CheckedChanged += new System.EventHandler(this.cbTodos_CheckedChanged);
-            // 
             // btnPlan
             // 
             this.btnPlan.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
             this.btnPlan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPlan.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnPlan.ForeColor = System.Drawing.Color.White;
-            this.btnPlan.Location = new System.Drawing.Point(210, 18);
+            this.btnPlan.Location = new System.Drawing.Point(12, 12);
             this.btnPlan.Name = "btnPlan";
             this.btnPlan.Size = new System.Drawing.Size(170, 38);
             this.btnPlan.TabIndex = 26;
             this.btnPlan.Text = "Seleccionar Plan";
             this.btnPlan.UseVisualStyleBackColor = false;
-            this.btnPlan.Click += new System.EventHandler(this.btnPlan_Click);
             // 
             // progressBar1
             // 
@@ -131,7 +117,6 @@
             this.Controls.Add(this.panelContenedor);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.btnPlan);
-            this.Controls.Add(this.cbTodos);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.MaximizeBox = false;
@@ -143,13 +128,10 @@
             this.panelContenedor.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DGVServicios)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.CheckBox cbTodos;
         private System.Windows.Forms.Button btnPlan;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Panel panelContenedor; // Modificado de GroupBox a Panel plano

@@ -661,7 +661,7 @@ namespace Mikrotik_Administrador.Data
             }
             return CantidadDUsuarios;
         }
-        public async Task<List<ListPlanesModel>> GetPlanesbyName(string Nombre, bool? IsAntena)
+        public async Task<List<ListPlanesModel>> GetPlanesbyName(string Nombre, bool? IsAntena, bool PorUsuarios, int IdMikrotik)
         {
             List<ListPlanesModel> list = new List<ListPlanesModel>();
             try
@@ -673,6 +673,8 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
                         cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
+                        cmd.Parameters.Add(new SqlParameter("@ParaSeleccion", PorUsuarios));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -844,6 +846,28 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
+        public async Task<bool> UpdateIdPlanInterno(int Id, string IdPlanInterno)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateIdPlanInterno", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlanInterno", IdPlanInterno));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<int> SavePlanAnidadoByMigracion(PlanAnidadoModel obj)
         {
             try
@@ -881,7 +905,7 @@ namespace Mikrotik_Administrador.Data
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("ResetStatusPlanesAnidado", sql))
+                    using (SqlCommand cmd = new SqlCommand("UpdateStatusPlanesAnidado", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
@@ -897,10 +921,10 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<PlanesAnidadosModel> GetPlanesAnidadosbyParametros(PlanesAnidadosModel obj)
+        public async Task<PlanAnidadoModel> GetPlanesAnidadosbyParametros(PlanAnidadoModel obj)
         {
-            PlanesAnidadosModel response = new PlanesAnidadosModel();
-            List<PlanesAnidadosModel> list = new List<PlanesAnidadosModel>();
+            PlanAnidadoModel response = new PlanAnidadoModel();
+            List<PlanAnidadoModel> list = new List<PlanAnidadoModel>();
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
@@ -929,9 +953,9 @@ namespace Mikrotik_Administrador.Data
             }
             return response;
         }
-        private PlanesAnidadosModel MapToPlanesAnidados(SqlDataReader reader)
+        private PlanAnidadoModel MapToPlanesAnidados(SqlDataReader reader)
         {
-            return new PlanesAnidadosModel()
+            return new PlanAnidadoModel()
             {
                 Id = (int)reader["Id"],
                 IdMikrotik = (int)reader["IdMikrotik"],
