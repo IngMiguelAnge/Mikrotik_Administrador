@@ -36,6 +36,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Modo", obj.Modo));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -1081,14 +1082,14 @@ namespace Mikrotik_Administrador.Data
                             {
                                 list.Add(MapToMikrotik(reader));
                             }
-                            response = list.Count() > 0 ? list[0] : null;
+                            response = list.Count() > 0 ? list[0] : new MikrotikModel();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                response = null;
+                response = new MikrotikModel();
             }
             return response;
         }

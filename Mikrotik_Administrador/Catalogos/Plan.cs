@@ -121,17 +121,6 @@ namespace Mikrotik_Administrador
                 return;
             }
             bool IsAntena = (string)CBPerteneceA.SelectedItem == "Antena" ? true : false;
-            //var BuscarNombrePlan = await obj.GetPlanesbyName(txtNombre.Text.Trim(), IsAntena);
-            //if (BuscarNombrePlan.Count() > 0 && BuscarNombrePlan.Where(x => x.Nombre == txtNombre.Text && x.Id != Id).FirstOrDefault() != null)
-            //{
-            //    DialogResult resultado = MessageBox.Show("Este Nombre de plan ya existe, ¿Quiere combinar los planes en uno?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //    if (resultado == DialogResult.No)
-            //    {
-            //        MessageBox.Show("Se cancelo el guardado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        return;
-            //    }
-
-            //}
            
             PlanModel plan = new PlanModel();
             plan.Id = Id;

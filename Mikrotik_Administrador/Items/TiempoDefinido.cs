@@ -13,7 +13,6 @@ namespace Mikrotik_Administrador.Items
 {
     public partial class TiempoDefinido : Form
     {
-        public string Plan { get; set; }
         public string Modo { get; set; }
         public int Horas { get; set; }
         public int Dias { get; set; }
@@ -28,7 +27,7 @@ namespace Mikrotik_Administrador.Items
         private void TiempoDefinido_Load(object sender, EventArgs e)
         {
             CBModo.SelectedIndex = 0;
-            lblTiempo.Text = "Tiempo que desea que dure el plan " + Plan;
+            lblTiempo.Text = "Tiempo que desea que dure el plan";
             NUDDias.Value = 8;
             dtpFechaInicio.Value = DateTime.Now;
             dtpFechaInicio.MinDate = DateTime.Now;

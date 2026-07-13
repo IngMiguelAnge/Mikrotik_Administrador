@@ -311,17 +311,14 @@ namespace Mikrotik_Administrador
                     break;
 
                 case "btnPlan":
-
+                    int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
                     Planes p = new Planes();
                     p.PorUsuarios = true;
                     p.Tipo = (string)DGVServicios.Rows[e.RowIndex].Cells["Tipo"].Value;
                     p.IdMikrotik = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
                     if (p.ShowDialog() == DialogResult.OK)
-                    {
-                        AppRepository obj = new AppRepository();
-                        var plan = obj.GetPlanById(p.IdSeleccionado).Result;
+                    {                
                         TiempoDefinido td = new TiempoDefinido();
-                        td.Plan = plan.Nombre;
                         td.FechaInicio = DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == null
                             ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value);
                         td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
@@ -332,6 +329,11 @@ namespace Mikrotik_Administrador
                             MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
+                        if(IdPlan == p.IdSeleccionado) //No tiene caso designar el mismo plan
+                        {
+                            MessageBox.Show("No se puede asignar el mismo plan, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                         TiempoDefinidosModel TD = new TiempoDefinidosModel
                         {
                             Dias = td.Dias,
@@ -340,9 +342,10 @@ namespace Mikrotik_Administrador
                             FechaFin = td.FechaFin ?? DateTime.Now.AddDays(td.Dias).AddHours(td.Horas),
                             Modo = td.Modo,
                             IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value),
-                            Estatus = "Pendiente"
+                            Estatus = "Pendiente",
+                            IdPlan = p.IdSeleccionado
                         };
-
+                        AppRepository obj = new AppRepository();
                         var result = obj.SaveTiempoCambio(TD);
                         MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BuscarServicios();
@@ -468,7 +471,6 @@ namespace Mikrotik_Administrador
                     AppRepository obj = new AppRepository();
                     var plan = obj.GetPlanById(p.IdSeleccionado).Result;
                     TiempoDefinido td = new TiempoDefinido();
-                    td.Plan = plan.Nombre;
                     td.FechaInicio = Seleccionados.Min(u => u.minFechaInicio) ?? null;
                     td.FechaFin = Seleccionados.Max(u => u.maxFechaFin) ?? null;
                     if (td.ShowDialog() == DialogResult.Cancel)

@@ -676,6 +676,7 @@ namespace Mikrotik_Administrador
 
         private async void btnPlan_Click(object sender, EventArgs e)
         {
+            return;
             if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
             {
                 MessageBox.Show("Por favor, selecciona un Mikrotik.");

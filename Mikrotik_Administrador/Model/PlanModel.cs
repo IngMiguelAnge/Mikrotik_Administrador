@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.IdentityModel.Protocols.WSTrust;
-
-namespace Mikrotik_Administrador.Model
+﻿namespace Mikrotik_Administrador.Model
 {
     public class PlanModel
     {
