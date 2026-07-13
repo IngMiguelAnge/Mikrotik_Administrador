@@ -310,10 +310,9 @@ namespace Mikrotik_Administrador
             {
                 Name = "btnDesactivar",
                 HeaderText = "Acción",
-                Text = "Cambiar Estatus",
+                Text = "Desactivar",
                 UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                Visible = false,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
@@ -326,7 +325,6 @@ namespace Mikrotik_Administrador
                 Text = "Ubicación",
                 UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                Visible = false,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };

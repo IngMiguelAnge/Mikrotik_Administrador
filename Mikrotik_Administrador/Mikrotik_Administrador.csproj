@@ -244,6 +244,12 @@
     <Compile Include="Catalogos\Bancos.Designer.cs">
       <DependentUpon>Bancos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\CambiosPlan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\CambiosPlan.Designer.cs">
+      <DependentUpon>CambiosPlan.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\HistorialPagos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -336,6 +342,7 @@
     <Compile Include="Model\PlanesModel.cs" />
     <Compile Include="Model\PlanModel.cs" />
     <Compile Include="Model\HistorialPagosModel.cs" />
+    <Compile Include="Model\ListTiempoCambioModel.cs" />
     <Compile Include="Model\TiempoDefinidosModel.cs" />
     <Compile Include="Model\UsuariosandPlanesModel.cs" />
     <Compile Include="Model\VentaModel.cs" />
@@ -433,6 +440,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Bancos.resx">
       <DependentUpon>Bancos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\CambiosPlan.resx">
+      <DependentUpon>CambiosPlan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\HistorialPagos.resx">
       <DependentUpon>HistorialPagos.cs</DependentUpon>

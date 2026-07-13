@@ -30,7 +30,6 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.btnPlan = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.panelContenedor = new System.Windows.Forms.Panel();
             this.DGVServicios = new System.Windows.Forms.DataGridView();
@@ -38,22 +37,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.DGVServicios)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnPlan
-            // 
-            this.btnPlan.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
-            this.btnPlan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPlan.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnPlan.ForeColor = System.Drawing.Color.White;
-            this.btnPlan.Location = new System.Drawing.Point(12, 12);
-            this.btnPlan.Name = "btnPlan";
-            this.btnPlan.Size = new System.Drawing.Size(170, 38);
-            this.btnPlan.TabIndex = 26;
-            this.btnPlan.Text = "Seleccionar Plan";
-            this.btnPlan.UseVisualStyleBackColor = false;
-            // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(24, 71);
+            this.progressBar1.Location = new System.Drawing.Point(12, 27);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(235, 12);
             this.progressBar1.TabIndex = 28;
@@ -64,10 +50,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelContenedor.Controls.Add(this.DGVServicios);
-            this.panelContenedor.Location = new System.Drawing.Point(12, 98);
+            this.panelContenedor.Location = new System.Drawing.Point(12, 57);
             this.panelContenedor.Name = "panelContenedor";
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenedor.Size = new System.Drawing.Size(776, 340);
+            this.panelContenedor.Size = new System.Drawing.Size(776, 381);
             this.panelContenedor.TabIndex = 34;
             // 
             // DGVServicios
@@ -104,7 +90,7 @@
             this.DGVServicios.RowHeadersWidth = 51;
             this.DGVServicios.RowTemplate.Height = 30;
             this.DGVServicios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DGVServicios.Size = new System.Drawing.Size(736, 300);
+            this.DGVServicios.Size = new System.Drawing.Size(736, 341);
             this.DGVServicios.TabIndex = 34;
             this.DGVServicios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVServicios_CellContentClick);
             // 
@@ -116,7 +102,6 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.panelContenedor);
             this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.btnPlan);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.MaximizeBox = false;
@@ -132,7 +117,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button btnPlan;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Panel panelContenedor; // Modificado de GroupBox a Panel plano
         private System.Windows.Forms.DataGridView DGVServicios;

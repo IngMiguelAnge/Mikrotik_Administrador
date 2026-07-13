@@ -99,7 +99,7 @@
             this.btnAddresList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddresList.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnAddresList.ForeColor = System.Drawing.Color.White;
-            this.btnAddresList.Location = new System.Drawing.Point(20, 16);
+            this.btnAddresList.Location = new System.Drawing.Point(198, 16);
             this.btnAddresList.Name = "btnAddresList";
             this.btnAddresList.Size = new System.Drawing.Size(160, 38);
             this.btnAddresList.TabIndex = 5;
@@ -125,7 +125,7 @@
             this.btnVerMirkotiks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnVerMirkotiks.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnVerMirkotiks.ForeColor = System.Drawing.Color.White;
-            this.btnVerMirkotiks.Location = new System.Drawing.Point(208, 16);
+            this.btnVerMirkotiks.Location = new System.Drawing.Point(20, 16);
             this.btnVerMirkotiks.Name = "btnVerMirkotiks";
             this.btnVerMirkotiks.Size = new System.Drawing.Size(150, 38);
             this.btnVerMirkotiks.TabIndex = 6;

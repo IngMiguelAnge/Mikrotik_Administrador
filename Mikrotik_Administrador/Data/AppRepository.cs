@@ -19,6 +19,52 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region TiempoDefinido
+        public async Task<List<ListTiempoCambioModel>> GetTiempoCambio(DateTime FechaInicio, DateTime FechaFin)
+        {
+            List<ListTiempoCambioModel> list = new List<ListTiempoCambioModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetTiempoCambio", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@FechaInicio", FechaInicio));
+                        cmd.Parameters.Add(new SqlParameter("@FechaFin", FechaFin));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListTiempoCambio(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListTiempoCambioModel MapToListTiempoCambio(SqlDataReader reader)
+        {
+            return new ListTiempoCambioModel()
+            {
+                Id = (int)reader["Id"],
+                Dias = (int)reader["Dias"],
+                Horas = (int)reader["Horas"],
+                FechaInicio = (string)reader["FechaInicio"],
+                FechaFin = (string)reader["FechaFin"],
+                Estatus = (string)reader["Estatus"],
+                Modo = (string)reader["Modo"],
+                IdUsuarioM = (int)reader["IdUsuarioM"],
+                Nota = (string)reader["Nota"],
+                IdPlan = (int)reader["IdPlan"],
+                PlanNuevo = (int)reader["PlanNuevo"],
+                Usuario = (string)reader["Usuario"]
+            };
+        }
         public async Task<bool> SaveTiempoCambio(TiempoDefinidosModel obj)
         {
             try
