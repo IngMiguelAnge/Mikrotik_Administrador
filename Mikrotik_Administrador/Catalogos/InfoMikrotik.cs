@@ -64,6 +64,7 @@ namespace Mikrotik_Administrador
         private void InfoMikrotik_Load(object sender, EventArgs e)
         {
             lblProbar.Text = "Sin conexión";
+            CBPlanes.SelectedIndex = 0;
             if (IdMikrotik != 0)
             {
                 AppRepository obj = new AppRepository();
@@ -92,7 +93,7 @@ namespace Mikrotik_Administrador
             }
             if (txtIP.Text.Trim() == "..." || txtPassword.Text == string.Empty
               || txtPort.Text == string.Empty || txtUsuario.Text == string.Empty 
-              || Convert.ToString(CBPlanes.SelectedItem) == string.Empty)
+              || CBPlanes.SelectedIndex == 0)
             {
                 MessageBox.Show("Se requiere probar la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

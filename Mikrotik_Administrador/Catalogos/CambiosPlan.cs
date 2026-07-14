@@ -1,11 +1,13 @@
 ﻿using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
+using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -158,6 +160,17 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            DataGridViewButtonColumn btnCancelar = new DataGridViewButtonColumn
+            {
+                Name = "btnCancelar",
+                HeaderText = "Acción",
+                Text = "Cancelar",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVCambios.Columns.Add(btnCancelar);
             DGVCambios.AllowUserToAddRows = false;
         }
         public void Buscar()
@@ -200,6 +213,32 @@ namespace Mikrotik_Administrador.Catalogos
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             Buscar();
+        }
+
+        private async void DGVCambios_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            var Id = DGVCambios.Rows[e.RowIndex].Cells["Id"].Value;
+
+            switch (DGVCambios.Columns[e.ColumnIndex].Name)
+            {
+                case "btnCancelar":
+                    var Estatus = DGVCambios.Rows[e.RowIndex].Cells["Estatus"].Value.ToString();
+                    if(Estatus == "Cancelado")
+                    {
+                        MessageBox.Show("El cambio de plan ya fue cancelado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    if (Estatus == "Completado")
+                    {
+                        MessageBox.Show("El cambio de plan ya termino, no se puede cancelar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    AppRepository obj = new AppRepository();
+                    await obj.UpdateEstatusTiempoCambio(Convert.ToInt32(Id));
+                    Buscar();
+                    break;      
+            }
         }
     }
 }

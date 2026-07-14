@@ -97,6 +97,7 @@
             this.DGVCambios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DGVCambios.Size = new System.Drawing.Size(1001, 256);
             this.DGVCambios.TabIndex = 34;
+            this.DGVCambios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVCambios_CellContentClick);
             // 
             // dtpFechaInicio
             // 

@@ -213,6 +213,7 @@
             this.CBPlanes.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.CBPlanes.FormattingEnabled = true;
             this.CBPlanes.Items.AddRange(new object[] {
+            "Seleccione",
             "Antenas",
             "Fibras",
             "Ambos"});

@@ -75,6 +75,12 @@ namespace Mikrotik_Administrador
                     ListaWireless();
                     break;                    
                 case "btnDesactivar":
+                    var Desactivado = (string)DGVMikrotiks.Rows[e.RowIndex].Cells["Estatus"].Value;
+                    if(Desactivado != "Activo")
+                    {
+                        MessageBox.Show("El Mikrotik ya está desactivado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
                     AppRepository obj = new AppRepository();
                     bool result = obj.DesactivarMikrotik(Convert.ToInt32(Id)).Result;
                     if (result == true)
