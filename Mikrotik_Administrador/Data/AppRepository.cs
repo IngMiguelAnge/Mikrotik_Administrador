@@ -59,9 +59,9 @@ namespace Mikrotik_Administrador.Data
                 Estatus = (string)reader["Estatus"],
                 Modo = (string)reader["Modo"],
                 IdUsuarioM = (int)reader["IdUsuarioM"],
-                Nota = (string)reader["Nota"],
+                Nota = Convert.IsDBNull(reader["Nota"]) ? string.Empty : (string)reader["Nota"],
                 IdPlan = (int)reader["IdPlan"],
-                PlanNuevo = (int)reader["PlanNuevo"],
+                PlanNuevo = (string)reader["PlanNuevo"],
                 Usuario = (string)reader["Usuario"]
             };
         }

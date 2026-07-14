@@ -89,7 +89,6 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Fecha que se iniciara",
                 DataPropertyName = "FechaInicio",
                 ReadOnly = true,
-                Visible = false,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });

@@ -38,6 +38,7 @@
             this.btnInformacion = new System.Windows.Forms.Button();
             this.btnBancos = new System.Windows.Forms.Button();
             this.btnPagos = new System.Windows.Forms.Button();
+            this.btnCambios = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,6 +65,7 @@
             this.flowLayoutPanel1.Controls.Add(this.btnInformacion);
             this.flowLayoutPanel1.Controls.Add(this.btnBancos);
             this.flowLayoutPanel1.Controls.Add(this.btnPagos);
+            this.flowLayoutPanel1.Controls.Add(this.btnCambios);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 60);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -191,6 +193,21 @@
             this.btnPagos.UseVisualStyleBackColor = false;
             this.btnPagos.Click += new System.EventHandler(this.btnPagos_Click);
             // 
+            // btnCambios
+            // 
+            this.btnCambios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.btnCambios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCambios.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnCambios.ForeColor = System.Drawing.Color.White;
+            this.btnCambios.Location = new System.Drawing.Point(360, 205);
+            this.btnCambios.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
+            this.btnCambios.Name = "btnCambios";
+            this.btnCambios.Size = new System.Drawing.Size(145, 75);
+            this.btnCambios.TabIndex = 10;
+            this.btnCambios.Text = "Cambios";
+            this.btnCambios.UseVisualStyleBackColor = false;
+            this.btnCambios.Click += new System.EventHandler(this.btnCambios_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -224,5 +241,6 @@
         private System.Windows.Forms.Button btnInformacion;
         private System.Windows.Forms.Button btnBancos;
         private System.Windows.Forms.Button btnPagos;
+        private System.Windows.Forms.Button btnCambios;
     }
 }

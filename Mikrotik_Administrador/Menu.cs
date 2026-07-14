@@ -1,12 +1,6 @@
 ﻿using Mikrotik_Administrador.Catalogos;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Mikrotik_Administrador
@@ -72,6 +66,12 @@ namespace Mikrotik_Administrador
         {
             Pagos pagos = new Pagos();
             pagos.Show();
+        }
+
+        private void btnCambios_Click(object sender, EventArgs e)
+        {
+            CambiosPlan cp = new CambiosPlan();
+            cp.Show();
         }
     }
 }

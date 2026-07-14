@@ -253,7 +253,8 @@ namespace Mikrotik_Administrador
         {
             Plan m = new Plan();
             m.Id = 0;
-            m.Show();
+            m.ShowDialog();
+            BuscarPlanes();
         }
 
         private void Planes_Load(object sender, EventArgs e)
