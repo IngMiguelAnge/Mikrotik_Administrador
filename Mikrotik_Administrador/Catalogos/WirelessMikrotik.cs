@@ -1,6 +1,7 @@
 ﻿using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
+using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -184,7 +185,8 @@ namespace Mikrotik_Administrador
 
                 var lista = await Task.Run(() => mikrotik.VerAddres());
                 var listaFinal = lista?.ToList() ?? new List<Address>();
-                dgvWireless.DataSource = new BindingList<Address>(listaFinal);
+                dgvWireless.DataSource = new SortableBindingList<Address>(listaFinal);
+
                 if (lista != null && lista.Count > 0)
                 {
                     BtnActualizar.Enabled = true;

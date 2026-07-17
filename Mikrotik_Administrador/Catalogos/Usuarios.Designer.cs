@@ -166,8 +166,7 @@
             this.dgvUsuarios.Size = new System.Drawing.Size(965, 284);
             this.dgvUsuarios.TabIndex = 14;
             this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
-            this.dgvUsuarios.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvUsuarios_ColumnHeaderMouseClick);
-            // 
+           // 
             // lblMensaje3
             // 
             this.lblMensaje3.AutoSize = true;

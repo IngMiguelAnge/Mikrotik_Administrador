@@ -21,7 +21,7 @@ namespace Mikrotik_Administrador
         public Usuarios()
         {
             InitializeComponent();
-            this.dgvUsuarios.ColumnHeaderMouseClick += dgvUsuarios_ColumnHeaderMouseClick;
+            //this.dgvUsuarios.ColumnHeaderMouseClick += dgvUsuarios_ColumnHeaderMouseClick;
         }
         public void CrearGridViewUsuarios()
         {
@@ -258,7 +258,7 @@ namespace Mikrotik_Administrador
                 lblServiciossin.Text = "Usuarios sin servicios: " + lista.Where(x => x.IdCliente == null).Count();
 
                 var listaFinal = lista?.ToList() ?? new List<ListUsuariosGeneralModel>();
-                dgvUsuarios.DataSource = new BindingList<ListUsuariosGeneralModel>(listaFinal);
+                dgvUsuarios.DataSource = new SortableBindingList<ListUsuariosGeneralModel>(listaFinal);
 
                 if (dgvUsuarios.Columns["Id"] != null)
                 {
@@ -520,7 +520,8 @@ namespace Mikrotik_Administrador
             {
                 var lista = await obj.GetClientesSinServicios();
                 var listaFinal = lista?.ToList() ?? new List<ListClientesModel>();
-                dgvUsuarios.DataSource = new BindingList<ListClientesModel>(listaFinal);             
+                dgvUsuarios.DataSource = new SortableBindingList<ListClientesModel>(listaFinal);
+
             }
             catch (Exception ex)
             {
@@ -845,38 +846,38 @@ namespace Mikrotik_Administrador
             BuscarUsuarios(true);
         }
 
-        private void dgvUsuarios_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.RowIndex != -1) return; // Asegurar que es clic en cabecera
+        //private void dgvUsuarios_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        //{
+        //    if (e.RowIndex != -1) return; // Asegurar que es clic en cabecera
 
-            DataGridViewColumn newColumn = dgvUsuarios.Columns[e.ColumnIndex];
-            if (newColumn is DataGridViewButtonColumn || newColumn is DataGridViewCheckBoxColumn)
-                return;
+        //    DataGridViewColumn newColumn = dgvUsuarios.Columns[e.ColumnIndex];
+        //    if (newColumn is DataGridViewButtonColumn || newColumn is DataGridViewCheckBoxColumn)
+        //        return;
 
-            IBindingList list = dgvUsuarios.DataSource as IBindingList;
+        //    IBindingList list = dgvUsuarios.DataSource as IBindingList;
 
-            if (list != null && list.Count > 0)
-            {
-                ListSortDirection direction = ListSortDirection.Ascending;
+        //    if (list != null && list.Count > 0)
+        //    {
+        //        ListSortDirection direction = ListSortDirection.Ascending;
 
-                // Detectar dirección actual basándose en el Glyph (la flechita)
-                if (newColumn.HeaderCell.SortGlyphDirection == SortOrder.Ascending)
-                    direction = ListSortDirection.Descending;
+        //        // Detectar dirección actual basándose en el Glyph (la flechita)
+        //        if (newColumn.HeaderCell.SortGlyphDirection == SortOrder.Ascending)
+        //            direction = ListSortDirection.Descending;
 
-                // Intentar obtener la propiedad por DataPropertyName o por el Nombre de la columna
-                string propName = string.IsNullOrEmpty(newColumn.DataPropertyName) ? newColumn.Name : newColumn.DataPropertyName;
-                PropertyDescriptor prop = TypeDescriptor.GetProperties(list[0].GetType())[propName];
+        //        // Intentar obtener la propiedad por DataPropertyName o por el Nombre de la columna
+        //        string propName = string.IsNullOrEmpty(newColumn.DataPropertyName) ? newColumn.Name : newColumn.DataPropertyName;
+        //        PropertyDescriptor prop = TypeDescriptor.GetProperties(list[0].GetType())[propName];
 
-                if (prop != null)
-                {
-                    list.ApplySort(prop, direction);
+        //        if (prop != null)
+        //        {
+        //            list.ApplySort(prop, direction);
 
-                    // Limpiar flechas de otras columnas y poner la nueva
-                    foreach (DataGridViewColumn c in dgvUsuarios.Columns) c.HeaderCell.SortGlyphDirection = SortOrder.None;
-                    newColumn.HeaderCell.SortGlyphDirection = direction == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
-                }
-            }
-        }
+        //            // Limpiar flechas de otras columnas y poner la nueva
+        //            foreach (DataGridViewColumn c in dgvUsuarios.Columns) c.HeaderCell.SortGlyphDirection = SortOrder.None;
+        //            newColumn.HeaderCell.SortGlyphDirection = direction == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
+        //        }
+        //    }
+        //}
 
         private async void BtnEliminar_Click(object sender, EventArgs e)
         {

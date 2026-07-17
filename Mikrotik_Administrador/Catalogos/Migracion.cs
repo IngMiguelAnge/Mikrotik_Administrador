@@ -26,7 +26,7 @@ namespace Mikrotik_Administrador
         public Migracion()
         {
             InitializeComponent();
-            this.dgvUsuarios.ColumnHeaderMouseClick += dgvUsuarios_ColumnHeaderMouseClick;
+            //this.dgvUsuarios.ColumnHeaderMouseClick += dgvUsuarios_ColumnHeaderMouseClick;
         }
 
         private async void Migracion_Load(object sender, EventArgs e)
@@ -199,6 +199,7 @@ namespace Mikrotik_Administrador
                     {
                         var listaFinal = lista?.ToList() ?? new List<Antenas>();
                         dgvUsuarios.DataSource = new SortableBindingList<Antenas>(listaFinal);
+
                     }
                 }
                 else
@@ -365,38 +366,38 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Clear();
         }
 
-        private void dgvUsuarios_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.RowIndex != -1) return; // Asegurar que es clic en cabecera
+        //private void dgvUsuarios_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        //{
+        //    if (e.RowIndex != -1) return; // Asegurar que es clic en cabecera
 
-            DataGridViewColumn newColumn = dgvUsuarios.Columns[e.ColumnIndex];
-            if (newColumn is DataGridViewButtonColumn || newColumn is DataGridViewCheckBoxColumn)
-                return;
+        //    DataGridViewColumn newColumn = dgvUsuarios.Columns[e.ColumnIndex];
+        //    if (newColumn is DataGridViewButtonColumn || newColumn is DataGridViewCheckBoxColumn)
+        //        return;
 
-            IBindingList list = dgvUsuarios.DataSource as IBindingList;
+        //    IBindingList list = dgvUsuarios.DataSource as IBindingList;
 
-            if (list != null && list.Count > 0)
-            {
-                ListSortDirection direction = ListSortDirection.Ascending;
+        //    if (list != null && list.Count > 0)
+        //    {
+        //        ListSortDirection direction = ListSortDirection.Ascending;
 
-                // Detectar dirección actual basándose en el Glyph (la flechita)
-                if (newColumn.HeaderCell.SortGlyphDirection == SortOrder.Ascending)
-                    direction = ListSortDirection.Descending;
+        //        // Detectar dirección actual basándose en el Glyph (la flechita)
+        //        if (newColumn.HeaderCell.SortGlyphDirection == SortOrder.Ascending)
+        //            direction = ListSortDirection.Descending;
 
-                // Intentar obtener la propiedad por DataPropertyName o por el Nombre de la columna
-                string propName = string.IsNullOrEmpty(newColumn.DataPropertyName) ? newColumn.Name : newColumn.DataPropertyName;
-                PropertyDescriptor prop = TypeDescriptor.GetProperties(list[0].GetType())[propName];
+        //        // Intentar obtener la propiedad por DataPropertyName o por el Nombre de la columna
+        //        string propName = string.IsNullOrEmpty(newColumn.DataPropertyName) ? newColumn.Name : newColumn.DataPropertyName;
+        //        PropertyDescriptor prop = TypeDescriptor.GetProperties(list[0].GetType())[propName];
 
-                if (prop != null)
-                {
-                    list.ApplySort(prop, direction);
+        //        if (prop != null)
+        //        {
+        //            list.ApplySort(prop, direction);
 
-                    // Limpiar flechas de otras columnas y poner la nueva
-                    foreach (DataGridViewColumn c in dgvUsuarios.Columns) c.HeaderCell.SortGlyphDirection = SortOrder.None;
-                    newColumn.HeaderCell.SortGlyphDirection = direction == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
-                }
-            }
-        }
+        //            // Limpiar flechas de otras columnas y poner la nueva
+        //            foreach (DataGridViewColumn c in dgvUsuarios.Columns) c.HeaderCell.SortGlyphDirection = SortOrder.None;
+        //            newColumn.HeaderCell.SortGlyphDirection = direction == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
+        //        }
+        //    }
+        //}
 
         private async void btnEliminar_Click(object sender, EventArgs e)
         {

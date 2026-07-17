@@ -324,9 +324,8 @@ namespace Mikrotik_Administrador
                 AppRepository obj = new AppRepository();
 
                 var lista = await obj.GetWireless();
-
                 var listaFinal = lista?.ToList() ?? new List<ListWirelessModel>();
-                DGVMikrotiks.DataSource = new BindingList<ListWirelessModel>(listaFinal);
+                DGVMikrotiks.DataSource = new SortableBindingList<ListWirelessModel>(listaFinal);
                 if (DGVMikrotiks.Columns["Id"] != null)
                     DGVMikrotiks.Columns["Id"].Visible = false;
             }
