@@ -47,7 +47,6 @@
             this.btnClientesSin = new System.Windows.Forms.Button();
             this.cbTodos = new System.Windows.Forms.CheckBox();
             this.panelContenedor = new System.Windows.Forms.Panel();
-            this.btnPlan = new System.Windows.Forms.Button();
             this.lblServiciossin = new System.Windows.Forms.Label();
             this.btnServiciosSin = new System.Windows.Forms.Button();
             this.BtnEliminar = new System.Windows.Forms.Button();
@@ -166,7 +165,7 @@
             this.dgvUsuarios.Size = new System.Drawing.Size(965, 284);
             this.dgvUsuarios.TabIndex = 14;
             this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
-           // 
+            // 
             // lblMensaje3
             // 
             this.lblMensaje3.AutoSize = true;
@@ -262,22 +261,6 @@
             this.panelContenedor.Size = new System.Drawing.Size(1005, 324);
             this.panelContenedor.TabIndex = 24;
             // 
-            // btnPlan
-            // 
-            this.btnPlan.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
-            this.btnPlan.Enabled = false;
-            this.btnPlan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPlan.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.btnPlan.ForeColor = System.Drawing.Color.White;
-            this.btnPlan.Location = new System.Drawing.Point(868, 86);
-            this.btnPlan.Name = "btnPlan";
-            this.btnPlan.Size = new System.Drawing.Size(160, 42);
-            this.btnPlan.TabIndex = 25;
-            this.btnPlan.Text = "Cambiar Plan";
-            this.btnPlan.UseVisualStyleBackColor = false;
-            this.btnPlan.Visible = false;
-            this.btnPlan.Click += new System.EventHandler(this.btnPlan_Click);
-            // 
             // lblServiciossin
             // 
             this.lblServiciossin.AutoSize = true;
@@ -326,7 +309,6 @@
             this.Controls.Add(this.BtnEliminar);
             this.Controls.Add(this.btnServiciosSin);
             this.Controls.Add(this.lblServiciossin);
-            this.Controls.Add(this.btnPlan);
             this.Controls.Add(this.panelContenedor);
             this.Controls.Add(this.cbTodos);
             this.Controls.Add(this.btnClientesSin);
@@ -375,7 +357,6 @@
         private System.Windows.Forms.Button btnClientesSin;
         private System.Windows.Forms.CheckBox cbTodos;
         private System.Windows.Forms.Panel panelContenedor; // Cambiado de GroupBox a Panel plano
-        private System.Windows.Forms.Button btnPlan;
         private System.Windows.Forms.Label lblServiciossin;
         private System.Windows.Forms.Button btnServiciosSin;
         private System.Windows.Forms.Button BtnEliminar;
