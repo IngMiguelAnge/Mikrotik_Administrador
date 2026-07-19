@@ -222,7 +222,7 @@ namespace Mikrotik_Administrador
 
                                 bool esBackup = (extension == ".backup");
 
-                                // 🔥 SEGUNDO PLANO: Transferencia y ejecución forzada
+                                // 🔥 SEGUNDO PLANO: Transferencia y ejecución real mediante Shell interactivo
                                 await Task.Run(() =>
                                 {
                                     // === PASO 2: TRANSFERENCIA POR SFTP ===
@@ -248,53 +248,48 @@ namespace Mikrotik_Administrador
                                         sftpClient.Disconnect();
                                     }
 
-                                    // === PASO 3: EJECUCIÓN (API para backup, SSH para reset) ===
-                                    if (esBackup)
+                                    // === PASO 3: EJECUCIÓN VÍA SSH (CANAL INTERACTIVO) ===
+                                    using (var sshClient = new SshClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
                                     {
-                                        // SOLUCIÓN TOTAL: Usamos un socket API básico de MikroTik. La API no tiene interfaz
-                                        // interactiva, por lo tanto RouterOS carga el backup y reinicia al segundo.
-                                        using (var apiConnection = new Renci.SshNet.Common.ApiConnection()) // O la librería de API que uses
+                                        sshClient.Connect();
+
+                                        if (esBackup)
                                         {
-                                            // Si prefieres no meter librerías nuevas, forzamos SSH pero abriendo un canal RAW directo de comandos:
-                                            using (var sshClient = new SshClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
+                                            // Creamos una terminal virtual interactiva (ShellStream) para burlar la seguridad de RouterOS v7
+                                            using (var shellStream = sshClient.CreateShellStream("terminal_backup", 80, 24, 80, 24, 1024))
                                             {
-                                                sshClient.Connect();
+                                                // 1. Enviamos el comando de restauración
+                                                shellStream.WriteLine($"/system backup load name=\"{nombreArchivoRemoto}\" password=\"\" dont-encrypt=yes");
 
-                                                // Creamos un comando SSH en crudo y le enviamos la respuesta esperada directamente en la tubería
-                                                using (var cmd = sshClient.CreateCommand($"/system backup load name=\"{nombreArchivoRemoto}\" password=\"\" dont-encrypt=yes"))
-                                                {
-                                                    // Ejecutamos pasándole un input directo al stream interno para responder al "y" fantasma de v7
-                                                    var stream = cmd.ExtendedOutputStream;
-                                                    cmd.BeginExecute(ar => { }, null);
+                                                // 2. Esperamos un instante a que RouterOS v7 procese la orden y pinte el aviso "Restore and reboot? [y/N]"
+                                                System.Threading.Thread.Sleep(1000);
 
-                                                    // Inyectamos el sí por si el buffer interactivo se quedó colgado esperando confirmación
-                                                    var inputWriter = new StreamWriter(cmd.OutputStream);
-                                                    inputWriter.WriteLine("y");
-                                                    inputWriter.Flush();
-                                                }
+                                                // 3. Inyectamos la confirmación directamente en la consola simulada
+                                                shellStream.WriteLine("y");
 
-                                                System.Threading.Thread.Sleep(3000);
-                                                sshClient.Disconnect();
+                                                // Damos margen para que el procesador reciba el "Yes" e inicie el apagado físico del hardware
+                                                System.Threading.Thread.Sleep(2000);
                                             }
                                         }
-                                    }
-                                    else
-                                    {
-                                        // Para .rsc estándar el SSH normal de siempre funciona de maravilla
-                                        using (var sshClient = new SshClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
+                                        else
                                         {
-                                            sshClient.Connect();
-                                            var cmdFinal = sshClient.CreateCommand("/system/reset-configuration no-defaults=yes force=yes");
-                                            cmdFinal.BeginExecute();
+                                            // Para archivos .rsc el reset clásico con no-defaults sigue funcionando igual
+                                            var cmdReset = sshClient.CreateCommand("/system/reset-configuration no-defaults=yes force=yes");
+                                            cmdReset.BeginExecute();
                                             System.Threading.Thread.Sleep(3000);
+                                        }
+
+                                        try
+                                        {
                                             sshClient.Disconnect();
                                         }
+                                        catch { /* Se ignora la desconexión abrupta provocada por el reinicio del MikroTik */ }
                                     }
                                 });
 
                                 // === PASO 4: INTERFAZ Y MENSAJE DE ÉXITO ===
                                 string mensajeExito = esBackup
-                                    ? "El respaldo binario se transfirió y se forzó su ejecución enviando el bypass de consola.\n\nEl MikroTik se está reiniciando ahora mismo. Espera de 1 a 2 minutos."
+                                    ? "El respaldo binario se transfirió y se confirmó su ejecución desde la consola interactiva.\n\nEl MikroTik se está reiniciando para cargar el sistema. Espera de 1 a 2 minutos."
                                     : "El script fue transferido con éxito y se forzó el reinicio de fábrica.\n\nEl MikroTik aplicará la configuración limpia al encender. Espera de 1 a 2 minutos.";
 
                                 MessageBox.Show(mensajeExito, "Restauración en Proceso", MessageBoxButtons.OK, MessageBoxIcon.Information);
