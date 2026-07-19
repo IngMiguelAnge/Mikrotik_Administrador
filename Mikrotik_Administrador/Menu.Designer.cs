@@ -176,6 +176,7 @@
             this.btnBancos.TabIndex = 8;
             this.btnBancos.Text = "Bancos";
             this.btnBancos.UseVisualStyleBackColor = false;
+            this.btnBancos.Visible = false;
             this.btnBancos.Click += new System.EventHandler(this.btnBancos_Click);
             // 
             // btnPagos
@@ -191,6 +192,7 @@
             this.btnPagos.TabIndex = 9;
             this.btnPagos.Text = "Pagos";
             this.btnPagos.UseVisualStyleBackColor = false;
+            this.btnPagos.Visible = false;
             this.btnPagos.Click += new System.EventHandler(this.btnPagos_Click);
             // 
             // btnCambios

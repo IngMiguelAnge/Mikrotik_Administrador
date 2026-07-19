@@ -36,6 +36,7 @@
             this.panelTop = new System.Windows.Forms.Panel();
             this.btnVerMirkotiks = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).BeginInit();
             this.panelTop.SuspendLayout();
             this.panelContenedor.SuspendLayout();
@@ -75,7 +76,7 @@
             this.DGVMikrotiks.RowHeadersWidth = 51;
             this.DGVMikrotiks.RowTemplate.Height = 30;
             this.DGVMikrotiks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DGVMikrotiks.Size = new System.Drawing.Size(900, 319);
+            this.DGVMikrotiks.Size = new System.Drawing.Size(900, 292);
             this.DGVMikrotiks.TabIndex = 1;
             this.DGVMikrotiks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVMikrotiks_CellContentClick);
             // 
@@ -110,13 +111,14 @@
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.Color.White;
+            this.panelTop.Controls.Add(this.progressBar1);
             this.panelTop.Controls.Add(this.BtnNuevo);
             this.panelTop.Controls.Add(this.btnVerMirkotiks);
             this.panelTop.Controls.Add(this.btnAddresList);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(940, 70);
+            this.panelTop.Size = new System.Drawing.Size(940, 97);
             this.panelTop.TabIndex = 8;
             // 
             // btnVerMirkotiks
@@ -137,11 +139,18 @@
             // 
             this.panelContenedor.Controls.Add(this.DGVMikrotiks);
             this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContenedor.Location = new System.Drawing.Point(0, 70);
+            this.panelContenedor.Location = new System.Drawing.Point(0, 97);
             this.panelContenedor.Name = "panelContenedor";
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenedor.Size = new System.Drawing.Size(940, 359);
+            this.panelContenedor.Size = new System.Drawing.Size(940, 332);
             this.panelContenedor.TabIndex = 9;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(20, 79);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(235, 12);
+            this.progressBar1.TabIndex = 29;
             // 
             // Mikrotiks
             // 
@@ -172,5 +181,6 @@
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Panel panelContenedor;
         private System.Windows.Forms.Button btnVerMirkotiks;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

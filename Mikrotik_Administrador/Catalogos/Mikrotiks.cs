@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mikrotik_Administrador
@@ -105,127 +106,208 @@ namespace Mikrotik_Administrador
                     ListaWireless();
                     break;
                 case "btnRespaldar":
-                    AppRepository objres = new AppRepository();
-                    MikrotikModel mikro = await objres.GetMikrotikById((int)Id);
-                    // Nombre del archivo que se creará
-                    string fileName = $"backup_{mikro.Nombre.Trim().Replace(" ","")}_{DateTime.Now:yyyyMMdd}.backup";
-                    string localPath = Path.Combine(Application.StartupPath, "Backups", fileName);
+                    // === PASO 0: CONFIGURACIÓN DE LA BARRA DE CARGA Y BOTONES ===
+                    progressBar1.Style = ProgressBarStyle.Marquee;
+                    progressBar1.MarqueeAnimationSpeed = 30;
 
-                    // Asegurar que la carpeta local exista
-                    Directory.CreateDirectory(Path.GetDirectoryName(localPath));
+                    BtnNuevo.Enabled = false;
+                    btnVerMirkotiks.Enabled = false;
+                    btnAddresList.Enabled = false;
 
                     try
                     {
-                        // Paso 1: Conectar por SSH y mandar a generar el respaldo en el MikroTik
-                        using (var sshClient = new SshClient(mikro.IP, mikro.Usuario, mikro.Password))
-                        {
-                            sshClient.Connect();
-                            // El comando genera el backup. 'dont-encrypt=yes' es opcional si no quieres ponerle clave al archivo
-                            var command = sshClient.CreateCommand($"/system backup save name={fileName} dont-encrypt=yes");
-                            command.Execute();
-                            sshClient.Disconnect();
-                        }
+                        AppRepository objres = new AppRepository();
+                        MikrotikModel mikro = await objres.GetMikrotikById((int)Id);
 
-                        // Paso 2: Conectar por SFTP para descargar el archivo a tu PC
-                        using (var sftpClient = new SftpClient(mikro.IP, mikro.Usuario, mikro.Password))
-                        {
-                            sftpClient.Connect();
+                        string baseName = $"backup_{mikro.Nombre.Trim().Replace(" ", "")}_{DateTime.Now:yyyyMMdd}";
+                        string fileBackup = $"{baseName}.backup";
+                        string fileRsc = $"{baseName}.rsc";
 
-                            using (var fileStream = File.Create(localPath))
+                        string localPathBackup = Path.Combine(Application.StartupPath, "Backups", fileBackup);
+                        string localPathRsc = Path.Combine(Application.StartupPath, "Backups", fileRsc);
+
+                        Directory.CreateDirectory(Path.GetDirectoryName(localPathBackup));
+
+                        await Task.Run(() =>
+                        {
+                            // Paso 1: Conectar por SSH y generar AMBOS respaldos en el MikroTik
+                            using (var sshClient = new SshClient(mikro.IP, mikro.Usuario, mikro.Password))
                             {
-                                // Descargamos el archivo recién creado
-                                sftpClient.DownloadFile(fileName, fileStream);
+                                sshClient.Connect();
+
+                                // 1.1 Generar archivo .backup
+                                var cmdBackup = sshClient.CreateCommand($"/system backup save name={fileBackup} dont-encrypt=yes");
+                                cmdBackup.Execute();
+
+                                // 1.2 CORRECCIÓN CRÍTICA: Generar .rsc compatible y limpio en v7
+                                // Usamos 'export' en su forma nativa y añadimos 'terse' para que genere líneas de comandos compactas 
+                                // que RouterOS v7 pueda reimportar de forma plana sin interpretar estructuras de bloques redundantes.
+                                var cmdRsc = sshClient.CreateCommand($"export file={fileRsc} show-sensitive terse");
+                                cmdRsc.Execute();
+
+                                sshClient.Disconnect();
                             }
 
-                            // Opcional: Eliminar el archivo del MikroTik para no saturar su memoria
-                            sftpClient.DeleteFile(fileName);
+                            // Paso 2: Conectar por SFTP para descargar ambos archivos a tu PC
+                            using (var sftpClient = new SftpClient(mikro.IP, mikro.Usuario, mikro.Password))
+                            {
+                                sftpClient.Connect();
 
-                            sftpClient.Disconnect();
-                        }
+                                // 2.1 Descargar el archivo .backup binario
+                                using (var fileStream = File.Create(localPathBackup))
+                                {
+                                    sftpClient.DownloadFile(fileBackup, fileStream);
+                                }
+                                sftpClient.DeleteFile(fileBackup);
 
-                        MessageBox.Show($"Respaldo guardado con éxito en: {localPath}", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                // 2.2 Descargar el archivo .rsc de texto plano
+                                using (var fileStream = File.Create(localPathRsc))
+                                {
+                                    sftpClient.DownloadFile(fileRsc, fileStream);
+                                }
+                                sftpClient.DeleteFile(fileRsc);
+
+                                sftpClient.Disconnect();
+                            }
+                        });
+
+                        MessageBox.Show($"Respaldos generados y guardados con éxito en la carpeta:\n{Path.Combine(Application.StartupPath, "Backups")}",
+                                        "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Error al realizar el respaldo: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    finally
+                    {
+                        progressBar1.Style = ProgressBarStyle.Blocks;
+                        progressBar1.Value = 0;
+                        btnAddresList.Enabled = true;
+                        btnVerMirkotiks.Enabled = true;
+                        BtnNuevo.Enabled = true;
+                    }
                     break;
                 case "btnRestaurar":
-                    AppRepository objress = new AppRepository();
-                    MikrotikModel mikrot = await objress.GetMikrotikById((int)Id);
+                    // === PASO 0: CONFIGURACIÓN DE LA BARRA DE CARGA Y BOTONES ===
+                    progressBar1.Style = ProgressBarStyle.Marquee;
+                    progressBar1.MarqueeAnimationSpeed = 30;
 
-                    // === PASO 1: SELECCIONAR EL ARCHIVO DESDE LA PC ===
-                    OpenFileDialog buscadorArchivos = new OpenFileDialog();
+                    BtnNuevo.Enabled = false;
+                    btnVerMirkotiks.Enabled = false;
+                    btnAddresList.Enabled = false;
 
-                    // Configura para que por defecto se abra en la carpeta "Backups" de tu aplicación
-                    buscadorArchivos.InitialDirectory = Path.Combine(Application.StartupPath, "Backups");
-                    buscadorArchivos.Filter = "Archivos de Respaldo (*.backup)|*.backup";
-                    buscadorArchivos.Title = "Selecciona el respaldo para el MikroTik";
-
-                    // Si el usuario selecciona un archivo y presiona "Abrir"
-                    if (buscadorArchivos.ShowDialog() == DialogResult.OK)
+                    try
                     {
-                        // Guardamos la ruta completa del archivo elegido en la PC
-                        string rutaArchivoLocal = buscadorArchivos.FileName;
+                        AppRepository objress = new AppRepository();
+                        MikrotikModel mikrot = await objress.GetMikrotikById((int)Id);
 
-                        // === PASO 2: PREPARAR DATOS DE CONEXIÓN Y VALIDAR ===
-                        // Extrae solo el nombre del archivo (ej. "backup_20260713.backup")
-                        string nombreArchivoRemoto = Path.GetFileName(rutaArchivoLocal);
-
-                        // Validación de seguridad para confirmar que el archivo existe físicamente
-                        if (!File.Exists(rutaArchivoLocal))
+                        // === PASO 1: SELECCIONAR EL ARCHIVO DESDE LA PC ===
+                        using (OpenFileDialog buscadorArchivos = new OpenFileDialog())
                         {
-                            MessageBox.Show("El archivo seleccionado no existe en la PC.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
+                            buscadorArchivos.InitialDirectory = Path.Combine(Application.StartupPath, "Backups");
+                            buscadorArchivos.Filter = "Archivos de Respaldo MikroTik (*.backup;*.rsc)|*.backup;*.rsc|Binario (*.backup)|*.backup|Script RSC (*.rsc)|*.rsc";
+                            buscadorArchivos.Title = "Selecciona el respaldo para el MikroTik";
 
-                        // === PASO 3: TRANSFERENCIA Y RESTAURACIÓN ===
-                        try
-                        {
-                            // Subir el archivo al MikroTik mediante SFTP
-                            using (var sftpClient = new SftpClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
+                            if (buscadorArchivos.ShowDialog() == DialogResult.OK)
                             {
-                                sftpClient.Connect();
+                                string rutaArchivoLocal = buscadorArchivos.FileName;
+                                string nombreArchivoRemoto = Path.GetFileName(rutaArchivoLocal);
+                                string extension = Path.GetExtension(rutaArchivoLocal).ToLower();
 
-                                using (var fileStream = File.OpenRead(rutaArchivoLocal))
+                                if (!File.Exists(rutaArchivoLocal))
                                 {
-                                    // Sube el archivo a la raíz de la memoria del MikroTik
-                                    sftpClient.UploadFile(fileStream, nombreArchivoRemoto);
+                                    MessageBox.Show("El archivo seleccionado no existe en la PC.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    return;
                                 }
 
-                                sftpClient.Disconnect();
+                                bool esBackup = (extension == ".backup");
+
+                                // 🔥 SEGUNDO PLANO: Transferencia y ejecución segura según tipo de archivo
+                                await Task.Run(() =>
+                                {
+                                    // === PASO 2: TRANSFERENCIA POR SFTP ===
+                                    using (var sftpClient = new SftpClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
+                                    {
+                                        sftpClient.Connect();
+
+                                        if (esBackup)
+                                        {
+                                            // Subimos el archivo .backup binario original directo a Files
+                                            using (var fileStream = File.OpenRead(rutaArchivoLocal))
+                                            {
+                                                sftpClient.UploadFile(fileStream, nombreArchivoRemoto);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // Para .rsc estándar: Subimos con el nombre nativo de auto-ejecución tras reset
+                                            using (var fileStream = File.OpenRead(rutaArchivoLocal))
+                                            {
+                                                sftpClient.UploadFile(fileStream, "run-after-reset.rsc");
+                                            }
+                                        }
+
+                                        sftpClient.Disconnect();
+                                    }
+
+                                    // === PASO 3: EJECUCIÓN VÍA SSH ===
+                                    using (var sshClient = new SshClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
+                                    {
+                                        sshClient.Connect();
+
+                                        string comandoSsh = "";
+
+                                        if (esBackup)
+                                        {
+                                            // SOLUCIÓN VIA EXECUTE BACKGROUND:
+                                            // Metemos el comando de carga dentro de un bloque :execute script={} asíncrono.
+                                            // RouterOS v7 lo procesa como un hilo del sistema (no interactivo), omitiendo el [y/N]
+                                            // Usamos llaves y comillas internas simples para no romper la cadena de C#.
+                                            comandoSsh = $":execute script={{ /system backup load name=\"{nombreArchivoRemoto}\" password=\"\" dont-encrypt=yes }}";
+                                        }
+                                        else
+                                        {
+                                            // Para .rsc estándar: Procedemos con el reset de fábrica limpio estándar
+                                            comandoSsh = "/system/reset-configuration no-defaults=yes force=yes";
+                                        }
+
+                                        var cmdFinal = sshClient.CreateCommand(comandoSsh);
+
+                                        // Disparo asíncrono porque al ejecutarse el bloque del sistema, el Mikrotik muere de inmediato para reiniciar
+                                        cmdFinal.BeginExecute();
+
+                                        // Pausa crítica para que el comando complete su viaje por el cable de red
+                                        System.Threading.Thread.Sleep(3000);
+
+                                        try
+                                        {
+                                            sshClient.Disconnect();
+                                        }
+                                        catch { /* Ignorar caída natural del puerto por reboot del hardware */ }
+                                    }
+                                });
+
+                                // === PASO 4: INTERFAZ Y MENSAJE DE ÉXITO ===
+                                string mensajeExito = esBackup
+                                    ? "El respaldo binario se transfirió y se inyectó en el procesador del sistema.\n\nEl MikroTik se está reiniciando para aplicar la configuración. Espera de 1 a 2 minutos."
+                                    : "El script fue transferido con éxito y se forzó el reinicio de fábrica.\n\nEl MikroTik aplicará la configuración limpia al encender. Espera de 1 a 2 minutos.";
+
+                                MessageBox.Show(mensajeExito, "Restauración en Proceso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
-
-                            // Conectar por SSH para ordenarle al MikroTik que cargue el respaldo
-                            using (var sshClient = new SshClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
-                            {
-                                sshClient.Connect();
-
-                                // Comando para aplicar la restauración
-                                string comandoRestaurar = $"/system backup load name={nombreArchivoRemoto} password=\"\" dont-encrypt=yes";
-                                var command = sshClient.CreateCommand(comandoRestaurar);
-
-                                try
-                                {
-                                    command.Execute();
-                                }
-                                catch (System.IO.IOException)
-                                {
-                                    // Ignoramos esta excepción porque el MikroTik se reinicia al instante
-                                    // y corta la comunicación bruscamente, lo cual es correcto.
-                                }
-
-                                sshClient.Disconnect();
-                            }
-
-                            // Mensaje final de éxito para orientar al usuario
-                            MessageBox.Show("El respaldo se ha subido con éxito. El MikroTik se está reiniciando para aplicar los cambios. Por favor, espera de 1 a 2 minutos para que vuelva a estar en línea.",
-                                            "Restauración en Proceso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Error durante la restauración: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error durante la restauración: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        // === PASO 5: RESTABLECER CONTROLES COMPLETAMENTE ===
+                        progressBar1.Style = ProgressBarStyle.Blocks;
+                        progressBar1.Value = 0;
+                        btnAddresList.Enabled = true;
+                        btnVerMirkotiks.Enabled = true;
+                        BtnNuevo.Enabled = true;
                     }
                     break;
             }
