@@ -15,6 +15,7 @@ namespace Mikrotik_Administrador
     {
         MK mikrotik;
         public int IdCliente { get; set; }
+        public int IdUsuario {  get; set; }
         public ServiciosCliente()
         {
             InitializeComponent();
@@ -306,10 +307,12 @@ namespace Mikrotik_Administrador
 
                 case "btnPlan":
                     int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
+                    int IdPlanActual = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
                     Planes p = new Planes();
+                    p.IdUsuario = IdUsuario;
                     p.PorUsuarios = true;
-                    p.Tipo = (string)DGVServicios.Rows[e.RowIndex].Cells["Tipo"].Value;
-                    p.IdMikrotik = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
+                    p.Tipo = string.Empty;// (string)DGVServicios.Rows[e.RowIndex].Cells["Tipo"].Value;
+                    //p.IdMikrotik = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
                     if (p.ShowDialog() == DialogResult.OK)
                     {                
                         TiempoDefinido td = new TiempoDefinido();
@@ -317,15 +320,15 @@ namespace Mikrotik_Administrador
                             ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value);
                         td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
                             ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value);
-                       
+                        td.IdPlan = p.IdSeleccionado;
                         if (td.ShowDialog() == DialogResult.Cancel)
                         {
                             MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-                        if(IdPlan == p.IdSeleccionado) //No tiene caso designar el mismo plan
+                        if(IdPlan == p.IdSeleccionado && td.IdMikrotik == IdPlanActual) //No tiene caso designar el mismo plan
                         {
-                            MessageBox.Show("No se puede asignar el mismo plan, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Esta plan ya se encuentra funcionando actualmente en el mikrotik seleccionado, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                         TiempoDefinidosModel TD = new TiempoDefinidosModel
@@ -337,7 +340,8 @@ namespace Mikrotik_Administrador
                             Modo = td.Modo,
                             IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value),
                             Estatus = "Pendiente",
-                            IdPlan = p.IdSeleccionado
+                            IdPlan = p.IdSeleccionado,
+                            IdMikrotikReceptor = td.IdMikrotik
                         };
                         AppRepository obj = new AppRepository();
                         var result = obj.SaveTiempoCambio(TD);

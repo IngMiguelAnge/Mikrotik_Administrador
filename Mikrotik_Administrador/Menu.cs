@@ -7,6 +7,7 @@ namespace Mikrotik_Administrador
 {
     public partial class Menu : Form
     {
+        public int IdUsuario {  get; set; }
         public Menu()
         {
             InitializeComponent();
@@ -39,7 +40,7 @@ namespace Mikrotik_Administrador
         {
             Planes m = new Planes();
             m.PorUsuarios = false;
-            m.IdMikrotik = 0;
+            m.IdUsuario = IdUsuario;
             m.Tipo = string.Empty;
             m.Show();
         }
@@ -53,6 +54,7 @@ namespace Mikrotik_Administrador
         private void btnInformacion_Click(object sender, EventArgs e)
         {
             InfoClientes m = new InfoClientes();
+            m.IdUsuario = IdUsuario;
             m.Show();
         }
 
@@ -72,6 +74,12 @@ namespace Mikrotik_Administrador
         {
             CambiosPlan cp = new CambiosPlan();
             cp.Show();
+        }
+
+        private void btnHistorial_Click(object sender, EventArgs e)
+        {
+            HistorialMovimientos H = new HistorialMovimientos();
+            H.Show();
         }
     }
 }

@@ -1,12 +1,14 @@
 ﻿using GMap.NET.MapProviders;
 using Microsoft.VisualBasic;
 using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -78,6 +80,25 @@ namespace Mikrotik_Administrador
             });
             dgvComments.Columns.Add(new DataGridViewTextBoxColumn
             {
+                Name = "IdMikrotik",
+                HeaderText = "IdMikrotik",
+                DataPropertyName = "IdMikrotik",
+                Visible = false,
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvComments.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Mikrotik",
+                HeaderText = "Mikrotik",
+                DataPropertyName = "Mikrotik",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvComments.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 Name = "Estatus",
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
@@ -124,6 +145,8 @@ namespace Mikrotik_Administrador
                 dgvComments.DataSource = new SortableBindingList<ListCommentsModel>(listaFinal);
                 if (dgvComments.Columns["Id"] != null)
                     dgvComments.Columns["Id"].Visible = false;             
+                if(dgvComments.Columns["IdMikrotik"] != null)
+                    dgvComments.Columns["IdMikrotik"].Visible = false;
             }
             catch (Exception ex)
             {
@@ -141,22 +164,18 @@ namespace Mikrotik_Administrador
         {
             if (e.RowIndex < 0) return;
             var Id = (int)dgvComments.Rows[e.RowIndex].Cells["Id"].Value;
+            var CommitText = dgvComments.Rows[e.RowIndex].Cells["Commit"].Value.ToString();
+            var IdMikrotik = (int)dgvComments.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
             AppRepository m = new AppRepository();
             switch (dgvComments.Columns[e.ColumnIndex].Name)
             {
                 case "btnEditar":
-                    string respuesta = Interaction.InputBox("Ingrese el nuevo commit:", "Commit", string.Empty);
-                    if (!string.IsNullOrEmpty(respuesta))
-                    {
-                        if (m.SaveComment(Id, respuesta).Result != 0)
-                        {
-                            MessageBox.Show("Comment actualizado");
-                            BuscarComments();
-                        }
-                        else
-                            MessageBox.Show("Error al actualizar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
+                    Comment c = new Comment();
+                    c.Id = Id;
+                    c.CommitText = CommitText;
+                    c.IdMikrotik = IdMikrotik;
+                    c.ShowDialog();
+                    BuscarComments();                
                     break;
                 case "btnCambiar":
                
@@ -175,19 +194,9 @@ namespace Mikrotik_Administrador
 
         private void btnNuevo_Click(object sender, EventArgs e)
         {
-            AppRepository m = new AppRepository();
-            string respuesta = Interaction.InputBox("Ingrese el nuevo commit:", "Commit", string.Empty);
-            if (!string.IsNullOrEmpty(respuesta))
-            {
-                if (m.SaveComment(0, respuesta).Result != 0)
-                {
-                    MessageBox.Show("Comment guardado");
-                    BuscarComments();
-                }
-                else
-                    MessageBox.Show("Error al actualizar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
+            Comment c = new Comment();
+            c.ShowDialog();
+            BuscarComments();
         }
     }
 }

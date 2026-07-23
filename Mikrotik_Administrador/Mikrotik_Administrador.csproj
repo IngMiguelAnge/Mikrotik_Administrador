@@ -256,6 +256,12 @@
     <Compile Include="Catalogos\CambiosPlan.Designer.cs">
       <DependentUpon>CambiosPlan.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\HistorialMovimientos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\HistorialMovimientos.Designer.cs">
+      <DependentUpon>HistorialMovimientos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\HistorialPagos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -284,6 +290,12 @@
     </Compile>
     <Compile Include="Catalogos\Comments.Designer.cs">
       <DependentUpon>Comments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Catalogos\Comment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\Comment.Designer.cs">
+      <DependentUpon>Comment.cs</DependentUpon>
     </Compile>
     <Compile Include="Items\ConfirmarPago.cs">
       <SubType>Form</SubType>
@@ -335,10 +347,12 @@
     </Compile>
     <Compile Include="Model\BancoModel.cs" />
     <Compile Include="Model\ConfigPageModel.cs" />
+    <Compile Include="Model\HistorialMovimientosModel.cs" />
     <Compile Include="Model\ListBancosModel.cs" />
     <Compile Include="Model\ListCommentsModel.cs" />
     <Compile Include="Model\ListConfigImpressionsModel.cs" />
     <Compile Include="Model\ListDetallesMensualidadModel.cs" />
+    <Compile Include="Model\ListHistorialMovimientosModel.cs" />
     <Compile Include="Model\ListHistorialPagosModel.cs" />
     <Compile Include="Model\ListPlanesAnidadosDetalleModel.cs" />
     <Compile Include="Model\ListPlanesModel.cs" />
@@ -450,6 +464,9 @@
     <EmbeddedResource Include="Catalogos\CambiosPlan.resx">
       <DependentUpon>CambiosPlan.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\HistorialMovimientos.resx">
+      <DependentUpon>HistorialMovimientos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\HistorialPagos.resx">
       <DependentUpon>HistorialPagos.cs</DependentUpon>
     </EmbeddedResource>
@@ -461,6 +478,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Comments.resx">
       <DependentUpon>Comments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\Comment.resx">
+      <DependentUpon>Comment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\ConfirmarPago.resx">
       <DependentUpon>ConfirmarPago.cs</DependentUpon>

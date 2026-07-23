@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Model;
+using System;
 using System.Windows.Forms;
-using System.Windows.Media.Animation;
-
 namespace Mikrotik_Administrador.Items
 {
     public partial class TiempoDefinido : Form
     {
+        public int IdPlan { get; set; }
         public string Modo { get; set; }
         public int Horas { get; set; }
         public int Dias { get; set; }
         public DateTime? FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
         private bool primera = true;
+        public int IdMikrotik { get; set; }
         public TiempoDefinido()
         {
             InitializeComponent();
         }
 
-        private void TiempoDefinido_Load(object sender, EventArgs e)
+        private async void TiempoDefinido_Load(object sender, EventArgs e)
         {
             CBModo.SelectedIndex = 0;
             lblTiempo.Text = "Tiempo que desea que dure el plan";
@@ -33,6 +28,17 @@ namespace Mikrotik_Administrador.Items
             dtpFechaInicio.MinDate = DateTime.Now;
             lblFechaFin.Text = string.Empty;
             CambiarFinal();
+            AppRepository obj = new AppRepository();
+            var listaMikrotiks = await obj.GetMikrotiksByIdPlan(IdPlan);
+
+            // Insertamos un objeto "fantasma" al inicio para el placeholder
+            listaMikrotiks.Insert(0, new ListMikrotikModel { Id = 0, Nombre = "Selecciona un Mikrotik" });
+
+            // Configuramos el ComboBox
+            CBMikrotiks.DisplayMember = "Nombre"; // Lo que el usuario VE
+            CBMikrotiks.ValueMember = "Id";      // El dato que procesas por DETRÁS
+            CBMikrotiks.DataSource = listaMikrotiks;
+            CBMikrotiks.SelectedIndex = 0;
             primera = false;
         }
 
@@ -119,11 +125,17 @@ namespace Mikrotik_Administrador.Items
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            if (CBMikrotiks.SelectedIndex == 0)
+            {
+                MessageBox.Show("Debe seleccionar un Mikrotik", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             Modo = CBModo.Text;
             if (!checarfechas())
             {
                 return;
             }
+            IdMikrotik = (int)CBMikrotiks.SelectedValue;
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

@@ -40,6 +40,8 @@
             this.lblFechaFin = new System.Windows.Forms.Label();
             this.CBModo = new System.Windows.Forms.ComboBox();
             this.lblModo = new System.Windows.Forms.Label();
+            this.lblMikrotik = new System.Windows.Forms.Label();
+            this.CBMikrotiks = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.NUDDias)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDHoras)).BeginInit();
             this.SuspendLayout();
@@ -113,7 +115,7 @@
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(210, 438);
+            this.btnGuardar.Location = new System.Drawing.Point(209, 570);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(120, 38);
             this.btnGuardar.TabIndex = 6;
@@ -193,12 +195,35 @@
             this.lblModo.TabIndex = 12;
             this.lblModo.Text = "Aplicar cambio:";
             // 
+            // lblMikrotik
+            // 
+            this.lblMikrotik.AutoSize = true;
+            this.lblMikrotik.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lblMikrotik.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMikrotik.Location = new System.Drawing.Point(39, 430);
+            this.lblMikrotik.Name = "lblMikrotik";
+            this.lblMikrotik.Size = new System.Drawing.Size(303, 28);
+            this.lblMikrotik.TabIndex = 13;
+            this.lblMikrotik.Text = "En que mikrotik aplicara el plan:";
+            // 
+            // CBMikrotiks
+            // 
+            this.CBMikrotiks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBMikrotiks.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBMikrotiks.FormattingEnabled = true;
+            this.CBMikrotiks.Location = new System.Drawing.Point(44, 471);
+            this.CBMikrotiks.Name = "CBMikrotiks";
+            this.CBMikrotiks.Size = new System.Drawing.Size(285, 33);
+            this.CBMikrotiks.TabIndex = 14;
+            // 
             // TiempoDefinido
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(375, 490);
+            this.ClientSize = new System.Drawing.Size(369, 625);
+            this.Controls.Add(this.CBMikrotiks);
+            this.Controls.Add(this.lblMikrotik);
             this.Controls.Add(this.CBModo);
             this.Controls.Add(this.lblModo);
             this.Controls.Add(this.lblFechaFin);
@@ -240,5 +265,7 @@
         private System.Windows.Forms.Label lblFechaFin;
         private System.Windows.Forms.ComboBox CBModo;
         private System.Windows.Forms.Label lblModo;
+        private System.Windows.Forms.Label lblMikrotik;
+        private System.Windows.Forms.ComboBox CBMikrotiks;
     }
 }

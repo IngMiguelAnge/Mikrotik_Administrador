@@ -20,6 +20,7 @@ namespace Mikrotik_Administrador
     public partial class Plan : Form
     {
         public int Id { get; set; }
+        public int IdUsuario { get; set; }
         MK mikrotik;
         public Plan()
         {
@@ -135,6 +136,14 @@ namespace Mikrotik_Administrador
                 string Mensaje = await EmparejarPlan(lista, plan);
                 if (Mensaje == string.Empty)
                 {
+                    HistorialMovimientosModel H = new HistorialMovimientosModel
+                    {
+                        Id = 0,
+                        Descripcion = "Se guarda el plan " + plan.Nombre + " con velocidad " + plan.Velocidad,
+                        Pagina = "En la página de planes",
+                        IdUsuario = IdUsuario
+                    };
+                    var r = obj.SaveHistorialMovimientos(H);
                     MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                     return;

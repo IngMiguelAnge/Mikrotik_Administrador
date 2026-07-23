@@ -323,7 +323,7 @@ namespace Mikrotik_Administrador.Class
                 System.Diagnostics.Debug.WriteLine("Error al eliminar Queue: " + ex.Message);
             }
         }
-        public List<Antenas> VerAntenas(string name, List<ListWirelessModel> ListWireless)
+        public List<Antenas> VerAntenas(string name, List<ListWirelessModel> ListWireless, int IdMikrotik)
         {
             List<Antenas> listaFinal = new List<Antenas>();
             try
@@ -336,7 +336,7 @@ namespace Mikrotik_Administrador.Class
                 bool objetoValido = true;
                 AppRepository obj = new AppRepository();
                 List<ListCommentsModel> listComments = new List<ListCommentsModel>();
-                listComments = obj.GetCommentsActivos().Result;
+                listComments = obj.GetCommentsActivos(IdMikrotik).Result;
                 foreach (string row in respuesta)
                 {
                     if (row.StartsWith("!re"))

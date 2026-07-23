@@ -187,7 +187,7 @@ namespace Mikrotik_Administrador
                         MessageBox.Show("No se ha guardado el Wireless del Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
-                    var lista = await Task.Run(() => mikrotik.VerAntenas(txtNombre.Text, listaddress)
+                    var lista = await Task.Run(() => mikrotik.VerAntenas(txtNombre.Text, listaddress, IdMikrotik)
                     .OrderBy(x => x.comment)
                     .ToList());
                     if (lista == null || lista.Count == 0)

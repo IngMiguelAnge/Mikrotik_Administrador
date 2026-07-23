@@ -15,6 +15,7 @@ namespace Mikrotik_Administrador
 {
     public partial class InfoClientes : Form
     {
+        public int IdUsuario {  get; set; }
         public InfoClientes()
         {
             InitializeComponent();
@@ -244,6 +245,7 @@ namespace Mikrotik_Administrador
                 case "btnServicios":
                     ServiciosCliente s = new ServiciosCliente();
                     s.IdCliente = Convert.ToInt32(Id);
+                    s.IdUsuario = IdUsuario;
                     s.ShowDialog();
                     CargarClientes();
                     break;

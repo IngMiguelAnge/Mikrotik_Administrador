@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 namespace Mikrotik_Administrador.Data
 {
@@ -18,6 +19,71 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region HistorialMovimientos
+        public async Task<bool> SaveHistorialMovimientos(HistorialMovimientosModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveHistorialMovimientos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Descripcion", obj.Descripcion));
+                        cmd.Parameters.Add(new SqlParameter("@Pagina", obj.Pagina));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<List<ListHistorialMovimientosModel>> GetHistorialMovimientos(DateTime Desde, DateTime Hasta)
+        {
+            List<ListHistorialMovimientosModel> list = new List<ListHistorialMovimientosModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetHistorialMovimientos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Desde", Desde));
+                        cmd.Parameters.Add(new SqlParameter("@Hasta", Hasta));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListHistorialMovimientos(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListHistorialMovimientosModel MapToListHistorialMovimientos(SqlDataReader reader)
+        {
+            return new ListHistorialMovimientosModel()
+            {
+                Id = (int)reader["Id"],
+                Descripcion = (string)reader["Descripcion"],
+                Pagina = (string)reader["Pagina"],
+                Usuario = (string)reader["Usuario"],
+                FechaCreacion = (DateTime)reader["FechaCreacion"],
+            };
+        }
+        #endregion
         #region TiempoDefinido
         public async Task<bool> UpdateEstatusTiempoCambio(int Id)
         {
@@ -104,6 +170,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotikReceptor", obj.IdMikrotikReceptor));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -567,7 +634,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<int> SaveComment(int Id, string Nombre)
+        public async Task<int> SaveComment(int Id, string Nombre, int IdMikrotik)
         {
             try
             {
@@ -578,6 +645,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
                         {
                             Direction = System.Data.ParameterDirection.Output
@@ -596,7 +664,7 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
-        public async Task<List<ListCommentsModel>> GetCommentsActivos()
+        public async Task<List<ListCommentsModel>> GetCommentsActivos(int IdMikrotik)
         {
             List<ListCommentsModel> list = new List<ListCommentsModel>();
             try
@@ -606,6 +674,7 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("GetCommentsActivos", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -655,6 +724,7 @@ namespace Mikrotik_Administrador.Data
             {
                 Id = (int)reader["Id"],
                 Nombre = (string)reader["Nombre"],
+                
                 Estatus = Convert.IsDBNull(reader["Estatus"]) ? string.Empty : (string)reader["Estatus"],
             };
         }
@@ -729,7 +799,7 @@ namespace Mikrotik_Administrador.Data
             }
             return CantidadDUsuarios;
         }
-        public async Task<List<ListPlanesModel>> GetPlanesbyName(string Nombre, bool? IsAntena, bool PorUsuarios, int IdMikrotik)
+        public async Task<List<ListPlanesModel>> GetPlanesbyName(string Nombre, bool? IsAntena, bool PorUsuarios)
         {
             List<ListPlanesModel> list = new List<ListPlanesModel>();
             try
@@ -742,7 +812,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
                         cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
                         cmd.Parameters.Add(new SqlParameter("@ParaSeleccion", PorUsuarios));
-                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        //cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -1170,6 +1240,33 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("GetMikrotiks", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListMikrotiks(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        public async Task<List<ListMikrotikModel>> GetMikrotiksByIdPlan(int IdPlan)
+        {
+            List<ListMikrotikModel> list = new List<ListMikrotikModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetMikrotiksByIdPlan", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", IdPlan));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {

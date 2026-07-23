@@ -16,8 +16,8 @@ namespace Mikrotik_Administrador
 {
     public partial class Planes : Form
     {
+        public int IdUsuario {  get; set; }
         public bool PorUsuarios { get; set; }
-        public int IdMikrotik { get; set; }
         public string Tipo { get; set; }
         public int IdSeleccionado { get; set; } 
         public Planes()
@@ -35,7 +35,7 @@ namespace Mikrotik_Administrador
                 AppRepository obj = new AppRepository();
                 bool? IsAntena = Tipo == string.Empty ? (bool?)null :
                     Tipo == "Antena" ? true : false;
-                var lista = obj.GetPlanesbyName(txtNombre.Text, IsAntena, PorUsuarios,IdMikrotik).Result;
+                var lista = obj.GetPlanesbyName(txtNombre.Text, IsAntena, PorUsuarios).Result;
                 var listaFinal = lista?.ToList() ?? new List<ListPlanesModel>();
                 dgvPlanes.DataSource = new SortableBindingList<ListPlanesModel>(listaFinal);
                 if (dgvPlanes.Columns["Id"] != null)
@@ -219,6 +219,7 @@ namespace Mikrotik_Administrador
                 case "btnEditar":
                     Plan m = new Plan();
                     m.Id = Convert.ToInt32(Id);
+                    m.IdUsuario = IdUsuario;
                     m.ShowDialog();
                     BuscarPlanes();
                     break;

@@ -39,6 +39,7 @@
             this.btnBancos = new System.Windows.Forms.Button();
             this.btnPagos = new System.Windows.Forms.Button();
             this.btnCambios = new System.Windows.Forms.Button();
+            this.btnHistorial = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,6 +67,7 @@
             this.flowLayoutPanel1.Controls.Add(this.btnBancos);
             this.flowLayoutPanel1.Controls.Add(this.btnPagos);
             this.flowLayoutPanel1.Controls.Add(this.btnCambios);
+            this.flowLayoutPanel1.Controls.Add(this.btnHistorial);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 60);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -210,6 +212,21 @@
             this.btnCambios.UseVisualStyleBackColor = false;
             this.btnCambios.Click += new System.EventHandler(this.btnCambios_Click);
             // 
+            // btnHistorial
+            // 
+            this.btnHistorial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.btnHistorial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHistorial.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnHistorial.ForeColor = System.Drawing.Color.White;
+            this.btnHistorial.Location = new System.Drawing.Point(30, 300);
+            this.btnHistorial.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
+            this.btnHistorial.Name = "btnHistorial";
+            this.btnHistorial.Size = new System.Drawing.Size(145, 75);
+            this.btnHistorial.TabIndex = 11;
+            this.btnHistorial.Text = "Historial";
+            this.btnHistorial.UseVisualStyleBackColor = false;
+            this.btnHistorial.Click += new System.EventHandler(this.btnHistorial_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -244,5 +261,6 @@
         private System.Windows.Forms.Button btnBancos;
         private System.Windows.Forms.Button btnPagos;
         private System.Windows.Forms.Button btnCambios;
+        private System.Windows.Forms.Button btnHistorial;
     }
 }

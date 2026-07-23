@@ -31,6 +31,7 @@ namespace Mikrotik_Administrador
             else
             {
                 Menu m = new Menu();
+                m.IdUsuario = usuario.Id;
                 m.Show();
                 this.Hide();
             }
