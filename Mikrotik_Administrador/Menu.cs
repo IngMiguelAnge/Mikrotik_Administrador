@@ -48,6 +48,7 @@ namespace Mikrotik_Administrador
         private void btnAsignacion_Click(object sender, EventArgs e)
         {
             Usuarios m = new Usuarios();
+            m.IdUsuario = IdUsuario;
             m.Show();
         }
 

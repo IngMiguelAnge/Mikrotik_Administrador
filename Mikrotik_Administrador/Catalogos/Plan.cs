@@ -150,6 +150,14 @@ namespace Mikrotik_Administrador
                 }
                 else
                 {
+                    HistorialMovimientosModel H = new HistorialMovimientosModel
+                    {
+                        Id = 0,
+                        Descripcion = "Se guarda el plan " + plan.Nombre + " con velocidad " + plan.Velocidad + " pero se encontraron errores al comunicarse con los mikrotiks",
+                        Pagina = "En la página de planes",
+                        IdUsuario = IdUsuario
+                    };
+                    var r = obj.SaveHistorialMovimientos(H);
                     MessageBox.Show("Se guardo el plan en base pero, " + Mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }

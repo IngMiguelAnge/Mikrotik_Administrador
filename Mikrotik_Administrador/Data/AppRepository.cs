@@ -1578,6 +1578,30 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
+        public async Task<bool> UpdateEstatusGeneralbyIdInterno(int IdMikrotik,string IdInterno, bool IsAntena, string Estatus)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateEstatusGeneralbyIdInterno", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
+                        cmd.Parameters.Add(new SqlParameter("@IdInterno", IdInterno));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", Estatus));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<bool> UpdatePlanGeneral(int Id, int IdPlan)
         {
             try

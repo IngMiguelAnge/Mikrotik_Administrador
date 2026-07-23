@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,6 +19,7 @@ namespace Mikrotik_Administrador
     {
         MK mikrotik;
         public int IdCliente { get; set; }
+        public int IdUsuario {  get; set; }
         public Usuarios()
         {
             InitializeComponent();
@@ -596,6 +598,11 @@ namespace Mikrotik_Administrador
                     MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                    mikrotik = null;
+                }
                 mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
 
                 bool login = await Task.Run(() =>
@@ -630,6 +637,14 @@ namespace Mikrotik_Administrador
                 {
                     string nuevoEstatus = objUsuario.Estatus == "Activo" ? "Inactivo" : "Activo";
                     var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus);
+                    HistorialMovimientosModel H = new HistorialMovimientosModel
+                    {
+                        Id = 0,
+                        Descripcion = "Se " + nuevoEstatus + " el usuario " + objUsuario.Usuario + " por clikeo",
+                        Pagina = "En la página de asignaciones",
+                        IdUsuario = IdUsuario
+                    };
+                    var r = obj.SaveHistorialMovimientos(H);
                     BuscarUsuarios(false);
                 }
                 else
@@ -917,6 +932,11 @@ namespace Mikrotik_Administrador
                 {
                     MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
+                }
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                    mikrotik = null;
                 }
                 mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
                 // Usamos Task.Run para que la conexión no detenga la ventana

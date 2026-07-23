@@ -171,6 +171,11 @@ namespace Mikrotik_Administrador
                     MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                    mikrotik = null;
+                }
                 mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
                 // Usamos Task.Run para que la conexión no detenga la ventana
                 bool login = await Task.Run(() =>

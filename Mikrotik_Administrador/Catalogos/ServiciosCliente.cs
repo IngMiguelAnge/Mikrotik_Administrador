@@ -282,6 +282,14 @@ namespace Mikrotik_Administrador
             // Evitar errores si hacen click en el encabezado
             if (e.RowIndex < 0) return;
             int Id = (int)DGVServicios.Rows[e.RowIndex].Cells["Id"].Value;
+            string Estatus = (string)DGVServicios.Rows[e.RowIndex].Cells["Estatus"].Value;
+            ListUsuariosGeneralModel objUsuario = new ListUsuariosGeneralModel();
+            objUsuario.Id = Id;
+            objUsuario.IdMikrotik = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
+            objUsuario.IdInterno = (string)DGVServicios.Rows[e.RowIndex].Cells["IdInterno"].Value;
+            objUsuario.Usuario = (string)DGVServicios.Rows[e.RowIndex].Cells["Usuario"].Value;
+            objUsuario.Estatus = (string)DGVServicios.Rows[e.RowIndex].Cells["Estatus"].Value;
+            objUsuario.Tipo = (string)DGVServicios.Rows[e.RowIndex].Cells["Tipo"].Value;
 
             switch (DGVServicios.Columns[e.ColumnIndex].Name)
             {
@@ -294,18 +302,22 @@ namespace Mikrotik_Administrador
                     u.Show();
                     break;
                 case "btnEstatus":
-                    ListUsuariosGeneralModel objUsuario = new ListUsuariosGeneralModel();
-                    objUsuario.Id = Id;
-                    objUsuario.IdMikrotik = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
-                    objUsuario.IdInterno = (string)DGVServicios.Rows[e.RowIndex].Cells["IdInterno"].Value;
-                    objUsuario.Usuario = (string)DGVServicios.Rows[e.RowIndex].Cells["Usuario"].Value;
-                    objUsuario.Estatus = (string)DGVServicios.Rows[e.RowIndex].Cells["Estatus"].Value;
-                    objUsuario.Tipo = (string)DGVServicios.Rows[e.RowIndex].Cells["Tipo"].Value;
-
+                   if(Estatus == "Eliminado")
+                    {
+                        MessageBox.Show("Este servicio se encuentra ya eliminado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+             
                     await CambiarEstatus(objUsuario);
                     break;
 
                 case "btnPlan":
+                    if (Estatus == "Eliminado")
+                    {
+                        MessageBox.Show("Este servicio se encuentra ya eliminado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    await ChecarUsuario(objUsuario);
                     int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
                     int IdPlanActual = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
                     Planes p = new Planes();
@@ -351,11 +363,11 @@ namespace Mikrotik_Administrador
                     break;
             }
         }
-        public async Task CambiarEstatus(ListUsuariosGeneralModel objUsuario)
+        public async Task ChecarUsuario(ListUsuariosGeneralModel objUsuario)
         {
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-           AppRepository obj = new AppRepository();
+            AppRepository obj = new AppRepository();
             try
             {
                 MikrotikModel mikro = new MikrotikModel();
@@ -364,6 +376,11 @@ namespace Mikrotik_Administrador
                 {
                     MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
+                }
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                    mikrotik = null;
                 }
                 mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
 
@@ -376,15 +393,113 @@ namespace Mikrotik_Administrador
                     MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+
+                if (objUsuario.Tipo == "Antena")
+                {
+                    //Primero revisamos si el servicio aun existe en el mikrotik
+                    string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Usuario));
+                    if (Queue == string.Empty)
+                    {
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado").Wait();
+
+                        MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        BuscarServicios();
+                        return;
+                    }
+                }
+                else
+                {
+                    //Primero revisamos si el servicio aun existe en el mikrotik
+                    var lista = await Task.Run(() => mikrotik.VerFibra(objUsuario.Usuario)
+                              .OrderBy(x => x.comment)
+                              .ToList());
+                    if (lista == null || lista.Count == 0)
+                    {
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado").Wait();
+
+                        MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        BuscarServicios();
+                        return;
+                    }
+                }              
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                }
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
+            }
+        }
+        public async Task CambiarEstatus(ListUsuariosGeneralModel objUsuario)
+        {
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            AppRepository obj = new AppRepository();
+            try
+            {
+                MikrotikModel mikro = new MikrotikModel();
+                mikro = obj.GetMikrotikById(objUsuario.IdMikrotik).Result;
+                if (mikro.Estatus == false)
+                {
+                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                    mikrotik = null;
+                }
+                mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+
+                bool login = await Task.Run(() =>
+                {
+                    return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                });
+                if (login == false)
+                {
+                    MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+              
+
                 bool Result1 = false;
                 bool Result2 = false;
                 if (objUsuario.Tipo == "Antena")
                 {
+                    //Primero revisamos si el servicio aun existe en el mikrotik
+                    string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Usuario));
+                    if(Queue == string.Empty)
+                    {
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado").Wait();
+
+                        MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        BuscarServicios();
+                        return;
+                    }
                     Result1 = mikrotik.CambiarEstatusAntena(objUsuario.IdInterno, objUsuario.Estatus);
                     Result2 = mikrotik.CambiarEstatusQueues(objUsuario.Usuario, objUsuario.Estatus);
                 }
                 else
                 {
+                    //Primero revisamos si el servicio aun existe en el mikrotik
+                    var lista = await Task.Run(() => mikrotik.VerFibra(objUsuario.Usuario)
+                              .OrderBy(x => x.comment)
+                              .ToList());
+                    if (lista == null || lista.Count == 0)
+                    {
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado").Wait();
+
+                        MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        BuscarServicios();
+                        return;
+                    }
                     Result1 = mikrotik.CambiarEstatusFibra(objUsuario.IdInterno, objUsuario.Estatus);
                     Result2 = true;
                 }
