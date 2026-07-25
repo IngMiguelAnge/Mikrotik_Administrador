@@ -7,5 +7,6 @@
         public string Comment { get; set; }
         public string Mikrotik { get; set; }
         public string Estatus { get; set; } 
+        public string Completado { get; set; }
     }
 }

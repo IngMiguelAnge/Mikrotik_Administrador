@@ -186,8 +186,8 @@ namespace Mikrotik_Administrador
                 {
                     IsAntena = true;
                     var listaddress = await obj.GetWirelessbyIdMikrotik(IdMikrotik);
-
-                    if (listaddress == null || listaddress.Count == 0)
+                    var listaaddresactivos = listaddress.Where(x => x.Estatus == "Activo").ToList();
+                    if (listaaddresactivos == null || listaaddresactivos.Count == 0)
                     {
                         MessageBox.Show("No se ha guardado el Wireless del Mikrotik seleccionado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;

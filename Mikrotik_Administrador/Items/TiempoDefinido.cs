@@ -1,6 +1,8 @@
-﻿using Mikrotik_Administrador.Data;
+﻿using Microsoft.VisualBasic;
+using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 namespace Mikrotik_Administrador.Items
 {
@@ -123,7 +125,7 @@ namespace Mikrotik_Administrador.Items
             }
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private async void btnGuardar_Click(object sender, EventArgs e)
         {
             if (CBMikrotiks.SelectedIndex == 0)
             {
@@ -135,7 +137,29 @@ namespace Mikrotik_Administrador.Items
             {
                 return;
             }
+            AppRepository obj = new AppRepository();
+            var plan = obj.GetPlanById(IdPlan);
             IdMikrotik = (int)CBMikrotiks.SelectedValue;
+            if(plan.Result.IsAntena ==  true)
+            {
+                var listwireles = await obj.GetWirelessbyIdMikrotik(IdMikrotik);
+                if (listwireles.Where(x => x.Estatus == "Activo").ToList().Count() == 0)
+                {
+                    MessageBox.Show("El mikrotik seleccionado no contiene wireless agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            else
+            {
+                var listPool = await obj.GetPoolsbyIdMikrotik(IdMikrotik);
+                if (listPool.Where(x => x.Estatus == "Activo").ToList().Count() == 0)
+                {
+                    MessageBox.Show("El mikrotik seleccionado no contiene wireless agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+                
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

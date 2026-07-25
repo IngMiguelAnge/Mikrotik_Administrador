@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvWireless = new System.Windows.Forms.DataGridView();
             this.BtnActualizar = new System.Windows.Forms.Button();
             this.BtnExtraer = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.lblAcepta = new System.Windows.Forms.Label();
+            this.CBPlanes = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvWireless)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,24 +49,24 @@
             this.dgvWireless.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvWireless.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvWireless.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvWireless.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvWireless.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvWireless.ColumnHeadersHeight = 35;
             this.dgvWireless.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvWireless.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvWireless.DefaultCellStyle = dataGridViewCellStyle6;
             this.dgvWireless.EnableHeadersVisualStyles = false;
             this.dgvWireless.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.dgvWireless.Location = new System.Drawing.Point(30, 123);
@@ -83,7 +85,7 @@
             this.BtnActualizar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnActualizar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.BtnActualizar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.BtnActualizar.Location = new System.Drawing.Point(315, 35);
+            this.BtnActualizar.Location = new System.Drawing.Point(570, 35);
             this.BtnActualizar.Name = "BtnActualizar";
             this.BtnActualizar.Size = new System.Drawing.Size(160, 38);
             this.BtnActualizar.TabIndex = 1;
@@ -97,7 +99,7 @@
             this.BtnExtraer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnExtraer.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.BtnExtraer.ForeColor = System.Drawing.Color.White;
-            this.BtnExtraer.Location = new System.Drawing.Point(30, 35);
+            this.BtnExtraer.Location = new System.Drawing.Point(286, 35);
             this.BtnExtraer.Name = "BtnExtraer";
             this.BtnExtraer.Size = new System.Drawing.Size(214, 38);
             this.BtnExtraer.TabIndex = 2;
@@ -112,12 +114,40 @@
             this.progressBar1.Size = new System.Drawing.Size(235, 12);
             this.progressBar1.TabIndex = 3;
             // 
+            // lblAcepta
+            // 
+            this.lblAcepta.AutoSize = true;
+            this.lblAcepta.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblAcepta.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblAcepta.Location = new System.Drawing.Point(27, 8);
+            this.lblAcepta.Name = "lblAcepta";
+            this.lblAcepta.Size = new System.Drawing.Size(181, 25);
+            this.lblAcepta.TabIndex = 32;
+            this.lblAcepta.Text = "¿Qué planes acepta?";
+            // 
+            // CBPlanes
+            // 
+            this.CBPlanes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBPlanes.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBPlanes.FormattingEnabled = true;
+            this.CBPlanes.Items.AddRange(new object[] {
+            "Seleccione",
+            "Antenas",
+            "Fibras"});
+            this.CBPlanes.Location = new System.Drawing.Point(30, 39);
+            this.CBPlanes.Name = "CBPlanes";
+            this.CBPlanes.Size = new System.Drawing.Size(200, 33);
+            this.CBPlanes.TabIndex = 31;
+            this.CBPlanes.SelectedIndexChanged += new System.EventHandler(this.CBPlanes_SelectedIndexChanged);
+            // 
             // WirelessMikrotik
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1000, 475);
+            this.Controls.Add(this.lblAcepta);
+            this.Controls.Add(this.CBPlanes);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.BtnExtraer);
             this.Controls.Add(this.BtnActualizar);
@@ -131,6 +161,7 @@
             this.Load += new System.EventHandler(this.WirelessMikrotik_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvWireless)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -140,5 +171,7 @@
         private System.Windows.Forms.Button BtnActualizar;
         private System.Windows.Forms.Button BtnExtraer;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label lblAcepta;
+        private System.Windows.Forms.ComboBox CBPlanes;
     }
 }

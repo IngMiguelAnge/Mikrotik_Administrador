@@ -28,6 +28,10 @@ namespace Mikrotik_Administrador
             try
             {
                 mikrotik = new MK(txtIP.Text.ToString(), Convert.ToInt32(this.txtPort.Text));
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                }
                 // Usamos Task.Run para que la conexión no detenga la ventana
                 bool login = await Task.Run(() => {
                     return mikrotik.ConectarYLogin(txtUsuario.Text, txtPassword.Text);

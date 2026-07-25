@@ -24,7 +24,7 @@ namespace Mikrotik_Administrador
             InfoMikrotik m = new InfoMikrotik();
             m.IdMikrotik = 0;
             m.ShowDialog();
-            ListaMikrotiks();
+            //ListaMikrotiks();
         }
 
         private async void ListaMikrotiks()
@@ -60,7 +60,7 @@ namespace Mikrotik_Administrador
             // Evitar errores si hacen click en el encabezado
             if (e.RowIndex < 0) return;
             var Id = DGVMikrotiks.Rows[e.RowIndex].Cells["Id"].Value;
-
+            string Planes = DGVMikrotiks.Rows[e.RowIndex].Cells["PlanAceptado"].Value.ToString();
             switch (DGVMikrotiks.Columns[e.ColumnIndex].Name)
             {
                 case "btnEditar":
@@ -72,9 +72,10 @@ namespace Mikrotik_Administrador
                 case "btnLanWireless":
                     WirelessMikrotik w = new WirelessMikrotik();
                     w.IdMikrotik = Convert.ToInt32(Id);
+                    w.Planes = Planes;
                     w.ShowDialog();
                     ListaWireless();
-                    break;                    
+                    break;
                 case "btnDesactivar":
                     var Desactivado = (string)DGVMikrotiks.Rows[e.RowIndex].Cells["Estatus"].Value;
                     if(Desactivado != "Activo")
@@ -95,6 +96,15 @@ namespace Mikrotik_Administrador
                     u.IdUsuario = 0;
                     u.IdMikrotik = Convert.ToInt32(Id);
                     u.ShowDialog();
+                    break;
+                case "btnCambioPool":
+                    AppRepository objp = new AppRepository();
+                    bool resultp = objp.UpdateEstatusPool(Convert.ToInt32(Id)).Result;
+                    if (resultp == true)
+                        MessageBox.Show("Cambiado");
+                    else
+                        MessageBox.Show("Error al cambiar el estatus", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ListaPools();
                     break;
                 case "btnCambio":
                     AppRepository obje = new AppRepository();
@@ -385,6 +395,15 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Completado",
+                HeaderText = "Rango de Ips",
+                DataPropertyName = "Completado",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
             DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn
             {
                 Name = "btnCambio",
@@ -510,7 +529,7 @@ namespace Mikrotik_Administrador
             {
                 Name = "btnLanWireless",
                 HeaderText = "Acción",
-                Text = "LanWireless",
+                Text = "Rangos",
                 UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
@@ -572,6 +591,121 @@ namespace Mikrotik_Administrador
         private void btnVerMirkotiks_Click(object sender, EventArgs e)
         {
             ListaMikrotiks();
+        }
+
+        private void btnVerPools_Click(object sender, EventArgs e)
+        {
+            ListaPools();
+        }
+        private async void ListaPools()
+        {
+            CrearGridViewListaPools();
+            try
+            {
+                AppRepository obj = new AppRepository();
+
+                var lista = await obj.GetPools();
+                var listaFinal = lista?.ToList() ?? new List<ListPoolsModel>();
+                DGVMikrotiks.DataSource = new SortableBindingList<ListPoolsModel>(listaFinal);
+                if (DGVMikrotiks.Columns["Id"] != null)
+                    DGVMikrotiks.Columns["Id"].Visible = false;
+                if (DGVMikrotiks.Columns["IdMikrotik"] != null)
+                    DGVMikrotiks.Columns["IdMikrotik"].Visible = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public void CrearGridViewListaPools()
+        {
+            DGVMikrotiks.Columns.Clear();
+            DGVMikrotiks.AutoGenerateColumns = false;
+            DGVMikrotiks.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            DGVMikrotiks.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            DGVMikrotiks.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            DGVMikrotiks.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            DGVMikrotiks.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            DGVMikrotiks.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            DGVMikrotiks.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "Id",
+                DataPropertyName = "Id",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IP",
+                HeaderText = "IP",
+                DataPropertyName = "IP",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdMikrotik",
+                HeaderText = "IdMikrotik",
+                DataPropertyName = "IdMikrotik",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Mikrotik",
+                HeaderText = "Mikrotik",
+                DataPropertyName = "Mikrotik",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVMikrotiks.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Completado",
+                HeaderText = "Rango de Ips",
+                DataPropertyName = "Completado",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn
+            {
+                Name = "btnCambioPool",
+                HeaderText = "Acción",
+                Text = "Cambiar Estatus",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVMikrotiks.Columns.Add(btnCambio);
+            DGVMikrotiks.AllowUserToAddRows = false;
         }
     }
 }

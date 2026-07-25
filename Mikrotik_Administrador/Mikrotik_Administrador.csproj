@@ -348,6 +348,7 @@
     <Compile Include="Model\BancoModel.cs" />
     <Compile Include="Model\ConfigPageModel.cs" />
     <Compile Include="Model\HistorialMovimientosModel.cs" />
+    <Compile Include="Model\IpPoolDTO.cs" />
     <Compile Include="Model\ListBancosModel.cs" />
     <Compile Include="Model\ListCommentsModel.cs" />
     <Compile Include="Model\ListConfigImpressionsModel.cs" />
@@ -356,6 +357,7 @@
     <Compile Include="Model\ListHistorialPagosModel.cs" />
     <Compile Include="Model\ListPlanesAnidadosDetalleModel.cs" />
     <Compile Include="Model\ListPlanesModel.cs" />
+    <Compile Include="Model\ListPoolsModel.cs" />
     <Compile Include="Model\ListUsuariosByPlanModel.cs" />
     <Compile Include="Model\MensualidadModel.cs" />
     <Compile Include="Model\PlanAnidadoModel.cs" />

@@ -34,9 +34,10 @@
             this.BtnNuevo = new System.Windows.Forms.Button();
             this.btnAddresList = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnVerMirkotiks = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.btnVerPools = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).BeginInit();
             this.panelTop.SuspendLayout();
             this.panelContenedor.SuspendLayout();
@@ -86,7 +87,7 @@
             this.BtnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.BtnNuevo.ForeColor = System.Drawing.Color.White;
-            this.BtnNuevo.Location = new System.Drawing.Point(399, 16);
+            this.BtnNuevo.Location = new System.Drawing.Point(568, 16);
             this.BtnNuevo.Name = "BtnNuevo";
             this.BtnNuevo.Size = new System.Drawing.Size(100, 38);
             this.BtnNuevo.TabIndex = 3;
@@ -111,6 +112,7 @@
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.Color.White;
+            this.panelTop.Controls.Add(this.btnVerPools);
             this.panelTop.Controls.Add(this.progressBar1);
             this.panelTop.Controls.Add(this.BtnNuevo);
             this.panelTop.Controls.Add(this.btnVerMirkotiks);
@@ -120,6 +122,13 @@
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(940, 97);
             this.panelTop.TabIndex = 8;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(20, 79);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(235, 12);
+            this.progressBar1.TabIndex = 29;
             // 
             // btnVerMirkotiks
             // 
@@ -131,7 +140,7 @@
             this.btnVerMirkotiks.Name = "btnVerMirkotiks";
             this.btnVerMirkotiks.Size = new System.Drawing.Size(150, 38);
             this.btnVerMirkotiks.TabIndex = 6;
-            this.btnVerMirkotiks.Text = "Actualizar Lista";
+            this.btnVerMirkotiks.Text = "Ver Mikrotiks";
             this.btnVerMirkotiks.UseVisualStyleBackColor = false;
             this.btnVerMirkotiks.Click += new System.EventHandler(this.btnVerMirkotiks_Click);
             // 
@@ -145,12 +154,19 @@
             this.panelContenedor.Size = new System.Drawing.Size(940, 332);
             this.panelContenedor.TabIndex = 9;
             // 
-            // progressBar1
+            // btnVerPools
             // 
-            this.progressBar1.Location = new System.Drawing.Point(20, 79);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(235, 12);
-            this.progressBar1.TabIndex = 29;
+            this.btnVerPools.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.btnVerPools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVerPools.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnVerPools.ForeColor = System.Drawing.Color.White;
+            this.btnVerPools.Location = new System.Drawing.Point(386, 16);
+            this.btnVerPools.Name = "btnVerPools";
+            this.btnVerPools.Size = new System.Drawing.Size(160, 38);
+            this.btnVerPools.TabIndex = 30;
+            this.btnVerPools.Text = "Ver Pools";
+            this.btnVerPools.UseVisualStyleBackColor = false;
+            this.btnVerPools.Click += new System.EventHandler(this.btnVerPools_Click);
             // 
             // Mikrotiks
             // 
@@ -182,5 +198,6 @@
         private System.Windows.Forms.Panel panelContenedor;
         private System.Windows.Forms.Button btnVerMirkotiks;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button btnVerPools;
     }
 }
