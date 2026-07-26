@@ -540,14 +540,16 @@ namespace Mikrotik_Administrador.Class
             }
             return false;
         }
-        public List<string> VerPool()
+        public List<PoolsModel> VerPool()
         {
-            List<string> ListIPs = new List<string>();
+            List<PoolsModel> ListIPs = new List<PoolsModel>();
             try
             {
                 Send("/ip/pool/print");
+                //Send("=.proplist=.id,name,ranges,available");
                 Send("=.proplist=name,ranges,available");
                 Send("?name=pool-PPPoE", true);
+                string Id = string.Empty;
                 foreach (string row in Read())
                 {
                     if (row.StartsWith("!re"))
@@ -563,22 +565,35 @@ namespace Mikrotik_Administrador.Class
 
                         string key = parts[1];
                         string value = parts[2];
-
+                        //if(key == ".id")
+                        //{
+                        //    Id = value;
+                        //}
                         if (key == "ranges")
                         {
-                            string[] partes = value.Split(',');
+                            string[] partes = value.Split(',');               
                             for (int i = 0; i < partes.Length; i++)
-                            {
+                            {                              
                                 string[] rango = partes[i].Split('-');
+                                PoolsModel pool = new PoolsModel();
                                 if (rango.Length == 2)
                                 {
-                                    ListIPs.Add(rango[0].Trim());
-                                    ListIPs.Add(rango[1].Trim());
+                                    //pool.IdInterno = Id;
+                                    pool.IP = rango[0].Trim();
+                                    ListIPs.Add(pool);
+                                    pool = new PoolsModel();
+                                    //pool.IdInterno = Id;
+                                    pool.IP = rango[1].Trim();
+                                    ListIPs.Add(pool);
                                 }
                                 else
-                                    ListIPs.Add(rango[0].Trim());
+                                {
+                                    //pool.IdInterno = Id;
+                                    pool.IP = rango[0].Trim();
+                                    ListIPs.Add(pool);
+                                }
                             }
-                            return ListIPs;
+                            //return ListIPs;
                         }
                     }
                 }
@@ -664,10 +679,10 @@ namespace Mikrotik_Administrador.Class
             bool existe = false;
             try
             {
-                List<string> ListIpPool = VerPool();
+                List<PoolsModel> ListIpPool = VerPool();
                 if (ListIpPool.Count() == 0)
                     return "No se encontro pool-PPPoE";
-                string[] segmentos = ListIpPool.First().Split('.');
+                string[] segmentos = ListIpPool.First().IP.Split('.');
                 string IPlocal = $"{segmentos[0]}.{segmentos[1]}.{segmentos[2]}.1";
                 if (Anidado.IdPlanInterno != string.Empty)
                 {

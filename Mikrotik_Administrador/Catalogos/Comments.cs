@@ -164,7 +164,7 @@ namespace Mikrotik_Administrador
         {
             if (e.RowIndex < 0) return;
             var Id = (int)dgvComments.Rows[e.RowIndex].Cells["Id"].Value;
-            var CommitText = dgvComments.Rows[e.RowIndex].Cells["Commit"].Value.ToString();
+            var CommitText = dgvComments.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
             var IdMikrotik = (int)dgvComments.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
             AppRepository m = new AppRepository();
             switch (dgvComments.Columns[e.ColumnIndex].Name)
@@ -195,6 +195,7 @@ namespace Mikrotik_Administrador
         private void btnNuevo_Click(object sender, EventArgs e)
         {
             Comment c = new Comment();
+            c.Id = 0;
             c.ShowDialog();
             BuscarComments();
         }

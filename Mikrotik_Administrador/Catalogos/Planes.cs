@@ -254,6 +254,7 @@ namespace Mikrotik_Administrador
         {
             Plan m = new Plan();
             m.Id = 0;
+            m.IdUsuario = IdUsuario;
             m.ShowDialog();
             BuscarPlanes();
         }

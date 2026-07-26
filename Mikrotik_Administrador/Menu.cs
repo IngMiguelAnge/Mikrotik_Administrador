@@ -1,13 +1,19 @@
 ﻿using Mikrotik_Administrador.Catalogos;
+using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Model;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mikrotik_Administrador
 {
     public partial class Menu : Form
     {
-        public int IdUsuario {  get; set; }
+        public int IdUsuario { get; set; }
+        public int IdTipoUsuario { get; set; }
         public Menu()
         {
             InitializeComponent();
@@ -81,6 +87,19 @@ namespace Mikrotik_Administrador
         {
             HistorialMovimientos H = new HistorialMovimientos();
             H.Show();
+        }
+
+        private async void Menu_Load(object sender, EventArgs e)
+        {
+            if (IdTipoUsuario != 1) //1:Administrador
+                return;
+            AppRepository obj = new AppRepository();
+            var lista = await Task.Run(() => obj.GetHistorialMovimientosUrgentes());
+            var listaFinal = lista?.ToList() ?? new List<ListHistorialMovimientosModel>();
+            if(listaFinal.Count() > 0)
+            {
+                MessageBox.Show("Se encontraron situaciónes urgentes a revisar, favor de ir a historial y pulsar en el boton de urgentes.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

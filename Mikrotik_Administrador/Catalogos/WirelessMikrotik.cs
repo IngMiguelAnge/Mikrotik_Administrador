@@ -78,10 +78,10 @@ namespace Mikrotik_Administrador
                 }
                 else
                 {
-                    List<IpPoolDTO> Seleccionados = new List<IpPoolDTO>();
+                    List<PoolsModel> Seleccionados = new List<PoolsModel>();
                     Seleccionados = dgvWireless.Rows.Cast<DataGridViewRow>()
                      .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
-                      .Select(r => new IpPoolDTO
+                      .Select(r => new PoolsModel
                       {
                           IP = Convert.ToString(r.Cells["IP"].Value)
                       })
@@ -250,13 +250,12 @@ namespace Mikrotik_Administrador
                 }
                 else
                 {
-                    List<string> ListIpPool = await Task.Run(() => mikrotik.VerPool());
-                    var listaFinal2 = (ListIpPool ?? new List<string>())
-                    .Where(ip => !string.IsNullOrEmpty(ip) && (ip.EndsWith(".1") || ip.EndsWith(".2")))
-                    .Select(ip => new IpPoolDTO { IP = ip })
+                    List<PoolsModel> ListIpPool = await Task.Run(() => mikrotik.VerPool());
+                    var listaFinal2 = (ListIpPool ?? new List<PoolsModel>())
+                    .Where(x => !string.IsNullOrEmpty(x.IP) && (x.IP.EndsWith(".1") || x.IP.EndsWith(".2")))
                     .ToList();
 
-                    dgvWireless.DataSource = new SortableBindingList<IpPoolDTO>(listaFinal2);
+                    dgvWireless.DataSource = new SortableBindingList<PoolsModel>(listaFinal2);
                 }
 
                 if (dgvWireless.RowCount > 0)

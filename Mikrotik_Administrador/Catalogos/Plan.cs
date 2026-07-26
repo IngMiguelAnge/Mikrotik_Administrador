@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -141,7 +142,8 @@ namespace Mikrotik_Administrador
                         Id = 0,
                         Descripcion = "Se guarda el plan " + plan.Nombre + " con velocidad " + plan.Velocidad,
                         Pagina = "En la página de planes",
-                        IdUsuario = IdUsuario
+                        IdUsuario = IdUsuario,
+                        Estatus = false
                     };
                     var r = obj.SaveHistorialMovimientos(H);
                     MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -149,15 +151,7 @@ namespace Mikrotik_Administrador
                     return;
                 }
                 else
-                {
-                    HistorialMovimientosModel H = new HistorialMovimientosModel
-                    {
-                        Id = 0,
-                        Descripcion = "Se guarda el plan " + plan.Nombre + " con velocidad " + plan.Velocidad + " pero se encontraron errores al comunicarse con los mikrotiks",
-                        Pagina = "En la página de planes",
-                        IdUsuario = IdUsuario
-                    };
-                    var r = obj.SaveHistorialMovimientos(H);
+                {                 
                     MessageBox.Show("Se guardo el plan en base pero, " + Mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -242,12 +236,29 @@ namespace Mikrotik_Administrador
                         }
                     }
                     else {
+                        HistorialMovimientosModel H = new HistorialMovimientosModel
+                        {
+                            Id = 0,
+                            Descripcion = "Se guarda el plan " + Plan.Nombre + " en base general, pero no se logro comunicar con el mikrotik: " + Fila.Nombre,
+                            Pagina = "En la página de planes",
+                            IdUsuario = IdUsuario,
+                            Estatus = true
+                        };
+                        var r = obj.SaveHistorialMovimientos(H);
                         MensajeError = MensajeError == string.Empty ? "No se pudo comunicar con algunos mikrotik, revisar" :
                             MensajeError;
                     }
                 }
                 catch (Exception ex)
                 {
+                    HistorialMovimientosModel H = new HistorialMovimientosModel
+                    {
+                        Id = 0,
+                        Descripcion = "Se guarda el plan " + Plan.Nombre + " en base general, pero al emparejar se dio el error: " + ex.Message,
+                        Pagina = "En la página de planes",
+                        IdUsuario = IdUsuario,
+                        Estatus = true
+                    };
                     MensajeError = "No se pudo comunicar con algunos mikrotik, revisar";
                 }
                 finally

@@ -130,6 +130,27 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region HistorialMovimientos
+        public async Task<bool> UpdateEstatusHistorialMovimiento(int Id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateEstatusHistorialMovimiento", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<bool> SaveHistorialMovimientos(HistorialMovimientosModel obj)
         {
             try
@@ -143,6 +164,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Descripcion", obj.Descripcion));
                         cmd.Parameters.Add(new SqlParameter("@Pagina", obj.Pagina));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -182,6 +204,32 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
+        public async Task<List<ListHistorialMovimientosModel>> GetHistorialMovimientosUrgentes()
+        {
+            List<ListHistorialMovimientosModel> list = new List<ListHistorialMovimientosModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetHistorialMovimientosUrgentes", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListHistorialMovimientos(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
         private ListHistorialMovimientosModel MapToListHistorialMovimientos(SqlDataReader reader)
         {
             return new ListHistorialMovimientosModel()
@@ -191,6 +239,7 @@ namespace Mikrotik_Administrador.Data
                 Pagina = (string)reader["Pagina"],
                 Usuario = (string)reader["Usuario"],
                 FechaCreacion = (DateTime)reader["FechaCreacion"],
+                Estatus = (string)reader["Estatus"],
             };
         }
         #endregion

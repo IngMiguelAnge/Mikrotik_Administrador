@@ -243,6 +243,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Menu_FormClosed);
+            this.Load += new System.EventHandler(this.Menu_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

@@ -162,7 +162,7 @@
             this.dgvUsuarios.RowHeadersWidth = 51;
             this.dgvUsuarios.RowTemplate.Height = 30;
             this.dgvUsuarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvUsuarios.Size = new System.Drawing.Size(965, 284);
+            this.dgvUsuarios.Size = new System.Drawing.Size(1024, 284);
             this.dgvUsuarios.TabIndex = 14;
             this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
             // 
@@ -191,7 +191,7 @@
             this.CBAsignar.Checked = true;
             this.CBAsignar.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CBAsignar.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.CBAsignar.Location = new System.Drawing.Point(596, 218);
+            this.CBAsignar.Location = new System.Drawing.Point(596, 147);
             this.CBAsignar.Name = "CBAsignar";
             this.CBAsignar.Size = new System.Drawing.Size(221, 29);
             this.CBAsignar.TabIndex = 19;
@@ -204,7 +204,7 @@
             this.BtnAsignar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnAsignar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.BtnAsignar.ForeColor = System.Drawing.Color.White;
-            this.BtnAsignar.Location = new System.Drawing.Point(596, 253);
+            this.BtnAsignar.Location = new System.Drawing.Point(587, 194);
             this.BtnAsignar.Name = "BtnAsignar";
             this.BtnAsignar.Size = new System.Drawing.Size(176, 42);
             this.BtnAsignar.TabIndex = 20;
@@ -217,7 +217,7 @@
             this.lblMensaje4.AutoSize = true;
             this.lblMensaje4.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblMensaje4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblMensaje4.Location = new System.Drawing.Point(591, 59);
+            this.lblMensaje4.Location = new System.Drawing.Point(841, 22);
             this.lblMensaje4.Name = "lblMensaje4";
             this.lblMensaje4.Size = new System.Drawing.Size(204, 25);
             this.lblMensaje4.TabIndex = 21;
@@ -229,7 +229,7 @@
             this.btnClientesSin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClientesSin.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.btnClientesSin.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.btnClientesSin.Location = new System.Drawing.Point(596, 90);
+            this.btnClientesSin.Location = new System.Drawing.Point(846, 53);
             this.btnClientesSin.Name = "btnClientesSin";
             this.btnClientesSin.Size = new System.Drawing.Size(241, 35);
             this.btnClientesSin.TabIndex = 22;
@@ -241,7 +241,7 @@
             // 
             this.cbTodos.AutoSize = true;
             this.cbTodos.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cbTodos.Location = new System.Drawing.Point(314, 266);
+            this.cbTodos.Location = new System.Drawing.Point(596, 95);
             this.cbTodos.Name = "cbTodos";
             this.cbTodos.Size = new System.Drawing.Size(178, 29);
             this.cbTodos.TabIndex = 23;
@@ -258,7 +258,7 @@
             this.panelContenedor.Location = new System.Drawing.Point(18, 301);
             this.panelContenedor.Name = "panelContenedor";
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenedor.Size = new System.Drawing.Size(1005, 324);
+            this.panelContenedor.Size = new System.Drawing.Size(1064, 324);
             this.panelContenedor.TabIndex = 24;
             // 
             // lblServiciossin
@@ -266,7 +266,7 @@
             this.lblServiciossin.AutoSize = true;
             this.lblServiciossin.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblServiciossin.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblServiciossin.Location = new System.Drawing.Point(591, 137);
+            this.lblServiciossin.Location = new System.Drawing.Point(841, 100);
             this.lblServiciossin.Name = "lblServiciossin";
             this.lblServiciossin.Size = new System.Drawing.Size(203, 25);
             this.lblServiciossin.TabIndex = 26;
@@ -278,7 +278,7 @@
             this.btnServiciosSin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnServiciosSin.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.btnServiciosSin.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.btnServiciosSin.Location = new System.Drawing.Point(596, 165);
+            this.btnServiciosSin.Location = new System.Drawing.Point(846, 128);
             this.btnServiciosSin.Name = "btnServiciosSin";
             this.btnServiciosSin.Size = new System.Drawing.Size(241, 35);
             this.btnServiciosSin.TabIndex = 27;
@@ -292,7 +292,7 @@
             this.BtnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnEliminar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.BtnEliminar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(211)))), ((int)(((byte)(47)))), ((int)(((byte)(47)))));
-            this.BtnEliminar.Location = new System.Drawing.Point(923, 12);
+            this.BtnEliminar.Location = new System.Drawing.Point(596, 11);
             this.BtnEliminar.Name = "BtnEliminar";
             this.BtnEliminar.Size = new System.Drawing.Size(100, 35);
             this.BtnEliminar.TabIndex = 28;
@@ -305,7 +305,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1040, 648);
+            this.ClientSize = new System.Drawing.Size(1099, 648);
             this.Controls.Add(this.BtnEliminar);
             this.Controls.Add(this.btnServiciosSin);
             this.Controls.Add(this.lblServiciossin);

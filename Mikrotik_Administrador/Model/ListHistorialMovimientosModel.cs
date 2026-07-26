@@ -9,5 +9,6 @@ namespace Mikrotik_Administrador.Model
         public string Pagina { get; set; }
         public string Usuario { get; set; }
         public DateTime FechaCreacion {  get; set; }
+        public string Estatus { get; set; }
     }
 }

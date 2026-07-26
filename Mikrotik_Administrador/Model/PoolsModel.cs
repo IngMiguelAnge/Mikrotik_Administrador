@@ -1,6 +1,6 @@
 ﻿namespace Mikrotik_Administrador.Model
 {
-    public class IpPoolDTO
+    public class PoolsModel
     {
         public string IP { get; set; }
     }

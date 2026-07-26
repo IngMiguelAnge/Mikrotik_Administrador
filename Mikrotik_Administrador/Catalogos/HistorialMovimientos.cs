@@ -1,4 +1,5 @@
 ﻿using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
@@ -15,6 +16,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class HistorialMovimientos : Form
     {
+        public bool Urgente = false;
         public HistorialMovimientos()
         {
             InitializeComponent();
@@ -24,6 +26,11 @@ namespace Mikrotik_Administrador.Catalogos
             dgvHistorial.Columns.Clear();
             dgvHistorial.AutoGenerateColumns = false;
             dgvHistorial.EnableHeadersVisualStyles = false;
+
+            // --- AJUSTES PARA SALTO DE LÍNEA Y ALTO DE FILAS ---
+            dgvHistorial.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dgvHistorial.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
             // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
             dgvHistorial.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
             dgvHistorial.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
@@ -86,22 +93,56 @@ namespace Mikrotik_Administrador.Catalogos
                 HeaderText = "Descripción",
                 DataPropertyName = "Descripcion",
                 ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            DataGridViewButtonColumn btnCambiar = new DataGridViewButtonColumn
+            {
+                Name = "btnCambiar",
+                HeaderText = "Acción",
+                Text = "Cambiar Estatus",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvHistorial.Columns.Add(btnCambiar);
             dgvHistorial.AllowUserToAddRows = false;
         }
 
-        private async void btnBuscar_Click(object sender, EventArgs e)
+        private  void btnBuscar_Click(object sender, EventArgs e)
+        {
+            Urgente = false;
+            Buscar();
+        }
+        public async void Buscar()
         {
             CrearGridView();
             btnBuscar.Enabled = false;
             try
             {
                 AppRepository obj = new AppRepository();
-                var lista = await Task.Run(() => obj.GetHistorialMovimientos(dtpFechaInicio.Value, dtpFechaFinal.Value));
-                var listaFinal = lista?.ToList() ?? new List<ListHistorialMovimientosModel>();
-                dgvHistorial.DataSource = new SortableBindingList<ListHistorialMovimientosModel>(listaFinal);
+                if(Urgente == false)
+                {
+                    var lista = await Task.Run(() => obj.GetHistorialMovimientos(dtpFechaInicio.Value, dtpFechaFinal.Value));
+                    var listaFinal = lista?.ToList() ?? new List<ListHistorialMovimientosModel>();
+                    dgvHistorial.DataSource = new SortableBindingList<ListHistorialMovimientosModel>(listaFinal);
+                }
+                else
+                {
+                    var lista = await Task.Run(() => obj.GetHistorialMovimientosUrgentes());
+                    var listaFinal = lista?.ToList() ?? new List<ListHistorialMovimientosModel>();
+                    dgvHistorial.DataSource = new SortableBindingList<ListHistorialMovimientosModel>(listaFinal);
+                }
                 if (dgvHistorial.Columns["Id"] != null)
                     dgvHistorial.Columns["Id"].Visible = false;
 
@@ -114,6 +155,34 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 btnBuscar.Enabled = true;
             }
+        }
+
+        private void dgvHistorial_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            var Id = (int)dgvHistorial.Rows[e.RowIndex].Cells["Id"].Value;
+            AppRepository m = new AppRepository();
+            switch (dgvHistorial.Columns[e.ColumnIndex].Name)
+            {
+                case "btnCambiar":
+
+                    bool result = m.UpdateEstatusHistorialMovimiento(Id).Result;
+                    if (result == true)
+                    {
+                        MessageBox.Show("Estatus cambiado");
+                        Buscar();
+                    }
+                    else
+                        MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    break;
+            }
+        }
+
+        private void btnUrgentes_Click(object sender, EventArgs e)
+        {
+            Urgente = true;
+            Buscar();
         }
     }
 }

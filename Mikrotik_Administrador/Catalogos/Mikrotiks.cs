@@ -60,7 +60,6 @@ namespace Mikrotik_Administrador
             // Evitar errores si hacen click en el encabezado
             if (e.RowIndex < 0) return;
             var Id = DGVMikrotiks.Rows[e.RowIndex].Cells["Id"].Value;
-            string Planes = DGVMikrotiks.Rows[e.RowIndex].Cells["PlanAceptado"].Value.ToString();
             switch (DGVMikrotiks.Columns[e.ColumnIndex].Name)
             {
                 case "btnEditar":
@@ -72,6 +71,7 @@ namespace Mikrotik_Administrador
                 case "btnLanWireless":
                     WirelessMikrotik w = new WirelessMikrotik();
                     w.IdMikrotik = Convert.ToInt32(Id);
+                    string Planes = DGVMikrotiks.Rows[e.RowIndex].Cells["PlanAceptado"].Value.ToString();
                     w.Planes = Planes;
                     w.ShowDialog();
                     ListaWireless();
@@ -197,129 +197,129 @@ namespace Mikrotik_Administrador
                         BtnNuevo.Enabled = true;
                     }
                     break;
-                case "btnRestaurar":
-                    // === PASO 0: CONFIGURACIÓN DE LA BARRA DE CARGA Y BOTONES ===
-                    progressBar1.Style = ProgressBarStyle.Marquee;
-                    progressBar1.MarqueeAnimationSpeed = 30;
+                //case "btnRestaurar":
+                //    // === PASO 0: CONFIGURACIÓN DE LA BARRA DE CARGA Y BOTONES ===
+                //    progressBar1.Style = ProgressBarStyle.Marquee;
+                //    progressBar1.MarqueeAnimationSpeed = 30;
 
-                    BtnNuevo.Enabled = false;
-                    btnVerMirkotiks.Enabled = false;
-                    btnAddresList.Enabled = false;
+                //    BtnNuevo.Enabled = false;
+                //    btnVerMirkotiks.Enabled = false;
+                //    btnAddresList.Enabled = false;
 
-                    try
-                    {
-                        AppRepository objress = new AppRepository();
-                        MikrotikModel mikrot = await objress.GetMikrotikById((int)Id);
+                //    try
+                //    {
+                //        AppRepository objress = new AppRepository();
+                //        MikrotikModel mikrot = await objress.GetMikrotikById((int)Id);
 
-                        // === PASO 1: SELECCIONAR EL ARCHIVO DESDE LA PC ===
-                        using (OpenFileDialog buscadorArchivos = new OpenFileDialog())
-                        {
-                            buscadorArchivos.InitialDirectory = Path.Combine(Application.StartupPath, "Backups");
-                            buscadorArchivos.Filter = "Archivos de Respaldo MikroTik (*.backup;*.rsc)|*.backup;*.rsc|Binario (*.backup)|*.backup|Script RSC (*.rsc)|*.rsc";
-                            buscadorArchivos.Title = "Selecciona el respaldo para el MikroTik";
+                //        // === PASO 1: SELECCIONAR EL ARCHIVO DESDE LA PC ===
+                //        using (OpenFileDialog buscadorArchivos = new OpenFileDialog())
+                //        {
+                //            buscadorArchivos.InitialDirectory = Path.Combine(Application.StartupPath, "Backups");
+                //            buscadorArchivos.Filter = "Archivos de Respaldo MikroTik (*.backup;*.rsc)|*.backup;*.rsc|Binario (*.backup)|*.backup|Script RSC (*.rsc)|*.rsc";
+                //            buscadorArchivos.Title = "Selecciona el respaldo para el MikroTik";
 
-                            if (buscadorArchivos.ShowDialog() == DialogResult.OK)
-                            {
-                                string rutaArchivoLocal = buscadorArchivos.FileName;
-                                string nombreArchivoRemoto = Path.GetFileName(rutaArchivoLocal);
-                                string extension = Path.GetExtension(rutaArchivoLocal).ToLower();
+                //            if (buscadorArchivos.ShowDialog() == DialogResult.OK)
+                //            {
+                //                string rutaArchivoLocal = buscadorArchivos.FileName;
+                //                string nombreArchivoRemoto = Path.GetFileName(rutaArchivoLocal);
+                //                string extension = Path.GetExtension(rutaArchivoLocal).ToLower();
 
-                                if (!File.Exists(rutaArchivoLocal))
-                                {
-                                    MessageBox.Show("El archivo seleccionado no existe en la PC.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    return;
-                                }
+                //                if (!File.Exists(rutaArchivoLocal))
+                //                {
+                //                    MessageBox.Show("El archivo seleccionado no existe en la PC.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //                    return;
+                //                }
 
-                                bool esBackup = (extension == ".backup");
+                //                bool esBackup = (extension == ".backup");
 
-                                // 🔥 SEGUNDO PLANO: Transferencia y ejecución real mediante Shell interactivo
-                                await Task.Run(() =>
-                                {
-                                    // === PASO 2: TRANSFERENCIA POR SFTP ===
-                                    using (var sftpClient = new SftpClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
-                                    {
-                                        sftpClient.Connect();
+                //                // 🔥 SEGUNDO PLANO: Transferencia y ejecución real mediante Shell interactivo
+                //                await Task.Run(() =>
+                //                {
+                //                    // === PASO 2: TRANSFERENCIA POR SFTP ===
+                //                    using (var sftpClient = new SftpClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
+                //                    {
+                //                        sftpClient.Connect();
 
-                                        if (esBackup)
-                                        {
-                                            using (var fileStream = File.OpenRead(rutaArchivoLocal))
-                                            {
-                                                sftpClient.UploadFile(fileStream, nombreArchivoRemoto);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            using (var fileStream = File.OpenRead(rutaArchivoLocal))
-                                            {
-                                                sftpClient.UploadFile(fileStream, "run-after-reset.rsc");
-                                            }
-                                        }
+                //                        if (esBackup)
+                //                        {
+                //                            using (var fileStream = File.OpenRead(rutaArchivoLocal))
+                //                            {
+                //                                sftpClient.UploadFile(fileStream, nombreArchivoRemoto);
+                //                            }
+                //                        }
+                //                        else
+                //                        {
+                //                            using (var fileStream = File.OpenRead(rutaArchivoLocal))
+                //                            {
+                //                                sftpClient.UploadFile(fileStream, "run-after-reset.rsc");
+                //                            }
+                //                        }
 
-                                        sftpClient.Disconnect();
-                                    }
+                //                        sftpClient.Disconnect();
+                //                    }
 
-                                    // === PASO 3: EJECUCIÓN VÍA SSH (CANAL INTERACTIVO) ===
-                                    using (var sshClient = new SshClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
-                                    {
-                                        sshClient.Connect();
+                //                    // === PASO 3: EJECUCIÓN VÍA SSH (CANAL INTERACTIVO) ===
+                //                    using (var sshClient = new SshClient(mikrot.IP, mikrot.Usuario, mikrot.Password))
+                //                    {
+                //                        sshClient.Connect();
 
-                                        if (esBackup)
-                                        {
-                                            // Creamos una terminal virtual interactiva (ShellStream) para burlar la seguridad de RouterOS v7
-                                            using (var shellStream = sshClient.CreateShellStream("terminal_backup", 80, 24, 80, 24, 1024))
-                                            {
-                                                // 1. Enviamos el comando de restauración
-                                                shellStream.WriteLine($"/system backup load name=\"{nombreArchivoRemoto}\" password=\"\" dont-encrypt=yes");
+                //                        if (esBackup)
+                //                        {
+                //                            // Creamos una terminal virtual interactiva (ShellStream) para burlar la seguridad de RouterOS v7
+                //                            using (var shellStream = sshClient.CreateShellStream("terminal_backup", 80, 24, 80, 24, 1024))
+                //                            {
+                //                                // 1. Enviamos el comando de restauración
+                //                                shellStream.WriteLine($"/system backup load name=\"{nombreArchivoRemoto}\" password=\"\" dont-encrypt=yes");
 
-                                                // 2. Esperamos un instante a que RouterOS v7 procese la orden y pinte el aviso "Restore and reboot? [y/N]"
-                                                System.Threading.Thread.Sleep(1000);
+                //                                // 2. Esperamos un instante a que RouterOS v7 procese la orden y pinte el aviso "Restore and reboot? [y/N]"
+                //                                System.Threading.Thread.Sleep(1000);
 
-                                                // 3. Inyectamos la confirmación directamente en la consola simulada
-                                                shellStream.WriteLine("y");
+                //                                // 3. Inyectamos la confirmación directamente en la consola simulada
+                //                                shellStream.WriteLine("y");
 
-                                                // Damos margen para que el procesador reciba el "Yes" e inicie el apagado físico del hardware
-                                                System.Threading.Thread.Sleep(2000);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            // Para archivos .rsc el reset clásico con no-defaults sigue funcionando igual
-                                            var cmdReset = sshClient.CreateCommand("/system/reset-configuration no-defaults=yes force=yes");
-                                            cmdReset.BeginExecute();
-                                            System.Threading.Thread.Sleep(3000);
-                                        }
+                //                                // Damos margen para que el procesador reciba el "Yes" e inicie el apagado físico del hardware
+                //                                System.Threading.Thread.Sleep(2000);
+                //                            }
+                //                        }
+                //                        else
+                //                        {
+                //                            // Para archivos .rsc el reset clásico con no-defaults sigue funcionando igual
+                //                            var cmdReset = sshClient.CreateCommand("/system/reset-configuration no-defaults=yes force=yes");
+                //                            cmdReset.BeginExecute();
+                //                            System.Threading.Thread.Sleep(3000);
+                //                        }
 
-                                        try
-                                        {
-                                            sshClient.Disconnect();
-                                        }
-                                        catch { /* Se ignora la desconexión abrupta provocada por el reinicio del MikroTik */ }
-                                    }
-                                });
+                //                        try
+                //                        {
+                //                            sshClient.Disconnect();
+                //                        }
+                //                        catch { /* Se ignora la desconexión abrupta provocada por el reinicio del MikroTik */ }
+                //                    }
+                //                });
 
-                                // === PASO 4: INTERFAZ Y MENSAJE DE ÉXITO ===
-                                string mensajeExito = esBackup
-                                    ? "El respaldo binario se transfirió y se confirmó su ejecución desde la consola interactiva.\n\nEl MikroTik se está reiniciando para cargar el sistema. Espera de 1 a 2 minutos."
-                                    : "El script fue transferido con éxito y se forzó el reinicio de fábrica.\n\nEl MikroTik aplicará la configuración limpia al encender. Espera de 1 a 2 minutos.";
+                //                // === PASO 4: INTERFAZ Y MENSAJE DE ÉXITO ===
+                //                string mensajeExito = esBackup
+                //                    ? "El respaldo binario se transfirió y se confirmó su ejecución desde la consola interactiva.\n\nEl MikroTik se está reiniciando para cargar el sistema. Espera de 1 a 2 minutos."
+                //                    : "El script fue transferido con éxito y se forzó el reinicio de fábrica.\n\nEl MikroTik aplicará la configuración limpia al encender. Espera de 1 a 2 minutos.";
 
-                                MessageBox.Show(mensajeExito, "Restauración en Proceso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error durante la restauración: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        // === PASO 5: RESTABLECER CONTROLES COMPLETAMENTE ===
-                        progressBar1.Style = ProgressBarStyle.Blocks;
-                        progressBar1.Value = 0;
-                        btnAddresList.Enabled = true;
-                        btnVerMirkotiks.Enabled = true;
-                        BtnNuevo.Enabled = true;
-                    }
-                    break;
+                //                MessageBox.Show(mensajeExito, "Restauración en Proceso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //            }
+                //        }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    MessageBox.Show($"Error durante la restauración: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //}
+                    //finally
+                    //{
+                    //    // === PASO 5: RESTABLECER CONTROLES COMPLETAMENTE ===
+                    //    progressBar1.Style = ProgressBarStyle.Blocks;
+                    //    progressBar1.Value = 0;
+                    //    btnAddresList.Enabled = true;
+                    //    btnVerMirkotiks.Enabled = true;
+                    //    BtnNuevo.Enabled = true;
+                    //}
+                    //break;
             }
         }
 
@@ -573,18 +573,18 @@ namespace Mikrotik_Administrador
             };
 
             DGVMikrotiks.Columns.Add(btnRespaldar);
-            DataGridViewButtonColumn btnRestaurar = new DataGridViewButtonColumn
-            {
-                Name = "btnRestaurar",
-                HeaderText = "Acción",
-                Text = "Restaurar",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
+            //DataGridViewButtonColumn btnRestaurar = new DataGridViewButtonColumn
+            //{
+            //    Name = "btnRestaurar",
+            //    HeaderText = "Acción",
+            //    Text = "Restaurar",
+            //    UseColumnTextForButtonValue = true,
+            //    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+            //    FlatStyle = FlatStyle.Flat,
+            //    DefaultCellStyle = estiloBotones
+            //};
 
-            DGVMikrotiks.Columns.Add(btnRestaurar);
+            //DGVMikrotiks.Columns.Add(btnRestaurar);
 
             DGVMikrotiks.AllowUserToAddRows = false;
         }

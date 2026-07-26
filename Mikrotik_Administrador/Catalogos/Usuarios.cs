@@ -318,6 +318,7 @@ namespace Mikrotik_Administrador
                     return;
                 }
             }
+            BtnEliminar.Visible = true;
             BuscarUsuarios(false);
         }
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
@@ -535,6 +536,7 @@ namespace Mikrotik_Administrador
 
         private async void btnClientesSin_Click(object sender, EventArgs e)
         {
+            BtnEliminar.Visible = false;
             await CargarClientesSin();
         }
         private async void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -640,9 +642,10 @@ namespace Mikrotik_Administrador
                     HistorialMovimientosModel H = new HistorialMovimientosModel
                     {
                         Id = 0,
-                        Descripcion = "Se " + nuevoEstatus + " el usuario " + objUsuario.Usuario + " por clikeo",
+                        Descripcion = "Se " + nuevoEstatus + " el usuario " + objUsuario.Usuario + " por desición del usuario",
                         Pagina = "En la página de asignaciones",
-                        IdUsuario = IdUsuario
+                        IdUsuario = IdUsuario,
+                        Estatus = false
                     };
                     var r = obj.SaveHistorialMovimientos(H);
                     BuscarUsuarios(false);
@@ -682,154 +685,6 @@ namespace Mikrotik_Administrador
             }
         }
 
-        //private async void btnPlan_Click(object sender, EventArgs e)
-        //{
-        //    return;
-        //    if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
-        //    {
-        //        MessageBox.Show("Por favor, selecciona un Mikrotik.");
-        //        return;
-        //    }
-
-        //    progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
-        //    progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-        //    btnClientesSin.Enabled = false;
-        //    BtnAsignar.Enabled = false;
-        //    BtnBuscar.Enabled = false;
-        //    btnPlan.Enabled = false;
-        //    BtnEliminar.Enabled = false;
-        //    try
-        //    {
-        //        List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
-        //        Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-        //         .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
-        //          .Select(r => new UsuariosModel
-        //          {
-        //              id = Convert.ToInt32(r.Cells["Id"].Value),
-        //              idmikrotik = Convert.ToInt32(r.Cells["IdMikrotik"].Value),
-        //              idinterno = Convert.ToString(r.Cells["IdInterno"].Value),
-        //              name = Convert.ToString(r.Cells["Usuario"].Value),
-        //              tipo = Convert.ToString(r.Cells["Tipo"].Value),
-        //          })
-        //          .OrderBy(u => u.idmikrotik)
-        //          .ToList();
-
-
-        //        if (Seleccionados.Count() == 0)
-        //        {
-        //            MessageBox.Show("No hay usuarios seleccionados");
-        //            return;
-        //        }
-
-
-        //        string primerTipo = Seleccionados[0].tipo;
-        //        foreach (UsuariosModel item in Seleccionados)
-        //        {
-        //            if (item.tipo != primerTipo)
-        //            {
-        //                MessageBox.Show("No se pueden asignar este plan a usuarios que no sean " + primerTipo + "," +
-        //                    "por favor seleccione usuarios del mismo tipo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //                return;
-        //            }
-        //        }
-        //        Planes p = new Planes();
-        //        p.PorUsuarios = true;
-        //        p.Tipo = primerTipo;
-
-        //        if (p.ShowDialog() == DialogResult.OK)
-        //        {
-        //            AppRepository obj = new AppRepository();
-        //            var plan = obj.GetPlanById(p.IdSeleccionado).Result;
-        //            int contadorfallos = 0;
-        //            int contadorcorrecto = 0;
-        //            int MikrotikActual = 0;
-        //            MikrotikModel mikro;
-        //            bool F = false;
-        //            foreach (UsuariosModel item in Seleccionados)
-        //            {
-        //                if (MikrotikActual != item.idmikrotik)
-        //                {
-        //                    F = false;
-        //                    mikro = new MikrotikModel();
-        //                    mikro = obj.GetMikrotikById(item.idmikrotik).Result;
-        //                    MikrotikActual = item.idmikrotik;
-        //                    if (mikro.Estatus == false)
-        //                    {
-        //                        contadorfallos++;
-        //                        F = true;
-        //                        continue;
-        //                    }
-        //                    if (mikrotik != null)
-        //                    {
-        //                        await Task.Run(() => mikrotik.Close());
-        //                    }
-        //                    mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
-        //                    bool login = await Task.Run(() =>
-        //                    {
-        //                        return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
-        //                    });
-        //                    if (login == false)
-        //                    {
-        //                        contadorfallos++;
-        //                        F = true;
-        //                        continue;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    if (F == true)
-        //                    {
-        //                        contadorfallos++;
-        //                        continue;
-        //                    }
-        //                }
-        //                bool Result1 = false;
-        //                if (item.tipo == "Antena")
-        //                    Result1 = mikrotik.ActualizarVelocidadQueue(item.name, plan.Velocidad);
-        //                else
-        //                {
-        //                    Result1 = mikrotik.ActualizarUsuarioPPP(item.idinterno, plan.Nombre, plan.Velocidad);
-        //                    if (Result1 == true)
-        //                    {
-        //                        var Result2 = await Task.Run(() =>
-        //                        {
-        //                            return mikrotik.DeleteInterfacebyPlan(plan.Nombre);
-        //                        });
-        //                    }
-        //                }
-        //                if (Result1 == true)
-        //                {
-        //                    var Res = await obj.UpdatePlanGeneral(item.id, plan.Id);
-        //                    contadorcorrecto++;
-        //                }
-        //                else
-        //                    contadorfallos++;
-        //            }
-        //            BuscarUsuarios(false);
-        //            MessageBox.Show("Usuarios que cambiaron plan: " + contadorcorrecto.ToString() +
-        //                "\nUsuarios no cambiaron plan: " + contadorfallos.ToString(), "Resultado de Exportación", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //    finally
-        //    {
-        //        btnClientesSin.Enabled = true;
-        //        BtnAsignar.Enabled = true;
-        //        BtnBuscar.Enabled = true;
-        //        btnPlan.Enabled = true;
-        //        BtnEliminar.Enabled = true;
-        //        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-        //        progressBar1.Value = 100;
-        //        if (mikrotik != null)
-        //        {
-        //            await Task.Run(() => mikrotik.Close());
-        //        }
-        //    }
-        //}
-
         private void CBMikrotiks_SelectedIndexChanged(object sender, EventArgs e)
         {
             CrearGridViewUsuarios();
@@ -850,41 +705,9 @@ namespace Mikrotik_Administrador
                     return;
                 }
             }
+            BtnEliminar.Visible = false;
             BuscarUsuarios(true);
         }
-
-        //private void dgvUsuarios_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        //{
-        //    if (e.RowIndex != -1) return; // Asegurar que es clic en cabecera
-
-        //    DataGridViewColumn newColumn = dgvUsuarios.Columns[e.ColumnIndex];
-        //    if (newColumn is DataGridViewButtonColumn || newColumn is DataGridViewCheckBoxColumn)
-        //        return;
-
-        //    IBindingList list = dgvUsuarios.DataSource as IBindingList;
-
-        //    if (list != null && list.Count > 0)
-        //    {
-        //        ListSortDirection direction = ListSortDirection.Ascending;
-
-        //        // Detectar dirección actual basándose en el Glyph (la flechita)
-        //        if (newColumn.HeaderCell.SortGlyphDirection == SortOrder.Ascending)
-        //            direction = ListSortDirection.Descending;
-
-        //        // Intentar obtener la propiedad por DataPropertyName o por el Nombre de la columna
-        //        string propName = string.IsNullOrEmpty(newColumn.DataPropertyName) ? newColumn.Name : newColumn.DataPropertyName;
-        //        PropertyDescriptor prop = TypeDescriptor.GetProperties(list[0].GetType())[propName];
-
-        //        if (prop != null)
-        //        {
-        //            list.ApplySort(prop, direction);
-
-        //            // Limpiar flechas de otras columnas y poner la nueva
-        //            foreach (DataGridViewColumn c in dgvUsuarios.Columns) c.HeaderCell.SortGlyphDirection = SortOrder.None;
-        //            newColumn.HeaderCell.SortGlyphDirection = direction == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
-        //        }
-        //    }
-        //}
 
         private async void BtnEliminar_Click(object sender, EventArgs e)
         {
@@ -908,6 +731,7 @@ namespace Mikrotik_Administrador
                   {
                       id = Convert.ToInt32(r.Cells["Id"].Value),
                       idmikrotik = Convert.ToInt32(r.Cells["IdMikrotik"].Value),
+                      mikrotik = Convert.ToString(r.Cells["Mikrotik"].Value),
                       idinterno = Convert.ToString(r.Cells["IdInterno"].Value),
                       name = Convert.ToString(r.Cells["Usuario"].Value),
                       tipo = Convert.ToString(r.Cells["Tipo"].Value),
@@ -919,38 +743,39 @@ namespace Mikrotik_Administrador
                     MessageBox.Show("No has seleccionado ningún usuario para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                int IdMikrotik = (int)CBMikrotiks.SelectedValue;
-                if (IdMikrotik == 0)
-                {
-                    MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
-                    return;
-                }
+                int revisaridmikrotik = 0;
                 AppRepository obj = new AppRepository();
                 MikrotikModel mikro = new MikrotikModel();
-                mikro = obj.GetMikrotikById(IdMikrotik).Result;
-                if (mikro.Estatus == false)
+                foreach (UsuariosModel item in Seleccionados.OrderBy(c=> c.idmikrotik))
                 {
-                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (mikrotik != null)
-                {
-                    await Task.Run(() => mikrotik.Close());
-                    mikrotik = null;
-                }
-                mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
-                // Usamos Task.Run para que la conexión no detenga la ventana
-                bool login = await Task.Run(() =>
-                {
-                    return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
-                });
-                if (login == false)
-                {
-                    MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                foreach (UsuariosModel item in Seleccionados)
-                {
+                    if(revisaridmikrotik != item.idmikrotik)
+                    {
+                        mikro = obj.GetMikrotikById(item.idmikrotik).Result;
+                        if (mikro.Estatus == false)
+                        {
+                            MessageBox.Show("El Mikrotik "+ item.mikrotik +" está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            BuscarUsuarios(false);
+                            return;
+                        }
+                        if (mikrotik != null)
+                        {
+                            await Task.Run(() => mikrotik.Close());
+                            mikrotik = null;
+                        }
+                        mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+                        // Usamos Task.Run para que la conexión no detenga la ventana
+                        bool login = await Task.Run(() =>
+                        {
+                            return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                        });
+                        if (login == false)
+                        {
+                            MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        revisaridmikrotik = item.idmikrotik;
+                    }                   
+                    
                     if (item.tipo.ToUpper() == "ANTENA")
                     {
                         mikrotik.EliminarQueuePorNombre(item.name);
@@ -972,6 +797,10 @@ namespace Mikrotik_Administrador
             }
             finally
             {
+                if (mikrotik != null)
+                {
+                    await Task.Run(() => mikrotik.Close());
+                }
                 progressBar1.Style = ProgressBarStyle.Blocks;
                 progressBar1.Value = 100;
                 BtnBuscar.Enabled = true;

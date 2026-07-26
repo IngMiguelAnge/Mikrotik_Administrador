@@ -348,7 +348,7 @@
     <Compile Include="Model\BancoModel.cs" />
     <Compile Include="Model\ConfigPageModel.cs" />
     <Compile Include="Model\HistorialMovimientosModel.cs" />
-    <Compile Include="Model\IpPoolDTO.cs" />
+    <Compile Include="Model\PoolsModel.cs" />
     <Compile Include="Model\ListBancosModel.cs" />
     <Compile Include="Model\ListCommentsModel.cs" />
     <Compile Include="Model\ListConfigImpressionsModel.cs" />

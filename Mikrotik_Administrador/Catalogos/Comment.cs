@@ -23,7 +23,7 @@ namespace Mikrotik_Administrador.Items
             }
             AppRepository m = new AppRepository();
 
-            if (m.SaveComment(0, txtComment.Text, (int)CBMikrotiks.SelectedValue).Result != 0)
+            if (m.SaveComment(Id, txtComment.Text, (int)CBMikrotiks.SelectedValue).Result != 0)
             {
                 MessageBox.Show("Comment guardado");
                 this.Close();
