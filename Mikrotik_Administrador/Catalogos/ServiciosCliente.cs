@@ -405,7 +405,7 @@ namespace Mikrotik_Administrador
                     string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Usuario));
                     if (Queue == string.Empty)
                     {
-                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado").Wait();
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", IdUsuario).Wait();
 
                         MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BuscarServicios();
@@ -421,7 +421,7 @@ namespace Mikrotik_Administrador
                               .ToList());
                     if (lista == null || lista.Count == 0)
                     {
-                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado").Wait();
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", IdUsuario).Wait();
 
                         MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BuscarServicios();
@@ -485,7 +485,7 @@ namespace Mikrotik_Administrador
                     string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Usuario));
                     if (Queue == string.Empty)
                     {
-                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado").Wait();
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", IdUsuario).Wait();
 
                         MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BuscarServicios();
@@ -502,7 +502,7 @@ namespace Mikrotik_Administrador
                               .ToList());
                     if (lista == null || lista.Count == 0)
                     {
-                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado").Wait();
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", IdUsuario).Wait();
 
                         MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BuscarServicios();
@@ -514,7 +514,7 @@ namespace Mikrotik_Administrador
                 if (Result1 == true && Result2 == true)
                 {
                     string nuevoEstatus = objUsuario.Estatus == "Activo" ? "Inactivo" : "Activo";
-                    var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus);
+                    var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus, IdUsuario);
                     BuscarServicios();
                 }
                 else

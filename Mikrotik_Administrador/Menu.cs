@@ -39,6 +39,7 @@ namespace Mikrotik_Administrador
         private void btnMigracion_Click(object sender, EventArgs e)
         {
             Migracion m = new Migracion();
+            m.IdUsuario = IdUsuario;
             m.Show();
         }
 

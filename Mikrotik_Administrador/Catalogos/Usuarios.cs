@@ -358,6 +358,7 @@ namespace Mikrotik_Administrador
         private void migracionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Migracion m = new Migracion();
+            m.IdUsuario = IdUsuario;
             m.Show();
             this.Hide();
         }
@@ -638,7 +639,7 @@ namespace Mikrotik_Administrador
                 if (Result1 == true && Result2 == true)
                 {
                     string nuevoEstatus = objUsuario.Estatus == "Activo" ? "Inactivo" : "Activo";
-                    var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus);
+                    var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus, IdUsuario);
                     HistorialMovimientosModel H = new HistorialMovimientosModel
                     {
                         Id = 0,
@@ -786,7 +787,7 @@ namespace Mikrotik_Administrador
                         mikrotik.EliminarFibra(item.idinterno);
                         mikrotik.DeleteInterfacebyName(item.name);
                     }
-                    obj.UpdateEstatusGeneral(item.id, "Eliminado").Wait();
+                    obj.UpdateEstatusGeneral(item.id, "Eliminado", IdUsuario).Wait();
                 }
                 MessageBox.Show("Usuarios eliminados del Mikrotik correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 BuscarUsuarios(false);
