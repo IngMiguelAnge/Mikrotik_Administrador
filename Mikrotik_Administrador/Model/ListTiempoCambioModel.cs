@@ -16,5 +16,6 @@ namespace Mikrotik_Administrador.Model
         public int IdPlan { get; set; }
         public string PlanNuevo { get; set; }
         public string Usuario { get; set; }
+        public string Programacion { get; set; }
     }
 }

@@ -78,6 +78,16 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Programacion",
+                HeaderText = "Se realizara",
+                DataPropertyName = "Programacion",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+
 
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {

@@ -315,6 +315,12 @@
     <Compile Include="Items\Pagar.Designer.cs">
       <DependentUpon>Pagar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Items\Programar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\Programar.Designer.cs">
+      <DependentUpon>Programar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Items\Prorroga.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -492,6 +498,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Items\Pagar.resx">
       <DependentUpon>Pagar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\Programar.resx">
+      <DependentUpon>Programar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\Prorroga.resx">
       <DependentUpon>Prorroga.cs</DependentUpon>

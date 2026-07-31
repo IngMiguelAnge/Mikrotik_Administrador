@@ -198,17 +198,17 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DataGridViewButtonColumn btnPlan = new DataGridViewButtonColumn
+            DataGridViewButtonColumn btnProgramar = new DataGridViewButtonColumn
             {
-                Name = "btnPlan",
+                Name = "btnProgramar",
                 HeaderText = "Acción",
-                Text = "Cambiar Plan",
+                Text = "Programar",
                 UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
-            DGVServicios.Columns.Add(btnPlan);
+            DGVServicios.Columns.Add(btnProgramar);
             DataGridViewButtonColumn btnUbicacion = new DataGridViewButtonColumn
             {
                 Name = "btnUbicacion",
@@ -311,7 +311,7 @@ namespace Mikrotik_Administrador
                     await CambiarEstatus(objUsuario);
                     break;
 
-                case "btnPlan":
+                case "btnProgramar":
                     if (Estatus == "Eliminado")
                     {
                         MessageBox.Show("Este servicio se encuentra ya eliminado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -322,50 +322,58 @@ namespace Mikrotik_Administrador
                     {
                         return;
                     }
-
+                    Programar pr = new Programar();
+                    if (pr.ShowDialog() != DialogResult.OK)
+                        return;
                     int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
-                    int IdPlanActual = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
-                    Planes p = new Planes();
-                    p.IdUsuario = IdUsuario;
-                    p.PorUsuarios = true;
-                    p.Tipo = string.Empty;// (string)DGVServicios.Rows[e.RowIndex].Cells["Tipo"].Value;
-                    //p.IdMikrotik = (int)DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
-                    if (p.ShowDialog() == DialogResult.OK)
+                    int IdPlanActual = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
+                    int IdPlanSeccionado = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
+                    if (pr.SePrograma == "Cambio de plan")
                     {
-                        TiempoDefinido td = new TiempoDefinido();
-                        td.FechaInicio = DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == null
-                            ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value);
-                        td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
-                            ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value);
-                        td.IdPlan = p.IdSeleccionado;
-                        if (td.ShowDialog() == DialogResult.Cancel)
+                         Planes p = new Planes();
+                        p.IdUsuario = IdUsuario;
+                        p.PorUsuarios = true;
+                        p.Tipo = string.Empty;
+                        if (p.ShowDialog()!= DialogResult.OK)
                         {
-                            MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-                        if (IdPlan == p.IdSeleccionado && td.IdMikrotik == IdPlanActual) //No tiene caso designar el mismo plan
-                        {
-                            MessageBox.Show("Esta plan ya se encuentra funcionando actualmente en el mikrotik seleccionado, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        TiempoDefinidosModel TD = new TiempoDefinidosModel
-                        {
-                            Dias = td.Dias,
-                            Horas = td.Horas,
-                            FechaInicio = td.FechaInicio ?? DateTime.Now,
-                            FechaFin = td.FechaFin ?? DateTime.Now.AddDays(td.Dias).AddHours(td.Horas),
-                            Modo = td.Modo,
-                            IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value),
-                            Estatus = "Pendiente",
-                            IdPlan = p.IdSeleccionado,
-                            IdMikrotikReceptor = td.IdMikrotik
-                        };
-                        AppRepository obj = new AppRepository();
-                        var result = obj.SaveTiempoCambio(TD);
-                        MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        BuscarServicios();
+                        IdPlanSeccionado = p.IdSeleccionado;
                     }
-                break;
+                    TiempoDefinido td = new TiempoDefinido();
+                    td.FechaInicio = DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == null
+                        ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value);
+                    td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
+                        ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value);
+                    td.IdPlan = IdPlanSeccionado;
+                    if (td.ShowDialog() == DialogResult.Cancel)
+                    {
+                        MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (IdPlanActual == IdPlanSeccionado && td.IdMikrotik == objUsuario.IdMikrotik) //No tiene caso designar el mismo plan
+                    {
+                        MessageBox.Show("Esta plan ya se encuentra funcionando actualmente en el mikrotik seleccionado, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    TiempoDefinidosModel TD = new TiempoDefinidosModel
+                    {
+                        Dias = td.Dias,
+                        Horas = td.Horas,
+                        FechaInicio = td.FechaInicio ?? DateTime.Now,
+                        FechaFin = td.FechaFin ?? DateTime.Now.AddDays(td.Dias).AddHours(td.Horas),
+                        Modo = td.Modo,
+                        IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value),
+                        Estatus = "Pendiente",
+                        IdPlan = IdPlanSeccionado,
+                        IdMikrotikReceptor = td.IdMikrotik,
+                        Programacion = pr.SePrograma
+                    };
+                    AppRepository obj = new AppRepository();
+                    var result = obj.SaveTiempoCambio(TD);
+                    MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    BuscarServicios();
+                    break;
             }
         }
         public async Task<bool> ChecarUsuario(ListUsuariosGeneralModel objUsuario)

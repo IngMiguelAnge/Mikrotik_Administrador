@@ -3,6 +3,7 @@ using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace Mikrotik_Administrador.Items
 {
@@ -32,7 +33,6 @@ namespace Mikrotik_Administrador.Items
             CambiarFinal();
             AppRepository obj = new AppRepository();
             var listaMikrotiks = await obj.GetMikrotiksByIdPlan(IdPlan);
-
             // Insertamos un objeto "fantasma" al inicio para el placeholder
             listaMikrotiks.Insert(0, new ListMikrotikModel { Id = 0, Nombre = "Selecciona un Mikrotik" });
 
@@ -162,6 +162,6 @@ namespace Mikrotik_Administrador.Items
                 
             this.DialogResult = DialogResult.OK;
             this.Close();
-        }
+        }        
     }
 }

@@ -99,15 +99,6 @@ namespace Mikrotik_Administrador
             });
             dgvComments.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Permitido",
-                HeaderText = "Permitido",
-                DataPropertyName = "Permitido",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvComments.Columns.Add(new DataGridViewTextBoxColumn
-            {
                 Name = "Estatus",
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
@@ -183,7 +174,6 @@ namespace Mikrotik_Administrador
                     c.Id = Id;
                     c.CommitText = CommitText;
                     c.IdMikrotik = IdMikrotik;
-                    c.Permitido = dgvComments.Rows[e.RowIndex].Cells["Permitido"].Value.ToString();
                     c.ShowDialog();
                     BuscarComments();                
                     break;

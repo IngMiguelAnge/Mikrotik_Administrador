@@ -7,6 +7,5 @@
         public int IdMikrotik { get; set; }
         public string Mikrotik { get; set; }
         public string Estatus { get; set; }
-        public string Permitido {  get; set; }
     }
 }
