@@ -34,6 +34,8 @@
             this.CBMikrotiks = new System.Windows.Forms.ComboBox();
             this.lblMikrotik = new System.Windows.Forms.Label();
             this.txtComment = new System.Windows.Forms.TextBox();
+            this.cbPermitidos = new System.Windows.Forms.ComboBox();
+            this.lblPermitido = new System.Windows.Forms.Label();
             this.panelContenedor.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,7 +56,7 @@
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(309, 197);
+            this.btnGuardar.Location = new System.Drawing.Point(141, 309);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(120, 38);
             this.btnGuardar.TabIndex = 2;
@@ -64,6 +66,8 @@
             // 
             // panelContenedor
             // 
+            this.panelContenedor.Controls.Add(this.cbPermitidos);
+            this.panelContenedor.Controls.Add(this.lblPermitido);
             this.panelContenedor.Controls.Add(this.CBMikrotiks);
             this.panelContenedor.Controls.Add(this.lblMikrotik);
             this.panelContenedor.Controls.Add(this.txtComment);
@@ -73,7 +77,7 @@
             this.panelContenedor.Location = new System.Drawing.Point(0, 0);
             this.panelContenedor.Name = "panelContenedor";
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenedor.Size = new System.Drawing.Size(464, 247);
+            this.panelContenedor.Size = new System.Drawing.Size(289, 366);
             this.panelContenedor.TabIndex = 4;
             // 
             // CBMikrotiks
@@ -106,12 +110,37 @@
             this.txtComment.Size = new System.Drawing.Size(230, 33);
             this.txtComment.TabIndex = 4;
             // 
+            // cbPermitidos
+            // 
+            this.cbPermitidos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPermitidos.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.cbPermitidos.FormattingEnabled = true;
+            this.cbPermitidos.Items.AddRange(new object[] {
+            "Seleccione",
+            "Permitido",
+            "No Permitido"});
+            this.cbPermitidos.Location = new System.Drawing.Point(31, 212);
+            this.cbPermitidos.Name = "cbPermitidos";
+            this.cbPermitidos.Size = new System.Drawing.Size(230, 33);
+            this.cbPermitidos.TabIndex = 8;
+            // 
+            // lblPermitido
+            // 
+            this.lblPermitido.AutoSize = true;
+            this.lblPermitido.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblPermitido.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblPermitido.Location = new System.Drawing.Point(26, 184);
+            this.lblPermitido.Name = "lblPermitido";
+            this.lblPermitido.Size = new System.Drawing.Size(98, 25);
+            this.lblPermitido.TabIndex = 7;
+            this.lblPermitido.Text = "Permitido:";
+            // 
             // Comment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(464, 247);
+            this.ClientSize = new System.Drawing.Size(289, 366);
             this.Controls.Add(this.panelContenedor);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -135,5 +164,7 @@
         private System.Windows.Forms.Label lblMikrotik;
         private System.Windows.Forms.TextBox txtComment;
         private System.Windows.Forms.ComboBox CBMikrotiks;
+        private System.Windows.Forms.ComboBox cbPermitidos;
+        private System.Windows.Forms.Label lblPermitido;
     }
 }

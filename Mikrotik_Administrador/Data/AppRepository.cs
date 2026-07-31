@@ -793,7 +793,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<int> SaveComment(int Id, string Nombre, int IdMikrotik)
+        public async Task<int> SaveComment(int Id, string Nombre, int IdMikrotik, bool Permitido)
         {
             try
             {
@@ -805,6 +805,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Permitido", Permitido));
                         SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
                         {
                             Direction = System.Data.ParameterDirection.Output
@@ -886,6 +887,7 @@ namespace Mikrotik_Administrador.Data
                 IdMikrotik = (int)reader["IdMikrotik"],
                 Mikrotik = (string)reader["Mikrotik"],
                 Estatus = Convert.IsDBNull(reader["Estatus"]) ? string.Empty : (string)reader["Estatus"],
+                Permitido = (string)reader["Permitido"],
             };
         }
         #endregion
