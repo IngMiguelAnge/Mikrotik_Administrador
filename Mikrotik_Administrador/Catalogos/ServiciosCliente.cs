@@ -346,12 +346,14 @@ namespace Mikrotik_Administrador
                     td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
                         ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value);
                     td.IdPlan = IdPlanSeccionado;
+                    td.Programacion = pr.SePrograma;
+                    td.IdMikrotik = objUsuario.IdMikrotik;
                     if (td.ShowDialog() == DialogResult.Cancel)
                     {
                         MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    if (IdPlanActual == IdPlanSeccionado && td.IdMikrotik == objUsuario.IdMikrotik) //No tiene caso designar el mismo plan
+                    if (IdPlanActual == IdPlanSeccionado && td.IdMikrotik == objUsuario.IdMikrotik && pr.SePrograma == "Cambio de plan") //No tiene caso designar el mismo plan
                     {
                         MessageBox.Show("Esta plan ya se encuentra funcionando actualmente en el mikrotik seleccionado, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;

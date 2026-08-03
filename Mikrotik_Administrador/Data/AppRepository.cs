@@ -117,6 +117,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         cmd.Parameters.Add(new SqlParameter("@IP", IP));
+                        cmd.Parameters.Add(new SqlParameter("@Completado", false));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -1813,6 +1814,29 @@ namespace Mikrotik_Administrador.Data
             }
         }
 
+        public async Task<bool> UpdateCompletado(int Id, bool IsAntena)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateCompletado", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public async Task<List<ListWirelessModel>> GetWireless()
         {
             List<ListWirelessModel> list = new List<ListWirelessModel>();
@@ -1892,6 +1916,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         cmd.Parameters.Add(new SqlParameter("@IdInterno", obj.IdInterno));
+                        cmd.Parameters.Add(new SqlParameter("@Completado", obj.Completado));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;

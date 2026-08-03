@@ -53,9 +53,9 @@
             this.lblTiempo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.lblTiempo.Location = new System.Drawing.Point(40, 117);
             this.lblTiempo.Name = "lblTiempo";
-            this.lblTiempo.Size = new System.Drawing.Size(268, 28);
+            this.lblTiempo.Size = new System.Drawing.Size(275, 28);
             this.lblTiempo.TabIndex = 0;
-            this.lblTiempo.Text = "Tiempo que dura el cambio:";
+            this.lblTiempo.Text = "Tiempo que desea que dure:";
             // 
             // lblDias
             // 

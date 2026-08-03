@@ -97,6 +97,15 @@ namespace Mikrotik_Administrador
                     u.IdMikrotik = Convert.ToInt32(Id);
                     u.ShowDialog();
                     break;
+                case "btnCambioCompletadoPool":
+                    AppRepository objpool = new AppRepository();
+                    bool resultpool = objpool.UpdateCompletado(Convert.ToInt32(Id), false).Result;
+                    if (resultpool == true)
+                        MessageBox.Show("Cambiado");
+                    else
+                        MessageBox.Show("Error al cambiar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ListaPools();
+                    break;
                 case "btnCambioPool":
                     AppRepository objp = new AppRepository();
                     bool resultp = objp.UpdateEstatusPool(Convert.ToInt32(Id)).Result;
@@ -113,6 +122,15 @@ namespace Mikrotik_Administrador
                         MessageBox.Show("Cambiado");
                     else
                         MessageBox.Show("Error al cambiar el estatus", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ListaWireless();
+                    break;
+                case "btnCambioCompletado":
+                    AppRepository objco = new AppRepository();
+                    bool resultco = objco.UpdateCompletado(Convert.ToInt32(Id),true).Result;
+                    if (resultco == true)
+                        MessageBox.Show("Cambiado");
+                    else
+                        MessageBox.Show("Error al cambiar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ListaWireless();
                     break;
                 case "btnRespaldar":
@@ -415,6 +433,18 @@ namespace Mikrotik_Administrador
                 DefaultCellStyle = estiloBotones
             };
             DGVMikrotiks.Columns.Add(btnCambio);
+            DataGridViewButtonColumn btnCambioCompletado = new DataGridViewButtonColumn
+            {
+                Name = "btnCambioCompletado",
+                HeaderText = "Acción",
+                Text = "Cambiar Completado",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVMikrotiks.Columns.Add(btnCambioCompletado);
+
             DGVMikrotiks.AllowUserToAddRows = false;
         }
         private async void ListaWireless()
@@ -694,7 +724,7 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn
+            DataGridViewButtonColumn btnCambioPool = new DataGridViewButtonColumn
             {
                 Name = "btnCambioPool",
                 HeaderText = "Acción",
@@ -704,7 +734,19 @@ namespace Mikrotik_Administrador
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
-            DGVMikrotiks.Columns.Add(btnCambio);
+            DGVMikrotiks.Columns.Add(btnCambioPool);
+            DataGridViewButtonColumn btnCambioCompletadoPool = new DataGridViewButtonColumn
+            {
+                Name = "btnCambioCompletadoPool",
+                HeaderText = "Acción",
+                Text = "Cambiar Completado",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVMikrotiks.Columns.Add(btnCambioCompletadoPool);
+        
             DGVMikrotiks.AllowUserToAddRows = false;
         }
     }

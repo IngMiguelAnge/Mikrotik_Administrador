@@ -67,7 +67,8 @@ namespace Mikrotik_Administrador
                             Address = item.address,
                             Comment = item.comment,
                             Estatus = item.estatus,
-                            IdInterno = item.id
+                            IdInterno = item.id,
+                            Completado = false
                         };
                         if (obj.SaveWireless(model).Result == false)
                         {

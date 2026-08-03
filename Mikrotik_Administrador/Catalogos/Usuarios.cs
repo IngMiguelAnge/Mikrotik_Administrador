@@ -627,13 +627,6 @@ namespace Mikrotik_Administrador
                 else
                 {
                     Result1 = mikrotik.CambiarEstatusFibra(objUsuario.IdInterno, objUsuario.Estatus);
-                    if (Result1 == true)
-                    {
-                        var Result = await Task.Run(() =>
-                        {
-                            return mikrotik.DeleteInterfacebyPlan(objUsuario.Usuario);
-                        });
-                    }
                     Result2 = true;
                 }
                 if (Result1 == true && Result2 == true)

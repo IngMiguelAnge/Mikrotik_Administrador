@@ -17,6 +17,7 @@ namespace Mikrotik_Administrador.Items
         public DateTime? FechaFin { get; set; }
         private bool primera = true;
         public int IdMikrotik { get; set; }
+        public string Programacion { get; set; }
         public TiempoDefinido()
         {
             InitializeComponent();
@@ -24,8 +25,9 @@ namespace Mikrotik_Administrador.Items
 
         private async void TiempoDefinido_Load(object sender, EventArgs e)
         {
+            
             CBModo.SelectedIndex = 0;
-            lblTiempo.Text = "Tiempo que desea que dure el plan";
+            lblTiempo.Text = "Tiempo que desea que dure:";
             NUDDias.Value = 8;
             dtpFechaInicio.Value = DateTime.Now;
             dtpFechaInicio.MinDate = DateTime.Now;
@@ -41,6 +43,12 @@ namespace Mikrotik_Administrador.Items
             CBMikrotiks.ValueMember = "Id";      // El dato que procesas por DETRÁS
             CBMikrotiks.DataSource = listaMikrotiks;
             CBMikrotiks.SelectedIndex = 0;
+            if (Programacion != "Cambio de plan")
+            {
+                CBMikrotiks.Visible = false;
+                lblMikrotik.Visible = false;
+                CBMikrotiks.SelectedValue = IdMikrotik;
+            }
             primera = false;
         }
 
@@ -69,7 +77,14 @@ namespace Mikrotik_Administrador.Items
                     return false;
                 }
             }
-       
+            if(CBModo.SelectedIndex == 3 && Programacion == "Suspensión")
+            {
+                DialogResult resultado = MessageBox.Show("Si selecciona permanente, el usuario sera eliminado del mikrotik. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (resultado == DialogResult.No)
+                {
+                    return false;
+                }
+            }
             Dias = (int)NUDDias.Value;
             Horas = (int)NUDHoras.Value;
             return true;
@@ -146,6 +161,12 @@ namespace Mikrotik_Administrador.Items
                 if (listwireles.Where(x => x.Estatus == "Activo").ToList().Count() == 0)
                 {
                     MessageBox.Show("El mikrotik seleccionado no contiene wireless agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                var listacomments = await Task.Run(() => obj.GetCommentsActivos(IdMikrotik));
+                if(listacomments.ToList().Count() == 0)
+                {
+                    MessageBox.Show("El mikrotik seleccionado no contiene comentarios agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
