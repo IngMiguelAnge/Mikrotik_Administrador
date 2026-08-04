@@ -42,6 +42,7 @@
             this.lblModo = new System.Windows.Forms.Label();
             this.lblMikrotik = new System.Windows.Forms.Label();
             this.CBMikrotiks = new System.Windows.Forms.ComboBox();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.NUDDias)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDHoras)).BeginInit();
             this.SuspendLayout();
@@ -112,7 +113,6 @@
             // btnGuardar
             // 
             this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
-            this.btnGuardar.Enabled = false;
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
@@ -217,12 +217,20 @@
             this.CBMikrotiks.Size = new System.Drawing.Size(285, 33);
             this.CBMikrotiks.TabIndex = 14;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(45, 540);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(235, 12);
+            this.progressBar1.TabIndex = 15;
+            // 
             // TiempoDefinido
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(369, 625);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.CBMikrotiks);
             this.Controls.Add(this.lblMikrotik);
             this.Controls.Add(this.CBModo);
@@ -268,5 +276,6 @@
         private System.Windows.Forms.Label lblModo;
         private System.Windows.Forms.Label lblMikrotik;
         private System.Windows.Forms.ComboBox CBMikrotiks;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

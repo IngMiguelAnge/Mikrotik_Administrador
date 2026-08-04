@@ -184,10 +184,16 @@ namespace Mikrotik_Administrador
                         Anidado.IdPlanInterno = string.Empty;
                         Anidado.IdPlan = Plan.Id;                  
                         Anidado.IsAntena = (string)CBPerteneceA.SelectedItem == "Fibra" ? false : true;
+                        Anidado.Id = 0;
                         IdPlanAnidado = obj.SavePlanAnidadoByMigracion(Anidado).Result;
                     }
 
-                    await obj.UpdateStatusPlanesAnidado(Fila.Id,false);
+                    await obj.UpdateStatusPlanesAnidado(IdPlanAnidado, false);
+                    if (mikrotik != null)
+                    {
+                        await Task.Run(() => mikrotik.Close());
+                        mikrotik = null;
+                    }
                     mikrotik = new MK(Fila.IP, Convert.ToInt32(Fila.Port));
                     bool login = await Task.Run(() =>
                     {
@@ -195,7 +201,6 @@ namespace Mikrotik_Administrador
                     });
                     if (login == true)
                     {
-                        await obj.UpdateStatusPlanesAnidado(Fila.Id,true);
                         if ((string)CBPerteneceA.SelectedItem == "Fibra")
                         {                         
                             var Result1 = await Task.Run(() =>
@@ -213,15 +218,15 @@ namespace Mikrotik_Administrador
                                     return mikrotik.DeleteInterfacebyPlan(Plan.Nombre);
                                 });
                             }
-                            var ListaPlanes = await Task.Run(() =>
-                            { 
-                                return mikrotik.VerProfile();
-                            });
-                            var perfil = ListaPlanes.FirstOrDefault(p => p.Name == Plan.Nombre);
-                            if (perfil != null)
-                            {
-                                var result = obj.UpdateIdPlanInterno(IdPlanAnidado, perfil.Id).Result;
-                            }
+                            //var ListaPlanes = await Task.Run(() =>
+                            //{ 
+                            //    return mikrotik.VerProfile();
+                            //});
+                            //var perfil = ListaPlanes.FirstOrDefault(p => p.Name == Plan.Nombre);
+                            //if (perfil != null)
+                            //{
+                            //    var result = obj.UpdateIdPlanInterno(IdPlanAnidado, perfil.Id).Result;
+                            //}
                         }
                         else
                         {

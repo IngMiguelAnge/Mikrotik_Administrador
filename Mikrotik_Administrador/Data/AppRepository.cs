@@ -1178,6 +1178,7 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("SavePlanAnidadoByMigracion", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
                         cmd.Parameters.Add(new SqlParameter("@IdPlanInterno", obj.IdPlanInterno));
                         cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
@@ -1200,7 +1201,7 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
-        public async Task<bool> UpdateStatusPlanesAnidado(int IdMikrotik, bool Estatus)
+        public async Task<bool> UpdateStatusPlanesAnidado(int IdPlanAnidado, bool Estatus)
         {
             try
             {
@@ -1209,7 +1210,7 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("UpdateStatusPlanesAnidado", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Id", IdPlanAnidado));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", Estatus));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
@@ -1702,6 +1703,7 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("SaveUsuariosGeneral", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
                         cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
                         cmd.Parameters.Add(new SqlParameter("@Address", obj.Address));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));

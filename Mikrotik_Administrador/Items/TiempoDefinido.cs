@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
@@ -18,6 +19,8 @@ namespace Mikrotik_Administrador.Items
         private bool primera = true;
         public int IdMikrotik { get; set; }
         public string Programacion { get; set; }
+        public string NombrePlan { get; set; }
+        MK mikrotik;
         public TiempoDefinido()
         {
             InitializeComponent();
@@ -152,10 +155,23 @@ namespace Mikrotik_Administrador.Items
             {
                 return;
             }
+            if (IdMikrotik != (int)CBMikrotiks.SelectedValue)
+            {
+                MessageBox.Show("El servicio para cambio de planes entre diferentes mikrotiks, aun esta en mantenimiento. Activo proximamente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            //if(IdMikrotik != (int)CBMikrotiks.SelectedValue)
+            //{
+            //    DialogResult resultado = MessageBox.Show("Si cambia de mikrotik, se perdera la informacion de los comentarios y wireless agregados. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //    if (resultado == DialogResult.No)
+            //    {
+            //        return;
+            //    }
+            //}
             AppRepository obj = new AppRepository();
-            var plan = obj.GetPlanById(IdPlan);
+            var plan = obj.GetPlanById(IdPlan).Result;
             IdMikrotik = (int)CBMikrotiks.SelectedValue;
-            if(plan.Result.IsAntena ==  true)
+            if(plan.IsAntena ==  true)
             {
                 var listwireles = await obj.GetWirelessbyIdMikrotik(IdMikrotik);
                 if (listwireles.Where(x => x.Estatus == "Activo").ToList().Count() == 0)
@@ -178,6 +194,58 @@ namespace Mikrotik_Administrador.Items
                     MessageBox.Show("El mikrotik seleccionado no contiene wireless agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+                progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+                btnGuardar.Enabled = false;
+                try
+                {
+                    //NombrePlan
+                    if (mikrotik != null)
+                    {
+                        await Task.Run(() => mikrotik.Close());
+                        mikrotik = null;
+                    }
+                    MikrotikModel mikro = new MikrotikModel();
+                    mikro = obj.GetMikrotikById(IdMikrotik).Result;
+                    if (mikro.Estatus == false)
+                    {
+                        MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+
+                    bool login = await Task.Run(() =>
+                    {
+                        return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                    });
+                    if (login == false)
+                    {
+                        MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    string IdInterno = mikrotik.BuscarPerfil(NombrePlan);
+                    if(IdInterno == string.Empty)
+                    {
+                        MessageBox.Show("Error este plan fue eliminado del mikrotik de manera interna y no fue informado el sistema, favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("El mikrotik seleccionado no responde, favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                finally
+                {
+                    if (mikrotik != null)
+                    {
+                        await Task.Run(() => mikrotik.Close());
+                    }
+                    btnGuardar.Enabled = true;
+                    progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                    progressBar1.Value = 100;
+                }
+               
             }
 
                 

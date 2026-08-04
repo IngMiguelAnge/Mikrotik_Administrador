@@ -314,6 +314,7 @@ namespace Mikrotik_Administrador
                         objAnidado.IdPlanInterno = item.idplan;
                         objAnidado.IdPlan = objPlan.Id;
                         objAnidado.IsAntena = cbAntenas.Checked;
+                        objAnidado.Id = 0;
                         var ress = obj.SavePlanAnidadoByMigracion(objAnidado);
                         ListaPlanes.Add(objPlan);
                         existeplan = new PlanModel();

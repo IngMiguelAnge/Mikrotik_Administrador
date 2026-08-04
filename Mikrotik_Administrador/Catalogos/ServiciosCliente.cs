@@ -6,6 +6,7 @@ using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -222,7 +223,7 @@ namespace Mikrotik_Administrador
             DGVServicios.Columns.Add(btnUbicacion);
             DataGridViewButtonColumn BtnEstatus = new DataGridViewButtonColumn
             {
-                Name = "BtnEstatus",
+                Name = "btnEstatus",
                 HeaderText = "Acción",
                 Text = "Cambio Estatus",
                 UseColumnTextForButtonValue = true,
@@ -328,9 +329,10 @@ namespace Mikrotik_Administrador
                     int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
                     int IdPlanActual = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
                     int IdPlanSeccionado = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
+                    string NombrePlan = string.Empty;
                     if (pr.SePrograma == "Cambio de plan")
                     {
-                         Planes p = new Planes();
+                        Planes p = new Planes();
                         p.IdUsuario = IdUsuario;
                         p.PorUsuarios = true;
                         p.Tipo = string.Empty;
@@ -339,6 +341,11 @@ namespace Mikrotik_Administrador
                             return;
                         }
                         IdPlanSeccionado = p.IdSeleccionado;
+                        NombrePlan = p.NombrePlan;
+                    }
+                    if (checar == false)
+                    {
+                        return;
                     }
                     TiempoDefinido td = new TiempoDefinido();
                     td.FechaInicio = DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == null
@@ -348,6 +355,7 @@ namespace Mikrotik_Administrador
                     td.IdPlan = IdPlanSeccionado;
                     td.Programacion = pr.SePrograma;
                     td.IdMikrotik = objUsuario.IdMikrotik;
+                    td.NombrePlan = NombrePlan;
                     if (td.ShowDialog() == DialogResult.Cancel)
                     {
                         MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

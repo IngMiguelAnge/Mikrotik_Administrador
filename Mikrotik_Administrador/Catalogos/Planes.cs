@@ -20,6 +20,7 @@ namespace Mikrotik_Administrador
         public bool PorUsuarios { get; set; }
         public string Tipo { get; set; }
         public int IdSeleccionado { get; set; } 
+        public string NombrePlan { get; set; }
         public Planes()
         {
             InitializeComponent();
@@ -213,7 +214,7 @@ namespace Mikrotik_Administrador
             // Evitar errores si hacen click en el encabezado
             if (e.RowIndex < 0) return;
             var Id = dgvPlanes.Rows[e.RowIndex].Cells["Id"].Value;
-
+            NombrePlan = (string)dgvPlanes.Rows[e.RowIndex].Cells["Nombre"].Value;
             switch (dgvPlanes.Columns[e.ColumnIndex].Name)
             {
                 case "btnEditar":
@@ -224,20 +225,20 @@ namespace Mikrotik_Administrador
                     BuscarPlanes();
                     break;
                 case "btnAsignar":
-                    var Nombre = (string)dgvPlanes.Rows[e.RowIndex].Cells["Nombre"].Value;
-                    if(Nombre.Trim() == string.Empty)
+                    if(NombrePlan.Trim() == string.Empty)
                     {
                         MessageBox.Show("Solo se pueden asignar planes con nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
+
                     // 1. Guardamos el ID en la propiedad pública
-                    this.IdSeleccionado = Convert.ToInt32(Id);
+                    IdSeleccionado = Convert.ToInt32(Id);
                     // 2. Indicamos que la operación fue exitosa
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                     break;
                 case "btnVerMikrotiks":
-                    var NombrePlan = (string)dgvPlanes.Rows[e.RowIndex].Cells["Nombre"].Value;
+         
                     if (NombrePlan.Trim() == string.Empty)
                     {
                         MessageBox.Show("Solo se pueden ver mikrotiks de planes con nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

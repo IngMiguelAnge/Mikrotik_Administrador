@@ -102,26 +102,29 @@ namespace Mikrotik_Administrador.Class
         {
             List<string> output = new List<string>();
 
+            // 1. Espera activa más flexible
             int waitAttempts = 100;
             while (con.Available == 0 && waitAttempts > 0)
             {
-                System.Threading.Thread.Sleep(50);
+                System.Threading.Thread.Sleep(20);
                 waitAttempts--;
             }
 
-            // Si después de la espera sigue en 0, es que el router recibió 
-            // el comando pero no lo entendió o no lo aceptó.
             if (con.Available == 0)
             {
                 System.Diagnostics.Debug.WriteLine("El router no mandó datos de respuesta.");
                 return output;
             }
 
+            // Variable para rastrear la última etiqueta de bloque (ej. !done, !re, !trap)
+            string lastTag = "";
+
             while (true)
             {
                 int curByte = connection.ReadByte();
                 if (curByte == -1) break;
 
+                // Decodificación de longitud del estándar RouterOS API
                 long count = 0;
                 if (curByte < 0x80) { count = curByte; }
                 else if (curByte < 0xC0) { count = ((curByte ^ 0x80) << 8) + connection.ReadByte(); }
@@ -129,9 +132,11 @@ namespace Mikrotik_Administrador.Class
                 else if (curByte < 0xF0) { count = ((curByte ^ 0xE0) << 24) + (connection.ReadByte() << 16) + (connection.ReadByte() << 8) + connection.ReadByte(); }
                 else if (curByte == 0xF0) { count = (connection.ReadByte() << 24) + (connection.ReadByte() << 16) + (connection.ReadByte() << 8) + connection.ReadByte(); }
 
+                // Si la palabra tiene longitud 0, indica FIN DE SENTENCIA
                 if (count == 0)
                 {
-                    if (output.Count > 0 && (output.Last().StartsWith("!done") || output.Last().StartsWith("!trap") || output.Last().StartsWith("!fatal")))
+                    // Si la etiqueta del bloque actual fue !done, !trap o !fatal, TERMINAMOS
+                    if (lastTag == "!done" || lastTag == "!trap" || lastTag == "!fatal")
                     {
                         break;
                     }
@@ -147,9 +152,17 @@ namespace Mikrotik_Administrador.Class
                     read += result;
                 }
 
-                string word = Encoding.Default.GetString(buffer);// Usar UTF8 es mejor en v7
+                // Se recomienda UTF8 para compatibilidad con MikroTik v7+
+                string word = Encoding.UTF8.GetString(buffer);
                 output.Add(word);
+
+                // Guardamos las etiquetas especiales (!done, !re, !trap, etc.)
+                if (word.StartsWith("!"))
+                {
+                    lastTag = word;
+                }
             }
+
             return output;
         }
         public bool Login(string username, string password)
@@ -365,7 +378,7 @@ namespace Mikrotik_Administrador.Class
                         {
                             case "list":
                                 value = value.Replace("\r", "").Replace("\n", "").Trim();
-                                
+
                                 if (listComments.Where(c => c.Nombre == value).ToList().Count() == 0)
                                 {
                                     objetoValido = false; // Marcamos que este registro no nos sirve
@@ -571,9 +584,9 @@ namespace Mikrotik_Administrador.Class
                         //}
                         if (key == "ranges")
                         {
-                            string[] partes = value.Split(',');               
+                            string[] partes = value.Split(',');
                             for (int i = 0; i < partes.Length; i++)
-                            {                              
+                            {
                                 string[] rango = partes[i].Split('-');
                                 PoolsModel pool = new PoolsModel();
                                 if (rango.Length == 2)
@@ -684,29 +697,67 @@ namespace Mikrotik_Administrador.Class
                     return "No se encontro pool-PPPoE";
                 string[] segmentos = ListIpPool.First().IP.Split('.');
                 string IPlocal = $"{segmentos[0]}.{segmentos[1]}.{segmentos[2]}.1";
-                if (Anidado.IdPlanInterno != string.Empty)
+
+                Send("/ppp/profile/print");
+                Send("=.proplist=.id");
+                Send("?name=" + Plan.Nombre, true);
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        existe = true;
+                    }
+                    else if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length >= 3 && parts[1] == ".id")
+                        {
+                            idEncontrado = parts[2];
+                        }
+                    }
+                    else if (row.StartsWith("!done"))
+                    {
+                        break; // Salimos del foreach del print
+                    }
+                }
+                AppRepository obj = new AppRepository();
+
+                // --- PASO 2: ACCIÓN (SET o ADD) ---
+                if (existe && !string.IsNullOrEmpty(idEncontrado))
                 {
                     Send("/ppp/profile/set");
-                    Send("=.id=" + Anidado.IdPlanInterno);
+                    Send("=.id=" + idEncontrado);
                     Send("=name=" + Plan.Nombre);
                     Send("=remote-address=pool-PPPoE");
                     Send("=local-address=" + IPlocal);
                     Send("=dns-server=1.1.1.1,8.8.8.8");
                     Send("=bridge-learning=yes");
                     Send("=rate-limit=" + Plan.Velocidad, true);
-
                     foreach (string row in Read())
                     {
                         if (row.StartsWith("!trap")) return "Error Mikrotik";
-                        if (row.StartsWith("!done")) return string.Empty;
+                        if (row.StartsWith("!done"))
+                        {
+                            bool r = obj.UpdateStatusPlanesAnidado(Anidado.Id, true).Result;
+                            return string.Empty;
+                        }
                     }
                 }
                 else
                 {
+                    Send("/ppp/profile/add");
+                    Send("=name=" + Plan.Nombre);
+                    Send("=remote-address=pool-PPPoE");
+                    Send("=local-address=" + IPlocal);
+                    Send("=dns-server=1.1.1.1,8.8.8.8");
+                    Send("=bridge-learning=yes");
+                    Send("=rate-limit=" + Plan.Velocidad, true);
+                    List<string> respAdd = Read();
                     Send("/ppp/profile/print");
                     Send("=.proplist=.id");
                     Send("?name=" + Plan.Nombre, true);
-                    foreach (string row in Read())
+                    List<string> respPrint = Read();
+                    foreach (string row in respPrint)
                     {
                         if (row.StartsWith("!re"))
                         {
@@ -720,68 +771,19 @@ namespace Mikrotik_Administrador.Class
                                 idEncontrado = parts[2];
                             }
                         }
-                        else if (row.StartsWith("!done"))
+                        else if (row.StartsWith("!done") && idEncontrado != string.Empty)
                         {
                             break; // Salimos del foreach del print
                         }
                     }
 
-                    // --- PASO 2: ACCIÓN (SET o ADD) ---
-                    if (existe && !string.IsNullOrEmpty(idEncontrado))
-                    {
-                        Send("/ppp/profile/set");
-                        Send("=.id=" + idEncontrado);
-                        Send("=name=" + Plan.Nombre);
-                        Send("=remote-address=pool-PPPoE");
-                        Send("=local-address=" + IPlocal);
-                        Send("=dns-server=1.1.1.1,8.8.8.8");
-                        Send("=bridge-learning=yes");
-                        Send("=rate-limit=" + Plan.Velocidad, true);
-                        foreach (string row in Read())
-                        {
-                            if (row.StartsWith("!trap")) return "Error Mikrotik";
-                            if (row.StartsWith("!done")) return string.Empty;
-                        }
-                    }
-                    else
-                    {
-                        Send("/ppp/profile/add");
-                        Send("=name=" + Plan.Nombre);
-                        Send("=remote-address=pool-PPPoE");
-                        Send("=local-address=" + IPlocal);
-                        Send("=dns-server=1.1.1.1,8.8.8.8");
-                        Send("=bridge-learning=yes");
-                        Send("=rate-limit=" + Plan.Velocidad, true);
-                        Send("/ppp/profile/print");
-                        Send("=.proplist=.id");
-                        Send("?name=" + Plan.Nombre, true);
-                        foreach (string row in Read())
-                        {
-                            if (row.StartsWith("!re"))
-                            {
-                                existe = true;
-                            }
-                            else if (row.StartsWith("="))
-                            {
-                                string[] parts = row.Split(new char[] { '=' }, 3);
-                                if (parts.Length >= 3 && parts[1] == ".id")
-                                {
-                                    idEncontrado = parts[2];
-                                }
-                            }
-                            else if (row.StartsWith("!done"))
-                            {
-                                break; // Salimos del foreach del print
-                            }
-                        }
 
-                    }
-                    AppRepository obj = new AppRepository();
                     PlanAnidadoModel plansave = new PlanAnidadoModel();
                     plansave.IdPlan = Plan.Id;
                     plansave.IdPlanInterno = idEncontrado;
                     plansave.IsAntena = Plan.IsAntena;
                     plansave.IdMikrotik = Anidado.IdMikrotik;
+                    plansave.Id = Anidado.IdPlanInterno != idEncontrado ? Anidado.Id : 0;
                     int guardado = obj.SavePlanAnidadoByMigracion(plansave).Result;
                     return string.Empty;
                 }
@@ -792,6 +794,29 @@ namespace Mikrotik_Administrador.Class
                 return e.Message;
             }
             return "Fallo perfil";
+        }
+        public string BuscarPerfil(string Nombre)
+        {
+            string idPerfil = "";
+            // 1. Enviar comando de búsqueda a MikroTik
+            Send("/ppp/profile/print");
+            Send("=.proplist=.id");
+            Send("?name=" + Nombre, true);
+
+            // 2. Leer la respuesta del RouterOS
+            List<string> respuesta = Read();
+
+
+            foreach (string linea in respuesta)
+            {
+                if (linea.StartsWith("=.id="))
+                {
+                    idPerfil = linea.Replace("=.id=", "").Trim(); // Ejemplo: "*1" o "*A"
+                    break;
+                }
+            }
+
+            return idPerfil;
         }
         public List<LimiteModel> VerProfile()
         {
@@ -896,7 +921,8 @@ namespace Mikrotik_Administrador.Class
                         string value = parts[2];
 
                         if (key == ".id") currentObj.id = value;
-                        if (key == "name") {
+                        if (key == "name")
+                        {
                             currentObj.comment = value;
                         }
                         if (key == "remote-address") currentObj.address = value;
@@ -924,7 +950,7 @@ namespace Mikrotik_Administrador.Class
             }
             return listaFinal;
         }
-      
+
         public List<Address> VerAddres()
         {
             List<Address> listaFinal = new List<Address>();

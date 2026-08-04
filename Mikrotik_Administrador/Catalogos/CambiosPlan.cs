@@ -266,6 +266,8 @@ namespace Mikrotik_Administrador.Catalogos
                     }
                     AppRepository obj = new AppRepository();
                     await obj.UpdateEstatusTiempoCambio(Convert.ToInt32(Id));
+                    MessageBox.Show("Se solicito terminar la programación favor de esperar unos segundos.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                     Buscar();
                     break;      
             }
