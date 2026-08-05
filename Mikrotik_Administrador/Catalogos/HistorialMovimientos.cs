@@ -27,11 +27,13 @@ namespace Mikrotik_Administrador.Catalogos
             dgvHistorial.AutoGenerateColumns = false;
             dgvHistorial.EnableHeadersVisualStyles = false;
 
-            // --- AJUSTES PARA SALTO DE LÍNEA Y ALTO DE FILAS ---
+            // --- ALTO FIJO Y SALTO DE LÍNEA A 2 FILAS DE TEXTO ---
+            // Alto fijo de 52px para 2 líneas de texto sin costo de procesamiento en la UI
+            dgvHistorial.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            dgvHistorial.RowTemplate.Height = 52;
             dgvHistorial.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dgvHistorial.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
-            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) ---
             dgvHistorial.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
             dgvHistorial.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
             dgvHistorial.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
@@ -49,73 +51,78 @@ namespace Mikrotik_Administrador.Catalogos
             estiloBotones.SelectionForeColor = System.Drawing.Color.White;
             estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
 
+            // --- COLUMNAS CON ANCHO DEFINIDO (OPTIMIZADAS) ---
             dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Id",
                 HeaderText = "Id",
                 DataPropertyName = "Id",
                 Visible = false,
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
+                ReadOnly = true
             });
+
             dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Usuario",
                 HeaderText = "Responsable",
                 DataPropertyName = "Usuario",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                Width = 130,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-           
+
             dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Pagina",
                 HeaderText = "Página",
                 DataPropertyName = "Pagina",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                Width = 120,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+
             dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "FechaCreacion",
                 HeaderText = "Fecha",
                 DataPropertyName = "FechaCreacion",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                Width = 140,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+
             dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Descripcion",
                 HeaderText = "Descripción",
                 DataPropertyName = "Descripcion",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill, // Se expande en el espacio sobrante
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+
             dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Estatus",
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                Width = 100,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+
             DataGridViewButtonColumn btnCambiar = new DataGridViewButtonColumn
             {
                 Name = "btnCambiar",
                 HeaderText = "Acción",
                 Text = "Cambiar Estatus",
                 UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                Width = 130,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
             dgvHistorial.Columns.Add(btnCambiar);
+
             dgvHistorial.AllowUserToAddRows = false;
         }
 
@@ -130,6 +137,8 @@ namespace Mikrotik_Administrador.Catalogos
             btnBuscar.Enabled = false;
             try
             {
+                progressBar1.Style = ProgressBarStyle.Marquee;
+                progressBar1.MarqueeAnimationSpeed = 30;
                 AppRepository obj = new AppRepository();
                 if(Urgente == false)
                 {
@@ -153,6 +162,8 @@ namespace Mikrotik_Administrador.Catalogos
             }
             finally
             {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
                 btnBuscar.Enabled = true;
             }
         }
