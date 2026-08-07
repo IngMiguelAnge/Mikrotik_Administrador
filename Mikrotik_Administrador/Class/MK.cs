@@ -783,7 +783,7 @@ namespace Mikrotik_Administrador.Class
                     plansave.IdPlanInterno = idEncontrado;
                     plansave.IsAntena = Plan.IsAntena;
                     plansave.IdMikrotik = Anidado.IdMikrotik;
-                    plansave.Id = Anidado.IdPlanInterno != idEncontrado ? Anidado.Id : 0;
+                    plansave.Id = Anidado.Id;
                     int guardado = obj.SavePlanAnidadoByMigracion(plansave).Result;
                     return string.Empty;
                 }

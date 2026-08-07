@@ -356,6 +356,7 @@ namespace Mikrotik_Administrador
                     td.Programacion = pr.SePrograma;
                     td.IdMikrotik = objUsuario.IdMikrotik;
                     td.NombrePlan = NombrePlan;
+               
                     if (td.ShowDialog() == DialogResult.Cancel)
                     {
                         MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -377,7 +378,8 @@ namespace Mikrotik_Administrador
                         Estatus = "Pendiente",
                         IdPlan = IdPlanSeccionado,
                         IdMikrotikReceptor = td.IdMikrotik,
-                        Programacion = pr.SePrograma
+                        Programacion = pr.SePrograma,
+                        Password = td.Password
                     };
                     AppRepository obj = new AppRepository();
                     var result = obj.SaveTiempoCambio(TD);

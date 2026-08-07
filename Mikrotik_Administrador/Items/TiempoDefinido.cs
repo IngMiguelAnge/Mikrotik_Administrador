@@ -10,6 +10,7 @@ namespace Mikrotik_Administrador.Items
 {
     public partial class TiempoDefinido : Form
     {
+        public string Password { get; set; }
         public int IdPlan { get; set; }
         public string Modo { get; set; }
         public int Horas { get; set; }
@@ -145,6 +146,7 @@ namespace Mikrotik_Administrador.Items
 
         private async void btnGuardar_Click(object sender, EventArgs e)
         {
+            Password = string.Empty;
             if (CBMikrotiks.SelectedIndex == 0)
             {
                 MessageBox.Show("Debe seleccionar un Mikrotik", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -157,17 +159,12 @@ namespace Mikrotik_Administrador.Items
             }
             if (IdMikrotik != (int)CBMikrotiks.SelectedValue)
             {
-                MessageBox.Show("El servicio para cambio de planes entre diferentes mikrotiks, aun esta en mantenimiento. Activo proximamente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                DialogResult resultado = MessageBox.Show("Esta intentado mover un usuario de un mikrotik a otro. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (resultado == DialogResult.No)
+                {
+                    return;
+                }
             }
-            //if(IdMikrotik != (int)CBMikrotiks.SelectedValue)
-            //{
-            //    DialogResult resultado = MessageBox.Show("Si cambia de mikrotik, se perdera la informacion de los comentarios y wireless agregados. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //    if (resultado == DialogResult.No)
-            //    {
-            //        return;
-            //    }
-            //}
             AppRepository obj = new AppRepository();
             var plan = obj.GetPlanById(IdPlan).Result;
             IdMikrotik = (int)CBMikrotiks.SelectedValue;
@@ -191,9 +188,13 @@ namespace Mikrotik_Administrador.Items
                 var listPool = await obj.GetPoolsbyIdMikrotik(IdMikrotik);
                 if (listPool.Where(x => x.Estatus == "Activo").ToList().Count() == 0)
                 {
-                    MessageBox.Show("El mikrotik seleccionado no contiene wireless agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("El mikrotik seleccionado no contiene pools agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                PasswordFibra pf = new PasswordFibra();
+                pf.ShowDialog();
+                Password = pf.Password;
+
                 progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
                 progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
                 btnGuardar.Enabled = false;
@@ -248,7 +249,6 @@ namespace Mikrotik_Administrador.Items
                
             }
 
-                
             this.DialogResult = DialogResult.OK;
             this.Close();
         }        

@@ -186,6 +186,7 @@ namespace Mikrotik_Administrador
                         Anidado.IsAntena = (string)CBPerteneceA.SelectedItem == "Fibra" ? false : true;
                         Anidado.Id = 0;
                         IdPlanAnidado = obj.SavePlanAnidadoByMigracion(Anidado).Result;
+                        Anidado.Id = IdPlanAnidado;
                     }
 
                     await obj.UpdateStatusPlanesAnidado(IdPlanAnidado, false);
@@ -202,7 +203,7 @@ namespace Mikrotik_Administrador
                     if (login == true)
                     {
                         if ((string)CBPerteneceA.SelectedItem == "Fibra")
-                        {                         
+                        {
                             var Result1 = await Task.Run(() =>
                             {
                                 return mikrotik.SavePerfil(Plan, Anidado);
@@ -218,18 +219,10 @@ namespace Mikrotik_Administrador
                                     return mikrotik.DeleteInterfacebyPlan(Plan.Nombre);
                                 });
                             }
-                            //var ListaPlanes = await Task.Run(() =>
-                            //{ 
-                            //    return mikrotik.VerProfile();
-                            //});
-                            //var perfil = ListaPlanes.FirstOrDefault(p => p.Name == Plan.Nombre);
-                            //if (perfil != null)
-                            //{
-                            //    var result = obj.UpdateIdPlanInterno(IdPlanAnidado, perfil.Id).Result;
-                            //}
                         }
                         else
                         {
+                            await obj.UpdateStatusPlanesAnidado(IdPlanAnidado, true);
                             if (Convert.ToInt32(lblCantidadenPlan.Text) > 0)
                             {
                                 var listausuario = obj.GetUsuariosMikrotiksByPlan(Fila.Id, Plan.Id).Result;

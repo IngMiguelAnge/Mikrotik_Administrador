@@ -333,6 +333,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotikReceptor", obj.IdMikrotikReceptor));
                         cmd.Parameters.Add(new SqlParameter("@Programacion", obj.Programacion));
+                        cmd.Parameters.Add(new SqlParameter("@Password", obj.Password));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
