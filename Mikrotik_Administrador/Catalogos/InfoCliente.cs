@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.XPath;
 
 namespace Mikrotik_Administrador
 {
@@ -42,6 +43,12 @@ namespace Mikrotik_Administrador
             }
 
             AppRepository obj = new AppRepository();
+            var result = obj.GetClientesbyName(txtNombre.Text.Trim(),0).Result;
+            if(result.Count > 0 && IdCliente == 0)
+            {
+                MessageBox.Show("Ya existe un cliente con el mismo nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             ClienteModel cliente = new ClienteModel();
             cliente.Id = IdCliente;
             cliente.Nombre = txtNombre.Text.Trim();

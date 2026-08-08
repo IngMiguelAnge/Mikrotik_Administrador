@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Class;
+﻿using GMap.NET.MapProviders;
+using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
@@ -560,7 +561,6 @@ namespace Mikrotik_Administrador
 
         private async void btnNuevo_Click(object sender, EventArgs e)
         {
-            int IdPlanSeccionado = 0;
             string nombrePlan = string.Empty;
             Planes p = new Planes();
             p.IdUsuario = IdUsuario;
@@ -571,7 +571,7 @@ namespace Mikrotik_Administrador
                 return;
             }
             AppRepository obj = new AppRepository();
-            var plan = obj.GetPlanById(IdPlanSeccionado).Result;
+            var plan = obj.GetPlanById(p.IdSeleccionado).Result;
 
             MikrotiksDisponibles m = new MikrotiksDisponibles();
             m.IdPlan = p.IdSeleccionado;
@@ -730,10 +730,12 @@ namespace Mikrotik_Administrador
                             objuser.Nombre = NombreCliente + contador.ToString();
                             objuser.Address = IPDisponible.Result;
                             objuser.IdInterno = ExisteEnAntenas.First().id;
-                            objuser.Estatus = ExisteEnAntenas.First().estatus;
+                            objuser.Estatus ="Inactivo";
                             objuser.Id = 0;
                             objuser.IdPlan = plan.Id;
-                            IdUsuarioN = obj.SaveUsuariosNuevo(objuser, IdUsuario, IdCliente).Result;                          
+                            IdUsuarioN = obj.SaveUsuariosNuevo(objuser, IdUsuario, IdCliente).Result;
+                            mikrotik.CambiarEstatusAntena(objuser.IdInterno, "Activo");
+                            mikrotik.CambiarEstatusQueues(objuser.Nombre, "Activo");
                         }
                     }
                     else
@@ -881,10 +883,12 @@ namespace Mikrotik_Administrador
                             objuser.Nombre = NombreCliente + contador.ToString();
                             objuser.Address = IPDisponibleFibra.Result;
                             objuser.IdInterno = idCreado;
-                            objuser.Estatus = "Activo";
+                            objuser.Estatus = "Inactivo";
                             objuser.Id = 0;
                             objuser.IdPlan = plan.Id;
                             IdUsuarioN = obj.SaveUsuariosNuevo(objuser, IdUsuario, IdCliente).Result;
+                            mikrotik.CambiarEstatusFibra(objuser.IdInterno, "Activo");
+
                         }
                     }
                     else
@@ -955,13 +959,14 @@ namespace Mikrotik_Administrador
                     if (obj.SaveUbicacion(ub.ub).Result == true)
                     {
                         MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.Close();
                     }
                     else
                     {
                         MessageBox.Show("Error al guardar la ubicación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+
+                BuscarServicios();
             }
             catch (Exception ex)
             {

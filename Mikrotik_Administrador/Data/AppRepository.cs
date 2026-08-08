@@ -1834,7 +1834,7 @@ namespace Mikrotik_Administrador.Data
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("SaveUsuariosGeneral", sql))
+                    using (SqlCommand cmd = new SqlCommand("SaveUsuariosNuevo", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));

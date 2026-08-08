@@ -253,5 +253,12 @@ namespace Mikrotik_Administrador
                     break;
             }
         }
+
+        private void btnNuevo_Click(object sender, EventArgs e)
+        {
+            InfoCliente m = new InfoCliente();
+            m.IdCliente = 0;
+            m.Show();
+        }
     }
 }
