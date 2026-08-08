@@ -247,6 +247,7 @@ namespace Mikrotik_Administrador
                     ServiciosCliente s = new ServiciosCliente();
                     s.IdCliente = Convert.ToInt32(Id);
                     s.IdUsuario = IdUsuario;
+                    s.NombreCliente = DGVClientes.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
                     s.ShowDialog();
                     CargarClientes();
                     break;

@@ -91,7 +91,7 @@ namespace Mikrotik_Administrador
                     foreach (var item in Seleccionados)
                     {
                       
-                        if (obj.SavePool(IdMikrotik, item.IP).Result == false)
+                        if (obj.SavePool(IdMikrotik, item.IP,false).Result == false)
                         {
                             MessageBox.Show("Error al actualizar pool. ip: " + item.IP, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;

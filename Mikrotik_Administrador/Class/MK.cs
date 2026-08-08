@@ -284,6 +284,604 @@ namespace Mikrotik_Administrador.Class
             }
             return MaxLimit;
         }
+        public string VerIdQueuebyAddress(string IPDisponible)
+        {
+            string Id = string.Empty;
+            try
+            {
+                Send("/queue/simple/print");
+                Send("=.proplist=.id");// Esto ayuda a que el router no se pierda enviando datos extra
+                Send("?address=" + IPDisponible, true);
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        continue;
+                    }
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+
+                        if (key == ".id")
+                            return value;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return Id;
+        }
+        public bool AgregarAntena(string listName, string ipAddress, string comment = "", bool disabled = false)
+        {
+            try
+            {
+                // 1. Comando principal para agregar
+                Send("/ip/firewall/address-list/add");
+
+                // 2. Parámetros obligatorios
+                Send("=list=" + listName);
+                Send("=address=" + ipAddress);
+
+                // 3. Parámetros opcionales
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    Send("=comment=" + comment);
+                }
+
+                // El 'true' en el último Send envía la señal de fin de frase al RouterOS
+                string statusDisabled = disabled ? "no" : "yes";
+                Send("=disabled=" + statusDisabled, true);
+
+                // 4. Leer la respuesta y verificar que no devuelva un error (!trap)
+                List<string> respuesta = Read();
+                return !respuesta.Any(r => r.Contains("!trap"));
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public bool AgregarIPAddress(string ipAddressWithMask, string interfaceName, string comment = "")
+        {
+            try
+            {
+                // Enviar el comando para agregar
+                Send("/ip/address/add");
+                Send("=address=" + ipAddressWithMask); // Ej: "192.168.88.1/24"
+                Send("=interface=" + interfaceName);   // Ej: "ether1" o "bridge"
+
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    Send("=comment=" + comment);
+                }
+
+                // Finalizar el comando
+                Send("=disabled=no", true);
+
+                // Leer la respuesta y validar éxito
+                List<string> respuesta = Read();
+                return !respuesta.Any(r => r.Contains("!trap"));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error al agregar IP Address: " + ex.Message);
+                return false;
+            }
+        }
+        public string CrearFibra(string Usuario, string IPDisponible, string Perfil, string PasswordFibra)
+        {
+            string idCreado = "";
+            // Enviar el comando para crear el usuario
+            Send("/ppp/secret/add");
+            Send("=name=" + Usuario);
+            Send("=password=" + PasswordFibra);
+            Send("=service=pppoe");
+            Send("=profile=" + Perfil);
+            Send("=remote-address=" + IPDisponible);
+            Send("=comment=Creado desde servicio", true);
+
+            // Leer la respuesta de MikroTik para obtener el .id
+            List<string> respuesta = Read();
+
+            foreach (string linea in respuesta)
+            {
+                if (linea.StartsWith("=ret="))
+                {
+                    idCreado = linea.Replace("=ret=", ""); // Ejemplo de resultado: "*1A"
+                    break;
+                }
+            }
+            return idCreado;
+        }
+        public List<LimiteModel> VerProfilebyName(string Name)
+        {
+            List<LimiteModel> lista = new List<LimiteModel>();
+            try
+            {
+                Send("/ppp/profile/print");
+                Send("=.proplist=.id,name,rate-limit");
+                Send("?name=" + Name, true);
+                LimiteModel obj = null;
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        obj = new LimiteModel();
+                        lista.Add(obj);
+                        continue;
+                    }
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+                        if (key == ".id") obj.Id = value;
+                        if (key == "name") obj.Name = value;
+                        if (key == "rate-limit") obj.Velocidad = value;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return lista;
+        }
+        public string ArmarNuevoRango(string ipEntrante)
+        {
+            // Ejemplo de entrada: "192.168.1.1"
+            string cleanIp = ipEntrante.Split('/')[0].Trim();
+            string[] octetos = cleanIp.Split('.');
+
+            // Toma los primeros 3 octetos (ej. "192.168.1") y arma el rango hasta el .254
+            string baseRed = $"{octetos[0]}.{octetos[1]}.{octetos[2]}";
+
+            // Resultado: "192.168.11.10-192.168.1.254"
+            return $"{cleanIp}-{baseRed}.254";
+        }
+        public bool AgregarPool(string IPDisponibleFibra)
+        {
+            // 1. Obtener el .id y los rangos actuales del Pool
+            Send("/ip/pool/print");
+            Send("=.proplist=.id,ranges");
+            Send("?name=pool-PPPoE", true);
+
+            List<string> respuesta = Read();
+
+            string idPool = "";
+            string rangesActual = "";
+
+            foreach (string linea in respuesta)
+            {
+                if (linea.StartsWith("=.id="))
+                    idPool = linea.Replace("=.id=", "").Trim();
+                else if (linea.StartsWith("=ranges="))
+                    rangesActual = linea.Replace("=ranges=", "").Trim();
+            }
+
+            // Si no encontró el Pool con ese nombre, retornamos false
+            if (string.IsNullOrEmpty(idPool))
+            {
+                return false;
+            }
+
+            // 2. Armar el nuevo formato (ej. "192.168.11.10-192.168.11.254")
+            string nuevoRango = ArmarNuevoRango(IPDisponibleFibra);
+
+            // Concatenar separado por coma
+            string rangesFinal = string.IsNullOrEmpty(rangesActual)
+                ? nuevoRango
+                : $"{rangesActual},{nuevoRango}";
+
+            // 3. Actualizar en MikroTik
+            Send("/ip/pool/set");
+            Send("=.id=" + idPool);
+            Send("=ranges=" + rangesFinal, true);
+
+            List<string> respSet = Read();
+
+            // 4. Validar la respuesta del RouterOS
+            // Si la respuesta contiene "!trap", MikroTik rechazó el comando por algún error
+            foreach (string linea in respSet)
+            {
+                if (linea.StartsWith("!trap"))
+                {
+                    return false; // Error en MikroTik
+                }
+            }
+
+            // Si no hubo ningún !trap, se ejecutó con éxito
+            return true;
+        }
+        public bool BuscarPoolbyAddress(string IdDisponibleFibra)
+        {
+            // 1. Pedir la propiedad 'ranges' del Pool que te interesa
+            Send("/ip/pool/print");
+            Send("=.proplist=ranges");
+            Send("?name=pool-PPPoE", true);
+
+            List<string> respuesta = Read();
+            string cadenaRanges = "";
+
+            foreach (string linea in respuesta)
+            {
+                if (linea.StartsWith("=ranges="))
+                {
+                    cadenaRanges = linea.Replace("=ranges=", "").Trim();
+                    break;
+                }
+            }
+
+            // Ejemplo de valor en 'cadenaRanges': "192.168.10.10-192.168.10.50,192.168.10.100-192.168.10.200"
+            return ExisteIpEnRanges(IdDisponibleFibra, cadenaRanges);
+        }
+        public bool ExisteIpEnRanges(string ipABuscar, string rangesString)
+        {
+            if (string.IsNullOrWhiteSpace(ipABuscar) || string.IsNullOrWhiteSpace(rangesString))
+                return false;
+
+            long targetIpNum = IpToLong(ipABuscar.Split('/')[0].Trim());
+
+            // Un pool puede tener varios rangos separados por comas
+            string[] rangos = rangesString.Split(',');
+
+            foreach (string rango in rangos)
+            {
+                string r = rango.Trim();
+
+                if (r.Contains("-"))
+                {
+                    // Es un rango (ej: 192.168.10.10-192.168.10.50)
+                    string[] partes = r.Split('-');
+                    long ipInicio = IpToLong(partes[0].Trim());
+                    long ipFin = IpToLong(partes[1].Trim());
+
+                    if (targetIpNum >= ipInicio && targetIpNum <= ipFin)
+                        return true;
+                }
+                else
+                {
+                    // Es una IP individual dentro del pool
+                    long ipUnica = IpToLong(r);
+                    if (targetIpNum == ipUnica)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+        private long IpToLong(string ip)
+        {
+            System.Net.IPAddress address;
+            if (System.Net.IPAddress.TryParse(ip, out address))
+            {
+                byte[] bytes = address.GetAddressBytes();
+                if (BitConverter.IsLittleEndian)
+                    Array.Reverse(bytes);
+
+                return BitConverter.ToUInt32(bytes, 0);
+            }
+            return 0;
+        }
+
+        public List<Fibra> VerFibrabyAddress(string IPDisponibleFibra)
+        {
+            List<Fibra> listaFinal = new List<Fibra>();
+            try
+            {
+                Send("/ppp/secret/print");
+                Send("=.proplist=.id,name,profile,remote-address,disabled");// Esto ayuda a que el router no se pierda enviando datos extra
+                Send("?remote-address=" + IPDisponibleFibra, true);
+                Fibra currentObj = null;
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        currentObj = new Fibra();
+                        listaFinal.Add(currentObj);
+                        continue;
+                    }
+
+                    if (row.StartsWith("!done")) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+
+                        if (key == ".id") currentObj.id = value;
+                        if (key == "name")
+                        {
+                            currentObj.comment = value;
+                        }
+                        if (key == "remote-address") currentObj.address = value;
+                        if (key == "disabled") currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
+                        if (key == "profile")
+                        {
+                            var Listalimites = VerProfilebyName(value);
+                            var perfil = Listalimites.FirstOrDefault(p => p.Name == value);
+                            if (perfil != null)
+                            {
+                                currentObj.idplan = perfil.Id;
+                                currentObj.velocidad = perfil.Velocidad;
+                            }
+                            else
+                            {
+                                currentObj.idplan = string.Empty;
+                                currentObj.velocidad = string.Empty;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return listaFinal;
+        }
+        public List<AddressModel> VerAddresbyAddress(string Address)
+        {
+            List<AddressModel> listaFinal = new List<AddressModel>();
+            try
+            {
+                // Enviamos el comando a la ruta de IP -> Address
+                Send("/ip/address/print");
+                Send("=.proplist=.id,address,comment,network,interface,actual-interface,disabled");
+                Send("?address=" + Address); // <-- Filtro de coincidencia exacta
+                Send("", true);
+                AddressModel currentObj = null;
+                List<string> respuesta = Read();
+                foreach (string row in respuesta)
+                {
+                    // Cada vez que aparece !re, es una nueva fila/registro
+                    if (row.StartsWith("!re"))
+                    {
+                        currentObj = new AddressModel();
+                        currentObj.comment = "Sin Comentario"; // Valor por defecto
+                        listaFinal.Add(currentObj);
+                        continue;
+                    }
+
+                    if (row.StartsWith("!done")) break;
+
+                    // Procesamos las propiedades del objeto actual
+                    if (row.StartsWith("=") && currentObj != null)
+                    {
+                        string[] parts = row.Substring(1).Split(new char[] { '=' }, 2);
+                        if (parts.Length < 2) continue;
+
+                        string key = parts[0];
+                        string value = parts[1];
+
+                        switch (key)
+                        {
+                            case ".id": currentObj.id = value; break;
+                            case "address": currentObj.address = value; break;
+                            case "comment":
+                                string valueLimpio = value.Replace("\r", "").Replace("\n", "").Trim();
+                                byte[] bytesMalos = Encoding.GetEncoding("ISO-8859-1").GetBytes(valueLimpio);
+                                currentObj.comment = Encoding.UTF8.GetString(bytesMalos);
+                                break;
+                            case "disabled":
+                                currentObj.estatus = value == "false" ? "Activo" : "Inactivo";
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error en VerAddres: " + ex.Message);
+            }
+            return listaFinal;
+        }
+        public List<Antenas> VerAntenasbyAddress(string IPDisponible)
+        {
+            List<Antenas> listaFinal = new List<Antenas>();
+            try
+            {
+                Send("/ip/firewall/address-list/print");
+                Send("=.proplist=list,.id,address,comment,disabled");
+                Send("?address=" + IPDisponible);// Busca coincidencia exacta en el comentario
+                Send("", true);
+                Antenas currentObj = null;
+                List<string> respuesta = Read();
+                bool objetoValido = true;
+                AppRepository obj = new AppRepository();
+                foreach (string row in respuesta)
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        currentObj = new Antenas();
+                        currentObj.comment = "Sin Comentario";
+                        objetoValido = true;
+                        continue;
+                    }
+
+                    if (!objetoValido && row.StartsWith("=")) continue;
+
+                    if (row.StartsWith("!done") ||
+                        row.StartsWith("!done") && (IPDisponible != string.Empty && currentObj.address.Contains(IPDisponible))
+                        ) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+                        //ListWireless
+                        switch (key)
+                        {
+                            case "list":
+                                value = value.Replace("\r", "").Replace("\n", "").Trim();
+                                break;
+                            case ".id": currentObj.id = value; break;
+                            case "comment":
+                                string valueLimpio = value.Replace("\r", "").Replace("\n", "").Trim();
+                                currentObj.comment = value;
+                                currentObj.idplan = string.Empty;
+                                currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
+                                break;
+                            case "address":
+                                currentObj.address = value;
+                                if (currentObj != null && !string.IsNullOrEmpty(currentObj.address))
+                                {
+                                    // Evitar duplicados si el !re se procesa varias veces
+                                    if (!listaFinal.Any(a => a.id == currentObj.id))
+                                    {
+                                        listaFinal.Add(currentObj);
+                                    }
+                                }
+
+                                break;
+                            case "disabled": currentObj.estatus = value == "false" ? "Activo" : "Inactivo"; break;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error en ver antenas: " + ex.Message);
+            }
+            return IPDisponible != string.Empty ? listaFinal.Where(r => r.address == IPDisponible).ToList() : listaFinal;
+        }
+        public bool CrearSimpleQueue(string name, string targetIp, string Velocidad, string comment = "")
+        {
+            try
+            {
+                // 1. Iniciar la ruta del comando add
+                Send("/queue/simple/add");
+
+                // 2. Enviar los parámetros con la sintaxis de la API de MikroTik (=propiedad=valor)
+                Send("=name=" + name);
+                Send("=target=" + targetIp);
+
+                // max-limit se define como "Upload/Download" (Ejemplo: "5M/10M")
+                string maxLimit = Velocidad;
+                Send("=max-limit=" + maxLimit);
+
+                if (!string.IsNullOrEmpty(comment))
+                {
+                    Send("=comment=" + comment);
+                }
+
+                // 3. El segundo parámetro 'true' en el último Send indica el fin de la frase/comando
+                Send("=disabled=no", true);
+
+                // 4. Leer la respuesta del MikroTik para verificar si se creó exitosamente
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!trap"))
+                    {
+                        // Un paquete !trap indica que MikroTik devolvió un error (ej. IP o Nombre ya existente)
+                        return false;
+                    }
+                    if (row.StartsWith("!done"))
+                    {
+                        // !done significa que la operación terminó con éxito
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar o registrar el error si es necesario
+            }
+
+            return false;
+        }
+        public List<Antenas> VerAntenasbyComment(string name)
+        {
+            List<Antenas> listaFinal = new List<Antenas>();
+            try
+            {
+                Send("/ip/firewall/address-list/print");
+                Send("=.proplist=list,.id,address,comment,disabled");
+                Send("?comment=" + name); // Busca coincidencia exacta en el comentario
+                Send("", true);
+                Antenas currentObj = null;
+                List<string> respuesta = Read();
+                bool objetoValido = true;
+                AppRepository obj = new AppRepository();
+                foreach (string row in respuesta)
+                {
+                    if (row.StartsWith("!re"))
+                    {
+                        currentObj = new Antenas();
+                        currentObj.comment = "Sin Comentario";
+                        objetoValido = true;
+                        continue;
+                    }
+
+                    if (!objetoValido && row.StartsWith("=")) continue;
+
+                    if (row.StartsWith("!done") ||
+                        row.StartsWith("!done") && (name != string.Empty && currentObj.comment.Contains(name))
+                        ) break;
+
+                    if (row.StartsWith("="))
+                    {
+                        string[] parts = row.Split(new char[] { '=' }, 3);
+                        if (parts.Length < 3) continue;
+
+                        string key = parts[1];
+                        string value = parts[2];
+                        //ListWireless
+                        switch (key)
+                        {
+                            case "list":
+                                value = value.Replace("\r", "").Replace("\n", "").Trim();
+                                break;
+                            case ".id": currentObj.id = value; break;
+                            case "comment":
+                                string valueLimpio = value.Replace("\r", "").Replace("\n", "").Trim();
+                                currentObj.comment = value;
+                                currentObj.idplan = string.Empty;
+                                currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
+                                break;
+                            case "address":
+                                currentObj.address = value;
+                                if (currentObj != null && !string.IsNullOrEmpty(currentObj.address))
+                                {
+                                    // Evitar duplicados si el !re se procesa varias veces
+                                    if (!listaFinal.Any(a => a.id == currentObj.id))
+                                    {
+                                        listaFinal.Add(currentObj);
+                                    }
+                                }
+
+                                break;
+                            case "disabled": currentObj.estatus = value == "false" ? "Activo" : "Inactivo"; break;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error en ver antenas: " + ex.Message);
+            }
+            return name != string.Empty ? listaFinal.Where(r => r.comment == name).ToList() : listaFinal;
+        }
         public void EliminarAntena(string idInterno)
         {
             try

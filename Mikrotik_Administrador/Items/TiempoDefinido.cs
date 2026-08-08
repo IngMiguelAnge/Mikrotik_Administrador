@@ -200,7 +200,6 @@ namespace Mikrotik_Administrador.Items
                 btnGuardar.Enabled = false;
                 try
                 {
-                    //NombrePlan
                     if (mikrotik != null)
                     {
                         await Task.Run(() => mikrotik.Close());

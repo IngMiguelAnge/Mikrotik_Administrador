@@ -309,6 +309,12 @@
     <Compile Include="Items\IniciarPagos.Designer.cs">
       <DependentUpon>IniciarPagos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Items\MikrotiksDisponibles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\MikrotiksDisponibles.Designer.cs">
+      <DependentUpon>MikrotiksDisponibles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Items\Pagar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -357,6 +363,7 @@
     <Compile Include="Menu.Designer.cs">
       <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\AddressModel.cs" />
     <Compile Include="Model\BancoModel.cs" />
     <Compile Include="Model\ConfigPageModel.cs" />
     <Compile Include="Model\HistorialMovimientosModel.cs" />
@@ -501,6 +508,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Items\IniciarPagos.resx">
       <DependentUpon>IniciarPagos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\MikrotiksDisponibles.resx">
+      <DependentUpon>MikrotiksDisponibles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\Pagar.resx">
       <DependentUpon>Pagar.cs</DependentUpon>

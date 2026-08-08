@@ -11,9 +11,10 @@ namespace Mikrotik_Administrador
 {
     public partial class Ubicacion : Form
     {
+        public bool NuevoServicio = false;
         public int IdUsuario = 0;
         public int IdMikrotik = 0;
-
+        public UbicacionModel ub = new UbicacionModel();
         GMapOverlay capaMarcadores;
         GMarkerGoogle marcador;
         bool estaArrastrando = false;
@@ -297,23 +298,32 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Faltan datos por capturar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            UbicacionModel ub = new UbicacionModel();
+            new UbicacionModel();
             ub.Direccion = txtDireccion.Text.Trim();
             ub.Direccion_Oficial = txtDireccionOficial.Text.Trim();
             ub.Latitud = txtLatitud.Text.Trim();
             ub.Longitud = txtLongitud.Text.Trim();
             ub.IdMikrotik = IdMikrotik;
             ub.IdUsuario = IdUsuario;
-            AppRepository app = new AppRepository();
-            if (app.SaveUbicacion(ub).Result == true)
+            if (NuevoServicio == false)
             {
-                MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                AppRepository app = new AppRepository();
+                if (app.SaveUbicacion(ub).Result == true)
+                {
+                    MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar la ubicación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
-                MessageBox.Show("Error al guardar la ubicación.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
+          
         }
 
         private void btnAceptarUbicacion_Click(object sender, EventArgs e)

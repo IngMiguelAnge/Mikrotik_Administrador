@@ -344,7 +344,6 @@
             this.Name = "Ubicacion";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Geolocalización y Ubicación";
             this.Load += new System.EventHandler(this.Ubicacion_Load);
             this.panelMapa.ResumeLayout(false);
             this.ResumeLayout(false);

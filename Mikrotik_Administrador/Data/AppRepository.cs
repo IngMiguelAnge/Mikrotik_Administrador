@@ -19,6 +19,110 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region IPS
+
+        public async Task<string> GetIPExist(int IdMikrotik, bool IsAntena, string IP)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetIPExist", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        // Parámetros obligatorios para el SP
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
+                        cmd.Parameters.Add(new SqlParameter("@IP", IP));
+                        await sql.OpenAsync().ConfigureAwait(false);
+
+                        // ExecuteScalarAsync ejecuta la consulta y retorna únicamente la 1ra columna de la 1ra fila
+                        object result = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
+
+                        // Si no devolvió NULL o DBNull, lo retornamos como string
+                        if (result != null && result != DBNull.Value)
+                        {
+                            return result.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Puedes registrar la excepción si lo requieres
+            }
+
+            return string.Empty;
+        }
+        public async Task<string> GetIPDisponibleAdresslist(int IdMikrotik, bool IsAntena)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetIPDisponibleAdresslist", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        // Parámetros obligatorios para el SP
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
+                        await sql.OpenAsync().ConfigureAwait(false);
+
+                        // ExecuteScalarAsync ejecuta la consulta y retorna únicamente la 1ra columna de la 1ra fila
+                        object result = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
+
+                        // Si no devolvió NULL o DBNull, lo retornamos como string
+                        if (result != null && result != DBNull.Value)
+                        {
+                            return result.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Puedes registrar la excepción si lo requieres
+            }
+
+            return string.Empty;
+        }
+        public async Task<string> GetIPDisponible(int IdMikrotik, bool IsAntena)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetIPDisponible", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        // Parámetros obligatorios para el SP
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
+
+                        await sql.OpenAsync().ConfigureAwait(false);
+
+                        // ExecuteScalarAsync ejecuta la consulta y retorna únicamente la 1ra columna de la 1ra fila
+                        object result = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
+
+                        // Si no devolvió NULL o DBNull, lo retornamos como string
+                        if (result != null && result != DBNull.Value)
+                        {
+                            return result.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Puedes registrar la excepción si lo requieres
+            }
+
+            return string.Empty;
+        }
+        #endregion
         #region Pools
         public async Task<bool> UpdateEstatusPool(int Id)
         {
@@ -106,7 +210,7 @@ namespace Mikrotik_Administrador.Data
                 Completado = (string)reader["Completado"],
             };
         }
-        public async Task<bool> SavePool(int IdMikrotik,string IP)
+        public async Task<bool> SavePool(int IdMikrotik,string IP,bool Completado)
         {
             try
             {
@@ -117,7 +221,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         cmd.Parameters.Add(new SqlParameter("@IP", IP));
-                        cmd.Parameters.Add(new SqlParameter("@Completado", false));
+                        cmd.Parameters.Add(new SqlParameter("@Completado", Completado));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -1695,6 +1799,7 @@ namespace Mikrotik_Administrador.Data
                 MaxFechaFin = Convert.IsDBNull(reader["MaxFechaFin"]) ? (DateTime?)null : (DateTime)reader["MaxFechaFin"],
             };
         }
+      
         public async Task<bool> SaveUsuariosGeneral(UsuariosGeneralModel obj, int IdUsuario)
         {
             try
@@ -1721,6 +1826,42 @@ namespace Mikrotik_Administrador.Data
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+        public async Task<int> SaveUsuariosNuevo(UsuariosGeneralModel obj, int IdUsuario, int IdCliente)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveUsuariosGeneral", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Address", obj.Address));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@IdInterno", obj.IdInterno));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
+                        cmd.Parameters.Add(new SqlParameter("@Responsable", IdUsuario));
+                        cmd.Parameters.Add(new SqlParameter("@IdCliente", IdCliente));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
             }
         }
         public async Task<bool> UpdateEstatusGeneral(int Id, string Estatus, int Responsable)
