@@ -40,6 +40,7 @@
             this.btnPagos = new System.Windows.Forms.Button();
             this.btnCambios = new System.Windows.Forms.Button();
             this.btnHistorial = new System.Windows.Forms.Button();
+            this.btnUsuarios = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,6 +69,7 @@
             this.flowLayoutPanel1.Controls.Add(this.btnPagos);
             this.flowLayoutPanel1.Controls.Add(this.btnCambios);
             this.flowLayoutPanel1.Controls.Add(this.btnHistorial);
+            this.flowLayoutPanel1.Controls.Add(this.btnUsuarios);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 60);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -227,6 +229,21 @@
             this.btnHistorial.UseVisualStyleBackColor = false;
             this.btnHistorial.Click += new System.EventHandler(this.btnHistorial_Click);
             // 
+            // btnUsuarios
+            // 
+            this.btnUsuarios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.btnUsuarios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUsuarios.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnUsuarios.ForeColor = System.Drawing.Color.White;
+            this.btnUsuarios.Location = new System.Drawing.Point(195, 300);
+            this.btnUsuarios.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
+            this.btnUsuarios.Name = "btnUsuarios";
+            this.btnUsuarios.Size = new System.Drawing.Size(145, 75);
+            this.btnUsuarios.TabIndex = 12;
+            this.btnUsuarios.Text = "Usuarios";
+            this.btnUsuarios.UseVisualStyleBackColor = false;
+            this.btnUsuarios.Click += new System.EventHandler(this.btnUsuarios_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -263,5 +280,6 @@
         private System.Windows.Forms.Button btnPagos;
         private System.Windows.Forms.Button btnCambios;
         private System.Windows.Forms.Button btnHistorial;
+        private System.Windows.Forms.Button btnUsuarios;
     }
 }

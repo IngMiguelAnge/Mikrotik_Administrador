@@ -26,9 +26,9 @@ namespace Mikrotik_Administrador
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            if (txtNombre.Text.Trim() == "")
+            if (txtNombre.Text.Trim() == string.Empty)
             {
-                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los clientes pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los comments pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (resultado == DialogResult.No)
                 {
                     return;
@@ -169,7 +169,7 @@ namespace Mikrotik_Administrador
             AppRepository m = new AppRepository();
             switch (dgvComments.Columns[e.ColumnIndex].Name)
             {
-                case "btnEditar":
+                case "btnEditar":                    
                     Comment c = new Comment();
                     c.Id = Id;
                     c.CommitText = CommitText;
@@ -182,7 +182,8 @@ namespace Mikrotik_Administrador
                     bool result = m.UpdateEstatusComment(Id).Result;
                     if (result == true)
                     {
-                        MessageBox.Show("Estatus cambiado");
+                        MessageBox.Show("Estatus cambiado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                         BuscarComments();
                     }
                     else

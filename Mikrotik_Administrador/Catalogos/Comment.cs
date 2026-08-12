@@ -45,7 +45,7 @@ namespace Mikrotik_Administrador.Items
             CBMikrotiks.ValueMember = "Id";      // El dato que procesas por DETRÁS
             CBMikrotiks.DataSource = listaMikrotiks;
             CBMikrotiks.SelectedIndex = 0;
-            if(IdMikrotik != 0)
+            if(Id != 0)
             {
                 CBMikrotiks.SelectedValue = IdMikrotik;
                 txtComment.Text = CommitText;

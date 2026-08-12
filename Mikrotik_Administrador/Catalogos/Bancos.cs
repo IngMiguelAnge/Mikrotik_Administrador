@@ -108,7 +108,7 @@ namespace Mikrotik_Administrador.Catalogos
         {
             if (txtNombre.Text.Trim() == "")
             {
-                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los articulos pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los bancos pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (resultado == DialogResult.No)
                 {
                     return;

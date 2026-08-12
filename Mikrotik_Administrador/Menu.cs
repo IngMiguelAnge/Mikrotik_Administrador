@@ -102,5 +102,11 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Se encontraron situaciónes urgentes a revisar, favor de ir a historial y pulsar en el boton de urgentes.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        private void btnUsuarios_Click(object sender, EventArgs e)
+        {
+            UsuariosSistema us = new UsuariosSistema();
+            us.Show();
+        }
     }
 }

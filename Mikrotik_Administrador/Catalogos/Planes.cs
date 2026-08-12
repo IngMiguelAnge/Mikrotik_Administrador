@@ -61,7 +61,7 @@ namespace Mikrotik_Administrador
         {
             if (txtNombre.Text.Trim() == "")
             {
-                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los clientes pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los planes pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (resultado == DialogResult.No)
                 {
                     return;

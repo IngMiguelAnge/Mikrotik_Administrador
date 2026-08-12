@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblFecha = new System.Windows.Forms.Label();
+            this.lblComment = new System.Windows.Forms.Label();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
             this.CBMikrotiks = new System.Windows.Forms.ComboBox();
@@ -37,16 +37,16 @@
             this.panelContenedor.SuspendLayout();
             this.SuspendLayout();
             // 
-            // lblFecha
+            // lblComment
             // 
-            this.lblFecha.AutoSize = true;
-            this.lblFecha.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblFecha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFecha.Location = new System.Drawing.Point(26, 20);
-            this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(98, 25);
-            this.lblFecha.TabIndex = 0;
-            this.lblFecha.Text = "Comment:";
+            this.lblComment.AutoSize = true;
+            this.lblComment.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblComment.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblComment.Location = new System.Drawing.Point(26, 20);
+            this.lblComment.Name = "lblComment";
+            this.lblComment.Size = new System.Drawing.Size(98, 25);
+            this.lblComment.TabIndex = 0;
+            this.lblComment.Text = "Comment:";
             // 
             // btnGuardar
             // 
@@ -68,7 +68,7 @@
             this.panelContenedor.Controls.Add(this.lblMikrotik);
             this.panelContenedor.Controls.Add(this.txtComment);
             this.panelContenedor.Controls.Add(this.btnGuardar);
-            this.panelContenedor.Controls.Add(this.lblFecha);
+            this.panelContenedor.Controls.Add(this.lblComment);
             this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContenedor.Location = new System.Drawing.Point(0, 0);
             this.panelContenedor.Name = "panelContenedor";
@@ -129,7 +129,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblFecha;
+        private System.Windows.Forms.Label lblComment;
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.Panel panelContenedor;
         private System.Windows.Forms.Label lblMikrotik;

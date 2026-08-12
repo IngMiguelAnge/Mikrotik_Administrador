@@ -280,6 +280,18 @@
     <Compile Include="Catalogos\Pagos.Designer.cs">
       <DependentUpon>Pagos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\UsuarioSistema.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\UsuarioSistema.Designer.cs">
+      <DependentUpon>UsuarioSistema.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Catalogos\UsuariosSistema.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\UsuariosSistema.Designer.cs">
+      <DependentUpon>UsuariosSistema.cs</DependentUpon>
+    </Compile>
     <Compile Include="Class\Address.cs" />
     <Compile Include="Class\Antenas.cs" />
     <Compile Include="Class\Fibra.cs" />
@@ -367,6 +379,8 @@
     <Compile Include="Model\BancoModel.cs" />
     <Compile Include="Model\ConfigPageModel.cs" />
     <Compile Include="Model\HistorialMovimientosModel.cs" />
+    <Compile Include="Model\ListTiposUsuarioModel.cs" />
+    <Compile Include="Model\ListUsuariosModel.cs" />
     <Compile Include="Model\PoolsModel.cs" />
     <Compile Include="Model\ListBancosModel.cs" />
     <Compile Include="Model\ListCommentsModel.cs" />
@@ -502,6 +516,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Comment.resx">
       <DependentUpon>Comment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\UsuarioSistema.resx">
+      <DependentUpon>UsuarioSistema.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\UsuariosSistema.resx">
+      <DependentUpon>UsuariosSistema.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\ConfirmarPago.resx">
       <DependentUpon>ConfirmarPago.cs</DependentUpon>

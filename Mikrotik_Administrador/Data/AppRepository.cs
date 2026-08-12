@@ -19,8 +19,132 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region TipoUsuarios
+        public async Task<List<ListTiposUsuarioModel>> GetTipos()
+        {
+            List<ListTiposUsuarioModel> list = new List<ListTiposUsuarioModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetTipos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToTipos(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListTiposUsuarioModel MapToTipos(SqlDataReader reader)
+        {
+            return new ListTiposUsuarioModel()
+            {
+                Id = (int)reader["Id"],
+                TipoUsuario = (string)reader["TipoUsuario"],
+            };
+        }
+        #endregion
+        #region Usuarios
+        public async Task<bool> SaveUsuario(UserModel us, string Nombre)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveUsuario", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", us.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Usuario", us.Usuario));
+                        cmd.Parameters.Add(new SqlParameter("@Password", us.Password));
+                        cmd.Parameters.Add(new SqlParameter("@IdTipoUsuario", us.IdTipoUsuario));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> UpdateEstatusUsuario(int Id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateEstatusUsuario", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<List<ListUsuariosModel>> GetUsuarios(string Nombre,string Usuario)
+        {
+            List<ListUsuariosModel> list = new List<ListUsuariosModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUsuarios", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Usuario", Usuario));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListUsuarios(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListUsuariosModel MapToListUsuarios(SqlDataReader reader)
+        {
+            return new ListUsuariosModel()
+            {
+                Id = (int)reader["Id"],
+                Nombre = (string)reader["Nombre"],
+                Usuario = (string)reader["Usuario"],
+                Password = (string)reader["Password"],
+                Estatus = Convert.IsDBNull(reader["Estatus"]) ? string.Empty : (string)reader["Estatus"],
+                IdTipo = (int)reader["IdTipo"],
+                TipoUsuario = (string)reader["TipoUsuario"],
+            };
+        }
+        #endregion
         #region IPS
-
         public async Task<string> GetIPExist(int IdMikrotik, bool IsAntena, string IP)
         {
             try
@@ -879,7 +1003,7 @@ namespace Mikrotik_Administrador.Data
             return obj;
         }
         #endregion
-        #region ActionsComments
+        #region Comments
         public async Task<bool> UpdateEstatusComment(int Id)
         {
             try
@@ -997,7 +1121,7 @@ namespace Mikrotik_Administrador.Data
             };
         }
         #endregion
-        #region ActionPlanes
+        #region Planes
         public async Task<List<PlanesModel>> GetPlanes(bool IsAntena)
         {
             List<PlanesModel> list = new List<PlanesModel>();
@@ -1373,7 +1497,7 @@ namespace Mikrotik_Administrador.Data
         }
 
         #endregion
-        #region ActionsUsers
+        #region Users
         public async Task<UserModel> GetUserbyNameAndPassword(string Usuario, string Password)
         {
             UserModel response = new UserModel();
@@ -1418,7 +1542,7 @@ namespace Mikrotik_Administrador.Data
         }
 
         #endregion
-        #region ActionsMikrotiks
+        #region Mikrotiks
         public async Task<bool> DesactivarMikrotik(int Id)
         {
             try
@@ -1608,7 +1732,7 @@ namespace Mikrotik_Administrador.Data
         }
 
         #endregion
-        #region ActionsUbicacion
+        #region Ubicacion
         public async Task<bool> SaveUbicacion(UbicacionModel obj)
         {
             try
@@ -1681,7 +1805,7 @@ namespace Mikrotik_Administrador.Data
         }
 
         #endregion
-        #region ActionsUsuariosGeneral
+        #region UsuariosGeneral
         public async Task<List<ListUsuariosByPlanModel>> GetUsuariosMikrotiksByPlan(int IdMikoritk,int IdPlan)
         {
             List<ListUsuariosByPlanModel> list = new List<ListUsuariosByPlanModel>();
@@ -1935,7 +2059,7 @@ namespace Mikrotik_Administrador.Data
             }
         }
         #endregion
-        #region ActionsWireless
+        #region Wireless
         public async Task<bool> UpdateEstatusWireless(int Id)
         {
             try
