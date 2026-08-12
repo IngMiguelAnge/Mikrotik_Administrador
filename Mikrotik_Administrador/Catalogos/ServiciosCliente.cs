@@ -384,7 +384,17 @@ namespace Mikrotik_Administrador
                         Programacion = pr.SePrograma,
                         Password = td.Password
                     };
+                    HistorialMovimientosModel H = new HistorialMovimientosModel
+                    {
+                        Id = 0,
+                        Descripcion = "Se a solicitado " + pr.SePrograma + " para el usuario " + objUsuario.Usuario + " plan seleccionado: " + NombrePlan,
+                        Pagina = "Servicio cliente",
+                        IdUsuario = IdUsuario,
+                        Estatus = false
+                    };
+                    
                     AppRepository obj = new AppRepository();
+                    await obj.SaveHistorialMovimientos(H);
                     var result = obj.SaveTiempoCambio(TD);
                     MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     BuscarServicios();
@@ -428,7 +438,7 @@ namespace Mikrotik_Administrador
                     string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Usuario));
                     if (Queue == string.Empty)
                     {
-                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", IdUsuario).Wait();
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", 1).Wait();
 
                         MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BuscarServicios();
@@ -444,7 +454,7 @@ namespace Mikrotik_Administrador
                               .ToList());
                     if (lista == null || lista.Count == 0)
                     {
-                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", IdUsuario).Wait();
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", 1).Wait();
 
                         MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BuscarServicios();
@@ -508,7 +518,7 @@ namespace Mikrotik_Administrador
                     string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Usuario));
                     if (Queue == string.Empty)
                     {
-                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", IdUsuario).Wait();
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", 1).Wait();
 
                         MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BuscarServicios();
@@ -525,7 +535,7 @@ namespace Mikrotik_Administrador
                               .ToList());
                     if (lista == null || lista.Count == 0)
                     {
-                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", IdUsuario).Wait();
+                        obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", 1).Wait();
 
                         MessageBox.Show("No se encontro el usuario en el Mikrotik seleccionado, es posible que haya sido eliminado previamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         BuscarServicios();
@@ -736,6 +746,14 @@ namespace Mikrotik_Administrador
                             IdUsuarioN = obj.SaveUsuariosNuevo(objuser, IdUsuario, IdCliente).Result;
                             mikrotik.CambiarEstatusAntena(objuser.IdInterno, "Activo");
                             mikrotik.CambiarEstatusQueues(objuser.Nombre, "Activo");
+                            HistorialMovimientosModel H = new HistorialMovimientosModel
+                            {
+                                Id = 0,
+                                Descripcion = "Se creo el usuario " + objuser.Nombre + " en antenas",
+                                Pagina = "Servicio cliente",
+                                IdUsuario = IdUsuario,
+                                Estatus = false
+                            };
                         }
                     }
                     else
@@ -888,7 +906,14 @@ namespace Mikrotik_Administrador
                             objuser.IdPlan = plan.Id;
                             IdUsuarioN = obj.SaveUsuariosNuevo(objuser, IdUsuario, IdCliente).Result;
                             mikrotik.CambiarEstatusFibra(objuser.IdInterno, "Activo");
-
+                            HistorialMovimientosModel H = new HistorialMovimientosModel
+                            {
+                                Id = 0,
+                                Descripcion = "Se creo el usuario " + objuser.Nombre + " en fibras",
+                                Pagina = "Servicio cliente",
+                                IdUsuario = IdUsuario,
+                                Estatus = false
+                            };
                         }
                     }
                     else

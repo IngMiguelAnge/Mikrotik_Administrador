@@ -93,7 +93,19 @@ namespace Mikrotik_Administrador
         private async void Menu_Load(object sender, EventArgs e)
         {
             if (IdTipoUsuario != 1) //1:Administrador
+            {
+                btnMikrotiks.Visible = false;
+                BtnComments.Visible = false;
+                btnMigracion.Visible = false;
+                btnPlanes.Visible = false;
+                btnAsignacion.Visible = false;
+                btnBancos.Visible = false;
+                btnPagos.Visible = false;
+                btnHistorial.Visible = false;
+                btnUsuarios.Visible = false;
                 return;
+            }
+               
             AppRepository obj = new AppRepository();
             var lista = await Task.Run(() => obj.GetHistorialMovimientosUrgentes());
             var listaFinal = lista?.ToList() ?? new List<ListHistorialMovimientosModel>();
