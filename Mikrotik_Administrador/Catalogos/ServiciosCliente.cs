@@ -18,7 +18,7 @@ namespace Mikrotik_Administrador
     {
         MK mikrotik;
         public int IdCliente { get; set; }
-        public int IdUsuario { get; set; }
+        public int IdResponsable { get; set; }
         public string NombreCliente { get; set; }
         public ServiciosCliente()
         {
@@ -336,7 +336,7 @@ namespace Mikrotik_Administrador
                     if (pr.SePrograma == "Cambio de plan")
                     {
                         Planes p = new Planes();
-                        p.IdUsuario = IdUsuario;
+                        p.IdResponsable = IdResponsable;
                         p.PorUsuarios = true;
                         p.Tipo = string.Empty;
                         if (p.ShowDialog()!= DialogResult.OK)
@@ -389,7 +389,7 @@ namespace Mikrotik_Administrador
                         Id = 0,
                         Descripcion = "Se a solicitado " + pr.SePrograma + " para el usuario " + objUsuario.Usuario + " plan seleccionado: " + NombrePlan,
                         Pagina = "Servicio cliente",
-                        IdUsuario = IdUsuario,
+                        IdUsuario = IdResponsable,
                         Estatus = false
                     };
                     
@@ -547,7 +547,7 @@ namespace Mikrotik_Administrador
                 if (Result1 == true && Result2 == true)
                 {
                     string nuevoEstatus = objUsuario.Estatus == "Activo" ? "Inactivo" : "Activo";
-                    var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus, IdUsuario);
+                    var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus, IdResponsable);
                     BuscarServicios();
                 }
                 else
@@ -573,7 +573,7 @@ namespace Mikrotik_Administrador
         {
             string nombrePlan = string.Empty;
             Planes p = new Planes();
-            p.IdUsuario = IdUsuario;
+            p.IdResponsable = IdResponsable;
             p.PorUsuarios = true;
             p.Tipo = string.Empty;
             if (p.ShowDialog() != DialogResult.OK)
@@ -743,7 +743,7 @@ namespace Mikrotik_Administrador
                             objuser.Estatus ="Inactivo";
                             objuser.Id = 0;
                             objuser.IdPlan = plan.Id;
-                            IdUsuarioN = obj.SaveUsuariosNuevo(objuser, IdUsuario, IdCliente).Result;
+                            IdUsuarioN = obj.SaveUsuariosNuevo(objuser, IdResponsable, IdCliente).Result;
                             mikrotik.CambiarEstatusAntena(objuser.IdInterno, "Activo");
                             mikrotik.CambiarEstatusQueues(objuser.Nombre, "Activo");
                             HistorialMovimientosModel H = new HistorialMovimientosModel
@@ -751,7 +751,7 @@ namespace Mikrotik_Administrador
                                 Id = 0,
                                 Descripcion = "Se creo el usuario " + objuser.Nombre + " en antenas",
                                 Pagina = "Servicio cliente",
-                                IdUsuario = IdUsuario,
+                                IdUsuario = IdResponsable,
                                 Estatus = false
                             };
                         }
@@ -904,14 +904,14 @@ namespace Mikrotik_Administrador
                             objuser.Estatus = "Inactivo";
                             objuser.Id = 0;
                             objuser.IdPlan = plan.Id;
-                            IdUsuarioN = obj.SaveUsuariosNuevo(objuser, IdUsuario, IdCliente).Result;
+                            IdUsuarioN = obj.SaveUsuariosNuevo(objuser, IdResponsable, IdCliente).Result;
                             mikrotik.CambiarEstatusFibra(objuser.IdInterno, "Activo");
                             HistorialMovimientosModel H = new HistorialMovimientosModel
                             {
                                 Id = 0,
                                 Descripcion = "Se creo el usuario " + objuser.Nombre + " en fibras",
                                 Pagina = "Servicio cliente",
-                                IdUsuario = IdUsuario,
+                                IdUsuario = IdResponsable,
                                 Estatus = false
                             };
                         }

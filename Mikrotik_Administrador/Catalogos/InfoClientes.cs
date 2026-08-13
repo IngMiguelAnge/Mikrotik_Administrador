@@ -15,7 +15,7 @@ namespace Mikrotik_Administrador
 {
     public partial class InfoClientes : Form
     {
-        public int IdUsuario {  get; set; }
+        public int IdResponsable {  get; set; }
         public InfoClientes()
         {
             InitializeComponent();
@@ -42,15 +42,6 @@ namespace Mikrotik_Administrador
             m.Show();
             this.Hide();
         }
-
-        private void migracionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Migracion m = new Migracion();
-            m.IdUsuario = IdUsuario;
-            m.Show();
-            this.Hide();
-        }
-
         private void AsignacionClientesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Usuarios m = new Usuarios();
@@ -246,7 +237,7 @@ namespace Mikrotik_Administrador
                 case "btnServicios":
                     ServiciosCliente s = new ServiciosCliente();
                     s.IdCliente = Convert.ToInt32(Id);
-                    s.IdUsuario = IdUsuario;
+                    s.IdResponsable = IdResponsable;
                     s.NombreCliente = DGVClientes.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
                     s.ShowDialog();
                     CargarClientes();

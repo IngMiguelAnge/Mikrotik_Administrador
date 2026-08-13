@@ -802,7 +802,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<List<UsuariosandPlanesModel>> GetUsuariosandPlanes(string Cliente, string Usuario, int IdPlan, int IdMikrotik)
+        public async Task<List<UsuariosandPlanesModel>> GetUsuariosandPlanes(int IdCliente, int IdUsuario, string Cliente, string Usuario, int IdPlan, int IdMikrotik)
         {
             List<UsuariosandPlanesModel> list = new List<UsuariosandPlanesModel>();
             try
@@ -812,6 +812,8 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("GetUsuariosandPlanes", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdCliente", IdCliente));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", IdUsuario));
                         cmd.Parameters.Add(new SqlParameter("@Cliente", Cliente));
                         cmd.Parameters.Add(new SqlParameter("@Usuario", Usuario));
                         cmd.Parameters.Add(new SqlParameter("@IdPlan", IdPlan));
@@ -837,17 +839,15 @@ namespace Mikrotik_Administrador.Data
         {
             return new UsuariosandPlanesModel()
             {
+                Identificador = (string)reader["Identificador"],
+                IdCliente = (int)reader["IdCliente"],
                 Cliente = (string)reader["Cliente"],
                 IdUser = (int)reader["IdUser"],
                 Usuario = (string)reader["Usuario"],
                 IdPlan = (int)reader["IdPlan"],
                 Plan = (string)reader["Plan"],
-                Precio = (decimal)reader["Precio"],
-                Velocidad = (string)reader["Velocidad"],
-                EstatusServicio = (string)reader["EstatusServicio"],
+                Estatus = (string)reader["Estatus"],
                 Mikrotik = (string)reader["Mikrotik"],
-                IdMes = (int)reader["IdMes"],
-                FechaLimite = (string)reader["FechaLimite"]
             };
         }
         #endregion

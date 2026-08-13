@@ -12,7 +12,7 @@ namespace Mikrotik_Administrador
 {
     public partial class Menu : Form
     {
-        public int IdUsuario { get; set; }
+        public int IdResponsable { get; set; }
         public int IdTipoUsuario { get; set; }
         public Menu()
         {
@@ -39,7 +39,7 @@ namespace Mikrotik_Administrador
         private void btnMigracion_Click(object sender, EventArgs e)
         {
             Migracion m = new Migracion();
-            m.IdUsuario = IdUsuario;
+            m.IdResponsable = IdResponsable;
             m.Show();
         }
 
@@ -47,7 +47,7 @@ namespace Mikrotik_Administrador
         {
             Planes m = new Planes();
             m.PorUsuarios = false;
-            m.IdUsuario = IdUsuario;
+            m.IdResponsable = IdResponsable;
             m.Tipo = string.Empty;
             m.Show();
         }
@@ -55,14 +55,14 @@ namespace Mikrotik_Administrador
         private void btnAsignacion_Click(object sender, EventArgs e)
         {
             Usuarios m = new Usuarios();
-            m.IdUsuario = IdUsuario;
+            m.IdResponsable = IdResponsable;
             m.Show();
         }
 
         private void btnInformacion_Click(object sender, EventArgs e)
         {
             InfoClientes m = new InfoClientes();
-            m.IdUsuario = IdUsuario;
+            m.IdResponsable = IdResponsable;
             m.Show();
         }
 
@@ -100,7 +100,6 @@ namespace Mikrotik_Administrador
                 btnPlanes.Visible = false;
                 btnAsignacion.Visible = false;
                 btnBancos.Visible = false;
-                btnPagos.Visible = false;
                 btnHistorial.Visible = false;
                 btnUsuarios.Visible = false;
                 return;

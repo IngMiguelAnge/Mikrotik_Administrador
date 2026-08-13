@@ -19,7 +19,7 @@ namespace Mikrotik_Administrador
     {
         MK mikrotik;
         public int IdCliente { get; set; }
-        public int IdUsuario {  get; set; }
+        public int IdResponsable {  get; set; }
         public Usuarios()
         {
             InitializeComponent();
@@ -355,14 +355,6 @@ namespace Mikrotik_Administrador
             this.Hide();
         }
 
-        private void migracionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Migracion m = new Migracion();
-            m.IdUsuario = IdUsuario;
-            m.Show();
-            this.Hide();
-        }
-
         private void BtnAsignar_Click(object sender, EventArgs e)
         {
             if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
@@ -632,13 +624,13 @@ namespace Mikrotik_Administrador
                 if (Result1 == true && Result2 == true)
                 {
                     string nuevoEstatus = objUsuario.Estatus == "Activo" ? "Inactivo" : "Activo";
-                    var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus, IdUsuario);
+                    var Res = await obj.UpdateEstatusGeneral(objUsuario.Id, nuevoEstatus, IdResponsable);
                     HistorialMovimientosModel H = new HistorialMovimientosModel
                     {
                         Id = 0,
                         Descripcion = "Se " + nuevoEstatus + " el usuario " + objUsuario.Usuario + " por desición del usuario",
                         Pagina = "En la página de asignaciones",
-                        IdUsuario = IdUsuario,
+                        IdUsuario = IdResponsable,
                         Estatus = false
                     };
                     var r = obj.SaveHistorialMovimientos(H);
@@ -780,7 +772,7 @@ namespace Mikrotik_Administrador
                         mikrotik.EliminarFibra(item.idinterno);
                         mikrotik.DeleteInterfacebyName(item.name);
                     }
-                    obj.UpdateEstatusGeneral(item.id, "Eliminado", IdUsuario).Wait();
+                    obj.UpdateEstatusGeneral(item.id, "Eliminado", IdResponsable).Wait();
                 }
                 MessageBox.Show("Usuarios eliminados del Mikrotik correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 BuscarUsuarios(false);

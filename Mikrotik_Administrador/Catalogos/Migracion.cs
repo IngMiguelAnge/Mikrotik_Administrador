@@ -23,7 +23,7 @@ namespace Mikrotik_Administrador
     {
         MK mikrotik;
         bool IsAntena = false;
-        public int IdUsuario { get; set; }
+        public int IdResponsable { get; set; }
         public Migracion()
         {
             InitializeComponent();
@@ -329,7 +329,7 @@ namespace Mikrotik_Administrador
                     objuser.Estatus = item.estatus;
                     objuser.Id = 0;
                     objuser.IdPlan = existeplan.Id;                    
-                    var res = obj.SaveUsuariosGeneral(objuser, IdUsuario).Result;
+                    var res = obj.SaveUsuariosGeneral(objuser, IdResponsable).Result;
                     if (res)
                         cantidadExportada++;
                     else
@@ -480,7 +480,7 @@ namespace Mikrotik_Administrador
                         mikrotik.EliminarFibra(item.id);
                         mikrotik.DeleteInterfacebyName(item.comment);
                     }
-                    obj.UpdateEstatusGeneralbyIdInterno(IdMikrotik,item.id,cbAntenas.Checked, "Eliminado",IdUsuario).Wait();
+                    obj.UpdateEstatusGeneralbyIdInterno(IdMikrotik,item.id,cbAntenas.Checked, "Eliminado", IdResponsable).Wait();
                 }
                 MessageBox.Show("Usuarios eliminados del Mikrotik correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 BuscarUsuarios();

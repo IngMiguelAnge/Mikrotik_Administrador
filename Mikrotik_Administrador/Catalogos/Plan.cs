@@ -21,7 +21,7 @@ namespace Mikrotik_Administrador
     public partial class Plan : Form
     {
         public int Id { get; set; }
-        public int IdUsuario { get; set; }
+        public int IdResponsable { get; set; }
         MK mikrotik;
         public Plan()
         {
@@ -142,7 +142,7 @@ namespace Mikrotik_Administrador
                         Id = 0,
                         Descripcion = "Se guarda el plan " + plan.Nombre + " con velocidad " + plan.Velocidad,
                         Pagina = "En la página de planes",
-                        IdUsuario = IdUsuario,
+                        IdUsuario = IdResponsable,
                         Estatus = false
                     };
                     var r = obj.SaveHistorialMovimientos(H);
@@ -239,7 +239,7 @@ namespace Mikrotik_Administrador
                             Id = 0,
                             Descripcion = "Se guarda el plan " + Plan.Nombre + " en base general, pero no se logro comunicar con el mikrotik: " + Fila.Nombre,
                             Pagina = "En la página de planes",
-                            IdUsuario = IdUsuario,
+                            IdUsuario = IdResponsable,
                             Estatus = true
                         };
                         var r = obj.SaveHistorialMovimientos(H);
@@ -254,7 +254,7 @@ namespace Mikrotik_Administrador
                         Id = 0,
                         Descripcion = "Se guarda el plan " + Plan.Nombre + " en base general, pero al emparejar se dio el error: " + ex.Message,
                         Pagina = "En la página de planes",
-                        IdUsuario = IdUsuario,
+                        IdUsuario = IdResponsable,
                         Estatus = true
                     };
                     MensajeError = "No se pudo comunicar con algunos mikrotik, revisar";

@@ -16,7 +16,7 @@ namespace Mikrotik_Administrador
 {
     public partial class Planes : Form
     {
-        public int IdUsuario {  get; set; }
+        public int IdResponsable {  get; set; }
         public bool PorUsuarios { get; set; }
         public string Tipo { get; set; }
         public int IdSeleccionado { get; set; } 
@@ -220,7 +220,7 @@ namespace Mikrotik_Administrador
                 case "btnEditar":
                     Plan m = new Plan();
                     m.Id = Convert.ToInt32(Id);
-                    m.IdUsuario = IdUsuario;
+                    m.IdResponsable = IdResponsable;
                     m.ShowDialog();
                     BuscarPlanes();
                     break;
@@ -255,7 +255,7 @@ namespace Mikrotik_Administrador
         {
             Plan m = new Plan();
             m.Id = 0;
-            m.IdUsuario = IdUsuario;
+            m.IdResponsable = IdResponsable;
             m.ShowDialog();
             BuscarPlanes();
         }

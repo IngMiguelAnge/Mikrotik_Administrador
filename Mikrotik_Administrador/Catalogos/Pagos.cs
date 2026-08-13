@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,6 +18,8 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class Pagos : Form
     {
+        private int IdCliente { get; set; } = 0;
+        private int IdUsuario { get; set; } = 0;
         public Pagos()
         {
             InitializeComponent();
@@ -53,8 +56,36 @@ namespace Mikrotik_Administrador.Catalogos
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
-        {       
+        {   
+            if(txtIdentificador.Text.Trim() != string.Empty)
+            {
+                DialogResult resultado = MessageBox.Show("El campo identificador tiene información, esto omitira todos los demas campos para busqueda. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (resultado == DialogResult.No)
+                {
+                    return;
+                }
+                ValidarIdentificador();
+            }
             Buscar();
+        }
+        private void ValidarIdentificador()
+        {
+            // Patrón para la estructura "Cli" + número + "Us" + número
+            string patron = @"^CLI(\d+)US(\d+)$";
+
+            Match match = Regex.Match(txtIdentificador.Text.Trim().ToUpper(), patron);
+
+            if (match.Success)
+            {
+                // Extraer los valores capturados en los grupos de la expresión regular
+                IdCliente = int.Parse(match.Groups[1].Value);
+                IdUsuario = int.Parse(match.Groups[2].Value);
+            }
+            else
+            {
+                MessageBox.Show("La estructura del texto ingresado no es válida. Debe ser tipo 'CliXUsY' (ej. Cli1Us1).", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
         }
         public async void Buscar()
         {
@@ -63,11 +94,23 @@ namespace Mikrotik_Administrador.Catalogos
             AppRepository obj = new AppRepository();
             try
             {
-                int IdPlan = CBPlan.SelectedIndex <= 0 ? 0 : (int)CBPlan.SelectedValue;
+
+                int IdPlan = CBPlan.SelectedIndex <= 0  ? 0 : (int)CBPlan.SelectedValue;
                 int IdMikrotik = CBMikrotik.SelectedIndex <= 0 ? 0 : (int)CBMikrotik.SelectedValue;
-                var Servicios = await obj.GetUsuariosandPlanes(txtCliente.Text.Trim(), txtUsuario.Text.Trim(), IdPlan, IdMikrotik);
+                string Cliente = txtCliente.Text.Trim();
+                string Usuario = txtUsuario.Text.Trim();
+                if (IdCliente != 0 && IdUsuario != 0)
+                {
+                    IdPlan = 0;
+                    IdMikrotik = 0;
+                    Cliente = string.Empty;
+                    Usuario = string.Empty;
+                }
+                var Servicios = await obj.GetUsuariosandPlanes(IdCliente, IdUsuario, Cliente, Usuario, IdPlan, IdMikrotik);
                 var listaFinal = Servicios?.ToList() ?? new List<UsuariosandPlanesModel>();
                 dgvClientes.DataSource = new SortableBindingList<UsuariosandPlanesModel>(listaFinal);
+                if (dgvClientes.Columns["IdCliente"] != null)
+                    dgvClientes.Columns["IdCliente"].Visible = false;
                 if (dgvClientes.Columns["IdUser"] != null)
                     dgvClientes.Columns["IdUser"].Visible = false;
                 if (dgvClientes.Columns["IdPlan"] != null)
@@ -104,6 +147,27 @@ namespace Mikrotik_Administrador.Catalogos
             estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
             estiloBotones.SelectionForeColor = System.Drawing.Color.White;
             estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+
+            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Identificador",
+                HeaderText = "Identificador",
+                DataPropertyName = "Identificador",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdCliente",
+                HeaderText = "IdCliente",
+                DataPropertyName = "IdCliente",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
 
             dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -145,7 +209,7 @@ namespace Mikrotik_Administrador.Catalogos
             });
             dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Plan",
+                Name = "Plan Actual",
                 HeaderText = "Plan",
                 DataPropertyName = "Plan",
                 ReadOnly = true,
@@ -154,46 +218,9 @@ namespace Mikrotik_Administrador.Catalogos
             });
             dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Precio",
-                HeaderText = "Precio",
-                DataPropertyName = "Precio",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Velocidad",
-                HeaderText = "Velocidad",
-                DataPropertyName = "Velocidad",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "IdMes",
-                HeaderText = "IdMes",
-                DataPropertyName = "IdMes",
-                Visible = false,
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "FechaLimite",
-                HeaderText = "Fecha Limite",
-                DataPropertyName = "FechaLimite",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "EstatusServicio",
+                Name = "Estatus",
                 HeaderText = "Estatus del servicio",
-                DataPropertyName = "EstatusServicio",
+                DataPropertyName = "Estatus",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
@@ -207,50 +234,18 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DataGridViewButtonColumn btnIniciar = new DataGridViewButtonColumn
+            DataGridViewButtonColumn btnMensualidad = new DataGridViewButtonColumn
             {
-                Name = "Iniciar",
+                Name = "btnMensualidad",
                 HeaderText = "Acción",
-                Text = "Iniciar",
+                Text = "Mensualidad",
                 UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
-            dgvClientes.Columns.Add(btnIniciar);
-            DataGridViewButtonColumn btnPagar = new DataGridViewButtonColumn
-            {
-                Name = "Pagar",
-                HeaderText = "Acción",
-                Text = "Pagar",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
-            dgvClientes.Columns.Add(btnPagar);
-            DataGridViewButtonColumn btnProrroga = new DataGridViewButtonColumn
-            {
-                Name = "Prorroga",
-                HeaderText = "Acción",
-                Text = "Prorroga",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
-            dgvClientes.Columns.Add(btnProrroga);
-            DataGridViewButtonColumn btnHistorial = new DataGridViewButtonColumn
-            {
-                Name = "Historial",
-                HeaderText = "Acción",
-                Text = "Historial",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
-            dgvClientes.Columns.Add(btnHistorial);
+            dgvClientes.Columns.Add(btnMensualidad);
+           
 
             dgvClientes.AllowUserToAddRows = false;
         }
@@ -260,65 +255,46 @@ namespace Mikrotik_Administrador.Catalogos
             if (e.RowIndex < 0) return;
             try
             {
-                int IdMes = (int)dgvClientes.Rows[e.RowIndex].Cells["IdMes"].Value;
                 int IdPlan = (int)dgvClientes.Rows[e.RowIndex].Cells["IdPlan"].Value;
                 int IdUser = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
-                string Cliente = (string)dgvClientes.Rows[e.RowIndex].Cells["Cliente"].Value;
+                string IdCliente = (string)dgvClientes.Rows[e.RowIndex].Cells["IdCliente"].Value;
                 dgvClientes.Enabled = false;
                 AppRepository r = new AppRepository();
                 switch (dgvClientes.Columns[e.ColumnIndex].Name)
                 {
-                    case "Iniciar":
-                        if (IdMes != 0)
-                        {
-                            MessageBox.Show("Este servicio ya tiene una fecha limite", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        IniciarPagos ini = new IniciarPagos();
+                    case "btnMensualidad":
+                        //if (IdMes != 0)
+                        //{
+                        //    MessageBox.Show("Este servicio ya tiene una fecha limite", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //    return;
+                        //}
+                        //IniciarPagos ini = new IniciarPagos();
 
-                        ini.ShowDialog();
-                        if (!ini.Guardar) return;
-                        MensualidadModel model = new MensualidadModel
-                        {
-                            Id = 0,
-                            FechaLimite = ini.FechaInicio,
-                            Pagado = false,
-                            IdPlan = IdPlan,
-                            PlanCerrado = string.Empty,
-                            CantidadCerrada = 0,
-                            IdUsuarioM = IdUser
-                        };
-                        AppRepository obj = new AppRepository();
-                        bool result = obj.SaveMensualidad(model).Result;
-                        if (result)
-                        {
-                            MessageBox.Show("Guardado correctamente.", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            Buscar();
-                        }
-                        else
-                            MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //ini.ShowDialog();
+                        //if (!ini.Guardar) return;
+                        //MensualidadModel model = new MensualidadModel
+                        //{
+                        //    Id = 0,
+                        //    FechaLimite = ini.FechaInicio,
+                        //    Pagado = false,
+                        //    IdPlan = IdPlan,
+                        //    PlanCerrado = string.Empty,
+                        //    CantidadCerrada = 0,
+                        //    IdUsuarioM = IdUser
+                        //};
+                        //AppRepository obj = new AppRepository();
+                        //bool result = obj.SaveMensualidad(model).Result;
+                        //if (result)
+                        //{
+                        //    MessageBox.Show("Guardado correctamente.", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //    Buscar();
+                        //}
+                        //else
+                        //    MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         break;
-                    case "Pagar":
-                        if (IdMes == 0)
-                        {
-                            MessageBox.Show("Este servicio no cuenta con una fecha limite", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        Pagar Pa = new Pagar();
-                        Pa.IdUsuarioM = IdUser;
-                        Pa.Cliente = Cliente;
-                        Pa.ShowDialog();
-                        break;
-                    case "Prorroga":
-                        Prorroga Pr = new Prorroga();
-                        Pr.ShowDialog();
-                        break;
-                    case "Historial": 
-                        HistorialPagos H = new HistorialPagos();
-                        H.IdUser = IdUser;
-                        H.ShowDialog();
-                        break;
+               
+
                     default:
                         break;
                 }
@@ -332,5 +308,6 @@ namespace Mikrotik_Administrador.Catalogos
                 dgvClientes.Enabled = true;
             }
         }
+
     }
 }
