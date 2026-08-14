@@ -848,6 +848,7 @@ namespace Mikrotik_Administrador.Data
                 Plan = (string)reader["Plan"],
                 Estatus = (string)reader["Estatus"],
                 Mikrotik = (string)reader["Mikrotik"],
+                Mensualidad = (string)reader["Mensualidad"],
             };
         }
         #endregion

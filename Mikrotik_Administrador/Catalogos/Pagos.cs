@@ -234,6 +234,15 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Mensualidad",
+                HeaderText = "Mensualidad",
+                DataPropertyName = "Mensualidad",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
             DataGridViewButtonColumn btnMensualidad = new DataGridViewButtonColumn
             {
                 Name = "btnMensualidad",
@@ -255,20 +264,22 @@ namespace Mikrotik_Administrador.Catalogos
             if (e.RowIndex < 0) return;
             try
             {
-                int IdPlan = (int)dgvClientes.Rows[e.RowIndex].Cells["IdPlan"].Value;
-                int IdUser = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
-                string IdCliente = (string)dgvClientes.Rows[e.RowIndex].Cells["IdCliente"].Value;
+                //int IdPlan = (int)dgvClientes.Rows[e.RowIndex].Cells["IdPlan"].Value;
+                //int IdUser = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
+                //int IdCliente = (int)dgvClientes.Rows[e.RowIndex].Cells["IdCliente"].Value;
                 dgvClientes.Enabled = false;
                 AppRepository r = new AppRepository();
                 switch (dgvClientes.Columns[e.ColumnIndex].Name)
                 {
                     case "btnMensualidad":
-                        //if (IdMes != 0)
-                        //{
-                        //    MessageBox.Show("Este servicio ya tiene una fecha limite", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        //    return;
-                        //}
-                        //IniciarPagos ini = new IniciarPagos();
+                        string Mensualidad = (string)dgvClientes.Rows[e.RowIndex].Cells["Mensualidad"].Value;
+                        if (Mensualidad == "Falta Crear")
+                        {
+                            IniciarPagos ini = new IniciarPagos();
+                            ini.ShowDialog();
+                            return;
+                        }
+                        
 
                         //ini.ShowDialog();
                         //if (!ini.Guardar) return;
