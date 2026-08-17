@@ -75,6 +75,7 @@ namespace Mikrotik_Administrador
         private void btnPagos_Click(object sender, EventArgs e)
         {
             Pagos pagos = new Pagos();
+            pagos.IdResponsable = IdResponsable;
             pagos.Show();
         }
 

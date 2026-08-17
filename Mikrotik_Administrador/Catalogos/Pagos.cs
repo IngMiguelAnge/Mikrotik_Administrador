@@ -18,6 +18,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class Pagos : Form
     {
+        public int IdResponsable { get; set; } = 0;
         private int IdCliente { get; set; } = 0;
         private int IdUsuario { get; set; } = 0;
         public Pagos()
@@ -264,9 +265,6 @@ namespace Mikrotik_Administrador.Catalogos
             if (e.RowIndex < 0) return;
             try
             {
-                //int IdPlan = (int)dgvClientes.Rows[e.RowIndex].Cells["IdPlan"].Value;
-                //int IdUser = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
-                //int IdCliente = (int)dgvClientes.Rows[e.RowIndex].Cells["IdCliente"].Value;
                 dgvClientes.Enabled = false;
                 AppRepository r = new AppRepository();
                 switch (dgvClientes.Columns[e.ColumnIndex].Name)
@@ -276,35 +274,14 @@ namespace Mikrotik_Administrador.Catalogos
                         if (Mensualidad == "Falta Crear")
                         {
                             IniciarPagos ini = new IniciarPagos();
+                            ini.IdMensualidad = 0;
+                            ini.IdUsuarioM = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
+                            ini.IdResponsable = IdResponsable;
                             ini.ShowDialog();
                             return;
                         }
                         
-
-                        //ini.ShowDialog();
-                        //if (!ini.Guardar) return;
-                        //MensualidadModel model = new MensualidadModel
-                        //{
-                        //    Id = 0,
-                        //    FechaLimite = ini.FechaInicio,
-                        //    Pagado = false,
-                        //    IdPlan = IdPlan,
-                        //    PlanCerrado = string.Empty,
-                        //    CantidadCerrada = 0,
-                        //    IdUsuarioM = IdUser
-                        //};
-                        //AppRepository obj = new AppRepository();
-                        //bool result = obj.SaveMensualidad(model).Result;
-                        //if (result)
-                        //{
-                        //    MessageBox.Show("Guardado correctamente.", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        //    Buscar();
-                        //}
-                        //else
-                        //    MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                        break;
-               
+                        break;              
 
                     default:
                         break;

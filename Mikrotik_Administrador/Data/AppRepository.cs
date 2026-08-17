@@ -785,12 +785,12 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
-                        cmd.Parameters.Add(new SqlParameter("@FechaLimite", obj.FechaLimite));
                         cmd.Parameters.Add(new SqlParameter("@Pagado", obj.Pagado));
-                        cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
-                        cmd.Parameters.Add(new SqlParameter("@PlanCerrado", obj.PlanCerrado));
-                        cmd.Parameters.Add(new SqlParameter("@CantidadCerrada", obj.CantidadCerrada));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@DiaCorte", obj.DiaCorte));
+                        cmd.Parameters.Add(new SqlParameter("@FechaInicio", obj.FechaInicio));
+                        cmd.Parameters.Add(new SqlParameter("@FechaLimite", obj.FechaLimite));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));                
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;

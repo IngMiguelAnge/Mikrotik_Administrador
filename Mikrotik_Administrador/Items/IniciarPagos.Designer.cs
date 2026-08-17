@@ -32,10 +32,10 @@
             this.dtpFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
-            this.lblDias = new System.Windows.Forms.Label();
-            this.NUDCorte = new System.Windows.Forms.NumericUpDown();
-            this.lblDiaCorte = new System.Windows.Forms.Label();
             this.lblFechaCorte = new System.Windows.Forms.Label();
+            this.lblDiaCorte = new System.Windows.Forms.Label();
+            this.NUDCorte = new System.Windows.Forms.NumericUpDown();
+            this.lblDias = new System.Windows.Forms.Label();
             this.panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUDCorte)).BeginInit();
             this.SuspendLayout();
@@ -90,16 +90,27 @@
             this.panelContenedor.Size = new System.Drawing.Size(464, 330);
             this.panelContenedor.TabIndex = 4;
             // 
-            // lblDias
+            // lblFechaCorte
             // 
-            this.lblDias.AutoSize = true;
-            this.lblDias.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblDias.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblDias.Location = new System.Drawing.Point(26, 128);
-            this.lblDias.Name = "lblDias";
-            this.lblDias.Size = new System.Drawing.Size(211, 25);
-            this.lblDias.TabIndex = 3;
-            this.lblDias.Text = "En que dia sera el corte:";
+            this.lblFechaCorte.AutoSize = true;
+            this.lblFechaCorte.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblFechaCorte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblFechaCorte.Location = new System.Drawing.Point(26, 260);
+            this.lblFechaCorte.Name = "lblFechaCorte";
+            this.lblFechaCorte.Size = new System.Drawing.Size(55, 25);
+            this.lblFechaCorte.TabIndex = 6;
+            this.lblFechaCorte.Text = "fecha";
+            // 
+            // lblDiaCorte
+            // 
+            this.lblDiaCorte.AutoSize = true;
+            this.lblDiaCorte.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblDiaCorte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblDiaCorte.Location = new System.Drawing.Point(26, 213);
+            this.lblDiaCorte.Name = "lblDiaCorte";
+            this.lblDiaCorte.Size = new System.Drawing.Size(194, 25);
+            this.lblDiaCorte.TabIndex = 5;
+            this.lblDiaCorte.Text = "Proximo corte sera el:";
             // 
             // NUDCorte
             // 
@@ -124,27 +135,16 @@
             0});
             this.NUDCorte.ValueChanged += new System.EventHandler(this.NUDCorte_ValueChanged);
             // 
-            // lblDiaCorte
+            // lblDias
             // 
-            this.lblDiaCorte.AutoSize = true;
-            this.lblDiaCorte.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblDiaCorte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblDiaCorte.Location = new System.Drawing.Point(26, 213);
-            this.lblDiaCorte.Name = "lblDiaCorte";
-            this.lblDiaCorte.Size = new System.Drawing.Size(123, 25);
-            this.lblDiaCorte.TabIndex = 5;
-            this.lblDiaCorte.Text = "Día del corte:";
-            // 
-            // lblFechaCorte
-            // 
-            this.lblFechaCorte.AutoSize = true;
-            this.lblFechaCorte.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblFechaCorte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFechaCorte.Location = new System.Drawing.Point(26, 260);
-            this.lblFechaCorte.Name = "lblFechaCorte";
-            this.lblFechaCorte.Size = new System.Drawing.Size(55, 25);
-            this.lblFechaCorte.TabIndex = 6;
-            this.lblFechaCorte.Text = "fecha";
+            this.lblDias.AutoSize = true;
+            this.lblDias.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblDias.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblDias.Location = new System.Drawing.Point(26, 128);
+            this.lblDias.Name = "lblDias";
+            this.lblDias.Size = new System.Drawing.Size(211, 25);
+            this.lblDias.TabIndex = 3;
+            this.lblDias.Text = "En que dia sera el corte:";
             // 
             // IniciarPagos
             // 

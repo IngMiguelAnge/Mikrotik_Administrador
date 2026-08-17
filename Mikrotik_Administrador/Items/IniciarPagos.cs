@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Model;
+using System;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Mikrotik_Administrador.Items
 {
     public partial class IniciarPagos : Form
     {
-        public DateTime FechaInicio = DateTime.Now;
-        public bool Guardar = false;
+        public int IdMensualidad { get; set; }
+        public int IdUsuarioM { get; set; }
+        public int IdResponsable { get; set; }
         public IniciarPagos()
         {
             InitializeComponent();
@@ -21,9 +18,26 @@ namespace Mikrotik_Administrador.Items
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            FechaInicio = dtpFechaInicio.Value;
-            Guardar = true;
-            this.Close();
+            MensualidadModel mensualidad = new MensualidadModel
+            {
+                Id = IdMensualidad,
+                Pagado = false,
+                IdUsuarioM = IdUsuarioM,
+                FechaInicio = dtpFechaInicio.Value,
+                DiaCorte = (int)NUDCorte.Value,
+                FechaLimite = Convert.ToDateTime(lblFechaCorte.Text),
+                IdUsuario = IdResponsable
+            };
+            AppRepository obj = new AppRepository();
+           ;
+            if (obj.SaveMensualidad(mensualidad).Result)
+            {
+                MessageBox.Show("Mensualidad guardada");
+                this.Close();
+            }
+            else
+                MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
         }
 
         private void IniciarPagos_Load(object sender, EventArgs e)

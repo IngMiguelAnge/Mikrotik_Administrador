@@ -28,7 +28,7 @@ namespace Mikrotik_Administrador.Items
                 this.Close();
             }
             else
-                MessageBox.Show("Error al actualizar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         }
 
