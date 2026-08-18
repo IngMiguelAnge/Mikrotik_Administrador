@@ -91,14 +91,14 @@ namespace Mikrotik_Administrador.Items
             AppRepository obj = new AppRepository();
             try
             {
-                var Servicios = await obj.GetDetallesMensualidad(IdUsuarioM);
-                var listaFinal = Servicios?.ToList() ?? new List<ListDetallesMensualidadModel>();
-                dgvDetalles.DataSource = new SortableBindingList<ListDetallesMensualidadModel>(listaFinal);
-                if (dgvDetalles.Columns["FechaOrden"] != null)
-                    dgvDetalles.Columns["FechaOrden"].Visible = false;
-                if (dgvDetalles.Columns["OrdenVisual"] != null)
-                    dgvDetalles.Columns["OrdenVisual"].Visible = false;
-                TotalReal = listaFinal.Where(c=> c.Estatus == "Saldo Pendiente").Select(x => Convert.ToDecimal(x.Cantidad)).FirstOrDefault();
+                //var Servicios = await obj.GetDetallesMensualidad(IdUsuarioM);
+                //var listaFinal = Servicios?.ToList() ?? new List<ListDetallesMensualidadModel>();
+                //dgvDetalles.DataSource = new SortableBindingList<ListDetallesMensualidadModel>(listaFinal);
+                //if (dgvDetalles.Columns["FechaOrden"] != null)
+                //    dgvDetalles.Columns["FechaOrden"].Visible = false;
+                //if (dgvDetalles.Columns["OrdenVisual"] != null)
+                //    dgvDetalles.Columns["OrdenVisual"].Visible = false;
+                //TotalReal = listaFinal.Where(c=> c.Estatus == "Saldo Pendiente").Select(x => Convert.ToDecimal(x.Cantidad)).FirstOrDefault();
             }
             catch (Exception ex)
             {

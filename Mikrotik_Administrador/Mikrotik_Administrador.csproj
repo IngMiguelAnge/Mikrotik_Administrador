@@ -256,6 +256,12 @@
     <Compile Include="Catalogos\CambiosPlan.Designer.cs">
       <DependentUpon>CambiosPlan.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\DetallesMensualidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\DetallesMensualidad.Designer.cs">
+      <DependentUpon>DetallesMensualidad.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\HistorialMovimientos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -505,6 +511,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\CambiosPlan.resx">
       <DependentUpon>CambiosPlan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\DetallesMensualidad.resx">
+      <DependentUpon>DetallesMensualidad.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\HistorialMovimientos.resx">
       <DependentUpon>HistorialMovimientos.cs</DependentUpon>

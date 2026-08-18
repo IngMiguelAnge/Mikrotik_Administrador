@@ -31,7 +31,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvMensualidades = new System.Windows.Forms.DataGridView();
-            this.btnNuevo = new System.Windows.Forms.Button();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
             this.cbTipo = new System.Windows.Forms.ComboBox();
@@ -78,19 +77,7 @@
             this.dgvMensualidades.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMensualidades.Size = new System.Drawing.Size(900, 300);
             this.dgvMensualidades.TabIndex = 0;
-            // 
-            // btnNuevo
-            // 
-            this.btnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
-            this.btnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnNuevo.ForeColor = System.Drawing.Color.White;
-            this.btnNuevo.Location = new System.Drawing.Point(376, 32);
-            this.btnNuevo.Name = "btnNuevo";
-            this.btnNuevo.Size = new System.Drawing.Size(100, 38);
-            this.btnNuevo.TabIndex = 4;
-            this.btnNuevo.Text = "+ Nuevo";
-            this.btnNuevo.UseVisualStyleBackColor = false;
+            this.dgvMensualidades.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMensualidades_CellContentClick);
             // 
             // btnBuscar
             // 
@@ -111,7 +98,6 @@
             this.panelTop.BackColor = System.Drawing.Color.White;
             this.panelTop.Controls.Add(this.cbTipo);
             this.panelTop.Controls.Add(this.Tipo);
-            this.panelTop.Controls.Add(this.btnNuevo);
             this.panelTop.Controls.Add(this.btnBuscar);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -181,7 +167,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgvMensualidades;
-        private System.Windows.Forms.Button btnNuevo;
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Panel panelContenedor;

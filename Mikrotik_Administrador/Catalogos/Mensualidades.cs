@@ -1,4 +1,5 @@
 ﻿using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
@@ -15,7 +16,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class Mensualidades : Form
     {
-        public int IdResponsable {  get; set; }
+        public int IdResponsable { get; set; }
         public int IdUsuarioM { get; set; }
         public Mensualidades()
         {
@@ -29,8 +30,9 @@ namespace Mikrotik_Administrador.Catalogos
         }
         public async void Buscar()
         {
-            if (cbTipo.SelectedIndex == 0) {
-                MessageBox.Show("Seleccione un tipo de menualidad","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (cbTipo.SelectedIndex == 0)
+            {
+                MessageBox.Show("Seleccione un tipo de menualidad", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -125,9 +127,37 @@ namespace Mikrotik_Administrador.Catalogos
             });
             dgvMensualidades.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Monto",
-                HeaderText = "Monto de la mensualidad",
-                DataPropertyName = "Monto",
+                Name = "Mensualidad",
+                HeaderText = "Mensualidad",
+                DataPropertyName = "Mensualidad",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2", // Aplica formato de moneda local (ej: $120.00 o $120.50)
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
+                }
+            });
+            dgvMensualidades.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Recibido",
+                HeaderText = "Recibido",
+                DataPropertyName = "Recibido",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2", // Aplica formato de moneda local (ej: $120.00 o $120.50)
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
+                }
+            });
+            dgvMensualidades.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Faltante",
+                HeaderText = "Faltante",
+                DataPropertyName = "Faltante",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic,
@@ -148,14 +178,82 @@ namespace Mikrotik_Administrador.Catalogos
                 DefaultCellStyle = estiloBotones
             };
             dgvMensualidades.Columns.Add(btnModificar);
-
-
+            DataGridViewButtonColumn btnPagar = new DataGridViewButtonColumn
+            {
+                Name = "btnPagar",
+                HeaderText = "Acción",
+                Text = "Pagar",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvMensualidades.Columns.Add(btnPagar);
+            DataGridViewButtonColumn btnHistorial = new DataGridViewButtonColumn
+            {
+                Name = "btnHistorial",
+                HeaderText = "Acción",
+                Text = "Historial de pagos",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvMensualidades.Columns.Add(btnHistorial);
+            DataGridViewButtonColumn btnVerDetalles = new DataGridViewButtonColumn
+            {
+                Name = "btnVerDetalles",
+                HeaderText = "Acción",
+                Text = "Detalles",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvMensualidades.Columns.Add(btnVerDetalles);
             dgvMensualidades.AllowUserToAddRows = false;
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             Buscar();
+        }
+
+        private void dgvMensualidades_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            try
+            {
+                dgvMensualidades.Enabled = false;
+                AppRepository r = new AppRepository();
+                switch (dgvMensualidades.Columns[e.ColumnIndex].Name)
+                {
+                    case "btnModificar":
+                        IniciarPagos ini = new IniciarPagos();
+                        ini.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
+                        ini.IdUsuarioM = IdUsuarioM;
+                        ini.IdResponsable = IdResponsable;
+                        ini.ShowDialog();
+                        break;
+                    case "btnVerDetalles":
+                        DetallesMensualidad detalles = new DetallesMensualidad();
+                        detalles.IdUsuarioM = IdUsuarioM;
+                        detalles.Desde = (DateTime)dgvMensualidades.Rows[e.RowIndex].Cells["FechaInicio"].Value;
+                        detalles.Hasta = (DateTime)dgvMensualidades.Rows[e.RowIndex].Cells["FechaLimite"].Value;
+                        detalles.ShowDialog();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}");
+            }
+            finally
+            {
+                dgvMensualidades.Enabled = true;
+            }
         }
     }
 }

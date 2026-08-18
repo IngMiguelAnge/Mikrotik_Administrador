@@ -18,6 +18,18 @@ namespace Mikrotik_Administrador.Items
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            AppRepository obj = new AppRepository();
+            obj.GetExistMensualidadProxima(IdUsuarioM, IdMensualidad, dtpFechaInicio.Value, Convert.ToDateTime(lblFechaCorte.Text)).ContinueWith(task =>
+            {
+                if (task.Result != null)
+                {
+                    if (task.Result.Count>0)
+                    {
+                        MessageBox.Show("No se puede ingresar esta fecha, ya hay un registro aproximado a la fecha establecida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+            });
             MensualidadModel mensualidad = new MensualidadModel
             {
                 Id = IdMensualidad,
@@ -28,7 +40,6 @@ namespace Mikrotik_Administrador.Items
                 FechaLimite = Convert.ToDateTime(lblFechaCorte.Text),
                 IdUsuario = IdResponsable
             };
-            AppRepository obj = new AppRepository();
 
             if (obj.SaveMensualidad(mensualidad).Result)
             {

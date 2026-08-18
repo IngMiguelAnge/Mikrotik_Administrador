@@ -4,10 +4,11 @@ namespace Mikrotik_Administrador.Model
 {
     public class ListDetallesMensualidadModel
     {
-        public string Descripcion { get; set; }
-        public string Cantidad { get; set; }
+        public int Id { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
         public string Estatus { get; set; }
-        public DateTime FechaOrden { get; set; }
-        public int OrdenVisual { get; set; }
+        public string Programacion { get; set; }
+        public string Plan { get; set; }
     }
 }

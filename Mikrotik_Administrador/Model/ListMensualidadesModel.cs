@@ -9,6 +9,8 @@ namespace Mikrotik_Administrador.Model
         public DateTime FechaInicio { get; set; }
         public DateTime FechaLimite { get; set; }
         public string Responsable { get; set; }
-        public decimal Monto { get; set; }
+        public decimal Mensualidad { get; set; }
+        public decimal Recibido { get; set; }
+        public decimal Faltante { get; set; }
     }
 }

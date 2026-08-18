@@ -736,7 +736,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<List<ListDetallesMensualidadModel>> GetDetallesMensualidad(int IdUsuarioM)
+        public async Task<List<ListDetallesMensualidadModel>> GetDetallesMensualidad(int IdUsuarioM, DateTime Desde, DateTime Hasta)
         {
             List<ListDetallesMensualidadModel> list = new List<ListDetallesMensualidadModel>();
             try
@@ -747,6 +747,8 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@Desde", Desde));
+                        cmd.Parameters.Add(new SqlParameter("@Hasta", Hasta));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -768,12 +770,44 @@ namespace Mikrotik_Administrador.Data
         {
             return new ListDetallesMensualidadModel()
             {
-                Descripcion = (string)reader["descripcion"],
-                Cantidad = (string)reader["cantidad"],
-                Estatus = (string)reader["estatus"],
-                FechaOrden = (DateTime)reader["fechaorden"],
-                OrdenVisual = (int)reader["ordenvisual"],
+                Id = (int)reader["Id"],
+                FechaInicio = (DateTime)reader["FechaInicio"],
+                FechaFin = (DateTime)reader["FechaFin"],
+                Estatus = (string)reader["Estatus"],
+                Programacion = (string)reader["Programacion"],
+                Plan = (string)reader["Plan"],
             };
+        }
+        public async Task<List<ListMensualidadesModel>> GetExistMensualidadProxima(int IdUsuarioM,int IdMensualidad, DateTime FechaInicio, DateTime FechaFin)
+        {
+            List<ListMensualidadesModel> list = new List<ListMensualidadesModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetExistMensualidadProxima", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@IdMensualidad", IdMensualidad));
+                        cmd.Parameters.Add(new SqlParameter("@Desde", FechaInicio));
+                        cmd.Parameters.Add(new SqlParameter("@Hasta", FechaFin));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToMensualidades(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
         }
         public async Task<List<ListMensualidadesModel>> GetMensualidades(int IdUsuarioM, bool Pagado)
         {
@@ -813,7 +847,9 @@ namespace Mikrotik_Administrador.Data
                 FechaInicio = (DateTime)reader["FechaInicio"],
                 FechaLimite = (DateTime)reader["FechaLimite"],
                 Responsable = (string)reader["Responsable"],
-                Monto = (decimal)reader["Monto"],
+                Mensualidad = (decimal)reader["Mensualidad"],
+                Recibido = (decimal)reader["Recibido"],
+                Faltante = (decimal)reader["Faltante"],
             };
         }
         public async Task<bool> SaveMensualidad(MensualidadModel obj)
