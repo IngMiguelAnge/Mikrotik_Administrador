@@ -277,10 +277,13 @@ namespace Mikrotik_Administrador.Catalogos
                             ini.IdMensualidad = 0;
                             ini.IdUsuarioM = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
                             ini.IdResponsable = IdResponsable;
-                            ini.ShowDialog();
-                            return;
+                            if (ini.ShowDialog() != DialogResult.OK)
+                            { return; }                        
                         }
-                        
+                        Mensualidades M = new Mensualidades();
+                        M.IdResponsable = IdResponsable;
+                        M.IdUsuarioM = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
+                        M.ShowDialog();
                         break;              
 
                     default:

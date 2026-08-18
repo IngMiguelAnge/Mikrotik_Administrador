@@ -29,11 +29,11 @@ namespace Mikrotik_Administrador.Items
                 IdUsuario = IdResponsable
             };
             AppRepository obj = new AppRepository();
-           ;
+
             if (obj.SaveMensualidad(mensualidad).Result)
             {
                 MessageBox.Show("Mensualidad guardada");
-                this.Close();
+                DialogResult = DialogResult.OK;
             }
             else
                 MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
