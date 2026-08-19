@@ -76,7 +76,7 @@ namespace Mikrotik_Administrador.Items
 
         private void Pagar_Load(object sender, EventArgs e)
         {
-            lblFaltante.Text = $"Total a pagar: $: {Faltante:C}";
+            lblFaltante.Text = $"Total a pagar: {Faltante:C}";
             AppRepository obj = new AppRepository();
             var ListBancos = obj.GetBancosActivos().Result.OrderBy(x => x.Nombre).ToList();
             // Insertamos un objeto "fantasma" al inicio para el placeholder

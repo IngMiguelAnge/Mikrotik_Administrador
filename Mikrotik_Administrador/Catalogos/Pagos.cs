@@ -284,7 +284,7 @@ namespace Mikrotik_Administrador.Catalogos
                         M.IdResponsable = IdResponsable;
                         M.IdUsuarioM = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
                         M.Cliente = (string)dgvClientes.Rows[e.RowIndex].Cells["Cliente"].Value;
-                        M.UsuarioM = (string)dgvClientes.Rows[e.RowIndex].Cells["UsuarioM"].Value;
+                        M.UsuarioM = (string)dgvClientes.Rows[e.RowIndex].Cells["Usuario"].Value;
                         M.ShowDialog();
                         break;              
 

@@ -125,15 +125,6 @@ namespace Mikrotik_Administrador.Catalogos
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Comentario",
-                HeaderText = "Comentario",
-                DataPropertyName = "Comentario",
-                ReadOnly = true,
-                Visible = false,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-            });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
-            {
                 Name = "Banco",
                 HeaderText = "Banco",
                 DataPropertyName = "Banco",
@@ -151,64 +142,14 @@ namespace Mikrotik_Administrador.Catalogos
             });
             dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "FechaLimite",
-                HeaderText = "Fecha Límite",
-                DataPropertyName = "FechaLimite",
+                Name = "Responsable",
+                HeaderText = "Responsable",
+                DataPropertyName = "Responsable",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Plan",
-                HeaderText = "Plan",
-                DataPropertyName = "Plan",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Precio",
-                HeaderText = "Precio",
-                DataPropertyName = "Precio",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Imagen",
-                HeaderText = "Imagen",
-                DataPropertyName = "Imagen",
-                Visible = false,
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            DataGridViewButtonColumn btnVerComentario = new DataGridViewButtonColumn
-            {
-                Name = "VerComentario",
-                HeaderText = "Acción",
-                Text = "Ver Comentario",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
-            dgvPagos.Columns.Add(btnVerComentario);
-            DataGridViewButtonColumn btnVerImagen = new DataGridViewButtonColumn
-            {
-                Name = "VerImagen",
-                HeaderText = "Acción",
-                Text = "Ver Imagen",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
-            dgvPagos.Columns.Add(btnVerImagen);
-
+           
             dgvPagos.AllowUserToAddRows = false;
         }
 
@@ -217,24 +158,24 @@ namespace Mikrotik_Administrador.Catalogos
             if (e.RowIndex < 0) return;
             try
             {
-                dgvPagos.Enabled = false;
-                string Comentario = (string)dgvPagos.Rows[e.RowIndex].Cells["Comentario"].Value;
-                byte[] Imagen = (byte[])dgvPagos.Rows[e.RowIndex].Cells["Imagen"].Value;
-                switch (dgvPagos.Columns[e.ColumnIndex].Name)
-                {
-                    case "VerComentario":
-                        VerComentario vc = new VerComentario();
-                        vc.Comentario = Comentario;
-                        vc.ShowDialog();
-                        break;
-                    case "VerImagen":
-                        VerImagen vi = new VerImagen();
-                        vi.Imagen = Imagen;
-                        vi.ShowDialog();
-                        break;                    
-                    default:
-                        break;
-                }
+                //dgvPagos.Enabled = false;
+                //string Comentario = (string)dgvPagos.Rows[e.RowIndex].Cells["Comentario"].Value;
+                //byte[] Imagen = (byte[])dgvPagos.Rows[e.RowIndex].Cells["Imagen"].Value;
+                //switch (dgvPagos.Columns[e.ColumnIndex].Name)
+                //{
+                //    case "VerComentario":
+                //        VerComentario vc = new VerComentario();
+                //        vc.Comentario = Comentario;
+                //        vc.ShowDialog();
+                //        break;
+                //    case "VerImagen":
+                //        VerImagen vi = new VerImagen();
+                //        vi.Imagen = Imagen;
+                //        vi.ShowDialog();
+                //        break;                    
+                //    default:
+                //        break;
+                //}
             }
             catch (Exception ex)
             {
