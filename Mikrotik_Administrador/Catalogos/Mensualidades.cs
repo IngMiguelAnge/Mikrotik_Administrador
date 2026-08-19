@@ -18,6 +18,8 @@ namespace Mikrotik_Administrador.Catalogos
     {
         public int IdResponsable { get; set; }
         public int IdUsuarioM { get; set; }
+        public string Cliente { get; set; }
+        public string UsuarioM { get; set; }
         public Mensualidades()
         {
             InitializeComponent();
@@ -241,6 +243,21 @@ namespace Mikrotik_Administrador.Catalogos
                         detalles.Desde = (DateTime)dgvMensualidades.Rows[e.RowIndex].Cells["FechaInicio"].Value;
                         detalles.Hasta = (DateTime)dgvMensualidades.Rows[e.RowIndex].Cells["FechaLimite"].Value;
                         detalles.ShowDialog();
+                        break;
+                    case "btnHistorial":
+                        HistorialPagos Hi = new HistorialPagos();
+                        Hi.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
+                        Hi.ShowDialog();
+                        break;
+                     case "btnPagar":
+                        Pagar iniP = new Pagar();
+                        iniP.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
+                        iniP.IdResponsable = IdResponsable;
+                        iniP.Cliente = Cliente;
+                        iniP.UsuarioM = UsuarioM;
+                        iniP.Faltante = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value;
+                        iniP.ShowDialog();
+                        Buscar();
                         break;
                     default:
                         break;

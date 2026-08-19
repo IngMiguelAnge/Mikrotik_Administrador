@@ -16,7 +16,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class HistorialPagos : Form
     {
-        public int IdUser { get; set; }
+        public int IdMensualidad { get; set; }
         public HistorialPagos()
         {
             InitializeComponent();
@@ -47,7 +47,7 @@ namespace Mikrotik_Administrador.Catalogos
             AppRepository obj = new AppRepository();
             try
             {
-                var Pagos = await obj.GetHistorialPagos(IdUser, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
+                var Pagos = await obj.GetHistorialPagos(IdMensualidad, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
                 var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosModel>();
                 dgvPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
                 if (dgvPagos.Columns["Imagen"] != null)

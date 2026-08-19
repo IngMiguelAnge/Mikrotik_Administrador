@@ -575,7 +575,7 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region HistorialPagos
-        public async Task<List<ListHistorialPagosModel>> GetHistorialPagos(int IdUser, string Referencia, int Id, int IdBanco)
+        public async Task<List<ListHistorialPagosModel>> GetHistorialPagos(int IdMensualidad, string Referencia, int Id, int IdBanco)
         {
              List<ListHistorialPagosModel> list = new List<ListHistorialPagosModel>();
             try
@@ -585,7 +585,7 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("GetHistorialPagos", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@IdUser", IdUser));
+                        cmd.Parameters.Add(new SqlParameter("@IdMensualidad", IdMensualidad));
                         cmd.Parameters.Add(new SqlParameter("@Referencia", Referencia));
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
                         cmd.Parameters.Add(new SqlParameter("@IdBanco", IdBanco));
@@ -614,13 +614,9 @@ namespace Mikrotik_Administrador.Data
                 FechaRecibido = (DateTime)reader["FechaRecibido"],
                 Cantidad = (decimal)reader["Cantidad"],
                 Estatus = (string)reader["Estatus"],
-                Comentario = (string)reader["Comentario"],
                 Banco = (string)reader["Banco"],
                 Referencia = (string)reader["Referencia"],
-                Imagen = (byte[])reader["Imagen"],
-                FechaLimite = (DateTime)reader["FechaLimite"],
-                Plan = (string)reader["Plan"],
-                Precio = (decimal)reader["Precio"],
+                Responsable = (string)reader["Responsable"],
             };
         }
         #endregion
@@ -718,13 +714,14 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
-                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
                         cmd.Parameters.Add(new SqlParameter("@FechaRecibido", obj.FechaRecibido));
                         cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
+                        cmd.Parameters.Add(new SqlParameter("@IdMensualidad", obj.IdMensualidad));
                         cmd.Parameters.Add(new SqlParameter("@Comentario", obj.Comentario));
                         cmd.Parameters.Add(new SqlParameter("@IdBanco", obj.IdBanco));
                         cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
                         cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;

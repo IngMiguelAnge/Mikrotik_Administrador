@@ -20,9 +20,11 @@ namespace Mikrotik_Administrador.Items
 {
     public partial class Pagar : Form
     {
-        public int IdUsuarioM { get; set; }
-        private decimal TotalReal = 0;
+        public int IdMensualidad { get; set; }
+        public int IdResponsable { get; set; }
+        public decimal Faltante { get; set; }
         public string Cliente { get; set; }
+        public string UsuarioM { get; set; }
         public Pagar()
         {
             InitializeComponent();
@@ -74,6 +76,7 @@ namespace Mikrotik_Administrador.Items
 
         private void Pagar_Load(object sender, EventArgs e)
         {
+            lblFaltante.Text = $"Total a pagar: $: {Faltante:C}";
             AppRepository obj = new AppRepository();
             var ListBancos = obj.GetBancosActivos().Result.OrderBy(x => x.Nombre).ToList();
             // Insertamos un objeto "fantasma" al inicio para el placeholder
@@ -83,101 +86,8 @@ namespace Mikrotik_Administrador.Items
             CBBanco.ValueMember = "Id";
             CBBanco.DataSource = ListBancos;
             CBBanco.SelectedIndex = 0;    
-            Buscar();
         }
-        public async void Buscar()
-        {
-            CrearGridView();
-            AppRepository obj = new AppRepository();
-            try
-            {
-                //var Servicios = await obj.GetDetallesMensualidad(IdUsuarioM);
-                //var listaFinal = Servicios?.ToList() ?? new List<ListDetallesMensualidadModel>();
-                //dgvDetalles.DataSource = new SortableBindingList<ListDetallesMensualidadModel>(listaFinal);
-                //if (dgvDetalles.Columns["FechaOrden"] != null)
-                //    dgvDetalles.Columns["FechaOrden"].Visible = false;
-                //if (dgvDetalles.Columns["OrdenVisual"] != null)
-                //    dgvDetalles.Columns["OrdenVisual"].Visible = false;
-                //TotalReal = listaFinal.Where(c=> c.Estatus == "Saldo Pendiente").Select(x => Convert.ToDecimal(x.Cantidad)).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al cargar: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        public void CrearGridView()
-        {
-            dgvDetalles.Columns.Clear();
-            dgvDetalles.AutoGenerateColumns = false;
-            dgvDetalles.EnableHeadersVisualStyles = false;
-            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
-            dgvDetalles.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
-            dgvDetalles.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
-            dgvDetalles.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-
-            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
-            dgvDetalles.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            dgvDetalles.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
-            dgvDetalles.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
-
-            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
-            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
-            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
-            estiloBotones.ForeColor = System.Drawing.Color.White;
-            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
-            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
-            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-
-            dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "FechaOrden",
-                HeaderText = "FechaOrden",
-                DataPropertyName = "FechaOrden",
-                Visible = false,
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "OrdenVisual",
-                HeaderText = "OrdenVisual",
-                DataPropertyName = "OrdenVisual",
-                Visible = false,
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Descripcion",
-                HeaderText = "Descripción",
-                DataPropertyName = "Descripcion",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Cantidad",
-                HeaderText = "Cantidad",
-                DataPropertyName = "Cantidad",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvDetalles.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Estatus",
-                HeaderText = "Estatus",
-                DataPropertyName = "Estatus",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            dgvDetalles.AllowUserToAddRows = false;
-        }
-
+      
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             if(txtReferencia.Text.Trim() == string.Empty 
@@ -187,9 +97,10 @@ namespace Mikrotik_Administrador.Items
                 return;
             }
             ConfirmarPago confirmacion = new ConfirmarPago();
-            confirmacion.Total = TotalReal;
+            confirmacion.Total = Faltante;
             if (confirmacion.ShowDialog() != DialogResult.OK)
             { return; }
+            AppRepository obj = new AppRepository();
             VentaModel venta = new VentaModel
             {
                 Copias = 0,
@@ -197,20 +108,22 @@ namespace Mikrotik_Administrador.Items
                 Recibido = confirmacion.Recibido,
                 IdTicket = 0,
                 Cliente = Cliente,
-                Total = TotalReal,
+                Total = Faltante,
                 Title = string.Empty
             };
             HistorialPagosModel sv = new HistorialPagosModel
             {
-                IdUsuarioM = IdUsuarioM,
+                Id = 0,
                 FechaRecibido = dtpFechaPago.Value,
-                Cantidad = confirmacion.Recibido - TotalReal < 0 ? confirmacion.Recibido : TotalReal,
+                Cantidad = confirmacion.Recibido - Faltante < 0 ? confirmacion.Recibido : Faltante,
+                IdMensualidad = IdMensualidad,
                 Comentario = txtComentario.Text.Trim(),
                 IdBanco = (int)CBBanco.SelectedValue,
                 Referencia = txtReferencia.Text.Trim(),
-                Imagen = ImageToByteArray()
+                Imagen = ImageToByteArray(),
+                IdUsuario = IdResponsable
             };
-            AppRepository obj = new AppRepository();
+
             var result = obj.SaveHistorialPagos(sv).Result;
             if (result)
             {
