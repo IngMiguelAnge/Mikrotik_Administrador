@@ -250,8 +250,14 @@ namespace Mikrotik_Administrador.Catalogos
                         Hi.ShowDialog();
                         break;
                      case "btnPagar":
+                        if((decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value == 0)
+                        {
+                            MessageBox.Show("Esta mensualidad se encuentra completamente pagada", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
                         Pagar iniP = new Pagar();
                         iniP.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
+                        iniP.Mensualidad = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Mensualidad"].Value;
                         iniP.IdResponsable = IdResponsable;
                         iniP.Cliente = Cliente;
                         iniP.UsuarioM = UsuarioM;

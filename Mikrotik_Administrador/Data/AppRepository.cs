@@ -704,7 +704,29 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region Pagos
-        public async Task<bool> SaveHistorialPagos(HistorialPagosModel obj)
+        public async Task<bool> UpdateEstatusMensualidad(int Id,bool Pagado)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateEstatusMensualidad", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@Pagado", Pagado));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<int> SaveHistorialPagos(HistorialPagosModel obj)
         {
             try
             {
@@ -722,15 +744,21 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
                         cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        return true;
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
                     }
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
         public async Task<List<ListDetallesMensualidadModel>> GetDetallesMensualidad(int IdUsuarioM, DateTime Desde, DateTime Hasta)

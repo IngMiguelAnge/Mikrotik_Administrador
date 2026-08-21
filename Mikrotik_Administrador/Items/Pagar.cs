@@ -21,6 +21,7 @@ namespace Mikrotik_Administrador.Items
     public partial class Pagar : Form
     {
         public int IdMensualidad { get; set; }
+        public decimal Mensualidad { get; set; }
         public int IdResponsable { get; set; }
         public decimal Faltante { get; set; }
         public string Cliente { get; set; }
@@ -101,16 +102,7 @@ namespace Mikrotik_Administrador.Items
             if (confirmacion.ShowDialog() != DialogResult.OK)
             { return; }
             AppRepository obj = new AppRepository();
-            VentaModel venta = new VentaModel
-            {
-                Copias = 0,
-                Imprimir = false,
-                Recibido = confirmacion.Recibido,
-                IdTicket = 0,
-                Cliente = Cliente,
-                Total = Faltante,
-                Title = string.Empty
-            };
+        
             HistorialPagosModel sv = new HistorialPagosModel
             {
                 Id = 0,
@@ -125,11 +117,28 @@ namespace Mikrotik_Administrador.Items
             };
 
             var result = obj.SaveHistorialPagos(sv).Result;
-            if (result)
+            if (result != 0)
             {
                 MessageBox.Show("Pago registrado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                VentaModel venta = new VentaModel
+                {
+                    Copias = 0,
+                    Imprimir = false,
+                    Recibido = confirmacion.Recibido,
+                    IdTicket = result,
+                    Cliente = Cliente,
+                    Total = Faltante,
+                    Title = string.Empty
+                };
+                if(Faltante <= confirmacion.Recibido)
+                {
+                    var resulpago = obj.UpdateEstatusMensualidad(IdMensualidad,true);
+                    MessageBox.Show("Pago completo, ya puede crear una nueva mensualidad", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                }
                 Impresiones im = new Impresiones();
                 im.GenerarTicket(venta);
+               
                 this.Close();
             }
             else
