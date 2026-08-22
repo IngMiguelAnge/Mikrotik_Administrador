@@ -575,6 +575,28 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region HistorialPagos
+        public async Task<bool> UpdateStatusHistorialPagos(int Id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateStatusHistorialPagos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public async Task<List<ListHistorialPagosModel>> GetHistorialPagos(int IdMensualidad, string Referencia, int Id, int IdBanco)
         {
              List<ListHistorialPagosModel> list = new List<ListHistorialPagosModel>();

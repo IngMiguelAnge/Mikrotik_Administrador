@@ -20,6 +20,7 @@ namespace Mikrotik_Administrador.Items
 {
     public partial class Pagar : Form
     {
+        public int Id {  get; set; }
         public int IdMensualidad { get; set; }
         public decimal Mensualidad { get; set; }
         public int IdResponsable { get; set; }
@@ -105,7 +106,7 @@ namespace Mikrotik_Administrador.Items
         
             HistorialPagosModel sv = new HistorialPagosModel
             {
-                Id = 0,
+                Id = Id,
                 FechaRecibido = dtpFechaPago.Value,
                 Cantidad = confirmacion.Recibido - Faltante < 0 ? confirmacion.Recibido : Faltante,
                 IdMensualidad = IdMensualidad,

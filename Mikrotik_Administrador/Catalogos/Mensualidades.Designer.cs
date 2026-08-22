@@ -36,6 +36,7 @@
             this.cbTipo = new System.Windows.Forms.ComboBox();
             this.Tipo = new System.Windows.Forms.Label();
             this.panelContenedor = new System.Windows.Forms.Panel();
+            this.btnNuevo = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMensualidades)).BeginInit();
             this.panelTop.SuspendLayout();
             this.panelContenedor.SuspendLayout();
@@ -96,6 +97,7 @@
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.Color.White;
+            this.panelTop.Controls.Add(this.btnNuevo);
             this.panelTop.Controls.Add(this.cbTipo);
             this.panelTop.Controls.Add(this.Tipo);
             this.panelTop.Controls.Add(this.btnBuscar);
@@ -140,6 +142,20 @@
             this.panelContenedor.Size = new System.Drawing.Size(940, 340);
             this.panelContenedor.TabIndex = 2;
             // 
+            // btnNuevo
+            // 
+            this.btnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnNuevo.ForeColor = System.Drawing.Color.White;
+            this.btnNuevo.Location = new System.Drawing.Point(372, 32);
+            this.btnNuevo.Name = "btnNuevo";
+            this.btnNuevo.Size = new System.Drawing.Size(120, 38);
+            this.btnNuevo.TabIndex = 7;
+            this.btnNuevo.Text = "Nuevo";
+            this.btnNuevo.UseVisualStyleBackColor = false;
+            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
+            // 
             // Mensualidades
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -172,5 +188,6 @@
         private System.Windows.Forms.Panel panelContenedor;
         private System.Windows.Forms.ComboBox cbTipo;
         private System.Windows.Forms.Label Tipo;
+        private System.Windows.Forms.Button btnNuevo;
     }
 }

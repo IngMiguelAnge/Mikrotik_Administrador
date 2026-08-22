@@ -17,6 +17,11 @@ namespace Mikrotik_Administrador.Catalogos
     public partial class HistorialPagos : Form
     {
         public int IdMensualidad { get; set; }
+        public decimal Faltante { get; set; }
+        public decimal Mensualidad { get; set; }
+        public int IdResponsable {  get; set; }
+        public string Cliente { get; set; }
+        public string UsuarioM {  get; set; }
         public HistorialPagos()
         {
             InitializeComponent();
@@ -49,11 +54,7 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 var Pagos = await obj.GetHistorialPagos(IdMensualidad, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
                 var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosModel>();
-                dgvPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
-                if (dgvPagos.Columns["Imagen"] != null)
-                    dgvPagos.Columns["Imagen"].Visible = false;
-                if (dgvPagos.Columns["Comentario"] != null)
-                    dgvPagos.Columns["Comentario"].Visible = false;
+                dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
             }
             catch (Exception ex)
             {
@@ -66,18 +67,18 @@ namespace Mikrotik_Administrador.Catalogos
         }
         public void CrearGridView()
         {
-            dgvPagos.Columns.Clear();
-            dgvPagos.AutoGenerateColumns = false;
-            dgvPagos.EnableHeadersVisualStyles = false;
+            dgvHistorialPagos.Columns.Clear();
+            dgvHistorialPagos.AutoGenerateColumns = false;
+            dgvHistorialPagos.EnableHeadersVisualStyles = false;
             // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
-            dgvPagos.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
-            dgvPagos.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
-            dgvPagos.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            dgvHistorialPagos.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            dgvHistorialPagos.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            dgvHistorialPagos.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
 
             // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
-            dgvPagos.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            dgvPagos.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
-            dgvPagos.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+            dgvHistorialPagos.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            dgvHistorialPagos.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            dgvHistorialPagos.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
 
             // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
             System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
@@ -87,7 +88,7 @@ namespace Mikrotik_Administrador.Catalogos
             estiloBotones.SelectionForeColor = System.Drawing.Color.White;
             estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
 
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
+            dgvHistorialPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Id",
                 HeaderText = "NoTicket",
@@ -96,7 +97,7 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
+            dgvHistorialPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "FechaRecibido",
                 HeaderText = "Fecha en que se recibe",
@@ -105,7 +106,7 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
+            dgvHistorialPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Cantidad",
                 HeaderText = "Cantidad",
@@ -114,7 +115,7 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
+            dgvHistorialPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Estatus",
                 HeaderText = "Estatus",
@@ -123,7 +124,7 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
+            dgvHistorialPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Banco",
                 HeaderText = "Banco",
@@ -132,7 +133,7 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
+            dgvHistorialPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Referencia",
                 HeaderText = "Referencia",
@@ -140,7 +141,7 @@ namespace Mikrotik_Administrador.Catalogos
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
             });
-            dgvPagos.Columns.Add(new DataGridViewTextBoxColumn
+            dgvHistorialPagos.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Responsable",
                 HeaderText = "Responsable",
@@ -149,33 +150,67 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-           
-            dgvPagos.AllowUserToAddRows = false;
+            DataGridViewButtonColumn btnCambiarStatus = new DataGridViewButtonColumn
+            {
+                Name = "btnCambiarStatus",
+                HeaderText = "Acción",
+                Text = "Cambio Estatus",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvHistorialPagos.Columns.Add(btnCambiarStatus);
+            DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn
+            {
+                Name = "btnEditar",
+                HeaderText = "Acción",
+                Text = "Editar",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvHistorialPagos.Columns.Add(btnEditar);
+            dgvHistorialPagos.AllowUserToAddRows = false;
         }
 
-        private void dgvPagos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void dgvHistorialPagos_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
+            dgvHistorialPagos.Enabled = false;
             try
             {
-                //dgvPagos.Enabled = false;
-                //string Comentario = (string)dgvPagos.Rows[e.RowIndex].Cells["Comentario"].Value;
-                //byte[] Imagen = (byte[])dgvPagos.Rows[e.RowIndex].Cells["Imagen"].Value;
-                //switch (dgvPagos.Columns[e.ColumnIndex].Name)
-                //{
-                //    case "VerComentario":
-                //        VerComentario vc = new VerComentario();
-                //        vc.Comentario = Comentario;
-                //        vc.ShowDialog();
-                //        break;
-                //    case "VerImagen":
-                //        VerImagen vi = new VerImagen();
-                //        vi.Imagen = Imagen;
-                //        vi.ShowDialog();
-                //        break;                    
-                //    default:
-                //        break;
-                //}
+                int Id = (int)dgvHistorialPagos.Rows[e.RowIndex].Cells["Id"].Value;
+                switch (dgvHistorialPagos.Columns[e.ColumnIndex].Name)
+                {
+                    case "btnCambiarStatus":
+                        if((string)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value == "Inactivo"
+                            && (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value > Faltante)
+                        {
+                            MessageBox.Show("No se puede reactivar este pago, sobre pasa el faltante a pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                      
+                        AppRepository obj = new AppRepository();
+                        await obj.UpdateStatusHistorialPagos(Id);
+                        Buscar();
+                        break;
+                    case "btnEditar":
+                        Pagar iniP = new Pagar();
+                        iniP.Id = Id;
+                        iniP.IdMensualidad = IdMensualidad;
+                        iniP.Mensualidad = Mensualidad;
+                        iniP.IdResponsable = IdResponsable;
+                        iniP.Cliente = Cliente;
+                        iniP.UsuarioM = UsuarioM;
+                        iniP.Faltante = Faltante + (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Cantidad"].Value;
+                        iniP.ShowDialog();
+                        Buscar();
+                        break;
+                    default:
+                        break;
+                }
             }
             catch (Exception ex)
             {
@@ -183,7 +218,7 @@ namespace Mikrotik_Administrador.Catalogos
             }
             finally
             {
-                dgvPagos.Enabled = true;
+                dgvHistorialPagos.Enabled = true;
             }
         }
     }

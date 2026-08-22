@@ -247,6 +247,11 @@ namespace Mikrotik_Administrador.Catalogos
                     case "btnHistorial":
                         HistorialPagos Hi = new HistorialPagos();
                         Hi.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
+                        Hi.Faltante = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value;
+                        Hi.Mensualidad = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Mensualidad"].Value;
+                        Hi.IdResponsable = IdResponsable;
+                        Hi.Cliente = Cliente;
+                        Hi.UsuarioM = UsuarioM;                     
                         Hi.ShowDialog();
                         break;
                      case "btnPagar":
@@ -256,6 +261,7 @@ namespace Mikrotik_Administrador.Catalogos
                             return;
                         }
                         Pagar iniP = new Pagar();
+                        iniP.Id = 0;
                         iniP.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
                         iniP.Mensualidad = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Mensualidad"].Value;
                         iniP.IdResponsable = IdResponsable;
@@ -277,6 +283,16 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 dgvMensualidades.Enabled = true;
             }
+        }
+
+        private void btnNuevo_Click(object sender, EventArgs e)
+        {
+            IniciarPagos ini = new IniciarPagos();
+            ini.IdMensualidad = 0;
+            ini.IdUsuarioM = IdUsuarioM;
+            ini.IdResponsable = IdResponsable;
+            if (ini.ShowDialog() != DialogResult.OK)
+            { return; }
         }
     }
 }

@@ -30,7 +30,7 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.dgvPagos = new System.Windows.Forms.DataGridView();
+            this.dgvHistorialPagos = new System.Windows.Forms.DataGridView();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
             this.CBBanco = new System.Windows.Forms.ComboBox();
@@ -40,19 +40,19 @@
             this.txtReferencia = new System.Windows.Forms.TextBox();
             this.lblReferencia = new System.Windows.Forms.Label();
             this.panelContenedor = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPagos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHistorialPagos)).BeginInit();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUDTicket)).BeginInit();
             this.panelContenedor.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dgvPagos
+            // dgvHistorialPagos
             // 
-            this.dgvPagos.AllowUserToAddRows = false;
-            this.dgvPagos.BackgroundColor = System.Drawing.Color.White;
-            this.dgvPagos.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvPagos.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.dgvPagos.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.dgvHistorialPagos.AllowUserToAddRows = false;
+            this.dgvHistorialPagos.BackgroundColor = System.Drawing.Color.White;
+            this.dgvHistorialPagos.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvHistorialPagos.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvHistorialPagos.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -60,29 +60,29 @@
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvPagos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvPagos.ColumnHeadersHeight = 35;
-            this.dgvPagos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvHistorialPagos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvHistorialPagos.ColumnHeadersHeight = 35;
+            this.dgvHistorialPagos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40))))); // CORREGIDO: Texto de celdas oscuro
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvPagos.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvPagos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvPagos.EnableHeadersVisualStyles = false;
-            this.dgvPagos.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.dgvPagos.Location = new System.Drawing.Point(20, 20);
-            this.dgvPagos.Name = "dgvPagos";
-            this.dgvPagos.RowHeadersVisible = false;
-            this.dgvPagos.RowHeadersWidth = 51;
-            this.dgvPagos.RowTemplate.Height = 30;
-            this.dgvPagos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPagos.Size = new System.Drawing.Size(886, 321);
-            this.dgvPagos.TabIndex = 0;
-            this.dgvPagos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPagos_CellContentClick);
+            this.dgvHistorialPagos.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvHistorialPagos.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvHistorialPagos.EnableHeadersVisualStyles = false;
+            this.dgvHistorialPagos.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dgvHistorialPagos.Location = new System.Drawing.Point(20, 20);
+            this.dgvHistorialPagos.Name = "dgvHistorialPagos";
+            this.dgvHistorialPagos.RowHeadersVisible = false;
+            this.dgvHistorialPagos.RowHeadersWidth = 51;
+            this.dgvHistorialPagos.RowTemplate.Height = 30;
+            this.dgvHistorialPagos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvHistorialPagos.Size = new System.Drawing.Size(886, 321);
+            this.dgvHistorialPagos.TabIndex = 0;
+            this.dgvHistorialPagos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHistorialPagos_CellContentClick);
             // 
             // btnBuscar
             // 
@@ -181,7 +181,7 @@
             // 
             // panelContenedor
             // 
-            this.panelContenedor.Controls.Add(this.dgvPagos);
+            this.panelContenedor.Controls.Add(this.dgvHistorialPagos);
             this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContenedor.Location = new System.Drawing.Point(0, 89);
             this.panelContenedor.Name = "panelContenedor";
@@ -198,14 +198,14 @@
             this.Controls.Add(this.panelContenedor);
             this.Controls.Add(this.panelTop);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40))))); // CORREGIDO: Asegura color por defecto oscuro
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.MaximizeBox = false;
             this.Name = "HistorialPagos";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.HistorialPagos_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPagos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHistorialPagos)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUDTicket)).EndInit();
@@ -215,7 +215,7 @@
         }
         #endregion
 
-        private System.Windows.Forms.DataGridView dgvPagos;
+        private System.Windows.Forms.DataGridView dgvHistorialPagos;
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Panel panelContenedor;

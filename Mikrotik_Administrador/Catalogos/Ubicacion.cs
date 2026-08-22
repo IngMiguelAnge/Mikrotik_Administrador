@@ -17,7 +17,6 @@ namespace Mikrotik_Administrador
         public UbicacionModel ub = new UbicacionModel();
         GMapOverlay capaMarcadores;
         GMarkerGoogle marcador;
-        bool estaArrastrando = false;
         public Ubicacion()
         {
             InitializeComponent();
