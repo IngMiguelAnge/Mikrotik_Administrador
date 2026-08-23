@@ -16,20 +16,29 @@ namespace Mikrotik_Administrador.Items
             InitializeComponent();
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private async void btnGuardar_Click(object sender, EventArgs e)
         {
             AppRepository obj = new AppRepository();
-            obj.GetExistMensualidadProxima(IdUsuarioM, IdMensualidad, dtpFechaInicio.Value, Convert.ToDateTime(lblFechaCorte.Text)).ContinueWith(task =>
+            var existencia = await obj.GetExistMensualidadProxima(
+           IdUsuarioM,
+           IdMensualidad,
+           dtpFechaInicio.Value,
+           Convert.ToDateTime(lblFechaCorte.Text)
+       );
+
+            // 2. Si existen registros, mostramos el error y el return AHORA SÍ cancela el guardado
+            if (existencia != null && existencia.Count > 0)
             {
-                if (task.Result != null)
-                {
-                    if (task.Result.Count>0)
-                    {
-                        MessageBox.Show("No se puede ingresar esta fecha, ya hay un registro aproximado a la fecha establecida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                }
-            });
+                MessageBox.Show(
+                    "No se puede ingresar esta fecha, ya hay un registro aproximado a la fecha establecida.",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                return; // Detiene la ejecución completa del método
+            }
+
+            // 3. Si la validación pasa, se crea el objeto
             MensualidadModel mensualidad = new MensualidadModel
             {
                 Id = IdMensualidad,
@@ -41,14 +50,18 @@ namespace Mikrotik_Administrador.Items
                 IdUsuario = IdResponsable
             };
 
-            if (obj.SaveMensualidad(mensualidad).Result)
+            // 4. Guardamos usando await en lugar de .Result (evita bloqueos de interfaz)
+            bool guardado = await obj.SaveMensualidad(mensualidad);
+
+            if (guardado)
             {
                 MessageBox.Show("Mensualidad guardada");
                 DialogResult = DialogResult.OK;
             }
             else
+            {
                 MessageBox.Show("Error al guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+            }
         }
 
         private void IniciarPagos_Load(object sender, EventArgs e)

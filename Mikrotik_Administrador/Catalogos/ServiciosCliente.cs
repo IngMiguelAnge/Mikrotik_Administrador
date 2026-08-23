@@ -319,7 +319,7 @@ namespace Mikrotik_Administrador
                     int IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value);
                     AppRepository obj = new AppRepository();
                     var Mensualidades = await obj.GetMensualidades(IdUsuarioM);
-                    if( Mensualidades != null || Mensualidades.Count() <= 0 )
+                    if( Mensualidades == null || Mensualidades.Count() <= 0 )
                     {
                         MessageBox.Show("Se requiere que el usuario tenga una mensualidad ya asignada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;

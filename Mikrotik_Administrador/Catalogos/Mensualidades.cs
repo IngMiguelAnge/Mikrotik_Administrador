@@ -285,6 +285,7 @@ namespace Mikrotik_Administrador.Catalogos
             ini.IdResponsable = IdResponsable;
             if (ini.ShowDialog() != DialogResult.OK)
             { return; }
+            Buscar();
         }
     }
 }
