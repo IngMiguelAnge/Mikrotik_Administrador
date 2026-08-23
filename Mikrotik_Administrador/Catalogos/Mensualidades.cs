@@ -27,24 +27,16 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void Mensualidades_Load(object sender, EventArgs e)
         {
-            cbTipo.SelectedIndex = 2;
             Buscar();
         }
         public async void Buscar()
         {
-            if (cbTipo.SelectedIndex == 0)
-            {
-                MessageBox.Show("Seleccione un tipo de menualidad", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             btnBuscar.Enabled = false;
             CrearGridView();
             AppRepository obj = new AppRepository();
             try
             {
-                bool Pagado = cbTipo.SelectedIndex == 1 ? true : false;
-                var Mensualidades = await obj.GetMensualidades(IdUsuarioM, Pagado);
+                var Mensualidades = await obj.GetMensualidades(IdUsuarioM);
                 var listaFinal = Mensualidades?.ToList() ?? new List<ListMensualidadesModel>();
                 dgvMensualidades.DataSource = new SortableBindingList<ListMensualidadesModel>(listaFinal);
             }

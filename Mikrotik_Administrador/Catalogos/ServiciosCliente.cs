@@ -316,6 +316,14 @@ namespace Mikrotik_Administrador
                     break;
 
                 case "btnProgramar":
+                    int IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value);
+                    AppRepository obj = new AppRepository();
+                    var Mensualidades = await obj.GetMensualidades(IdUsuarioM);
+                    if( Mensualidades != null || Mensualidades.Count() <= 0 )
+                    {
+                        MessageBox.Show("Se requiere que el usuario tenga una mensualidad ya asignada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     if (Estatus == "Eliminado")
                     {
                         MessageBox.Show("Este servicio se encuentra ya eliminado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -377,7 +385,7 @@ namespace Mikrotik_Administrador
                         FechaInicio = td.FechaInicio ?? DateTime.Now,
                         FechaFin = td.FechaFin ?? DateTime.Now.AddDays(td.Dias).AddHours(td.Horas),
                         Modo = td.Modo,
-                        IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value),
+                        IdUsuarioM = IdUsuarioM,
                         Estatus = "Pendiente",
                         IdPlan = IdPlanSeccionado,
                         IdMikrotikReceptor = td.IdMikrotik,
@@ -393,7 +401,6 @@ namespace Mikrotik_Administrador
                         Estatus = false
                     };
                     
-                    AppRepository obj = new AppRepository();
                     await obj.SaveHistorialMovimientos(H);
                     var result = obj.SaveTiempoCambio(TD);
                     MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);

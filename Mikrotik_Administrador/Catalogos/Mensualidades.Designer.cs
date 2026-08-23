@@ -33,10 +33,8 @@
             this.dgvMensualidades = new System.Windows.Forms.DataGridView();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.cbTipo = new System.Windows.Forms.ComboBox();
-            this.Tipo = new System.Windows.Forms.Label();
-            this.panelContenedor = new System.Windows.Forms.Panel();
             this.btnNuevo = new System.Windows.Forms.Button();
+            this.panelContenedor = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMensualidades)).BeginInit();
             this.panelTop.SuspendLayout();
             this.panelContenedor.SuspendLayout();
@@ -86,7 +84,7 @@
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBuscar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnBuscar.ForeColor = System.Drawing.Color.White;
-            this.btnBuscar.Location = new System.Drawing.Point(244, 32);
+            this.btnBuscar.Location = new System.Drawing.Point(20, 33);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(100, 38);
             this.btnBuscar.TabIndex = 3;
@@ -98,8 +96,6 @@
             // 
             this.panelTop.BackColor = System.Drawing.Color.White;
             this.panelTop.Controls.Add(this.btnNuevo);
-            this.panelTop.Controls.Add(this.cbTipo);
-            this.panelTop.Controls.Add(this.Tipo);
             this.panelTop.Controls.Add(this.btnBuscar);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -107,30 +103,19 @@
             this.panelTop.Size = new System.Drawing.Size(940, 89);
             this.panelTop.TabIndex = 1;
             // 
-            // cbTipo
+            // btnNuevo
             // 
-            this.cbTipo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbTipo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.cbTipo.FormattingEnabled = true;
-            this.cbTipo.Items.AddRange(new object[] {
-            "Seleccione",
-            "Pagas",
-            "Pendientes"});
-            this.cbTipo.Location = new System.Drawing.Point(20, 37);
-            this.cbTipo.Name = "cbTipo";
-            this.cbTipo.Size = new System.Drawing.Size(180, 33);
-            this.cbTipo.TabIndex = 2;
-            // 
-            // Tipo
-            // 
-            this.Tipo.AutoSize = true;
-            this.Tipo.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.Tipo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.Tipo.Location = new System.Drawing.Point(15, 9);
-            this.Tipo.Name = "Tipo";
-            this.Tipo.Size = new System.Drawing.Size(53, 25);
-            this.Tipo.TabIndex = 6;
-            this.Tipo.Text = "Tipo:";
+            this.btnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnNuevo.ForeColor = System.Drawing.Color.White;
+            this.btnNuevo.Location = new System.Drawing.Point(148, 33);
+            this.btnNuevo.Name = "btnNuevo";
+            this.btnNuevo.Size = new System.Drawing.Size(120, 38);
+            this.btnNuevo.TabIndex = 7;
+            this.btnNuevo.Text = "Nuevo";
+            this.btnNuevo.UseVisualStyleBackColor = false;
+            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
             // 
             // panelContenedor
             // 
@@ -141,20 +126,6 @@
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
             this.panelContenedor.Size = new System.Drawing.Size(940, 340);
             this.panelContenedor.TabIndex = 2;
-            // 
-            // btnNuevo
-            // 
-            this.btnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
-            this.btnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnNuevo.ForeColor = System.Drawing.Color.White;
-            this.btnNuevo.Location = new System.Drawing.Point(372, 32);
-            this.btnNuevo.Name = "btnNuevo";
-            this.btnNuevo.Size = new System.Drawing.Size(120, 38);
-            this.btnNuevo.TabIndex = 7;
-            this.btnNuevo.Text = "Nuevo";
-            this.btnNuevo.UseVisualStyleBackColor = false;
-            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
             // 
             // Mensualidades
             // 
@@ -174,7 +145,6 @@
             this.Load += new System.EventHandler(this.Mensualidades_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMensualidades)).EndInit();
             this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
             this.panelContenedor.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -186,8 +156,6 @@
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Panel panelContenedor;
-        private System.Windows.Forms.ComboBox cbTipo;
-        private System.Windows.Forms.Label Tipo;
         private System.Windows.Forms.Button btnNuevo;
     }
 }

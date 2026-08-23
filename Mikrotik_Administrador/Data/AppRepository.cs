@@ -856,7 +856,7 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-        public async Task<List<ListMensualidadesModel>> GetMensualidades(int IdUsuarioM, bool Pagado)
+        public async Task<List<ListMensualidadesModel>> GetMensualidades(int IdUsuarioM)
         {
             List<ListMensualidadesModel> list = new List<ListMensualidadesModel>();
             try
@@ -867,7 +867,34 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
-                        cmd.Parameters.Add(new SqlParameter("@Pagado", Pagado));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToMensualidades(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+        public async Task<List<ListMensualidadesModel>> GetExistMensualidadesbyUserM(int IdUsuarioM)
+        {
+            List<ListMensualidadesModel> list = new List<ListMensualidadesModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetExistMensualidadesbyUserM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
