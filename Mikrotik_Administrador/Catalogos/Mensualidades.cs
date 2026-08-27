@@ -228,6 +228,7 @@ namespace Mikrotik_Administrador.Catalogos
                         ini.IdUsuarioM = IdUsuarioM;
                         ini.IdResponsable = IdResponsable;
                         ini.ShowDialog();
+                        Buscar();
                         break;
                     case "btnVerDetalles":
                         DetallesMensualidad detalles = new DetallesMensualidad();

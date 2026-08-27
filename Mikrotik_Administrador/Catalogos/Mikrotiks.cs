@@ -24,7 +24,7 @@ namespace Mikrotik_Administrador
             InfoMikrotik m = new InfoMikrotik();
             m.IdMikrotik = 0;
             m.ShowDialog();
-            //ListaMikrotiks();
+            ListaMikrotiks();
         }
 
         private async void ListaMikrotiks()
@@ -40,8 +40,6 @@ namespace Mikrotik_Administrador
                 var lista = await obj.GetMikrotiks();
                 var listaFinal = lista?.ToList() ?? new List<ListMikrotikModel>();
                  DGVMikrotiks.DataSource = new SortableBindingList<ListMikrotikModel>(listaFinal);
-                if (DGVMikrotiks.Columns["Id"] != null)
-                DGVMikrotiks.Columns["Id"].Visible = false;
             }
             catch (Exception ex)
             {

@@ -137,8 +137,6 @@ namespace Mikrotik_Administrador.Catalogos
                 var lista = await Task.Run(() => obj.GetBancos(txtNombre.Text, Tipo));
                 var listaFinal = lista?.ToList() ?? new List<ListBancosModel>();
                 dgvBancos.DataSource = new SortableBindingList<ListBancosModel>(listaFinal);
-                if (dgvBancos.Columns["Id"] != null)
-                    dgvBancos.Columns["Id"].Visible = false;
             }
             catch (Exception ex)
             {

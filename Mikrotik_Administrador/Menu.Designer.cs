@@ -41,6 +41,7 @@
             this.btnCambios = new System.Windows.Forms.Button();
             this.btnHistorial = new System.Windows.Forms.Button();
             this.btnUsuarios = new System.Windows.Forms.Button();
+            this.btncerrar = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -242,12 +243,24 @@
             this.btnUsuarios.UseVisualStyleBackColor = false;
             this.btnUsuarios.Click += new System.EventHandler(this.btnUsuarios_Click);
             // 
+            // btncerrar
+            // 
+            this.btncerrar.Font = new System.Drawing.Font("Segoe UI Black", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btncerrar.Location = new System.Drawing.Point(30, 12);
+            this.btncerrar.Name = "btncerrar";
+            this.btncerrar.Size = new System.Drawing.Size(168, 42);
+            this.btncerrar.TabIndex = 11;
+            this.btncerrar.Text = "Cerrar Sessión";
+            this.btncerrar.UseVisualStyleBackColor = true;
+            this.btncerrar.Click += new System.EventHandler(this.btncerrar_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(684, 461);
+            this.Controls.Add(this.btncerrar);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.lblMenu);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -279,5 +292,6 @@
         private System.Windows.Forms.Button btnCambios;
         private System.Windows.Forms.Button btnHistorial;
         private System.Windows.Forms.Button btnUsuarios;
+        private System.Windows.Forms.Button btncerrar;
     }
 }

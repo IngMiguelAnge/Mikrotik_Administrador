@@ -222,6 +222,7 @@ namespace Mikrotik_Administrador.Catalogos
         {
             UsuarioSistema us = new UsuarioSistema();
             us.ShowDialog();
+            BuscarUsuarios();
         }
     }
 }

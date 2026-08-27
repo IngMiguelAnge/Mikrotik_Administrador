@@ -1298,7 +1298,8 @@ namespace Mikrotik_Administrador.Class
 
                 Send("/ppp/profile/print");
                 Send("=.proplist=.id");
-                Send("?name=" + Plan.Nombre, true);
+                //Send("?name=" + Plan.Nombre, true);
+                Send("?rate-limit=" + Plan.Velocidad, true);
                 foreach (string row in Read())
                 {
                     if (row.StartsWith("!re"))
@@ -1337,7 +1338,7 @@ namespace Mikrotik_Administrador.Class
                         if (row.StartsWith("!done"))
                         {
                             bool r = obj.UpdateStatusPlanesAnidado(Anidado.Id, true).Result;
-                            return string.Empty;
+                            break;
                         }
                     }
                 }
@@ -1374,24 +1375,21 @@ namespace Mikrotik_Administrador.Class
                             break; // Salimos del foreach del print
                         }
                     }
-
-
-                    PlanAnidadoModel plansave = new PlanAnidadoModel();
-                    plansave.IdPlan = Plan.Id;
-                    plansave.IdPlanInterno = idEncontrado;
-                    plansave.IsAntena = Plan.IsAntena;
-                    plansave.IdMikrotik = Anidado.IdMikrotik;
-                    plansave.Id = Anidado.Id;
-                    int guardado = obj.SavePlanAnidadoByMigracion(plansave).Result;
-                    return string.Empty;
                 }
+                PlanAnidadoModel plansave = new PlanAnidadoModel();
+                plansave.IdPlan = Plan.Id;
+                plansave.IdPlanInterno = idEncontrado;
+                plansave.IsAntena = Plan.IsAntena;
+                plansave.IdMikrotik = Anidado.IdMikrotik;
+                plansave.Id = Anidado.Id;
+                int guardado = obj.SavePlanAnidadoByMigracion(plansave).Result;
+                return string.Empty;
 
             }
             catch (Exception e)
             {
                 return e.Message;
             }
-            return "Fallo perfil";
         }
         public string BuscarPerfil(string Nombre)
         {

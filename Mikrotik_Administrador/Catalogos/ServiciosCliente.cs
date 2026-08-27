@@ -57,7 +57,6 @@ namespace Mikrotik_Administrador
                 Name = "Id",
                 HeaderText = "Id",
                 DataPropertyName = "Id",
-                Visible = false,
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
@@ -249,10 +248,7 @@ namespace Mikrotik_Administrador
                 var lista = obj.GetUsuariosMikrotiksByIdCliente(IdCliente).Result;
                 var listaFinal = lista?.ToList() ?? new List<ListUsuariosGeneralModel>();
                 DGVServicios.DataSource = new SortableBindingList<ListUsuariosGeneralModel>(listaFinal);
-                if (DGVServicios.Columns["Id"] != null)
-                {
-                    DGVServicios.Columns["Id"].Visible = false;
-                }
+ 
                 if (DGVServicios.Columns["IdPlan"] != null)
                 {
                     DGVServicios.Columns["IdPlan"].Visible = false;

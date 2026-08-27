@@ -62,8 +62,6 @@ namespace Mikrotik_Administrador
                 var lista = await Task.Run(() => obj.GetClientesbyName(txtCliente.Text, IdMikrotik));
                 var listaFinal = lista?.ToList() ?? new List<ListClientesModel>();
                 DGVClientes.DataSource = new SortableBindingList<ListClientesModel>(listaFinal);
-                if (DGVClientes.Columns["Id"] != null)
-                    DGVClientes.Columns["Id"].Visible = false;
              
             }
             catch (Exception ex)
@@ -105,7 +103,6 @@ namespace Mikrotik_Administrador
                 Name = "Id",
                 HeaderText = "Id",
                 DataPropertyName = "Id",
-                Visible = false,
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic

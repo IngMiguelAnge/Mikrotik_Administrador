@@ -39,8 +39,6 @@ namespace Mikrotik_Administrador
                 var lista = obj.GetPlanesbyName(txtNombre.Text, IsAntena, PorUsuarios).Result;
                 var listaFinal = lista?.ToList() ?? new List<ListPlanesModel>();
                 dgvPlanes.DataSource = new SortableBindingList<ListPlanesModel>(listaFinal);
-                if (dgvPlanes.Columns["Id"] != null)
-                    dgvPlanes.Columns["Id"].Visible = false;
                 if (dgvPlanes.Columns["Correctos"] != null && PorUsuarios == true)
                     dgvPlanes.Columns["Correctos"].Visible = false;
                 if (dgvPlanes.Columns["Erroneos"] != null && PorUsuarios == true)
@@ -97,7 +95,6 @@ namespace Mikrotik_Administrador
                 Name = "Id",
                 HeaderText = "Id",
                 DataPropertyName = "Id",
-                Visible = false,
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic

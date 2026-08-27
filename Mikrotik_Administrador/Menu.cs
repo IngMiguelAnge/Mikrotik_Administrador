@@ -120,5 +120,11 @@ namespace Mikrotik_Administrador
             UsuariosSistema us = new UsuariosSistema();
             us.Show();
         }
+
+        private void btncerrar_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+            Environment.Exit(0);
+        }
     }
 }
