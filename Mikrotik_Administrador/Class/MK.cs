@@ -49,20 +49,33 @@ namespace Mikrotik_Administrador.Class
         {
             try
             {
-                if (connection != null)
+                if (con != null && con.Connected && connection != null)
                 {
-                    // Intentar enviar /quit solo si el socket sigue vivo
-                    if (con != null && con.Connected)
+                    try
                     {
+                        // 1. Enviar /quit
                         Send("/quit", true);
-                        System.Threading.Thread.Sleep(50);
+
+                        // 2. IMPORTANTE: Leer la respuesta (!done) para que RouterOS confirme el cierre de sesión
+                        // Adapta esta línea según cómo lea datos tu clase (Read(), ReadResponse(), etc.)
+                        Read();
                     }
-                    connection.Dispose(); // Usar Dispose es más agresivo y limpio
+                    catch
+                    {
+                        // Si falla el envío de /quit, continuamos para forzar la limpieza del socket
+                    }
                 }
-                if (con != null) con.Close();
                 return true;
             }
-            catch { return false; }
+            finally
+            {
+                // El bloque finally GARANTIZA que los sockets se cierren siempre, ocurra o no una excepción
+                try { connection?.Dispose(); } catch { }
+                try { con?.Close(); } catch { }
+
+                connection = null;
+                con = null;
+            }
         }
         public void Send(string co)
         {
