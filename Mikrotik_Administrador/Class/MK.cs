@@ -1311,27 +1311,29 @@ namespace Mikrotik_Administrador.Class
 
                 Send("/ppp/profile/print");
                 Send("=.proplist=.id");
-                //Send("?name=" + Plan.Nombre, true);
+                if(Anidado.IdPlanInterno == string.Empty)
                 Send("?rate-limit=" + Plan.Velocidad, true);
+                else
+                Send("=.id=" + Anidado.IdPlanInterno, true);
                 foreach (string row in Read())
-                {
-                    if (row.StartsWith("!re"))
                     {
-                        existe = true;
-                    }
-                    else if (row.StartsWith("="))
-                    {
-                        string[] parts = row.Split(new char[] { '=' }, 3);
-                        if (parts.Length >= 3 && parts[1] == ".id")
+                        if (row.StartsWith("!re"))
                         {
-                            idEncontrado = parts[2];
+                            existe = true;
+                        }
+                        else if (row.StartsWith("="))
+                        {
+                            string[] parts = row.Split(new char[] { '=' }, 3);
+                            if (parts.Length >= 3 && parts[1] == ".id")
+                            {
+                                idEncontrado = parts[2];
+                            }
+                        }
+                        else if (row.StartsWith("!done"))
+                        {
+                            break; // Salimos del foreach del print
                         }
                     }
-                    else if (row.StartsWith("!done"))
-                    {
-                        break; // Salimos del foreach del print
-                    }
-                }
                 AppRepository obj = new AppRepository();
 
                 // --- PASO 2: ACCIÓN (SET o ADD) ---
