@@ -125,10 +125,10 @@ namespace Mikrotik_Administrador
             bool IsAntena = (string)CBPerteneceA.SelectedItem == "Antena" ? true : false;
             string Velocidad = Convert.ToString(NUDSubida.Value) + cbSubida.SelectedItem +
                 "/" + Convert.ToString(NUDDescarga.Value) + CBDescarga.SelectedItem;
-            var existVelocidad = obj.GetPlanByVelocidad(Velocidad);
-            if (existVelocidad != null && existVelocidad.Result.Id != Id)
+            var existVelocidad = obj.GetPlanByVelocidad(Velocidad, IsAntena);
+            if (existVelocidad.Result != null && existVelocidad.Result.Id != Id)
             {
-                MessageBox.Show("Esta velocidad y se encuentra registrada previamente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Esta velocidad ya se encuentra registrada previamente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             PlanModel plan = new PlanModel();

@@ -1311,10 +1311,13 @@ namespace Mikrotik_Administrador.Class
 
                 Send("/ppp/profile/print");
                 Send("=.proplist=.id");
-                if(Anidado.IdPlanInterno == string.Empty)
-                Send("?rate-limit=" + Plan.Velocidad, true);
+                if (Anidado.IdPlanInterno == string.Empty)
+                    Send("?rate-limit=" + Plan.Velocidad, true);
                 else
-                Send("=.id=" + Anidado.IdPlanInterno, true);
+                {
+                    Send("?.id=" + Anidado.IdPlanInterno); // Algunos wrappers requieren esto
+                    Send("?#&", true); // Evalúa la consulta
+                }
                 foreach (string row in Read())
                     {
                         if (row.StartsWith("!re"))

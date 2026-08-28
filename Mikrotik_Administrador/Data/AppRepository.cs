@@ -1455,7 +1455,7 @@ namespace Mikrotik_Administrador.Data
             }
             return response;
         }
-        public async Task<PlanModel> GetPlanByVelocidad(string Velocidad)
+        public async Task<PlanModel> GetPlanByVelocidad(string Velocidad, bool IsAntena)
         {
             PlanModel response = new PlanModel();
             List<PlanModel> list = new List<PlanModel>();
@@ -1467,6 +1467,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Velocidad", Velocidad));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
