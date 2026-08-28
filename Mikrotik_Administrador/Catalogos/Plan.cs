@@ -123,14 +123,20 @@ namespace Mikrotik_Administrador
                 return;
             }
             bool IsAntena = (string)CBPerteneceA.SelectedItem == "Antena" ? true : false;
-           
+            string Velocidad = Convert.ToString(NUDSubida.Value) + cbSubida.SelectedItem +
+                "/" + Convert.ToString(NUDDescarga.Value) + CBDescarga.SelectedItem;
+            var existVelocidad = obj.GetPlanByVelocidad(Velocidad);
+            if (existVelocidad != null && existVelocidad.Result.Id != Id)
+            {
+                MessageBox.Show("Esta velocidad y se encuentra registrada previamente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             PlanModel plan = new PlanModel();
             plan.Id = Id;
             plan.Nombre = txtNombre.Text.Trim();
             plan.IsAntena = IsAntena;
             plan.Precio = NUDPrecio.Value;
-            plan.Velocidad = Convert.ToString(NUDSubida.Value) + cbSubida.SelectedItem +
-                "/" + Convert.ToString(NUDDescarga.Value) + CBDescarga.SelectedItem;
+            plan.Velocidad = Velocidad;
             plan.Id = obj.SavePlan(plan).Result;
             if (plan.Id != 0)
             {

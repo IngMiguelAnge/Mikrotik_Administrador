@@ -1455,6 +1455,36 @@ namespace Mikrotik_Administrador.Data
             }
             return response;
         }
+        public async Task<PlanModel> GetPlanByVelocidad(string Velocidad)
+        {
+            PlanModel response = new PlanModel();
+            List<PlanModel> list = new List<PlanModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetPlanByVelocidad", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Velocidad", Velocidad));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToPlan(reader));
+                            }
+                            response = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response = null;
+            }
+            return response;
+        }
         private PlanModel MapToPlan(SqlDataReader reader)
         {
             return new PlanModel()

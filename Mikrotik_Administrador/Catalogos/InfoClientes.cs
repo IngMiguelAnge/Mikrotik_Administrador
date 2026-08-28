@@ -212,7 +212,8 @@ namespace Mikrotik_Administrador
                 case "btnEditar":
                     InfoCliente m = new InfoCliente();
                     m.IdCliente = Convert.ToInt32(Id);
-                    m.Show();
+                    m.ShowDialog();
+                    CargarClientes();
                     break;
                 case "btnCambiarEstatus":
                     var TotalServicios = DGVClientes.Rows[e.RowIndex].Cells["TotalServicios"].Value;
@@ -246,7 +247,8 @@ namespace Mikrotik_Administrador
         {
             InfoCliente m = new InfoCliente();
             m.IdCliente = 0;
-            m.Show();
+            m.ShowDialog();
+            CargarClientes();
         }
     }
 }
