@@ -280,6 +280,12 @@
     <Compile Include="Catalogos\Mensualidades.Designer.cs">
       <DependentUpon>Mensualidades.cs</DependentUpon>
     </Compile>
+    <Compile Include="Items\MensualidadesMultiples.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\MensualidadesMultiples.Designer.cs">
+      <DependentUpon>MensualidadesMultiples.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\MikrotiksAnidados.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -391,6 +397,7 @@
     <Compile Include="Model\BancoModel.cs" />
     <Compile Include="Model\ConfigPageModel.cs" />
     <Compile Include="Model\HistorialMovimientosModel.cs" />
+    <Compile Include="Model\ListClientesDescargaModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />
     <Compile Include="Model\ListTiposUsuarioModel.cs" />
     <Compile Include="Model\ListUsuariosModel.cs" />
@@ -547,6 +554,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Items\IniciarPagos.resx">
       <DependentUpon>IniciarPagos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\MensualidadesMultiples.resx">
+      <DependentUpon>MensualidadesMultiples.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\MikrotiksDisponibles.resx">
       <DependentUpon>MikrotiksDisponibles.cs</DependentUpon>

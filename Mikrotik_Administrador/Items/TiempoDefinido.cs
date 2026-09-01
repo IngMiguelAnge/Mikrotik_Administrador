@@ -3,6 +3,7 @@ using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -34,7 +35,6 @@ namespace Mikrotik_Administrador.Items
             lblTiempo.Text = "Tiempo que desea que dure:";
             NUDDias.Value = 8;
             dtpFechaInicio.Value = DateTime.Now;
-            dtpFechaInicio.MinDate = DateTime.Now;
             lblFechaFin.Text = string.Empty;
             CambiarFinal();
             AppRepository obj = new AppRepository();
@@ -75,13 +75,14 @@ namespace Mikrotik_Administrador.Items
                     MessageBox.Show("La fecha de inicio seleccionada no es válida. No debe estar entre " + FechaInicio?.ToString("dd/MM/yyyy HH:mm:ss") + " y " + FechaFin?.ToString("dd/MM/yyyy HH:mm:ss"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
+                if (lblFechaFin.Visible == true)
                 if (Convert.ToDateTime(lblFechaFin.Text) >= FechaInicio && Convert.ToDateTime(lblFechaFin.Text) <= FechaFin)
                 {
                     MessageBox.Show("La fecha que termina no es válida. No debe estar entre " + FechaInicio?.ToString("dd/MM/yyyy HH:mm:ss") + " y " + FechaFin?.ToString("dd/MM/yyyy HH:mm:ss"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
             }
-            if(CBModo.SelectedIndex == 3 && Programacion == "Suspensión")
+            if (CBModo.SelectedIndex == 3 && Programacion == "Suspensión")
             {
                 DialogResult resultado = MessageBox.Show("Si selecciona permanente, el usuario sera eliminado del mikrotik. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (resultado == DialogResult.No)
@@ -89,6 +90,12 @@ namespace Mikrotik_Administrador.Items
                     return false;
                 }
             }
+            //if (dtpFechaInicio.Value < DateTime.Now)
+            //{
+                
+            //}
+            //if (lblFechaFin.Visible == true)
+           
             Dias = (int)NUDDias.Value;
             Horas = (int)NUDHoras.Value;
             return true;
@@ -119,6 +126,7 @@ namespace Mikrotik_Administrador.Items
 
         private void CBModo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            lblFechaFin.Visible = true;
             if (CBModo.SelectedIndex == 0)
             {
                 NUDDias.Enabled = false;
@@ -133,7 +141,7 @@ namespace Mikrotik_Administrador.Items
                 {
                     NUDDias.Enabled = false;
                     NUDHoras.Enabled = false;
-                    lblFechaFin.Text = "Es para plan mensual";
+                    lblFechaFin.Visible = false;
                 }
                 else
                 {

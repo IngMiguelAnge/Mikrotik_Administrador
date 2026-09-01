@@ -2577,6 +2577,47 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
+        public async Task<List<ListClientesDescargaModel>> GetUsuariosAll(string Cliente, int IdMikrotik, string Usuario)
+        {
+            List<ListClientesDescargaModel> list = new List<ListClientesDescargaModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUsuariosAll", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Cliente", Cliente));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Usuario", Usuario));
+
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToClientesDescarga(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListClientesDescargaModel MapToClientesDescarga(SqlDataReader reader)
+        {
+            return new ListClientesDescargaModel()
+            {
+                IdCliente = (int)reader["IdCliente"],
+                Cliente = (string)reader["Cliente"],
+                IdUsuarioM = (int)reader["IdUsuarioM"],
+                Usuario = (string)reader["Usuario"],
+                Estatus = (string)reader["Estatus"],
+            };
+        }
         #endregion
     }
 }
