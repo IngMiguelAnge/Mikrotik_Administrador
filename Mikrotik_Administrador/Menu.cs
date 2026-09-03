@@ -126,5 +126,11 @@ namespace Mikrotik_Administrador
             Application.Restart();
             Environment.Exit(0);
         }
+
+        private void btnExcel_Click(object sender, EventArgs e)
+        {
+            MensualidadesMultiples mm = new MensualidadesMultiples();
+            mm.Show();
+        }
     }
 }

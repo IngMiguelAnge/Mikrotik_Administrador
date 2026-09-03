@@ -42,6 +42,7 @@
             this.btnHistorial = new System.Windows.Forms.Button();
             this.btnUsuarios = new System.Windows.Forms.Button();
             this.btncerrar = new System.Windows.Forms.Button();
+            this.btnExcel = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,6 +72,7 @@
             this.flowLayoutPanel1.Controls.Add(this.btnCambios);
             this.flowLayoutPanel1.Controls.Add(this.btnHistorial);
             this.flowLayoutPanel1.Controls.Add(this.btnUsuarios);
+            this.flowLayoutPanel1.Controls.Add(this.btnExcel);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 60);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -254,6 +256,21 @@
             this.btncerrar.UseVisualStyleBackColor = true;
             this.btncerrar.Click += new System.EventHandler(this.btncerrar_Click);
             // 
+            // btnExcel
+            // 
+            this.btnExcel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.btnExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExcel.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnExcel.ForeColor = System.Drawing.Color.White;
+            this.btnExcel.Location = new System.Drawing.Point(360, 300);
+            this.btnExcel.Margin = new System.Windows.Forms.Padding(5, 5, 15, 15);
+            this.btnExcel.Name = "btnExcel";
+            this.btnExcel.Size = new System.Drawing.Size(145, 75);
+            this.btnExcel.TabIndex = 13;
+            this.btnExcel.Text = "Excel";
+            this.btnExcel.UseVisualStyleBackColor = false;
+            this.btnExcel.Click += new System.EventHandler(this.btnExcel_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -293,5 +310,6 @@
         private System.Windows.Forms.Button btnHistorial;
         private System.Windows.Forms.Button btnUsuarios;
         private System.Windows.Forms.Button btncerrar;
+        private System.Windows.Forms.Button btnExcel;
     }
 }

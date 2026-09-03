@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Class;
+﻿using ClosedXML.Excel;
+using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
@@ -7,10 +8,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace Mikrotik_Administrador.Catalogos
 {
@@ -194,9 +197,146 @@ namespace Mikrotik_Administrador.Catalogos
                     return;
                 }
                 AppRepository obj = new AppRepository();
-                foreach (ListClientesDescargaModel item in Seleccionados)
+                // 1.Configurar cuadro de diálogo para guardar el archivo
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
                 {
+                    saveFileDialog.Filter = "Archivo de Excel (*.xlsx)|*.xlsx";
+                    saveFileDialog.FileName = "Descarga de Mensualidades.xlsx";
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        // 2. Crear el libro de trabajo (Workbook)
+                        using (var workbook = new XLWorkbook())
+                        {
+                            // ==============================================================
+                            // HOJA 1: CAMBIOS Y SUSPENSIONES (Aparecerá primero)
+                            // ==============================================================
+                            var wsCambios = workbook.Worksheets.Add("Cambios y suspensiones");
+
+                            // Encabezados
+                            wsCambios.Cell(1, 1).Value = "IdUsuarioM";                 // A
+                            wsCambios.Cell(1, 2).Value = "Usuario del mikrotik";       // B
+                            wsCambios.Cell(1, 3).Value = "Servicio extra";              // C
+                            wsCambios.Cell(1, 4).Value = "Cuando inicio";               // D
+                            wsCambios.Cell(1, 5).Value = "Días que duro";               // E
+                            wsCambios.Cell(1, 6).Value = "Id Plan que recibiria";       // F
+                            wsCambios.Cell(1, 7).Value = "Nombre Plan que recibiria";   // G
+                            wsCambios.Cell(1, 8).Value = "Id mikrotik receptor";        // H
+                            wsCambios.Cell(1, 9).Value = "Nombre mikrotik receptor";    // I
+
+                            // Formato a los encabezados (A1 a I1)
+                            var headerCambios = wsCambios.Range("A1:I1");
+                            headerCambios.Style.Font.Bold = true;
+                            headerCambios.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
+                            headerCambios.Style.Font.FontColor = XLColor.White;
+
+                            int filaCambios = 2;
+                            foreach (ListClientesDescargaModel item in Seleccionados)
+                            {
+                                wsCambios.Cell(filaCambios, 1).Value = item.IdUsuarioM;
+                                wsCambios.Cell(filaCambios, 2).Value = item.Usuario;
+                                wsCambios.Cell(filaCambios, 3).Value = "Cambio de plan";
+                                wsCambios.Cell(filaCambios, 4).Value = DateTime.Now;
+                                wsCambios.Cell(filaCambios, 4).Style.DateFormat.Format = "dd/MM/yyyy HH:mm:ss";
+                                wsCambios.Cell(filaCambios, 5).Value = 1;
+                                wsCambios.Cell(filaCambios, 6).Value = 1;
+                                wsCambios.Cell(filaCambios, 7).Value = "Plan Basico";
+                                wsCambios.Cell(filaCambios, 8).Value = 1;
+                                wsCambios.Cell(filaCambios, 9).Value = "Santa Maria";
+                                filaCambios++;
+                            }
+
+                            // Autoajuste de columnas para Hoja 1
+                            wsCambios.Columns().AdjustToContents();
+
+                            // ==============================================================
+                            // HOJA 2: MENSUALIDADES (Aparecerá segundo)
+                            // ==============================================================
+                            var wsMensualidades = workbook.Worksheets.Add("Mensualidades");
+
+                            // Encabezados
+                            wsMensualidades.Cell(1, 1).Value = "N°Mensualidad"; //A
+                            wsMensualidades.Cell(1, 2).Value = "IdCliente";                            // B
+                            wsMensualidades.Cell(1, 3).Value = "Cliente";                              // C
+                            wsMensualidades.Cell(1, 4).Value = "IdUsuarioM";                           // D
+                            wsMensualidades.Cell(1, 5).Value = "UsuarioM";                             // E
+                            wsMensualidades.Cell(1, 6).Value = "Fecha en que comenzo la mensualidad";  // F
+                            wsMensualidades.Cell(1, 7).Value = "Día de corte";                         // G
+                            wsMensualidades.Cell(1, 8).Value = "IdUsuarioResponsable";                            // H
+                            wsMensualidades.Cell(1, 9).Value = "Responsable de dar de alta la mensualidad"; // I
+
+                            // Formato a los encabezados (A1 a H1)
+                            var headerMensualidades = wsMensualidades.Range("A1:I1");
+                            headerMensualidades.Style.Font.Bold = true;
+                            headerMensualidades.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
+                            headerMensualidades.Style.Font.FontColor = XLColor.White;
+
+                            int filaMensualidades = 2;
+                            foreach (ListClientesDescargaModel item in Seleccionados)
+                            {
+                                wsMensualidades.Cell(filaMensualidades, 1).Value = 1;
+                                wsMensualidades.Cell(filaMensualidades, 2).Value = item.IdCliente;
+                                wsMensualidades.Cell(filaMensualidades, 3).Value = item.Cliente;
+                                wsMensualidades.Cell(filaMensualidades, 4).Value = item.IdUsuarioM;
+                                wsMensualidades.Cell(filaMensualidades, 5).Value = item.Usuario;
+                                wsMensualidades.Cell(filaMensualidades, 6).Value = DateTime.Now;
+                                wsMensualidades.Cell(filaMensualidades, 6).Style.DateFormat.Format = "dd/MM/yyyy";
+                                wsMensualidades.Cell(filaMensualidades, 7).Value = 1;
+                                wsMensualidades.Cell(filaMensualidades, 8).Value = 1;
+                                wsMensualidades.Cell(filaMensualidades, 9).Value = "Administrador";
+                                filaMensualidades++;
+                            }
+
+                            // Autoajuste de columnas para Hoja 2
+                            wsMensualidades.Columns().AdjustToContents();
+
+
+                            // ==============================================================
+                            // HOJA 2: MENSUALIDADES (Aparecerá segundo)
+                            // ==============================================================
+                            var wsPagos = workbook.Worksheets.Add("Pagos");
+
+                            // Encabezados
+                            wsPagos.Cell(1, 1).Value = "N°Mensualidad"; //A
+                            wsPagos.Cell(1, 2).Value = "N°Pago";        //B
+                            wsPagos.Cell(1, 3).Value = "Fecha en que se recibio";  // C
+                            wsPagos.Cell(1, 4).Value = "Cantidad";     // D
+                            wsPagos.Cell(1, 5).Value = "Comentario";   // E
+                            wsPagos.Cell(1, 6).Value = "IdBanco";  // F
+                            wsPagos.Cell(1, 7).Value = "Nombre de banco";  // G
+                            wsPagos.Cell(1, 8).Value = "Referencia";      // H
+                            wsPagos.Cell(1, 9).Value = "Ruta de la imagen"; // I
+                            wsPagos.Cell(1, 10).Value = "IdUsuarioResponsable"; // J
+                            wsPagos.Cell(1, 11).Value = "Responsable de recibir el pago"; // K
+                            // Formato a los encabezados (A1 a K1)
+                            var headerPagos = wsPagos.Range("A1:K1");
+                            headerPagos.Style.Font.Bold = true;
+                            headerPagos.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
+                            headerPagos.Style.Font.FontColor = XLColor.White;
+
+                            wsPagos.Cell(2, 1).Value = 1;
+                            wsPagos.Cell(2, 2).Value = 1;
+                            wsPagos.Cell(2, 3).Value = DateTime.Now;
+                            wsPagos.Cell(2, 3).Style.DateFormat.Format = "dd/MM/yyyy HH:mm:ss";
+                            wsPagos.Cell(2, 4).Value = 0;
+                            wsPagos.Cell(2, 5).Value = "";
+                            wsPagos.Cell(2, 6).Value = 1;
+                            wsPagos.Cell(2, 7).Value = "PAGOS EFECTIVO";
+                            wsPagos.Cell(2, 8).Value = "1234ASD";
+                            wsPagos.Cell(2, 9).Value = "C:\\Users\\Lenovo\\OneDrive\\Desktop\\Imagenes\\1.jpg";
+                            wsPagos.Cell(2, 10).Value = 1;
+                            wsPagos.Cell(2, 11).Value = "Administrador";
+
+                            // Autoajuste de columnas para Hoja 2
+                            wsPagos.Columns().AdjustToContents();
+                            // 5. Guardar el archivo
+                            workbook.SaveAs(saveFileDialog.FileName);
+                        }
+
+                        MessageBox.Show("Archivo excel generado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
+
             }
             catch (Exception ex)
             {
@@ -210,6 +350,70 @@ namespace Mikrotik_Administrador.Catalogos
                 btnDescargar.Enabled = true;
                 btnCargar.Enabled = true;
             }
+        }
+
+        private void btnCargar_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Archivos de Excel (*.xlsx)|*.xlsx";
+                openFileDialog.Title = "Seleccionar archivo Excel";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Llamar al método para leer e mostrar en el DataGridView
+                    CargarDatosExcel(openFileDialog.FileName);
+                }
+            }
+
+        }
+        private void CargarDatosExcel(string rutaArchivo)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+
+                using (var workbook = new XLWorkbook(rutaArchivo))
+                {
+                    // Tomar la primera hoja de trabajo
+                    var worksheet = workbook.Worksheet(1);
+
+                    // Define si la primera fila tiene nombres de columnas
+                    bool primeraFilaEsEncabezado = true;
+
+                    foreach (var row in worksheet.RowsUsed())
+                    {
+                        if (primeraFilaEsEncabezado)
+                        {
+                            // Crear las columnas en el DataTable con el texto del encabezado
+                            foreach (var cell in row.CellsUsed())
+                            {
+                                dt.Columns.Add(cell.Value.ToString());
+                            }
+                            primeraFilaEsEncabezado = false;
+                        }
+                        else
+                        {
+                            // Agregar las filas de datos
+                            dt.Rows.Add();
+                            int i = 0;
+                            foreach (var cell in row.Cells(1, dt.Columns.Count))
+                            {
+                                dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
+                                i++;
+                            }
+                        }
+                    }
+                }
+                string mira = dt.Rows[0]["Producto"].ToString();
+                MessageBox.Show("Archivo Excel cargado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 }
