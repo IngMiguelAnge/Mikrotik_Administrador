@@ -87,7 +87,22 @@ namespace Mikrotik_Administrador.Items
             CBBanco.DisplayMember = "Nombre";
             CBBanco.ValueMember = "Id";
             CBBanco.DataSource = ListBancos;
-            CBBanco.SelectedIndex = 0;    
+            CBBanco.SelectedIndex = 0;
+            if (Id == 0)
+                return;
+            var Pago = obj.GetHistorialPagosById(Id).Result;
+            CBBanco.SelectedValue = Pago.IdBanco;
+            txtReferencia.Text = Pago.Referencia;
+            txtComentario.Text = Pago.Comentario;
+            if (Pago.Imagen != null && Pago.Imagen.Length > 0)
+            {
+                using (MemoryStream ms = new MemoryStream(Pago.Imagen))
+                {
+                    PBImagen.Image = new Bitmap(ms);
+                    PBImagen.SizeMode = PictureBoxSizeMode.Zoom;
+                }
+            }
+            dtpFechaPago.Value = Pago.FechaRecibido;
         }
       
         private void btnGuardar_Click(object sender, EventArgs e)

@@ -90,12 +90,6 @@ namespace Mikrotik_Administrador.Items
                     return false;
                 }
             }
-            //if (dtpFechaInicio.Value < DateTime.Now)
-            //{
-                
-            //}
-            //if (lblFechaFin.Visible == true)
-           
             Dias = (int)NUDDias.Value;
             Horas = (int)NUDHoras.Value;
             return true;

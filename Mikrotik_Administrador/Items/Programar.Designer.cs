@@ -80,8 +80,7 @@
             this.CBAccion.Items.AddRange(new object[] {
             "Seleccione",
             "Cambio de plan",
-            "Suspensión",
-            "Reactivación"});
+            "Suspensión"});
             this.CBAccion.Location = new System.Drawing.Point(31, 62);
             this.CBAccion.Name = "CBAccion";
             this.CBAccion.Size = new System.Drawing.Size(278, 33);

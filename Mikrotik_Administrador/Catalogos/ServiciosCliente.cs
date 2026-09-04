@@ -312,7 +312,7 @@ namespace Mikrotik_Administrador
                     break;
 
                 case "btnProgramar":
-                    MessageBox.Show("Se esta actializando para aceptar el excel.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                     int IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value);
                     AppRepository obj = new AppRepository();

@@ -186,14 +186,14 @@ namespace Mikrotik_Administrador.Catalogos
                 {
                     case "btnCambiarStatus":
                         if((string)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value == "Inactivo"
-                            && (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value > Faltante)
+                            && (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Cantidad"].Value > Faltante)
                         {
                             MessageBox.Show("No se puede reactivar este pago, sobre pasa el faltante a pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                       
                         AppRepository obj = new AppRepository();
-                        await obj.UpdateStatusHistorialPagos(Id);
+                        await obj.UpdateEstatusHistorialPagos(Id);
                         Buscar();
                         break;
                     case "btnEditar":

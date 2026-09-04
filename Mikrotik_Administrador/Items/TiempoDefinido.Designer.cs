@@ -177,8 +177,7 @@
             this.CBModo.Items.AddRange(new object[] {
             "Seleccione",
             "Test",
-            "Temporal",
-            "Permanente"});
+            "Temporal"});
             this.CBModo.Location = new System.Drawing.Point(44, 65);
             this.CBModo.Name = "CBModo";
             this.CBModo.Size = new System.Drawing.Size(285, 33);
