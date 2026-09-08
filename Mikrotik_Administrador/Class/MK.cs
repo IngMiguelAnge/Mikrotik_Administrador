@@ -366,22 +366,27 @@ namespace Mikrotik_Administrador.Class
         {
             try
             {
-                // Enviar el comando para agregar
+                // 1. Comando principal
                 Send("/ip/address/add");
-                Send("=address=" + ipAddressWithMask); // Ej: "192.168.88.1/24"
-                Send("=interface=" + interfaceName);   // Ej: "ether1" o "bridge"
+
+                // 2. Parámetros (sin pasar 'true' en el medio)
+                Send("=address=" + ipAddressWithMask);
+                Send("=interface=" + interfaceName);
 
                 if (!string.IsNullOrEmpty(comment))
                 {
                     Send("=comment=" + comment);
                 }
 
-                // Finalizar el comando
-                Send("=disabled=no", true);
+                Send("=disabled=no");
 
-                // Leer la respuesta y validar éxito
+                // 3. OBLIGATORIO: Enviar la cadena vacía que ejecuta la sentencia
+                Send("", true); // O invocar a tu método para finalizar la ráfaga (por ejemplo: SendEnd() / SendSentence())
+
+                // 4. Leer respuesta
                 List<string> respuesta = Read();
-                return !respuesta.Any(r => r.Contains("!trap"));
+
+                return respuesta.Any(r => r.Contains("!done")) && !respuesta.Any(r => r.Contains("!trap"));
             }
             catch (Exception ex)
             {

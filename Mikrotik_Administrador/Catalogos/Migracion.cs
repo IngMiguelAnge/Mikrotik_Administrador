@@ -480,6 +480,15 @@ namespace Mikrotik_Administrador
                         mikrotik.EliminarFibra(item.id);
                         mikrotik.DeleteInterfacebyName(item.comment);
                     }
+                    HistorialMovimientosModel H = new HistorialMovimientosModel
+                    {
+                        Id = 0,
+                        Descripcion = "Se elimino al usuario " + item.comment + " con ip: " + item.address,
+                        Pagina = "En la página de migración",
+                        IdUsuario = IdResponsable,
+                        Estatus = false
+                    };
+                    var r = obj.SaveHistorialMovimientos(H);
                     obj.UpdateEstatusGeneralbyIdInterno(IdMikrotik,item.id,cbAntenas.Checked, "Eliminado", IdResponsable).Wait();
                 }
                 MessageBox.Show("Usuarios eliminados del Mikrotik correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);

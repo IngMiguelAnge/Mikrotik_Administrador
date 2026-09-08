@@ -18,6 +18,89 @@ namespace Mikrotik_Administrador
         {
             InitializeComponent();
         }
+        //Menu configuracion
+        private void OcultarSubMenuConfiguracion()
+        {
+            if (panelSubmenuConfiguracion.Visible == true)
+                panelSubmenuConfiguracion.Visible = false;
+        }
+
+        private void MostrarSubMenuConfiguracion(Panel submenu)
+        {
+            if (submenu.Visible == false)
+            {
+                OcultarSubMenuConfiguracion();
+                submenu.Visible = true;
+            }
+            else
+            {
+                submenu.Visible = false;
+            }
+        }
+
+        private void btnSideConfiguracion_Click(object sender, EventArgs e)
+        {
+            MostrarSubMenuConfiguracion(panelSubmenuConfiguracion);
+        }
+        private void btnSubUsuarios_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuConfiguracion();
+        }
+
+        private void btnSubMikrotik_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuConfiguracion();
+        }
+
+        private void btnSubComment_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuConfiguracion();
+        }
+
+        private void btnSubPlanes_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuConfiguracion();
+        }
+        private void btnSubBancos_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuConfiguracion();
+        }
+
+
+        //Menu OutSistema
+        private void OcultarSubMenuOut()
+        {
+            if (panelSubmenuOut.Visible == true)
+                panelSubmenuOut.Visible = false;
+        }
+
+        private void MostrarSubMenuOut(Panel submenu)
+        {
+            if (submenu.Visible == false)
+            {
+                OcultarSubMenuOut();
+                submenu.Visible = true;
+            }
+            else
+            {
+                submenu.Visible = false;
+            }
+        }
+
+        private void btnSideOut_Click(object sender, EventArgs e)
+        {
+            MostrarSubMenuOut(panelSubmenuOut);
+        }
+
+        private void btnSubMigracion_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuOut();
+        }
+
+        private void btnSubAsignaciones_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuOut();
+        }
 
         private void Menu_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -132,5 +215,6 @@ namespace Mikrotik_Administrador
             MensualidadesMultiples mm = new MensualidadesMultiples();
             mm.Show();
         }
+
     }
 }
