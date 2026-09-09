@@ -40,7 +40,7 @@ namespace Mikrotik_Administrador
             this.btnAsignacion = new System.Windows.Forms.Button();
             this.btnInformacion = new System.Windows.Forms.Button();
             this.btnBancos = new System.Windows.Forms.Button();
-            this.btnPagos = new System.Windows.Forms.Button();
+            this.btnMensualidades = new System.Windows.Forms.Button();
             this.btnCambios = new System.Windows.Forms.Button();
             this.btnHistorial = new System.Windows.Forms.Button();
             this.btnUsuarios = new System.Windows.Forms.Button();
@@ -49,26 +49,36 @@ namespace Mikrotik_Administrador
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.btncerrar = new System.Windows.Forms.Button();
             this.panelSideMenu = new System.Windows.Forms.Panel();
-            this.lblSideTitle = new System.Windows.Forms.Label();
-            this.btnSideMenu = new System.Windows.Forms.Button();
-            this.btnSideConfiguracion = new System.Windows.Forms.Button();
-            this.panelSubmenuConfiguracion = new System.Windows.Forms.Panel();
-            this.btnSubUsuarios = new System.Windows.Forms.Button();
-            this.btnSubMikrotiks = new System.Windows.Forms.Button();
-            this.btnSubComments = new System.Windows.Forms.Button();
-            this.btnSubPlanes = new System.Windows.Forms.Button();
-            this.btnSubBancos = new System.Windows.Forms.Button();
-            this.btnSideOut = new System.Windows.Forms.Button();
+            this.btnSideSalir = new System.Windows.Forms.Button();
+            this.panelSubmenuHistoriales = new System.Windows.Forms.Panel();
+            this.btnSubCambios = new System.Windows.Forms.Button();
+            this.btnSubMovimientos = new System.Windows.Forms.Button();
+            this.btnSideHistoriales = new System.Windows.Forms.Button();
+            this.panelSubmenuCliente = new System.Windows.Forms.Panel();
+            this.btnSubMensualidades = new System.Windows.Forms.Button();
+            this.btnSubInformacion = new System.Windows.Forms.Button();
+            this.btnSideCliente = new System.Windows.Forms.Button();
             this.panelSubmenuOut = new System.Windows.Forms.Panel();
             this.btnSubAsignaciones = new System.Windows.Forms.Button();
             this.btnSubMigracion = new System.Windows.Forms.Button();
-            this.btnSideSalir = new System.Windows.Forms.Button();
+            this.btnSideOut = new System.Windows.Forms.Button();
+            this.panelSubmenuConfiguracion = new System.Windows.Forms.Panel();
+            this.btnSubBancos = new System.Windows.Forms.Button();
+            this.btnSubPlanes = new System.Windows.Forms.Button();
+            this.btnSubComments = new System.Windows.Forms.Button();
+            this.btnSubMikrotiks = new System.Windows.Forms.Button();
+            this.btnSubUsuarios = new System.Windows.Forms.Button();
+            this.btnSideConfiguracion = new System.Windows.Forms.Button();
+            this.btnSideMenu = new System.Windows.Forms.Button();
+            this.lblSideTitle = new System.Windows.Forms.Label();
             this.flowLayoutPanel1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             this.panelSideMenu.SuspendLayout();
-            this.panelSubmenuConfiguracion.SuspendLayout();
+            this.panelSubmenuHistoriales.SuspendLayout();
+            this.panelSubmenuCliente.SuspendLayout();
             this.panelSubmenuOut.SuspendLayout();
+            this.panelSubmenuConfiguracion.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblMenu
@@ -94,7 +104,7 @@ namespace Mikrotik_Administrador
             this.flowLayoutPanel1.Controls.Add(this.btnAsignacion);
             this.flowLayoutPanel1.Controls.Add(this.btnInformacion);
             this.flowLayoutPanel1.Controls.Add(this.btnBancos);
-            this.flowLayoutPanel1.Controls.Add(this.btnPagos);
+            this.flowLayoutPanel1.Controls.Add(this.btnMensualidades);
             this.flowLayoutPanel1.Controls.Add(this.btnCambios);
             this.flowLayoutPanel1.Controls.Add(this.btnHistorial);
             this.flowLayoutPanel1.Controls.Add(this.btnUsuarios);
@@ -225,22 +235,22 @@ namespace Mikrotik_Administrador
             this.btnBancos.UseVisualStyleBackColor = false;
             this.btnBancos.Click += new System.EventHandler(this.btnBancos_Click);
             // 
-            // btnPagos
+            // btnMensualidades
             // 
-            this.btnPagos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
-            this.btnPagos.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnPagos.FlatAppearance.BorderSize = 0;
-            this.btnPagos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPagos.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnPagos.ForeColor = System.Drawing.Color.White;
-            this.btnPagos.Location = new System.Drawing.Point(230, 240);
-            this.btnPagos.Margin = new System.Windows.Forms.Padding(10);
-            this.btnPagos.Name = "btnPagos";
-            this.btnPagos.Size = new System.Drawing.Size(180, 85);
-            this.btnPagos.TabIndex = 7;
-            this.btnPagos.Text = "Adeudos";
-            this.btnPagos.UseVisualStyleBackColor = false;
-            this.btnPagos.Click += new System.EventHandler(this.btnPagos_Click);
+            this.btnMensualidades.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnMensualidades.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMensualidades.FlatAppearance.BorderSize = 0;
+            this.btnMensualidades.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMensualidades.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnMensualidades.ForeColor = System.Drawing.Color.White;
+            this.btnMensualidades.Location = new System.Drawing.Point(230, 240);
+            this.btnMensualidades.Margin = new System.Windows.Forms.Padding(10);
+            this.btnMensualidades.Name = "btnMensualidades";
+            this.btnMensualidades.Size = new System.Drawing.Size(180, 85);
+            this.btnMensualidades.TabIndex = 7;
+            this.btnMensualidades.Text = "Mensualidades";
+            this.btnMensualidades.UseVisualStyleBackColor = false;
+            this.btnMensualidades.Click += new System.EventHandler(this.btnMensualidades_Click);
             // 
             // btnCambios
             // 
@@ -353,6 +363,10 @@ namespace Mikrotik_Administrador
             this.panelSideMenu.AutoScroll = true;
             this.panelSideMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
             this.panelSideMenu.Controls.Add(this.btnSideSalir);
+            this.panelSideMenu.Controls.Add(this.panelSubmenuHistoriales);
+            this.panelSideMenu.Controls.Add(this.btnSideHistoriales);
+            this.panelSideMenu.Controls.Add(this.panelSubmenuCliente);
+            this.panelSideMenu.Controls.Add(this.btnSideCliente);
             this.panelSideMenu.Controls.Add(this.panelSubmenuOut);
             this.panelSideMenu.Controls.Add(this.btnSideOut);
             this.panelSideMenu.Controls.Add(this.panelSubmenuConfiguracion);
@@ -365,176 +379,154 @@ namespace Mikrotik_Administrador
             this.panelSideMenu.Size = new System.Drawing.Size(220, 461);
             this.panelSideMenu.TabIndex = 11;
             // 
-            // lblSideTitle
+            // btnSideSalir
             // 
-            this.lblSideTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblSideTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.lblSideTitle.ForeColor = System.Drawing.Color.White;
-            this.lblSideTitle.Location = new System.Drawing.Point(0, 0);
-            this.lblSideTitle.Name = "lblSideTitle";
-            this.lblSideTitle.Size = new System.Drawing.Size(220, 70);
-            this.lblSideTitle.TabIndex = 0;
-            this.lblSideTitle.Text = "Master System";
-            this.lblSideTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnSideSalir.BackColor = System.Drawing.Color.Transparent;
+            this.btnSideSalir.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSideSalir.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSideSalir.FlatAppearance.BorderSize = 0;
+            this.btnSideSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSideSalir.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnSideSalir.ForeColor = System.Drawing.Color.White;
+            this.btnSideSalir.Location = new System.Drawing.Point(0, 755);
+            this.btnSideSalir.Name = "btnSideSalir";
+            this.btnSideSalir.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.btnSideSalir.Size = new System.Drawing.Size(194, 45);
+            this.btnSideSalir.TabIndex = 6;
+            this.btnSideSalir.Text = "Salir";
+            this.btnSideSalir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSideSalir.UseVisualStyleBackColor = false;
+            this.btnSideSalir.Click += new System.EventHandler(this.btncerrar_Click);
             // 
-            // btnSideMenu
+            // panelSubmenuHistoriales
             // 
-            this.btnSideMenu.BackColor = System.Drawing.Color.Transparent;
-            this.btnSideMenu.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSideMenu.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnSideMenu.FlatAppearance.BorderSize = 0;
-            this.btnSideMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSideMenu.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.btnSideMenu.ForeColor = System.Drawing.Color.White;
-            this.btnSideMenu.Location = new System.Drawing.Point(0, 70);
-            this.btnSideMenu.Name = "btnSideMenu";
-            this.btnSideMenu.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
-            this.btnSideMenu.Size = new System.Drawing.Size(220, 45);
-            this.btnSideMenu.TabIndex = 1;
-            this.btnSideMenu.Text = "Menu";
-            this.btnSideMenu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSideMenu.UseVisualStyleBackColor = false;
-            this.btnSideMenu.Visible = false;
+            this.panelSubmenuHistoriales.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(30)))), ((int)(((byte)(80)))));
+            this.panelSubmenuHistoriales.Controls.Add(this.btnSubCambios);
+            this.panelSubmenuHistoriales.Controls.Add(this.btnSubMovimientos);
+            this.panelSubmenuHistoriales.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSubmenuHistoriales.Location = new System.Drawing.Point(0, 655);
+            this.panelSubmenuHistoriales.Name = "panelSubmenuHistoriales";
+            this.panelSubmenuHistoriales.Size = new System.Drawing.Size(194, 100);
+            this.panelSubmenuHistoriales.TabIndex = 7;
+            this.panelSubmenuHistoriales.Visible = false;
             // 
-            // btnSideConfiguracion
+            // btnSubCambios
             // 
-            this.btnSideConfiguracion.BackColor = System.Drawing.Color.Transparent;
-            this.btnSideConfiguracion.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSideConfiguracion.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnSideConfiguracion.FlatAppearance.BorderSize = 0;
-            this.btnSideConfiguracion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSideConfiguracion.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.btnSideConfiguracion.ForeColor = System.Drawing.Color.White;
-            this.btnSideConfiguracion.Location = new System.Drawing.Point(0, 115);
-            this.btnSideConfiguracion.Name = "btnSideConfiguracion";
-            this.btnSideConfiguracion.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
-            this.btnSideConfiguracion.Size = new System.Drawing.Size(220, 45);
-            this.btnSideConfiguracion.TabIndex = 2;
-            this.btnSideConfiguracion.Text = "Configuración ▾";
-            this.btnSideConfiguracion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSideConfiguracion.UseVisualStyleBackColor = false;
-            this.btnSideConfiguracion.Click += new System.EventHandler(this.btnSideConfiguracion_Click);
+            this.btnSubCambios.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSubCambios.FlatAppearance.BorderSize = 0;
+            this.btnSubCambios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubCambios.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSubCambios.ForeColor = System.Drawing.Color.Gainsboro;
+            this.btnSubCambios.Location = new System.Drawing.Point(0, 40);
+            this.btnSubCambios.Name = "btnSubCambios";
+            this.btnSubCambios.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
+            this.btnSubCambios.Size = new System.Drawing.Size(194, 40);
+            this.btnSubCambios.TabIndex = 2;
+            this.btnSubCambios.Text = "Cambios";
+            this.btnSubCambios.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSubCambios.UseVisualStyleBackColor = true;
+            this.btnSubCambios.Click += new System.EventHandler(this.btnSubCambios_Click);
             // 
-            // panelSubmenuConfiguracion
+            // btnSubMovimientos
             // 
-            this.panelSubmenuConfiguracion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(30)))), ((int)(((byte)(80)))));
-            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubBancos);
-            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubPlanes);
-            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubComments);
-            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubMikrotiks);
-            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubUsuarios);
-            this.panelSubmenuConfiguracion.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSubmenuConfiguracion.Location = new System.Drawing.Point(0, 160);
-            this.panelSubmenuConfiguracion.Name = "panelSubmenuConfiguracion";
-            this.panelSubmenuConfiguracion.Size = new System.Drawing.Size(220, 200);
-            this.panelSubmenuConfiguracion.TabIndex = 7;
-            this.panelSubmenuConfiguracion.Visible = false;
+            this.btnSubMovimientos.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSubMovimientos.FlatAppearance.BorderSize = 0;
+            this.btnSubMovimientos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubMovimientos.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSubMovimientos.ForeColor = System.Drawing.Color.Gainsboro;
+            this.btnSubMovimientos.Location = new System.Drawing.Point(0, 0);
+            this.btnSubMovimientos.Name = "btnSubMovimientos";
+            this.btnSubMovimientos.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
+            this.btnSubMovimientos.Size = new System.Drawing.Size(194, 40);
+            this.btnSubMovimientos.TabIndex = 2;
+            this.btnSubMovimientos.Text = "Movmientos";
+            this.btnSubMovimientos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSubMovimientos.UseVisualStyleBackColor = true;
+            this.btnSubMovimientos.Click += new System.EventHandler(this.btnSubMovimientos_Click);
             // 
-            // btnSubBancos
+            // btnSideHistoriales
             // 
-
-            this.btnSubBancos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnSubBancos.FlatAppearance.BorderSize = 0;
-            this.btnSubBancos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSubBancos.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSubBancos.ForeColor = System.Drawing.Color.Gainsboro;
-            this.btnSubBancos.Location = new System.Drawing.Point(0, 0);
-            this.btnSubBancos.Name = "btnSubBancos";
-            this.btnSubBancos.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
-            this.btnSubBancos.Size = new System.Drawing.Size(220, 40);
-            this.btnSubBancos.TabIndex = 2;
-            this.btnSubBancos.Text = "Bancos";
-            this.btnSubBancos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSubBancos.UseVisualStyleBackColor = true;
-            this.btnSubBancos.Click += new System.EventHandler(this.btnSubBancos_Click);
+            this.btnSideHistoriales.BackColor = System.Drawing.Color.Transparent;
+            this.btnSideHistoriales.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSideHistoriales.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSideHistoriales.FlatAppearance.BorderSize = 0;
+            this.btnSideHistoriales.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSideHistoriales.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnSideHistoriales.ForeColor = System.Drawing.Color.White;
+            this.btnSideHistoriales.Location = new System.Drawing.Point(0, 610);
+            this.btnSideHistoriales.Name = "btnSideHistoriales";
+            this.btnSideHistoriales.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.btnSideHistoriales.Size = new System.Drawing.Size(194, 45);
+            this.btnSideHistoriales.TabIndex = 2;
+            this.btnSideHistoriales.Text = "Historiales ▾";
+            this.btnSideHistoriales.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSideHistoriales.UseVisualStyleBackColor = false;
+            this.btnSideHistoriales.Click += new System.EventHandler(this.btnSideHistoriales_Click);
             // 
-            // btnSubPlanes
+            // panelSubmenuCliente
             // 
-
-            this.btnSubPlanes.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnSubPlanes.FlatAppearance.BorderSize = 0;
-            this.btnSubPlanes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSubPlanes.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSubPlanes.ForeColor = System.Drawing.Color.Gainsboro;
-            this.btnSubPlanes.Location = new System.Drawing.Point(0, 0);
-            this.btnSubPlanes.Name = "btnSubPlanes";
-            this.btnSubPlanes.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
-            this.btnSubPlanes.Size = new System.Drawing.Size(220, 40);
-            this.btnSubPlanes.TabIndex = 2;
-            this.btnSubPlanes.Text = "Planes";
-            this.btnSubPlanes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSubPlanes.UseVisualStyleBackColor = true;
-            this.btnSubPlanes.Click += new System.EventHandler(this.btnSubPlanes_Click);
+            this.panelSubmenuCliente.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(30)))), ((int)(((byte)(80)))));
+            this.panelSubmenuCliente.Controls.Add(this.btnSubMensualidades);
+            this.panelSubmenuCliente.Controls.Add(this.btnSubInformacion);
+            this.panelSubmenuCliente.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSubmenuCliente.Location = new System.Drawing.Point(0, 530);
+            this.panelSubmenuCliente.Name = "panelSubmenuCliente";
+            this.panelSubmenuCliente.Size = new System.Drawing.Size(194, 80);
+            this.panelSubmenuCliente.TabIndex = 7;
+            this.panelSubmenuCliente.Visible = false;
             // 
-            // btnSubComments
+            // btnSubMensualidades
             // 
-            this.btnSubComments.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnSubComments.FlatAppearance.BorderSize = 0;
-            this.btnSubComments.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSubComments.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSubComments.ForeColor = System.Drawing.Color.Gainsboro;
-            this.btnSubComments.Location = new System.Drawing.Point(0, 40);
-            this.btnSubComments.Name = "btnSubComments";
-            this.btnSubComments.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
-            this.btnSubComments.Size = new System.Drawing.Size(220, 40);
-            this.btnSubComments.TabIndex = 1;
-            this.btnSubComments.Text = "Comments";
-            this.btnSubComments.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSubComments.UseVisualStyleBackColor = true;
-            this.btnSubComments.Click += new System.EventHandler(this.btnSubComment_Click);
+            this.btnSubMensualidades.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSubMensualidades.FlatAppearance.BorderSize = 0;
+            this.btnSubMensualidades.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubMensualidades.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSubMensualidades.ForeColor = System.Drawing.Color.Gainsboro;
+            this.btnSubMensualidades.Location = new System.Drawing.Point(0, 40);
+            this.btnSubMensualidades.Name = "btnSubMensualidades";
+            this.btnSubMensualidades.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
+            this.btnSubMensualidades.Size = new System.Drawing.Size(194, 40);
+            this.btnSubMensualidades.TabIndex = 1;
+            this.btnSubMensualidades.Text = "Mensualidades";
+            this.btnSubMensualidades.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSubMensualidades.UseVisualStyleBackColor = true;
+            this.btnSubMensualidades.Click += new System.EventHandler(this.btnSubMensualidades_Click);
             // 
-            // btnSubMikrotiks
+            // btnSubInformacion
             // 
-            this.btnSubMikrotiks.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnSubMikrotiks.FlatAppearance.BorderSize = 0;
-            this.btnSubMikrotiks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSubMikrotiks.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSubMikrotiks.ForeColor = System.Drawing.Color.Gainsboro;
-            this.btnSubMikrotiks.Location = new System.Drawing.Point(0, 80);
-            this.btnSubMikrotiks.Name = "btnSubMikrotiks";
-            this.btnSubMikrotiks.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
-            this.btnSubMikrotiks.Size = new System.Drawing.Size(220, 40);
-            this.btnSubMikrotiks.TabIndex = 0;
-            this.btnSubMikrotiks.Text = "Mikrotiks";
-            this.btnSubMikrotiks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSubMikrotiks.UseVisualStyleBackColor = true;
-            this.btnSubMikrotiks.Click += new System.EventHandler(this.btnSubMikrotik_Click);
+            this.btnSubInformacion.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSubInformacion.FlatAppearance.BorderSize = 0;
+            this.btnSubInformacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubInformacion.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSubInformacion.ForeColor = System.Drawing.Color.Gainsboro;
+            this.btnSubInformacion.Location = new System.Drawing.Point(0, 0);
+            this.btnSubInformacion.Name = "btnSubInformacion";
+            this.btnSubInformacion.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
+            this.btnSubInformacion.Size = new System.Drawing.Size(194, 40);
+            this.btnSubInformacion.TabIndex = 1;
+            this.btnSubInformacion.Text = "Información";
+            this.btnSubInformacion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSubInformacion.UseVisualStyleBackColor = true;
+            this.btnSubInformacion.Click += new System.EventHandler(this.btnSubInformacion_Click);
             // 
-            // btnSubUsuarios
+            // btnSideCliente
             // 
-            this.btnSubUsuarios.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnSubUsuarios.FlatAppearance.BorderSize = 0;
-            this.btnSubUsuarios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSubUsuarios.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSubUsuarios.ForeColor = System.Drawing.Color.Gainsboro;
-            this.btnSubUsuarios.Location = new System.Drawing.Point(0, 80);
-            this.btnSubUsuarios.Name = "btnSubUsuarios";
-            this.btnSubUsuarios.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
-            this.btnSubUsuarios.Size = new System.Drawing.Size(220, 40);
-            this.btnSubUsuarios.TabIndex = 0;
-            this.btnSubUsuarios.Text = "Usuarios";
-            this.btnSubUsuarios.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSubUsuarios.UseVisualStyleBackColor = true;
-            this.btnSubUsuarios.Click += new System.EventHandler(this.btnSubMikrotik_Click);
-            // 
-            // btnSideOut
-            // 
-            this.btnSideOut.BackColor = System.Drawing.Color.Transparent;
-            this.btnSideOut.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSideOut.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnSideOut.FlatAppearance.BorderSize = 0;
-            this.btnSideOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSideOut.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.btnSideOut.ForeColor = System.Drawing.Color.White;
-            this.btnSideOut.Location = new System.Drawing.Point(0, 280);
-            this.btnSideOut.Name = "btnSideOut";
-            this.btnSideOut.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
-            this.btnSideOut.Size = new System.Drawing.Size(220, 45);
-            this.btnSideOut.TabIndex = 3;
-            this.btnSideOut.Text = "Sistema out ▾";
-            this.btnSideOut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSideOut.UseVisualStyleBackColor = false;
-            this.btnSideOut.Click += new System.EventHandler(this.btnSideOut_Click);
+            this.btnSideCliente.BackColor = System.Drawing.Color.Transparent;
+            this.btnSideCliente.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSideCliente.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSideCliente.FlatAppearance.BorderSize = 0;
+            this.btnSideCliente.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSideCliente.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnSideCliente.ForeColor = System.Drawing.Color.White;
+            this.btnSideCliente.Location = new System.Drawing.Point(0, 485);
+            this.btnSideCliente.Name = "btnSideCliente";
+            this.btnSideCliente.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.btnSideCliente.Size = new System.Drawing.Size(194, 45);
+            this.btnSideCliente.TabIndex = 3;
+            this.btnSideCliente.Text = "Clientes ▾";
+            this.btnSideCliente.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSideCliente.UseVisualStyleBackColor = false;
+            this.btnSideCliente.Click += new System.EventHandler(this.btnSideCliente_Click);
             // 
             // panelSubmenuOut
             // 
@@ -542,9 +534,9 @@ namespace Mikrotik_Administrador
             this.panelSubmenuOut.Controls.Add(this.btnSubAsignaciones);
             this.panelSubmenuOut.Controls.Add(this.btnSubMigracion);
             this.panelSubmenuOut.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSubmenuOut.Location = new System.Drawing.Point(0, 325);
+            this.panelSubmenuOut.Location = new System.Drawing.Point(0, 405);
             this.panelSubmenuOut.Name = "panelSubmenuOut";
-            this.panelSubmenuOut.Size = new System.Drawing.Size(220, 80);
+            this.panelSubmenuOut.Size = new System.Drawing.Size(194, 80);
             this.panelSubmenuOut.TabIndex = 7;
             this.panelSubmenuOut.Visible = false;
             // 
@@ -558,7 +550,7 @@ namespace Mikrotik_Administrador
             this.btnSubAsignaciones.Location = new System.Drawing.Point(0, 40);
             this.btnSubAsignaciones.Name = "btnSubAsignaciones";
             this.btnSubAsignaciones.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
-            this.btnSubAsignaciones.Size = new System.Drawing.Size(220, 40);
+            this.btnSubAsignaciones.Size = new System.Drawing.Size(194, 40);
             this.btnSubAsignaciones.TabIndex = 1;
             this.btnSubAsignaciones.Text = "Asignaciones";
             this.btnSubAsignaciones.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -575,31 +567,181 @@ namespace Mikrotik_Administrador
             this.btnSubMigracion.Location = new System.Drawing.Point(0, 0);
             this.btnSubMigracion.Name = "btnSubMigracion";
             this.btnSubMigracion.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
-            this.btnSubMigracion.Size = new System.Drawing.Size(220, 40);
+            this.btnSubMigracion.Size = new System.Drawing.Size(194, 40);
             this.btnSubMigracion.TabIndex = 2;
             this.btnSubMigracion.Text = "Migración";
             this.btnSubMigracion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubMigracion.UseVisualStyleBackColor = true;
             this.btnSubMigracion.Click += new System.EventHandler(this.btnSubMigracion_Click);
             // 
-            // btnSideSalir
+            // btnSideOut
             // 
-            this.btnSideSalir.BackColor = System.Drawing.Color.Transparent;
-            this.btnSideSalir.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSideSalir.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnSideSalir.FlatAppearance.BorderSize = 0;
-            this.btnSideSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSideSalir.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.btnSideSalir.ForeColor = System.Drawing.Color.White;
-            this.btnSideSalir.Location = new System.Drawing.Point(0, 405);
-            this.btnSideSalir.Name = "btnSideSalir";
-            this.btnSideSalir.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
-            this.btnSideSalir.Size = new System.Drawing.Size(220, 45);
-            this.btnSideSalir.TabIndex = 6;
-            this.btnSideSalir.Text = "Salir";
-            this.btnSideSalir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSideSalir.UseVisualStyleBackColor = false;
-            this.btnSideSalir.Click += new System.EventHandler(this.btncerrar_Click);
+            this.btnSideOut.BackColor = System.Drawing.Color.Transparent;
+            this.btnSideOut.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSideOut.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSideOut.FlatAppearance.BorderSize = 0;
+            this.btnSideOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSideOut.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnSideOut.ForeColor = System.Drawing.Color.White;
+            this.btnSideOut.Location = new System.Drawing.Point(0, 360);
+            this.btnSideOut.Name = "btnSideOut";
+            this.btnSideOut.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.btnSideOut.Size = new System.Drawing.Size(194, 45);
+            this.btnSideOut.TabIndex = 3;
+            this.btnSideOut.Text = "Sistema out ▾";
+            this.btnSideOut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSideOut.UseVisualStyleBackColor = false;
+            this.btnSideOut.Click += new System.EventHandler(this.btnSideOut_Click);
+            // 
+            // panelSubmenuConfiguracion
+            // 
+            this.panelSubmenuConfiguracion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(30)))), ((int)(((byte)(80)))));
+            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubBancos);
+            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubPlanes);
+            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubComments);
+            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubMikrotiks);
+            this.panelSubmenuConfiguracion.Controls.Add(this.btnSubUsuarios);
+            this.panelSubmenuConfiguracion.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSubmenuConfiguracion.Location = new System.Drawing.Point(0, 160);
+            this.panelSubmenuConfiguracion.Name = "panelSubmenuConfiguracion";
+            this.panelSubmenuConfiguracion.Size = new System.Drawing.Size(194, 200);
+            this.panelSubmenuConfiguracion.TabIndex = 7;
+            this.panelSubmenuConfiguracion.Visible = false;
+            // 
+            // btnSubBancos
+            // 
+            this.btnSubBancos.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSubBancos.FlatAppearance.BorderSize = 0;
+            this.btnSubBancos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubBancos.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSubBancos.ForeColor = System.Drawing.Color.Gainsboro;
+            this.btnSubBancos.Location = new System.Drawing.Point(0, 160);
+            this.btnSubBancos.Name = "btnSubBancos";
+            this.btnSubBancos.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
+            this.btnSubBancos.Size = new System.Drawing.Size(194, 40);
+            this.btnSubBancos.TabIndex = 2;
+            this.btnSubBancos.Text = "Bancos";
+            this.btnSubBancos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSubBancos.UseVisualStyleBackColor = true;
+            this.btnSubBancos.Click += new System.EventHandler(this.btnSubBancos_Click);
+            // 
+            // btnSubPlanes
+            // 
+            this.btnSubPlanes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSubPlanes.FlatAppearance.BorderSize = 0;
+            this.btnSubPlanes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubPlanes.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSubPlanes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.btnSubPlanes.Location = new System.Drawing.Point(0, 120);
+            this.btnSubPlanes.Name = "btnSubPlanes";
+            this.btnSubPlanes.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
+            this.btnSubPlanes.Size = new System.Drawing.Size(194, 40);
+            this.btnSubPlanes.TabIndex = 2;
+            this.btnSubPlanes.Text = "Planes";
+            this.btnSubPlanes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSubPlanes.UseVisualStyleBackColor = true;
+            this.btnSubPlanes.Click += new System.EventHandler(this.btnSubPlanes_Click);
+            // 
+            // btnSubComments
+            // 
+            this.btnSubComments.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSubComments.FlatAppearance.BorderSize = 0;
+            this.btnSubComments.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubComments.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSubComments.ForeColor = System.Drawing.Color.Gainsboro;
+            this.btnSubComments.Location = new System.Drawing.Point(0, 80);
+            this.btnSubComments.Name = "btnSubComments";
+            this.btnSubComments.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
+            this.btnSubComments.Size = new System.Drawing.Size(194, 40);
+            this.btnSubComments.TabIndex = 1;
+            this.btnSubComments.Text = "Comments";
+            this.btnSubComments.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSubComments.UseVisualStyleBackColor = true;
+            this.btnSubComments.Click += new System.EventHandler(this.btnSubComment_Click);
+            // 
+            // btnSubMikrotiks
+            // 
+            this.btnSubMikrotiks.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSubMikrotiks.FlatAppearance.BorderSize = 0;
+            this.btnSubMikrotiks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubMikrotiks.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSubMikrotiks.ForeColor = System.Drawing.Color.Gainsboro;
+            this.btnSubMikrotiks.Location = new System.Drawing.Point(0, 40);
+            this.btnSubMikrotiks.Name = "btnSubMikrotiks";
+            this.btnSubMikrotiks.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
+            this.btnSubMikrotiks.Size = new System.Drawing.Size(194, 40);
+            this.btnSubMikrotiks.TabIndex = 0;
+            this.btnSubMikrotiks.Text = "Mikrotiks";
+            this.btnSubMikrotiks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSubMikrotiks.UseVisualStyleBackColor = true;
+            this.btnSubMikrotiks.Click += new System.EventHandler(this.btnSubMikrotik_Click);
+            // 
+            // btnSubUsuarios
+            // 
+            this.btnSubUsuarios.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSubUsuarios.FlatAppearance.BorderSize = 0;
+            this.btnSubUsuarios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubUsuarios.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSubUsuarios.ForeColor = System.Drawing.Color.Gainsboro;
+            this.btnSubUsuarios.Location = new System.Drawing.Point(0, 0);
+            this.btnSubUsuarios.Name = "btnSubUsuarios";
+            this.btnSubUsuarios.Padding = new System.Windows.Forms.Padding(45, 0, 0, 0);
+            this.btnSubUsuarios.Size = new System.Drawing.Size(194, 40);
+            this.btnSubUsuarios.TabIndex = 0;
+            this.btnSubUsuarios.Text = "Usuarios";
+            this.btnSubUsuarios.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSubUsuarios.UseVisualStyleBackColor = true;
+            this.btnSubUsuarios.Click += new System.EventHandler(this.btnSubMikrotik_Click);
+            // 
+            // btnSideConfiguracion
+            // 
+            this.btnSideConfiguracion.BackColor = System.Drawing.Color.Transparent;
+            this.btnSideConfiguracion.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSideConfiguracion.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSideConfiguracion.FlatAppearance.BorderSize = 0;
+            this.btnSideConfiguracion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSideConfiguracion.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnSideConfiguracion.ForeColor = System.Drawing.Color.White;
+            this.btnSideConfiguracion.Location = new System.Drawing.Point(0, 115);
+            this.btnSideConfiguracion.Name = "btnSideConfiguracion";
+            this.btnSideConfiguracion.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.btnSideConfiguracion.Size = new System.Drawing.Size(194, 45);
+            this.btnSideConfiguracion.TabIndex = 2;
+            this.btnSideConfiguracion.Text = "Configuración ▾";
+            this.btnSideConfiguracion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSideConfiguracion.UseVisualStyleBackColor = false;
+            this.btnSideConfiguracion.Click += new System.EventHandler(this.btnSideConfiguracion_Click);
+            // 
+            // btnSideMenu
+            // 
+            this.btnSideMenu.BackColor = System.Drawing.Color.Transparent;
+            this.btnSideMenu.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSideMenu.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSideMenu.FlatAppearance.BorderSize = 0;
+            this.btnSideMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSideMenu.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnSideMenu.ForeColor = System.Drawing.Color.White;
+            this.btnSideMenu.Location = new System.Drawing.Point(0, 70);
+            this.btnSideMenu.Name = "btnSideMenu";
+            this.btnSideMenu.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+            this.btnSideMenu.Size = new System.Drawing.Size(194, 45);
+            this.btnSideMenu.TabIndex = 1;
+            this.btnSideMenu.Text = "Menu";
+            this.btnSideMenu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSideMenu.UseVisualStyleBackColor = false;
+            this.btnSideMenu.Visible = false;
+            // 
+            // lblSideTitle
+            // 
+            this.lblSideTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblSideTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblSideTitle.ForeColor = System.Drawing.Color.White;
+            this.lblSideTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblSideTitle.Name = "lblSideTitle";
+            this.lblSideTitle.Size = new System.Drawing.Size(194, 70);
+            this.lblSideTitle.TabIndex = 0;
+            this.lblSideTitle.Text = "Master System";
+            this.lblSideTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Menu
             // 
@@ -621,9 +763,12 @@ namespace Mikrotik_Administrador
             this.panelHeader.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.panelSideMenu.ResumeLayout(false);
-            this.panelSubmenuConfiguracion.ResumeLayout(false);
+            this.panelSubmenuHistoriales.ResumeLayout(false);
+            this.panelSubmenuCliente.ResumeLayout(false);
             this.panelSubmenuOut.ResumeLayout(false);
+            this.panelSubmenuConfiguracion.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -637,7 +782,7 @@ namespace Mikrotik_Administrador
         private System.Windows.Forms.Button btnAsignacion;
         private System.Windows.Forms.Button btnInformacion;
         private System.Windows.Forms.Button btnBancos;
-        private System.Windows.Forms.Button btnPagos;
+        private System.Windows.Forms.Button btnMensualidades;
         private System.Windows.Forms.Button btnCambios;
         private System.Windows.Forms.Button btnHistorial;
         private System.Windows.Forms.Button btnUsuarios;
@@ -648,11 +793,24 @@ namespace Mikrotik_Administrador
         private System.Windows.Forms.Panel panelSideMenu;
         private System.Windows.Forms.Label lblSideTitle;
         private System.Windows.Forms.Button btnSideMenu;
+
+        private System.Windows.Forms.Button btnSideHistoriales;
+        private System.Windows.Forms.Panel panelSubmenuHistoriales;
+        private System.Windows.Forms.Button btnSubMovimientos;
+        private System.Windows.Forms.Button btnSubCambios;
+
+
+        private System.Windows.Forms.Button btnSideCliente;
+        private System.Windows.Forms.Panel panelSubmenuCliente;
+        private System.Windows.Forms.Button btnSubInformacion;
+        private System.Windows.Forms.Button btnSubMensualidades;
+
         private System.Windows.Forms.Button btnSideOut;
         private System.Windows.Forms.Panel panelSubmenuOut;
         private System.Windows.Forms.Button btnSubAsignaciones;
         private System.Windows.Forms.Button btnSubMigracion;
         private System.Windows.Forms.Button btnSideConfiguracion;
+        
         private System.Windows.Forms.Panel panelSubmenuConfiguracion;
         private System.Windows.Forms.Button btnSubUsuarios;
         private System.Windows.Forms.Button btnSubMikrotiks;

@@ -37,7 +37,6 @@ namespace Mikrotik_Administrador
                 submenu.Visible = false;
             }
         }
-
         private void btnSideConfiguracion_Click(object sender, EventArgs e)
         {
             MostrarSubMenuConfiguracion(panelSubmenuConfiguracion);
@@ -65,7 +64,6 @@ namespace Mikrotik_Administrador
         {
             OcultarSubMenuConfiguracion();
         }
-
 
         //Menu OutSistema
         private void OcultarSubMenuOut()
@@ -101,7 +99,74 @@ namespace Mikrotik_Administrador
         {
             OcultarSubMenuOut();
         }
+        //Menu Cliente
+        private void OcultarSubMenuCliente()
+        {
+            if (panelSubmenuCliente.Visible == true)
+                panelSubmenuCliente.Visible = false;
+        }
 
+        private void MostrarSubMenuCliente(Panel submenu)
+        {
+            if (submenu.Visible == false)
+            {
+                OcultarSubMenuCliente();
+                submenu.Visible = true;
+            }
+            else
+            {
+                submenu.Visible = false;
+            }
+        }
+
+        private void btnSideCliente_Click(object sender, EventArgs e)
+        {
+            MostrarSubMenuCliente(panelSubmenuOut);
+        }
+
+        private void btnSubInformacion_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuCliente();
+        }
+
+        private void btnSubMensualidades_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuCliente();
+        }
+        //Menu Historial
+        private void OcultarSubMenuHistoriales()
+        {
+            if (panelSubmenuHistoriales.Visible == true)
+                panelSubmenuHistoriales.Visible = false;
+        }
+
+        private void MostrarSubMenuHistoriales(Panel submenu)
+        {
+            if (submenu.Visible == false)
+            {
+                OcultarSubMenuHistoriales();
+                submenu.Visible = true;
+            }
+            else
+            {
+                submenu.Visible = false;
+            }
+        }
+
+        private void btnSideHistoriales_Click(object sender, EventArgs e)
+        {
+            MostrarSubMenuHistoriales(panelSubmenuOut);
+        }
+
+        private void btnSubMovimientos_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuHistoriales();
+        }
+
+        private void btnSubCambios_Click(object sender, EventArgs e)
+        {
+            OcultarSubMenuHistoriales();
+        }
         private void Menu_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
@@ -155,7 +220,7 @@ namespace Mikrotik_Administrador
             b.Show();
         }
 
-        private void btnPagos_Click(object sender, EventArgs e)
+        private void btnMensualidades_Click(object sender, EventArgs e)
         {
             Pagos pagos = new Pagos();
             pagos.IdResponsable = IdResponsable;
