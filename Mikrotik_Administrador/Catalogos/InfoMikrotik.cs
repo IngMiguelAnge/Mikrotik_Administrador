@@ -87,7 +87,7 @@ namespace Mikrotik_Administrador
             }
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private async void btnGuardar_Click(object sender, EventArgs e)
         {
             if (!System.Net.IPAddress.TryParse(txtIP.Text, out _))
             {
@@ -116,10 +116,17 @@ namespace Mikrotik_Administrador
                     return;
                 }
             }
+
             AppRepository obj = new AppRepository();
+            var lista = await obj.GetMikrotikByIP(txtIP.Text.Replace(" ", ""));
+            if(lista.Count > 0 && lista[0].Id != IdMikrotik)
+            {
+                MessageBox.Show("Ya existe un Mikrotik con la misma IP, por favor verifique", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             MikrotikModel mikrotik = new MikrotikModel();
             mikrotik.Nombre = txtNombre.Text;
-            mikrotik.IP = txtIP.Text.Replace(" ", ""); ;
+            mikrotik.IP = txtIP.Text.Replace(" ", ""); 
             mikrotik.Port = txtPort.Text.Replace(" ", ""); 
             mikrotik.Usuario = txtUsuario.Text;
             mikrotik.Password = txtPassword.Text;

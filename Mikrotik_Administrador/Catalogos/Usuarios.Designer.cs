@@ -200,7 +200,7 @@
             // 
             // BtnAsignar
             // 
-            this.BtnAsignar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.BtnAsignar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
             this.BtnAsignar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnAsignar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.BtnAsignar.ForeColor = System.Drawing.Color.White;

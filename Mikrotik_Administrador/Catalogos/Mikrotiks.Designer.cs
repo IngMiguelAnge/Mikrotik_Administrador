@@ -34,10 +34,10 @@
             this.BtnNuevo = new System.Windows.Forms.Button();
             this.btnAddresList = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.btnVerPools = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnVerMirkotiks = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
-            this.btnVerPools = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DGVMikrotiks)).BeginInit();
             this.panelTop.SuspendLayout();
             this.panelContenedor.SuspendLayout();
@@ -97,7 +97,7 @@
             // 
             // btnAddresList
             // 
-            this.btnAddresList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.btnAddresList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
             this.btnAddresList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddresList.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnAddresList.ForeColor = System.Drawing.Color.White;
@@ -123,6 +123,20 @@
             this.panelTop.Size = new System.Drawing.Size(940, 97);
             this.panelTop.TabIndex = 8;
             // 
+            // btnVerPools
+            // 
+            this.btnVerPools.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnVerPools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVerPools.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnVerPools.ForeColor = System.Drawing.Color.White;
+            this.btnVerPools.Location = new System.Drawing.Point(386, 16);
+            this.btnVerPools.Name = "btnVerPools";
+            this.btnVerPools.Size = new System.Drawing.Size(160, 38);
+            this.btnVerPools.TabIndex = 30;
+            this.btnVerPools.Text = "Ver Pools";
+            this.btnVerPools.UseVisualStyleBackColor = false;
+            this.btnVerPools.Click += new System.EventHandler(this.btnVerPools_Click);
+            // 
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(20, 79);
@@ -132,7 +146,7 @@
             // 
             // btnVerMirkotiks
             // 
-            this.btnVerMirkotiks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.btnVerMirkotiks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
             this.btnVerMirkotiks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnVerMirkotiks.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnVerMirkotiks.ForeColor = System.Drawing.Color.White;
@@ -153,20 +167,6 @@
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
             this.panelContenedor.Size = new System.Drawing.Size(940, 332);
             this.panelContenedor.TabIndex = 9;
-            // 
-            // btnVerPools
-            // 
-            this.btnVerPools.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
-            this.btnVerPools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVerPools.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnVerPools.ForeColor = System.Drawing.Color.White;
-            this.btnVerPools.Location = new System.Drawing.Point(386, 16);
-            this.btnVerPools.Name = "btnVerPools";
-            this.btnVerPools.Size = new System.Drawing.Size(160, 38);
-            this.btnVerPools.TabIndex = 30;
-            this.btnVerPools.Text = "Ver Pools";
-            this.btnVerPools.UseVisualStyleBackColor = false;
-            this.btnVerPools.Click += new System.EventHandler(this.btnVerPools_Click);
             // 
             // Mikrotiks
             // 

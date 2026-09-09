@@ -56,16 +56,15 @@ namespace Mikrotik_Administrador
             this.lblSideTitle = new System.Windows.Forms.Label();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.picLogo = new System.Windows.Forms.PictureBox();
-            this.btncerrar = new System.Windows.Forms.Button();
             this.lblMenu = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.grpConfiguracion = new System.Windows.Forms.GroupBox();
             this.flowConfiguracion = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnUsuarios = new System.Windows.Forms.Button();
             this.btnMikrotiks = new System.Windows.Forms.Button();
             this.BtnComments = new System.Windows.Forms.Button();
             this.btnPlanes = new System.Windows.Forms.Button();
             this.btnBancos = new System.Windows.Forms.Button();
-            this.btnUsuarios = new System.Windows.Forms.Button();
             this.grpSistemaOut = new System.Windows.Forms.GroupBox();
             this.flowSistemaOut = new System.Windows.Forms.FlowLayoutPanel();
             this.btnMigracion = new System.Windows.Forms.Button();
@@ -133,6 +132,7 @@ namespace Mikrotik_Administrador
             this.btnSideSalir.Text = "Salir";
             this.btnSideSalir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSideSalir.UseVisualStyleBackColor = false;
+            this.btnSideSalir.Click += new System.EventHandler(this.btnSideSalir_Click);
             // 
             // panelSubmenuHistoriales
             // 
@@ -161,6 +161,7 @@ namespace Mikrotik_Administrador
             this.btnSubCambios.Text = "Cambios";
             this.btnSubCambios.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubCambios.UseVisualStyleBackColor = true;
+            this.btnSubCambios.Click += new System.EventHandler(this.btnSubCambios_Click);
             // 
             // btnSubMovimientos
             // 
@@ -177,6 +178,7 @@ namespace Mikrotik_Administrador
             this.btnSubMovimientos.Text = "Movimientos";
             this.btnSubMovimientos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubMovimientos.UseVisualStyleBackColor = true;
+            this.btnSubMovimientos.Click += new System.EventHandler(this.btnSubMovimientos_Click);
             // 
             // btnSideHistoriales
             // 
@@ -222,6 +224,7 @@ namespace Mikrotik_Administrador
             this.btnSubMensualidades.Text = "Mensualidades";
             this.btnSubMensualidades.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubMensualidades.UseVisualStyleBackColor = true;
+            this.btnSubMensualidades.Click += new System.EventHandler(this.btnSubMensualidades_Click);
             // 
             // btnSubInformacion
             // 
@@ -238,6 +241,7 @@ namespace Mikrotik_Administrador
             this.btnSubInformacion.Text = "Información";
             this.btnSubInformacion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubInformacion.UseVisualStyleBackColor = true;
+            this.btnSubInformacion.Click += new System.EventHandler(this.btnSubInformacion_Click);
             // 
             // btnSideCliente
             // 
@@ -283,6 +287,7 @@ namespace Mikrotik_Administrador
             this.btnSubAsignaciones.Text = "Asignaciones";
             this.btnSubAsignaciones.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubAsignaciones.UseVisualStyleBackColor = true;
+            this.btnSubAsignaciones.Click += new System.EventHandler(this.btnSubAsignaciones_Click);
             // 
             // btnSubMigracion
             // 
@@ -299,6 +304,7 @@ namespace Mikrotik_Administrador
             this.btnSubMigracion.Text = "Migración";
             this.btnSubMigracion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubMigracion.UseVisualStyleBackColor = true;
+            this.btnSubMigracion.Click += new System.EventHandler(this.btnSubMigracion_Click);
             // 
             // btnSideOut
             // 
@@ -347,6 +353,7 @@ namespace Mikrotik_Administrador
             this.btnSubBancos.Text = "Bancos";
             this.btnSubBancos.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubBancos.UseVisualStyleBackColor = true;
+            this.btnSubBancos.Click += new System.EventHandler(this.btnSubBancos_Click);
             // 
             // btnSubPlanes
             // 
@@ -363,6 +370,7 @@ namespace Mikrotik_Administrador
             this.btnSubPlanes.Text = "Planes";
             this.btnSubPlanes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubPlanes.UseVisualStyleBackColor = true;
+            this.btnSubPlanes.Click += new System.EventHandler(this.btnSubPlanes_Click);
             // 
             // btnSubComments
             // 
@@ -379,6 +387,7 @@ namespace Mikrotik_Administrador
             this.btnSubComments.Text = "Comments";
             this.btnSubComments.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubComments.UseVisualStyleBackColor = true;
+            this.btnSubComments.Click += new System.EventHandler(this.btnSubComments_Click);
             // 
             // btnSubMikrotiks
             // 
@@ -395,6 +404,7 @@ namespace Mikrotik_Administrador
             this.btnSubMikrotiks.Text = "Mikrotiks";
             this.btnSubMikrotiks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubMikrotiks.UseVisualStyleBackColor = true;
+            this.btnSubMikrotiks.Click += new System.EventHandler(this.btnSubMikrotiks_Click);
             // 
             // btnSubUsuarios
             // 
@@ -411,6 +421,7 @@ namespace Mikrotik_Administrador
             this.btnSubUsuarios.Text = "Usuarios";
             this.btnSubUsuarios.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSubUsuarios.UseVisualStyleBackColor = true;
+            this.btnSubUsuarios.Click += new System.EventHandler(this.btnSubUsuarios_Click);
             // 
             // btnSideConfiguracion
             // 
@@ -462,7 +473,6 @@ namespace Mikrotik_Administrador
             // 
             this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
             this.panelHeader.Controls.Add(this.picLogo);
-            this.panelHeader.Controls.Add(this.btncerrar);
             this.panelHeader.Controls.Add(this.lblMenu);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(220, 0);
@@ -480,20 +490,6 @@ namespace Mikrotik_Administrador
             this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picLogo.TabIndex = 12;
             this.picLogo.TabStop = false;
-            // 
-            // btncerrar
-            // 
-            this.btncerrar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
-            this.btncerrar.FlatAppearance.BorderSize = 0;
-            this.btncerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btncerrar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.btncerrar.ForeColor = System.Drawing.Color.White;
-            this.btncerrar.Location = new System.Drawing.Point(15, 17);
-            this.btncerrar.Name = "btncerrar";
-            this.btncerrar.Size = new System.Drawing.Size(125, 35);
-            this.btncerrar.TabIndex = 11;
-            this.btncerrar.Text = "Cerrar Sesión";
-            this.btncerrar.UseVisualStyleBackColor = false;
             // 
             // lblMenu
             // 
@@ -533,7 +529,7 @@ namespace Mikrotik_Administrador
             this.grpConfiguracion.Location = new System.Drawing.Point(23, 23);
             this.grpConfiguracion.Margin = new System.Windows.Forms.Padding(3, 3, 3, 15);
             this.grpConfiguracion.Name = "grpConfiguracion";
-            this.grpConfiguracion.Size = new System.Drawing.Size(690, 118);
+            this.grpConfiguracion.Size = new System.Drawing.Size(712, 118);
             this.grpConfiguracion.TabIndex = 0;
             this.grpConfiguracion.TabStop = false;
             this.grpConfiguracion.Text = "Configuración";
@@ -541,100 +537,16 @@ namespace Mikrotik_Administrador
             // flowConfiguracion
             // 
             this.flowConfiguracion.AutoSize = true;
+            this.flowConfiguracion.Controls.Add(this.btnUsuarios);
             this.flowConfiguracion.Controls.Add(this.btnMikrotiks);
             this.flowConfiguracion.Controls.Add(this.BtnComments);
             this.flowConfiguracion.Controls.Add(this.btnPlanes);
             this.flowConfiguracion.Controls.Add(this.btnBancos);
-            this.flowConfiguracion.Controls.Add(this.btnUsuarios);
             this.flowConfiguracion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowConfiguracion.Location = new System.Drawing.Point(3, 33);
             this.flowConfiguracion.Name = "flowConfiguracion";
-            this.flowConfiguracion.Size = new System.Drawing.Size(684, 82);
+            this.flowConfiguracion.Size = new System.Drawing.Size(706, 82);
             this.flowConfiguracion.TabIndex = 0;
-            // 
-            // btnMikrotiks
-            // 
-            this.btnMikrotiks.BackColor = System.Drawing.Color.White;
-            this.btnMikrotiks.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMikrotiks.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
-            this.btnMikrotiks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMikrotiks.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnMikrotiks.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-            this.btnMikrotiks.Image = ((System.Drawing.Image)(resources.GetObject("btnMikrotiks.Image")));
-            this.btnMikrotiks.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnMikrotiks.Location = new System.Drawing.Point(8, 8);
-            this.btnMikrotiks.Margin = new System.Windows.Forms.Padding(8);
-            this.btnMikrotiks.Name = "btnMikrotiks";
-            this.btnMikrotiks.Size = new System.Drawing.Size(129, 66);
-            this.btnMikrotiks.TabIndex = 0;
-            this.btnMikrotiks.Text = "Mikrotiks";
-            this.btnMikrotiks.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnMikrotiks.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnMikrotiks.UseVisualStyleBackColor = false;
-            this.btnMikrotiks.Click += new System.EventHandler(this.btnSubMikrotik_Click);
-            // 
-            // BtnComments
-            // 
-            this.BtnComments.BackColor = System.Drawing.Color.White;
-            this.BtnComments.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.BtnComments.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
-            this.BtnComments.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnComments.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.BtnComments.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-            this.BtnComments.Image = ((System.Drawing.Image)(resources.GetObject("BtnComments.Image")));
-            this.BtnComments.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnComments.Location = new System.Drawing.Point(153, 8);
-            this.BtnComments.Margin = new System.Windows.Forms.Padding(8);
-            this.BtnComments.Name = "BtnComments";
-            this.BtnComments.Size = new System.Drawing.Size(124, 66);
-            this.BtnComments.TabIndex = 1;
-            this.BtnComments.Text = "Comments";
-            this.BtnComments.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnComments.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnComments.UseVisualStyleBackColor = false;
-            this.BtnComments.Click += new System.EventHandler(this.btnSubComment_Click);
-            // 
-            // btnPlanes
-            // 
-            this.btnPlanes.BackColor = System.Drawing.Color.White;
-            this.btnPlanes.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnPlanes.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
-            this.btnPlanes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPlanes.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnPlanes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-            this.btnPlanes.Image = ((System.Drawing.Image)(resources.GetObject("btnPlanes.Image")));
-            this.btnPlanes.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnPlanes.Location = new System.Drawing.Point(293, 8);
-            this.btnPlanes.Margin = new System.Windows.Forms.Padding(8);
-            this.btnPlanes.Name = "btnPlanes";
-            this.btnPlanes.Size = new System.Drawing.Size(104, 66);
-            this.btnPlanes.TabIndex = 2;
-            this.btnPlanes.Text = "Planes";
-            this.btnPlanes.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnPlanes.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnPlanes.UseVisualStyleBackColor = false;
-            this.btnPlanes.Click += new System.EventHandler(this.btnSubPlanes_Click);
-            // 
-            // btnBancos
-            // 
-            this.btnBancos.BackColor = System.Drawing.Color.White;
-            this.btnBancos.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBancos.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
-            this.btnBancos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBancos.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnBancos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-            this.btnBancos.Image = ((System.Drawing.Image)(resources.GetObject("btnBancos.Image")));
-            this.btnBancos.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBancos.Location = new System.Drawing.Point(413, 8);
-            this.btnBancos.Margin = new System.Windows.Forms.Padding(8);
-            this.btnBancos.Name = "btnBancos";
-            this.btnBancos.Size = new System.Drawing.Size(107, 66);
-            this.btnBancos.TabIndex = 3;
-            this.btnBancos.Text = "Bancos";
-            this.btnBancos.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBancos.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnBancos.UseVisualStyleBackColor = false;
-            this.btnBancos.Click += new System.EventHandler(this.btnSubBancos_Click);
             // 
             // btnUsuarios
             // 
@@ -646,7 +558,7 @@ namespace Mikrotik_Administrador
             this.btnUsuarios.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
             this.btnUsuarios.Image = ((System.Drawing.Image)(resources.GetObject("btnUsuarios.Image")));
             this.btnUsuarios.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnUsuarios.Location = new System.Drawing.Point(536, 8);
+            this.btnUsuarios.Location = new System.Drawing.Point(8, 8);
             this.btnUsuarios.Margin = new System.Windows.Forms.Padding(8);
             this.btnUsuarios.Name = "btnUsuarios";
             this.btnUsuarios.Size = new System.Drawing.Size(140, 66);
@@ -655,7 +567,91 @@ namespace Mikrotik_Administrador
             this.btnUsuarios.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnUsuarios.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnUsuarios.UseVisualStyleBackColor = false;
-            this.btnUsuarios.Click += new System.EventHandler(this.btnSubMikrotik_Click);
+            this.btnUsuarios.Click += new System.EventHandler(this.btnUsuarios_Click);
+            // 
+            // btnMikrotiks
+            // 
+            this.btnMikrotiks.BackColor = System.Drawing.Color.White;
+            this.btnMikrotiks.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMikrotiks.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
+            this.btnMikrotiks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMikrotiks.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnMikrotiks.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.btnMikrotiks.Image = ((System.Drawing.Image)(resources.GetObject("btnMikrotiks.Image")));
+            this.btnMikrotiks.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnMikrotiks.Location = new System.Drawing.Point(164, 8);
+            this.btnMikrotiks.Margin = new System.Windows.Forms.Padding(8);
+            this.btnMikrotiks.Name = "btnMikrotiks";
+            this.btnMikrotiks.Size = new System.Drawing.Size(151, 66);
+            this.btnMikrotiks.TabIndex = 0;
+            this.btnMikrotiks.Text = "Mikrotiks";
+            this.btnMikrotiks.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnMikrotiks.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnMikrotiks.UseVisualStyleBackColor = false;
+            this.btnMikrotiks.Click += new System.EventHandler(this.btnMikrotiks_Click);
+            // 
+            // BtnComments
+            // 
+            this.BtnComments.BackColor = System.Drawing.Color.White;
+            this.BtnComments.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnComments.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
+            this.BtnComments.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnComments.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.BtnComments.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.BtnComments.Image = ((System.Drawing.Image)(resources.GetObject("BtnComments.Image")));
+            this.BtnComments.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.BtnComments.Location = new System.Drawing.Point(331, 8);
+            this.BtnComments.Margin = new System.Windows.Forms.Padding(8);
+            this.BtnComments.Name = "BtnComments";
+            this.BtnComments.Size = new System.Drawing.Size(124, 66);
+            this.BtnComments.TabIndex = 1;
+            this.BtnComments.Text = "Comments";
+            this.BtnComments.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.BtnComments.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnComments.UseVisualStyleBackColor = false;
+            this.BtnComments.Click += new System.EventHandler(this.BtnComments_Click);
+            // 
+            // btnPlanes
+            // 
+            this.btnPlanes.BackColor = System.Drawing.Color.White;
+            this.btnPlanes.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPlanes.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
+            this.btnPlanes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPlanes.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnPlanes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.btnPlanes.Image = ((System.Drawing.Image)(resources.GetObject("btnPlanes.Image")));
+            this.btnPlanes.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnPlanes.Location = new System.Drawing.Point(471, 8);
+            this.btnPlanes.Margin = new System.Windows.Forms.Padding(8);
+            this.btnPlanes.Name = "btnPlanes";
+            this.btnPlanes.Size = new System.Drawing.Size(104, 66);
+            this.btnPlanes.TabIndex = 2;
+            this.btnPlanes.Text = "Planes";
+            this.btnPlanes.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnPlanes.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnPlanes.UseVisualStyleBackColor = false;
+            this.btnPlanes.Click += new System.EventHandler(this.btnPlanes_Click);
+            // 
+            // btnBancos
+            // 
+            this.btnBancos.BackColor = System.Drawing.Color.White;
+            this.btnBancos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBancos.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
+            this.btnBancos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBancos.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnBancos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.btnBancos.Image = ((System.Drawing.Image)(resources.GetObject("btnBancos.Image")));
+            this.btnBancos.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnBancos.Location = new System.Drawing.Point(591, 8);
+            this.btnBancos.Margin = new System.Windows.Forms.Padding(8);
+            this.btnBancos.Name = "btnBancos";
+            this.btnBancos.Size = new System.Drawing.Size(107, 66);
+            this.btnBancos.TabIndex = 3;
+            this.btnBancos.Text = "Bancos";
+            this.btnBancos.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnBancos.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnBancos.UseVisualStyleBackColor = false;
+            this.btnBancos.Click += new System.EventHandler(this.btnBancos_Click);
             // 
             // grpSistemaOut
             // 
@@ -701,7 +697,7 @@ namespace Mikrotik_Administrador
             this.btnMigracion.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnMigracion.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnMigracion.UseVisualStyleBackColor = false;
-            this.btnMigracion.Click += new System.EventHandler(this.btnSubMigracion_Click);
+            this.btnMigracion.Click += new System.EventHandler(this.btnMigracion_Click);
             // 
             // btnAsignacion
             // 
@@ -722,7 +718,7 @@ namespace Mikrotik_Administrador
             this.btnAsignacion.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnAsignacion.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnAsignacion.UseVisualStyleBackColor = false;
-            this.btnAsignacion.Click += new System.EventHandler(this.btnSubAsignaciones_Click);
+            this.btnAsignacion.Click += new System.EventHandler(this.btnAsignacion_Click);
             // 
             // grpClientes
             // 
@@ -768,7 +764,7 @@ namespace Mikrotik_Administrador
             this.btnInformacion.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnInformacion.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnInformacion.UseVisualStyleBackColor = false;
-            this.btnInformacion.Click += new System.EventHandler(this.btnSubInformacion_Click);
+            this.btnInformacion.Click += new System.EventHandler(this.btnInformacion_Click);
             // 
             // btnMensualidades
             // 
@@ -789,7 +785,7 @@ namespace Mikrotik_Administrador
             this.btnMensualidades.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnMensualidades.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnMensualidades.UseVisualStyleBackColor = false;
-            this.btnMensualidades.Click += new System.EventHandler(this.btnSubMensualidades_Click);
+            this.btnMensualidades.Click += new System.EventHandler(this.btnMensualidades_Click);
             // 
             // grpHistoriales
             // 
@@ -800,7 +796,7 @@ namespace Mikrotik_Administrador
             this.grpHistoriales.Location = new System.Drawing.Point(23, 431);
             this.grpHistoriales.Margin = new System.Windows.Forms.Padding(3, 3, 3, 15);
             this.grpHistoriales.Name = "grpHistoriales";
-            this.grpHistoriales.Size = new System.Drawing.Size(477, 119);
+            this.grpHistoriales.Size = new System.Drawing.Size(514, 119);
             this.grpHistoriales.TabIndex = 3;
             this.grpHistoriales.TabStop = false;
             this.grpHistoriales.Text = "Historiales";
@@ -814,7 +810,7 @@ namespace Mikrotik_Administrador
             this.flowHistoriales.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowHistoriales.Location = new System.Drawing.Point(3, 33);
             this.flowHistoriales.Name = "flowHistoriales";
-            this.flowHistoriales.Size = new System.Drawing.Size(471, 83);
+            this.flowHistoriales.Size = new System.Drawing.Size(508, 83);
             this.flowHistoriales.TabIndex = 0;
             // 
             // btnCambios
@@ -836,7 +832,7 @@ namespace Mikrotik_Administrador
             this.btnCambios.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCambios.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnCambios.UseVisualStyleBackColor = false;
-            this.btnCambios.Click += new System.EventHandler(this.btnSubCambios_Click);
+            this.btnCambios.Click += new System.EventHandler(this.btnCambios_Click);
             // 
             // btnHistorial
             // 
@@ -851,13 +847,13 @@ namespace Mikrotik_Administrador
             this.btnHistorial.Location = new System.Drawing.Point(175, 8);
             this.btnHistorial.Margin = new System.Windows.Forms.Padding(8);
             this.btnHistorial.Name = "btnHistorial";
-            this.btnHistorial.Size = new System.Drawing.Size(120, 67);
+            this.btnHistorial.Size = new System.Drawing.Size(157, 67);
             this.btnHistorial.TabIndex = 1;
-            this.btnHistorial.Text = "Historial";
+            this.btnHistorial.Text = "Movimientos";
             this.btnHistorial.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnHistorial.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnHistorial.UseVisualStyleBackColor = false;
-            this.btnHistorial.Click += new System.EventHandler(this.btnSubMovimientos_Click);
+            this.btnHistorial.Click += new System.EventHandler(this.btnHistorial_Click);
             // 
             // btnExcel
             // 
@@ -868,7 +864,7 @@ namespace Mikrotik_Administrador
             this.btnExcel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnExcel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
             this.btnExcel.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnExcel.Location = new System.Drawing.Point(311, 8);
+            this.btnExcel.Location = new System.Drawing.Point(348, 8);
             this.btnExcel.Margin = new System.Windows.Forms.Padding(8);
             this.btnExcel.Name = "btnExcel";
             this.btnExcel.Size = new System.Drawing.Size(152, 62);
@@ -949,7 +945,6 @@ namespace Mikrotik_Administrador
         private System.Windows.Forms.Button btnSideSalir;
 
         private System.Windows.Forms.Panel panelHeader;
-        private System.Windows.Forms.Button btncerrar;
         private System.Windows.Forms.PictureBox picLogo;
         private System.Windows.Forms.Label lblMenu;
 

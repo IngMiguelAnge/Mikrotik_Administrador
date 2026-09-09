@@ -59,7 +59,7 @@
             // 
             this.lblCambio.AutoSize = true;
             this.lblCambio.Font = new System.Drawing.Font("Segoe UI", 28F, System.Drawing.FontStyle.Bold);
-            this.lblCambio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.lblCambio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
             this.lblCambio.Location = new System.Drawing.Point(20, 140);
             this.lblCambio.Name = "lblCambio";
             this.lblCambio.Size = new System.Drawing.Size(271, 74);

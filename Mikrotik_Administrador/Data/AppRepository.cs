@@ -1851,6 +1851,33 @@ namespace Mikrotik_Administrador.Data
             }
             return response;
         }
+        public async Task<List<ListMikrotikModel>> GetMikrotikByIP(string IP)
+        {
+            List<ListMikrotikModel> list = new List<ListMikrotikModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetMikrotikByIP", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IP", IP));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListMikrotiks(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
         public async Task<List<ListMikrotikModel>> GetMikrotiks()
         {
             List<ListMikrotikModel> list = new List<ListMikrotikModel>();

@@ -44,25 +44,38 @@ namespace Mikrotik_Administrador
         private void btnSubUsuarios_Click(object sender, EventArgs e)
         {
             OcultarSubMenuConfiguracion();
+            UsuariosSistema us = new UsuariosSistema();
+            us.Show();
         }
-
-        private void btnSubMikrotik_Click(object sender, EventArgs e)
+        
+        private void btnSubMikrotiks_Click(object sender, EventArgs e)
         {
             OcultarSubMenuConfiguracion();
+            Mikrotiks m = new Mikrotiks();
+            m.Show();
         }
 
-        private void btnSubComment_Click(object sender, EventArgs e)
+        private void btnSubComments_Click(object sender, EventArgs e)
         {
             OcultarSubMenuConfiguracion();
+            Comments c = new Comments();
+            c.Show();
         }
 
         private void btnSubPlanes_Click(object sender, EventArgs e)
         {
             OcultarSubMenuConfiguracion();
+            Planes m = new Planes();
+            m.PorUsuarios = false;
+            m.IdResponsable = IdResponsable;
+            m.Tipo = string.Empty;
+            m.Show();
         }
         private void btnSubBancos_Click(object sender, EventArgs e)
         {
             OcultarSubMenuConfiguracion();
+            Bancos b = new Bancos();
+            b.Show();
         }
 
         //Menu OutSistema
@@ -93,11 +106,17 @@ namespace Mikrotik_Administrador
         private void btnSubMigracion_Click(object sender, EventArgs e)
         {
             OcultarSubMenuOut();
+            Migracion m = new Migracion();
+            m.IdResponsable = IdResponsable;
+            m.Show();
         }
 
         private void btnSubAsignaciones_Click(object sender, EventArgs e)
         {
             OcultarSubMenuOut();
+            Usuarios m = new Usuarios();
+            m.IdResponsable = IdResponsable;
+            m.Show();
         }
         //Menu Cliente
         private void OcultarSubMenuCliente()
@@ -127,11 +146,17 @@ namespace Mikrotik_Administrador
         private void btnSubInformacion_Click(object sender, EventArgs e)
         {
             OcultarSubMenuCliente();
+            InfoClientes m = new InfoClientes();
+            m.IdResponsable = IdResponsable;
+            m.Show();
         }
 
         private void btnSubMensualidades_Click(object sender, EventArgs e)
         {
             OcultarSubMenuCliente();
+            Pagos pagos = new Pagos();
+            pagos.IdResponsable = IdResponsable;
+            pagos.Show();
         }
         //Menu Historial
         private void OcultarSubMenuHistoriales()
@@ -161,11 +186,15 @@ namespace Mikrotik_Administrador
         private void btnSubMovimientos_Click(object sender, EventArgs e)
         {
             OcultarSubMenuHistoriales();
+            HistorialMovimientos H = new HistorialMovimientos();
+            H.Show();
         }
 
         private void btnSubCambios_Click(object sender, EventArgs e)
         {
             OcultarSubMenuHistoriales();
+            CambiosPlan cp = new CambiosPlan();
+            cp.Show();
         }
         private void Menu_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -246,6 +275,9 @@ namespace Mikrotik_Administrador
                 grpConfiguracion.Visible = false;
                 grpSistemaOut.Visible= false;
                 grpHistoriales.Visible = false;
+                btnSideConfiguracion.Visible = false;
+                btnSideOut.Visible = false;
+                btnSideHistoriales.Visible = false;
                 return;
             }
                
@@ -266,8 +298,7 @@ namespace Mikrotik_Administrador
 
         private void btncerrar_Click(object sender, EventArgs e)
         {
-            Application.Restart();
-            Environment.Exit(0);
+          
         }
 
         private void btnExcel_Click(object sender, EventArgs e)
@@ -276,5 +307,10 @@ namespace Mikrotik_Administrador
             mm.Show();
         }
 
+        private void btnSideSalir_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+            Environment.Exit(0);
+        }
     }
 }

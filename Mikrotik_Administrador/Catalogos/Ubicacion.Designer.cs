@@ -259,7 +259,7 @@
             // 
             // btnAceptarUbicacion
             // 
-            this.btnAceptarUbicacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(80)))), ((int)(((byte)(196)))));
+            this.btnAceptarUbicacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
             this.btnAceptarUbicacion.Enabled = false;
             this.btnAceptarUbicacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAceptarUbicacion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
