@@ -121,7 +121,7 @@ namespace Mikrotik_Administrador
 
         private void btnSideCliente_Click(object sender, EventArgs e)
         {
-            MostrarSubMenuCliente(panelSubmenuOut);
+            MostrarSubMenuCliente(panelSubmenuCliente);
         }
 
         private void btnSubInformacion_Click(object sender, EventArgs e)
@@ -155,7 +155,7 @@ namespace Mikrotik_Administrador
 
         private void btnSideHistoriales_Click(object sender, EventArgs e)
         {
-            MostrarSubMenuHistoriales(panelSubmenuOut);
+            MostrarSubMenuHistoriales(panelSubmenuHistoriales);
         }
 
         private void btnSubMovimientos_Click(object sender, EventArgs e)
@@ -243,14 +243,9 @@ namespace Mikrotik_Administrador
         {
             if (IdTipoUsuario != 1) //1:Administrador
             {
-                btnMikrotiks.Visible = false;
-                BtnComments.Visible = false;
-                btnMigracion.Visible = false;
-                btnPlanes.Visible = false;
-                btnAsignacion.Visible = false;
-                btnBancos.Visible = false;
-                btnHistorial.Visible = false;
-                btnUsuarios.Visible = false;
+                grpConfiguracion.Visible = false;
+                grpSistemaOut.Visible= false;
+                grpHistoriales.Visible = false;
                 return;
             }
                
