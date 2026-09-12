@@ -204,8 +204,6 @@ namespace Mikrotik_Administrador
             dgvPlanes.AllowUserToAddRows = false;
         }
 
-       
-
         private void dgvPlanes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // Evitar errores si hacen click en el encabezado

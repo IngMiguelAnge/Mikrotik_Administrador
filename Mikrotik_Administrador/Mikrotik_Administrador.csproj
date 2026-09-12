@@ -304,6 +304,18 @@
     <Compile Include="Catalogos\Mensualidades.Designer.cs">
       <DependentUpon>Mensualidades.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\PreregistroCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\PreregistroCliente.Designer.cs">
+      <DependentUpon>PreregistroCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Items\Mapa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\Mapa.Designer.cs">
+      <DependentUpon>Mapa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Items\MensualidadesMultiples.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -567,6 +579,9 @@
     <EmbeddedResource Include="Catalogos\Comment.resx">
       <DependentUpon>Comment.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\PreregistroCliente.resx">
+      <DependentUpon>PreregistroCliente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\UsuarioSistema.resx">
       <DependentUpon>UsuarioSistema.cs</DependentUpon>
     </EmbeddedResource>
@@ -578,6 +593,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Items\IniciarPagos.resx">
       <DependentUpon>IniciarPagos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\Mapa.resx">
+      <DependentUpon>Mapa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\MensualidadesMultiples.resx">
       <DependentUpon>MensualidadesMultiples.cs</DependentUpon>
@@ -683,9 +701,11 @@
     <Content Include="Imagenes\bank.png" />
     <Content Include="Imagenes\comments.png" />
     <Content Include="Imagenes\exchange.png" />
+    <Content Include="Imagenes\google-maps.png" />
     <Content Include="Imagenes\history.png" />
     <Content Include="Imagenes\Information.png" />
     <Content Include="Imagenes\LOGO MASTER SISTEM.png" />
+    <Content Include="Imagenes\Lupa.png" />
     <Content Include="Imagenes\Mensualidad.png" />
     <Content Include="Imagenes\migration.png" />
     <Content Include="Imagenes\plan.png" />

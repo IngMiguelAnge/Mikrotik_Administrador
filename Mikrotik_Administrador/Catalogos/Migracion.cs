@@ -70,7 +70,7 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "id",
-                HeaderText = "id",
+                HeaderText = "Id",
                 DataPropertyName = "id",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -79,7 +79,7 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "comment",
-                HeaderText = "comment",
+                HeaderText = "Servicio",
                 DataPropertyName = "comment",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -88,7 +88,7 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "address",
-                HeaderText = "address",
+                HeaderText = "IP",
                 DataPropertyName = "address",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -97,7 +97,7 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "idplan",
-                HeaderText = "idplan",
+                HeaderText = "IdPlan",
                 DataPropertyName = "idplan",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -106,7 +106,7 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "velocidad",
-                HeaderText = "velocidad",
+                HeaderText = "Velocidad",
                 DataPropertyName = "velocidad",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -115,7 +115,7 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "estatus",
-                HeaderText = "estatus",
+                HeaderText = "Estatus",
                 DataPropertyName = "estatus",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -408,7 +408,7 @@ namespace Mikrotik_Administrador
 
         private async void btnEliminar_Click(object sender, EventArgs e)
         {
-            DialogResult resultado = MessageBox.Show("Estas por eliminar de forma permanente a los usuarios del mikrotik ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult resultado = MessageBox.Show("Estas por eliminar de forma permanente a los usuarios del mikrotik ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
             if (resultado == DialogResult.No)
             {
                 return;

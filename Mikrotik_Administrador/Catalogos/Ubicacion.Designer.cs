@@ -115,9 +115,9 @@
             // txtDireccionOficial
             // 
             this.txtDireccionOficial.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtDireccionOficial.Location = new System.Drawing.Point(170, 80);
+            this.txtDireccionOficial.Location = new System.Drawing.Point(196, 80);
             this.txtDireccionOficial.Name = "txtDireccionOficial";
-            this.txtDireccionOficial.Size = new System.Drawing.Size(796, 33);
+            this.txtDireccionOficial.Size = new System.Drawing.Size(770, 33);
             this.txtDireccionOficial.TabIndex = 3;
             // 
             // cmbMapas
@@ -217,7 +217,7 @@
             this.lblEjemplo.AutoSize = true;
             this.lblEjemplo.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Italic);
             this.lblEjemplo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(165)))));
-            this.lblEjemplo.Location = new System.Drawing.Point(166, 116);
+            this.lblEjemplo.Location = new System.Drawing.Point(192, 116);
             this.lblEjemplo.Name = "lblEjemplo";
             this.lblEjemplo.Size = new System.Drawing.Size(405, 23);
             this.lblEjemplo.TabIndex = 4;
@@ -237,9 +237,9 @@
             // txtDireccion
             // 
             this.txtDireccion.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtDireccion.Location = new System.Drawing.Point(170, 34);
+            this.txtDireccion.Location = new System.Drawing.Point(196, 34);
             this.txtDireccion.Name = "txtDireccion";
-            this.txtDireccion.Size = new System.Drawing.Size(796, 33);
+            this.txtDireccion.Size = new System.Drawing.Size(770, 33);
             this.txtDireccion.TabIndex = 1;
             // 
             // BtnGuardar

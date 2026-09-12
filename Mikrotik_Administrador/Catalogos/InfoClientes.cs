@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Data;
+﻿using Mikrotik_Administrador.Catalogos;
+using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
@@ -110,7 +111,7 @@ namespace Mikrotik_Administrador
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Nombre",
-                HeaderText = "Nombre",
+                HeaderText = "Cliente",
                 DataPropertyName = "Nombre",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -245,8 +246,7 @@ namespace Mikrotik_Administrador
 
         private void btnNuevo_Click(object sender, EventArgs e)
         {
-            InfoCliente m = new InfoCliente();
-            m.IdCliente = 0;
+            PreregistroCliente m = new PreregistroCliente();
             m.ShowDialog();
             CargarClientes();
         }

@@ -1401,7 +1401,6 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
                         cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
                         cmd.Parameters.Add(new SqlParameter("@ParaSeleccion", PorUsuarios));
-                        //cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
