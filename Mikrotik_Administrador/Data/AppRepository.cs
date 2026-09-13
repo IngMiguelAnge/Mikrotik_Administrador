@@ -1994,7 +1994,7 @@ namespace Mikrotik_Administrador.Data
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("GetUbicacionByIds", sql))
+                    using (SqlCommand cmd = new SqlCommand("GetUbicacionesCercanas", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Latitud", Latitud));

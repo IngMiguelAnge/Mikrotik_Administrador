@@ -134,7 +134,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(780, 275);
+            this.ClientSize = new System.Drawing.Size(780, 252);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.txtTelefono2);
             this.Controls.Add(this.lblMensaje4);

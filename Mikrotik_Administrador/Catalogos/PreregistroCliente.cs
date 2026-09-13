@@ -22,6 +22,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class PreregistroCliente : Form
     {
+        public int IdCliente { get; set; }
         public int IdResponsable { get; set; }
         MK mikrotik;
         private int IdPlan;
@@ -51,7 +52,7 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            if (txtNombre.Text.Trim() == "")
+            if (txtNombrePlan.Text.Trim() == "")
             {
                 DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los planes pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (resultado == DialogResult.No)
@@ -157,7 +158,7 @@ namespace Mikrotik_Administrador.Catalogos
             try
             {
                 AppRepository obj = new AppRepository();
-                var lista = obj.GetPlanesbyName(txtNombre.Text, null, true).Result;
+                var lista = obj.GetPlanesbyName(txtNombrePlan.Text, null, true).Result;
                 var listaFinal = lista?.ToList() ?? new List<ListPlanesModel>();
                 dgvPlanes.DataSource = new SortableBindingList<ListPlanesModel>(listaFinal);
             }
@@ -172,9 +173,9 @@ namespace Mikrotik_Administrador.Catalogos
                 btnBuscar.Enabled = true;
                 btnBuscarCoordenadas.Enabled = true;
                 btnLupa.Enabled = true;
-                btnGuardar.Enabled = Confirmado = false ? false : true;
-                btnCancelarDireccion.Enabled = Confirmado = false ? false : true;
-                btnAceptarUbicacion.Enabled = Confirmado = false ? true : false;
+                btnGuardar.Enabled = Confirmado;
+                btnCancelarDireccion.Enabled = Confirmado;
+                btnAceptarUbicacion.Enabled = Confirmado;
             }
         }
 
@@ -206,6 +207,8 @@ namespace Mikrotik_Administrador.Catalogos
                     string comment = string.Empty;
                     if (IsAntena)
                     {
+                        lblPassword.Visible = false;
+                        txtPassword.Visible = false;
                         AppRepository obj = new AppRepository();
                         var listacomments = await Task.Run(() => obj.GetCommentsActivos(m.IdMikrotik));
                         if (listacomments.Count == 0)
@@ -258,9 +261,9 @@ namespace Mikrotik_Administrador.Catalogos
             btnBuscar.Enabled = false;
             btnBuscarCoordenadas.Enabled = false;
             btnLupa.Enabled = false;
-            btnGuardar.Enabled = Confirmado = false;
-            btnCancelarDireccion.Enabled = Confirmado = false;
-            btnAceptarUbicacion.Enabled = Confirmado = false;
+            btnGuardar.Enabled = false;
+            btnCancelarDireccion.Enabled = false;
+            btnAceptarUbicacion.Enabled = false;
 
             try
             {
@@ -289,8 +292,8 @@ namespace Mikrotik_Administrador.Catalogos
                 btnBuscar.Enabled = true;
                 btnBuscarCoordenadas.Enabled = true;
                 btnLupa.Enabled = true;
-                btnGuardar.Enabled = Confirmado = false ? false : true;
-                btnCancelarDireccion.Enabled = Confirmado = false ? false : true;
+                btnGuardar.Enabled = Confirmado;
+                btnCancelarDireccion.Enabled = Confirmado;
             }
         }
         public void BuscarPorDireccion(string direccionBuscada)
@@ -441,6 +444,11 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void PreregistroCliente_Load(object sender, EventArgs e)
         {
+            if(IdCliente != 0)
+            {
+                gbDatosCliente.Visible = false;
+            }
+           
             IdPlan = 0;
             txtLatitud.Text = "18.68165869879";
             txtLongitud.Text = "-97.64837265014";
@@ -474,18 +482,22 @@ namespace Mikrotik_Administrador.Catalogos
         private async void btnGuardar_Click(object sender, EventArgs e)
         {
             int IdUsuarioN = 0;
-            int IdCliente = 0;
             btnBuscar.Enabled = false;
             btnBuscarCoordenadas.Enabled = false;
             btnLupa.Enabled = false;
             btnGuardar.Enabled = false;
-            btnCancelarDireccion.Enabled = Confirmado = false;
-            btnAceptarUbicacion.Enabled = Confirmado = false;
+            btnCancelarDireccion.Enabled = false;
+            btnAceptarUbicacion.Enabled = false;
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             try
             {
-                if (txtNombre.Text.Trim() == string.Empty || txtDireccionOficial.Text.Trim() == string.Empty || txtLatitud.Text.Trim() == string.Empty || txtLongitud.Text.Trim() == string.Empty
+                if (gbDatosCliente.Visible == true && txtNombreCliente.Text.Trim() == string.Empty)
+                {
+                    MessageBox.Show("Por favor, completa todos los campos antes de guardar.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (txtDireccionOficial.Text.Trim() == string.Empty || txtLatitud.Text.Trim() == string.Empty || txtLongitud.Text.Trim() == string.Empty
                 || txtNombreServicio.Text.Trim() == string.Empty || txtDireccion.Text.Trim() == string.Empty)
                 {
                     MessageBox.Show("Por favor, completa todos los campos antes de guardar.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -498,13 +510,17 @@ namespace Mikrotik_Administrador.Catalogos
                     return;
                 }
                 AppRepository obj = new AppRepository();
-                var result = obj.GetClientesbyName(txtNombre.Text.Trim(), 0).Result;
-                if (result.Count > 0)
+                if(gbDatosCliente.Visible == true)
                 {
-                    MessageBox.Show("Ya existe un cliente con el mismo nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    var result = obj.GetClientesbyName(txtNombreCliente.Text.Trim(), 0).Result;
+                    if (result.Count > 0)
+                    {
+                        MessageBox.Show("Ya existe un cliente con el mismo nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
-                List<UbicacionesCercanas> listUbicaciones = obj.GetUbicacionesCercanas(txtLatitud.Text, txtLatitud.Text).Result.ToList();
+            
+                List<UbicacionesCercanas> listUbicaciones = obj.GetUbicacionesCercanas(txtLatitud.Text, txtLongitud.Text).Result.ToList();
                 if (listUbicaciones.Count > 0)
                 {
                     ListUbicacionesCercanas ubicacion = new ListUbicacionesCercanas();
@@ -530,7 +546,7 @@ namespace Mikrotik_Administrador.Catalogos
                     return;
                 }
                 string comment = string.Empty;
-                if (txtPassword.Visible == true)//es antena si sale true
+                if (txtPassword.Visible == false)//es antena si sale false
                 {
                     var listacomments = await Task.Run(() => obj.GetCommentsActivos(IdMikrotik));
                     if (listacomments.Count == 0)
@@ -564,7 +580,7 @@ namespace Mikrotik_Administrador.Catalogos
                     return;
                 }
 
-                if (txtPassword.Visible == true)//es antena si sale true
+                if (txtPassword.Visible == false)//es antena si sale false
                 {
                     //Procesos para introducir en antena
                     string ExisteEnQueue = string.Empty;
@@ -648,18 +664,22 @@ namespace Mikrotik_Administrador.Catalogos
                         }
                         else
                         {
-                            ClienteModel cliente = new ClienteModel();
-                            cliente.Id = 0;
-                            cliente.Nombre = txtNombre.Text.Trim();
-                            cliente.Correo = txtCorreo.Text.Trim();
-                            cliente.Telefono1 = txtTelefono1.Text.Trim();
-                            cliente.Telefono2 = txtTelefono2.Text.Trim();
-                            IdCliente = obj.SaveCliente(cliente).Result;
-                            if (IdCliente == 0)
+                            if(gbDatosCliente.Visible == true)
                             {
-                                MessageBox.Show("No se logro guardar el cliente para la solicitud asignada en la base de datos favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
+                                ClienteModel cliente = new ClienteModel();
+                                cliente.Id = 0;
+                                cliente.Nombre = txtNombreCliente.Text.Trim();
+                                cliente.Correo = txtCorreo.Text.Trim();
+                                cliente.Telefono1 = txtTelefono1.Text.Trim();
+                                cliente.Telefono2 = txtTelefono2.Text.Trim();
+                                IdCliente = obj.SaveCliente(cliente).Result;
+                                if (IdCliente == 0)
+                                {
+                                    MessageBox.Show("No se logro guardar el cliente para la solicitud asignada en la base de datos favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
                             }
+                         
                             //No existe en firewall ni en queue, se procede a introducirlo
                             PlanAnidadoModel objAnidado = new PlanAnidadoModel();
                             objAnidado.IdMikrotik = IdMikrotik;
@@ -826,18 +846,22 @@ namespace Mikrotik_Administrador.Catalogos
                                 MessageBox.Show("No se logro extraer el perfil del plan para la solicitud asignada en el mikrotik, es posible que lo hayan borrado fuera del sistema. Favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 return;
                             }
-                            ClienteModel cliente = new ClienteModel();
-                            cliente.Id = 0;
-                            cliente.Nombre = txtNombre.Text.Trim();
-                            cliente.Correo = txtCorreo.Text.Trim();
-                            cliente.Telefono1 = txtTelefono1.Text.Trim();
-                            cliente.Telefono2 = txtTelefono2.Text.Trim();
-                            IdCliente = obj.SaveCliente(cliente).Result;
-                            if (IdCliente == 0)
+                            if (gbDatosCliente.Visible == true)
                             {
-                                MessageBox.Show("No se logro guardar el cliente para la solicitud asignada en la base de datos favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
+                                ClienteModel cliente = new ClienteModel();
+                                cliente.Id = 0;
+                                cliente.Nombre = txtNombreCliente.Text.Trim();
+                                cliente.Correo = txtCorreo.Text.Trim();
+                                cliente.Telefono1 = txtTelefono1.Text.Trim();
+                                cliente.Telefono2 = txtTelefono2.Text.Trim();
+                                IdCliente = obj.SaveCliente(cliente).Result;
+                                if (IdCliente == 0)
+                                {
+                                    MessageBox.Show("No se logro guardar el cliente para la solicitud asignada en la base de datos favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
                             }
+                            
                             string idCreado = mikrotik.CrearFibra(txtNombreServicio.Text, IPDisponibleFibra.Result, NombrePlan, txtPassword.Text);
                             UsuariosGeneralModel objuser = new UsuariosGeneralModel();
                             objuser.IdMikrotik = IdMikrotik;
@@ -947,9 +971,9 @@ namespace Mikrotik_Administrador.Catalogos
                 btnBuscar.Enabled = true;
                 btnBuscarCoordenadas.Enabled = true;
                 btnLupa.Enabled = true;
-                btnGuardar.Enabled = Confirmado = false ? false : true;
-                btnCancelarDireccion.Enabled = Confirmado = false ? false : true;
-                btnAceptarUbicacion.Enabled = Confirmado = false ? true : false;
+                btnGuardar.Enabled = Confirmado;
+                btnCancelarDireccion.Enabled = Confirmado;
+                btnAceptarUbicacion.Enabled = Confirmado;
             }
         }
     }
