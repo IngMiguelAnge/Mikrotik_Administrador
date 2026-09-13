@@ -247,6 +247,7 @@ namespace Mikrotik_Administrador
         private void btnNuevo_Click(object sender, EventArgs e)
         {
             PreregistroCliente m = new PreregistroCliente();
+            m.IdResponsable = IdResponsable;
             m.ShowDialog();
             CargarClientes();
         }

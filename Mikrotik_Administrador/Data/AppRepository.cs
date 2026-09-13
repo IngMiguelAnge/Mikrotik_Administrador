@@ -1987,6 +1987,46 @@ namespace Mikrotik_Administrador.Data
 
         #endregion
         #region Ubicacion
+        public async Task<List<UbicacionesCercanas>> GetUbicacionesCercanas(string Latitud, string Longitud)
+        {
+            List<UbicacionesCercanas> list = new List<UbicacionesCercanas>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUbicacionByIds", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Latitud", Latitud));
+                        cmd.Parameters.Add(new SqlParameter("@Longitud", Longitud));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToUbicacionesCercanas(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private UbicacionesCercanas MapToUbicacionesCercanas(SqlDataReader reader)
+        {
+            return new UbicacionesCercanas()
+            {
+                Id = (int)reader["Id"],
+                Servicio = (string)reader["Servicio"],
+                Address = (string)reader["Address"],
+                Estatus = (string)reader["Estatus"],
+                Mikrotik = (string)reader["Mikrotik"]
+            };
+        }
+
         public async Task<bool> SaveUbicacion(UbicacionModel obj)
         {
             try
@@ -2097,7 +2137,7 @@ namespace Mikrotik_Administrador.Data
                 Nombre = (string)reader["Nombre"],
             };
         }
-        public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName(string Nombre, int IdMikrotik, string Cliente)
+        public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName(string Nombre, int IdMikrotik, bool IsAntena)
         {
             List<ListUsuariosGeneralModel> list = new List<ListUsuariosGeneralModel>();
             try
@@ -2109,7 +2149,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
-                        cmd.Parameters.Add(new SqlParameter("@Cliente", Cliente));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
 
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
@@ -2602,7 +2642,7 @@ namespace Mikrotik_Administrador.Data
                 Correo = Convert.IsDBNull(reader["Correo"]) ? string.Empty : (string)reader["Correo"],
             };
         }
-        public async Task<bool> SaveCliente(ClienteModel Cliente)
+        public async Task<int> SaveCliente(ClienteModel Cliente)
         {
             try
             {
@@ -2616,15 +2656,23 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Correo", Cliente.Correo));
                         cmd.Parameters.Add(new SqlParameter("@Telefono1", Cliente.Telefono1));
                         cmd.Parameters.Add(new SqlParameter("@Telefono2", Cliente.Telefono2));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        return true;
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+
+                        return idGenerado;
+
                     }
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
         public async Task<bool> UpdateEstatusCliente(int Id)

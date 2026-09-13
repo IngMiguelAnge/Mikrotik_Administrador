@@ -411,6 +411,12 @@
     <Compile Include="Items\TiempoDefinido.Designer.cs">
       <DependentUpon>TiempoDefinido.cs</DependentUpon>
     </Compile>
+    <Compile Include="Items\ListUbicacionesCercanas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\ListUbicacionesCercanas.Designer.cs">
+      <DependentUpon>ListUbicacionesCercanas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Items\VerComentario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -436,6 +442,7 @@
     <Compile Include="Model\ListClientesDescargaModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />
     <Compile Include="Model\ListTiposUsuarioModel.cs" />
+    <Compile Include="Model\UbicacionesCercanas.cs" />
     <Compile Include="Model\ListUsuariosModel.cs" />
     <Compile Include="Model\PoolsModel.cs" />
     <Compile Include="Model\ListBancosModel.cs" />
@@ -617,6 +624,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Items\TiempoDefinido.resx">
       <DependentUpon>TiempoDefinido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\ListUbicacionesCercanas.resx">
+      <DependentUpon>ListUbicacionesCercanas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\VerComentario.resx">
       <DependentUpon>VerComentario.cs</DependentUpon>

@@ -853,7 +853,7 @@ namespace Mikrotik_Administrador
                             {
                                 Id = 0,
                                 Descripcion = "Ya se encuentra registrado el ip " + IPDisponibleFibra.Result + " para fibra, en el mikrotik " + m.Nombre + " y no esta informado el sistema favor de actualizar, se procedera a guardarlo en el sistema, favor de revisar",
-                                Pagina = "Servicio automatico de planes",
+                                Pagina = "Servicio Cliente",
                                 IdUsuario = 1,
                                 Estatus = true
                             };
@@ -892,14 +892,13 @@ namespace Mikrotik_Administrador
                         {
                             //No existe en el mikrotik ahora si podemos meter el nuevo ip
                             //Insertamos en mikrotik
-                            string idCreado = mikrotik.CrearFibra(NombreCliente + contador.ToString(), IPDisponibleFibra.Result, plan.Nombre, pass.Password);
-
                             string IdPlanInterno = mikrotik.BuscarPerfil(plan.Nombre);
                             if (IdPlanInterno == string.Empty)
                             {
                                 MessageBox.Show("No se logro extraer el perfil del plan para la solicitud asignada en el mikrotik, es posible que lo hayan borrado fuera del sistema. Favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 return;
                             }
+                            string idCreado = mikrotik.CrearFibra(NombreCliente + contador.ToString(), IPDisponibleFibra.Result, plan.Nombre, pass.Password);
 
                             UsuariosGeneralModel objuser = new UsuariosGeneralModel();
                             objuser.IdMikrotik = m.IdMikrotik;
@@ -937,7 +936,7 @@ namespace Mikrotik_Administrador
                             HistorialMovimientosModel H = new HistorialMovimientosModel
                             {
                                 Id = 0,
-                                Descripcion = "La ip " + IPDisponibleAddress.Result + " se encontro en el addres list del mikrotik " + m.Nombre + " pero no esta registrado en la base, se agregara a la base de forma automatica",
+                                Descripcion = "La ip " + IPDisponibleAddress.Result + " se encontro en el pool del mikrotik " + m.Nombre + " pero no esta registrado en la base, se agregara a la base de forma automatica",
                                 Pagina = "Servicio cliente",
                                 IdUsuario = 1,
                                 Estatus = false
@@ -956,7 +955,7 @@ namespace Mikrotik_Administrador
                             {
                                 Id = 0,
                                 Descripcion = text,
-                                Pagina = "Servicio automatico de planes",
+                                Pagina = "Servicio Cliente",
                                 IdUsuario = 1,
                                 Estatus = Estatushistory
                             };

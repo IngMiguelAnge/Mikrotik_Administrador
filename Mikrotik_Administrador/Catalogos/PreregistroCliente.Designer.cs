@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PreregistroCliente));
             this.gbDatosCliente = new System.Windows.Forms.GroupBox();
             this.lblMensaje1 = new System.Windows.Forms.Label();
@@ -65,11 +65,15 @@
             this.lblDireccionSugerida = new System.Windows.Forms.Label();
             this.txtDireccionSugerida = new System.Windows.Forms.TextBox();
             this.panelBotones = new System.Windows.Forms.Panel();
+            this.gMapOculto = new GMap.NET.WindowsForms.GMapControl();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.btnAceptarUbicacion = new System.Windows.Forms.Button();
             this.btnCancelarDireccion = new System.Windows.Forms.Button();
             this.btnLupa = new System.Windows.Forms.Button();
-            this.gMapOculto = new GMap.NET.WindowsForms.GMapControl();
+            this.lblMikrotikSeleccionado = new System.Windows.Forms.Label();
+            this.txtMikrotik = new System.Windows.Forms.TextBox();
+            this.lblPassword = new System.Windows.Forms.Label();
+            this.txtPassword = new System.Windows.Forms.TextBox();
             this.gbDatosCliente.SuspendLayout();
             this.gbPlanes.SuspendLayout();
             this.panelContenedor.SuspendLayout();
@@ -183,6 +187,10 @@
             // 
             this.gbPlanes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbPlanes.Controls.Add(this.txtPassword);
+            this.gbPlanes.Controls.Add(this.lblPassword);
+            this.gbPlanes.Controls.Add(this.txtMikrotik);
+            this.gbPlanes.Controls.Add(this.lblMikrotikSeleccionado);
             this.gbPlanes.Controls.Add(this.lblNombre);
             this.gbPlanes.Controls.Add(this.txtBuscarPlan);
             this.gbPlanes.Controls.Add(this.btnBuscar);
@@ -240,9 +248,9 @@
             this.llbNombreUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.llbNombreUsuario.Location = new System.Drawing.Point(496, 28);
             this.llbNombreUsuario.Name = "llbNombreUsuario";
-            this.llbNombreUsuario.Size = new System.Drawing.Size(215, 25);
+            this.llbNombreUsuario.Size = new System.Drawing.Size(223, 25);
             this.llbNombreUsuario.TabIndex = 7;
-            this.llbNombreUsuario.Text = "Nombre para el servicio:";
+            this.llbNombreUsuario.Text = "*Nombre para el servicio:";
             // 
             // txtNombreServicio
             // 
@@ -250,7 +258,7 @@
             this.txtNombreServicio.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.txtNombreServicio.Location = new System.Drawing.Point(501, 50);
             this.txtNombreServicio.Name = "txtNombreServicio";
-            this.txtNombreServicio.Size = new System.Drawing.Size(385, 33);
+            this.txtNombreServicio.Size = new System.Drawing.Size(313, 33);
             this.txtNombreServicio.TabIndex = 7;
             // 
             // progressBar1
@@ -268,7 +276,7 @@
             this.panelContenedor.Controls.Add(this.dgvPlanes);
             this.panelContenedor.Location = new System.Drawing.Point(23, 116);
             this.panelContenedor.Name = "panelContenedor";
-            this.panelContenedor.Size = new System.Drawing.Size(955, 166);
+            this.panelContenedor.Size = new System.Drawing.Size(778, 166);
             this.panelContenedor.TabIndex = 9;
             // 
             // dgvPlanes
@@ -277,23 +285,23 @@
             this.dgvPlanes.BackgroundColor = System.Drawing.Color.White;
             this.dgvPlanes.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvPlanes.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvPlanes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvPlanes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvPlanes.ColumnHeadersHeight = 30;
             this.dgvPlanes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvPlanes.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPlanes.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvPlanes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvPlanes.EnableHeadersVisualStyles = false;
             this.dgvPlanes.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -303,7 +311,7 @@
             this.dgvPlanes.RowHeadersWidth = 62;
             this.dgvPlanes.RowTemplate.Height = 28;
             this.dgvPlanes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPlanes.Size = new System.Drawing.Size(955, 166);
+            this.dgvPlanes.Size = new System.Drawing.Size(778, 166);
             this.dgvPlanes.TabIndex = 0;
             this.dgvPlanes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPlanes_CellContentClick);
             // 
@@ -498,68 +506,10 @@
             this.panelBotones.Controls.Add(this.btnCancelarDireccion);
             this.panelBotones.Controls.Add(this.btnLupa);
             this.panelBotones.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBotones.Location = new System.Drawing.Point(0, 750);
+            this.panelBotones.Location = new System.Drawing.Point(0, 729);
             this.panelBotones.Name = "panelBotones";
-            this.panelBotones.Size = new System.Drawing.Size(1045, 60);
+            this.panelBotones.Size = new System.Drawing.Size(1045, 81);
             this.panelBotones.TabIndex = 3;
-            // 
-            // btnGuardar
-            // 
-            this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
-            this.btnGuardar.Enabled = false;
-            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(915, 3);
-            this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(110, 46);
-            this.btnGuardar.TabIndex = 10;
-            this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = false;
-            // 
-            // btnAceptarUbicacion
-            // 
-            this.btnAceptarUbicacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
-            this.btnAceptarUbicacion.Enabled = false;
-            this.btnAceptarUbicacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAceptarUbicacion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.btnAceptarUbicacion.ForeColor = System.Drawing.Color.White;
-            this.btnAceptarUbicacion.Location = new System.Drawing.Point(20, 12);
-            this.btnAceptarUbicacion.Name = "btnAceptarUbicacion";
-            this.btnAceptarUbicacion.Size = new System.Drawing.Size(160, 36);
-            this.btnAceptarUbicacion.TabIndex = 16;
-            this.btnAceptarUbicacion.Text = "Confirmar dirección";
-            this.btnAceptarUbicacion.UseVisualStyleBackColor = false;
-            this.btnAceptarUbicacion.Click += new System.EventHandler(this.btnAceptarUbicacion_Click);
-            // 
-            // btnCancelarDireccion
-            // 
-            this.btnCancelarDireccion.BackColor = System.Drawing.Color.White;
-            this.btnCancelarDireccion.Enabled = false;
-            this.btnCancelarDireccion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCancelarDireccion.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnCancelarDireccion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.btnCancelarDireccion.Location = new System.Drawing.Point(190, 12);
-            this.btnCancelarDireccion.Name = "btnCancelarDireccion";
-            this.btnCancelarDireccion.Size = new System.Drawing.Size(150, 36);
-            this.btnCancelarDireccion.TabIndex = 17;
-            this.btnCancelarDireccion.Text = "Cancelar dirección";
-            this.btnCancelarDireccion.UseVisualStyleBackColor = false;
-            this.btnCancelarDireccion.Click += new System.EventHandler(this.btnCancelarDireccion_Click);
-            // 
-            // btnLupa
-            // 
-            this.btnLupa.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.btnLupa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.btnLupa.Image = ((System.Drawing.Image)(resources.GetObject("btnLupa.Image")));
-            this.btnLupa.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLupa.Location = new System.Drawing.Point(350, 9);
-            this.btnLupa.Name = "btnLupa";
-            this.btnLupa.Size = new System.Drawing.Size(179, 40);
-            this.btnLupa.TabIndex = 18;
-            this.btnLupa.Text = "Ver mapa";
-            this.btnLupa.UseVisualStyleBackColor = true;
-            this.btnLupa.Click += new System.EventHandler(this.btnLupa_Click);
             // 
             // gMapOculto
             // 
@@ -587,6 +537,109 @@
             this.gMapOculto.TabIndex = 19;
             this.gMapOculto.Visible = false;
             this.gMapOculto.Zoom = 0D;
+            // 
+            // btnGuardar
+            // 
+            this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnGuardar.Enabled = false;
+            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnGuardar.ForeColor = System.Drawing.Color.White;
+            this.btnGuardar.Location = new System.Drawing.Point(866, 13);
+            this.btnGuardar.Name = "btnGuardar";
+            this.btnGuardar.Size = new System.Drawing.Size(110, 46);
+            this.btnGuardar.TabIndex = 10;
+            this.btnGuardar.Text = "Guardar";
+            this.btnGuardar.UseVisualStyleBackColor = false;
+            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+            // 
+            // btnAceptarUbicacion
+            // 
+            this.btnAceptarUbicacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnAceptarUbicacion.Enabled = false;
+            this.btnAceptarUbicacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAceptarUbicacion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.btnAceptarUbicacion.ForeColor = System.Drawing.Color.White;
+            this.btnAceptarUbicacion.Location = new System.Drawing.Point(20, 12);
+            this.btnAceptarUbicacion.Name = "btnAceptarUbicacion";
+            this.btnAceptarUbicacion.Size = new System.Drawing.Size(160, 47);
+            this.btnAceptarUbicacion.TabIndex = 16;
+            this.btnAceptarUbicacion.Text = "Confirmar dirección";
+            this.btnAceptarUbicacion.UseVisualStyleBackColor = false;
+            this.btnAceptarUbicacion.Click += new System.EventHandler(this.btnAceptarUbicacion_Click);
+            // 
+            // btnCancelarDireccion
+            // 
+            this.btnCancelarDireccion.BackColor = System.Drawing.Color.White;
+            this.btnCancelarDireccion.Enabled = false;
+            this.btnCancelarDireccion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancelarDireccion.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnCancelarDireccion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.btnCancelarDireccion.Location = new System.Drawing.Point(190, 12);
+            this.btnCancelarDireccion.Name = "btnCancelarDireccion";
+            this.btnCancelarDireccion.Size = new System.Drawing.Size(150, 47);
+            this.btnCancelarDireccion.TabIndex = 17;
+            this.btnCancelarDireccion.Text = "Cancelar dirección";
+            this.btnCancelarDireccion.UseVisualStyleBackColor = false;
+            this.btnCancelarDireccion.Click += new System.EventHandler(this.btnCancelarDireccion_Click);
+            // 
+            // btnLupa
+            // 
+            this.btnLupa.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.btnLupa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.btnLupa.Image = ((System.Drawing.Image)(resources.GetObject("btnLupa.Image")));
+            this.btnLupa.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnLupa.Location = new System.Drawing.Point(350, 9);
+            this.btnLupa.Name = "btnLupa";
+            this.btnLupa.Size = new System.Drawing.Size(179, 50);
+            this.btnLupa.TabIndex = 18;
+            this.btnLupa.Text = "Ver mapa";
+            this.btnLupa.UseVisualStyleBackColor = true;
+            this.btnLupa.Click += new System.EventHandler(this.btnLupa_Click);
+            // 
+            // lblMikrotikSeleccionado
+            // 
+            this.lblMikrotikSeleccionado.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblMikrotikSeleccionado.AutoSize = true;
+            this.lblMikrotikSeleccionado.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblMikrotikSeleccionado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMikrotikSeleccionado.Location = new System.Drawing.Point(801, 94);
+            this.lblMikrotikSeleccionado.Name = "lblMikrotikSeleccionado";
+            this.lblMikrotikSeleccionado.Size = new System.Drawing.Size(198, 25);
+            this.lblMikrotikSeleccionado.TabIndex = 10;
+            this.lblMikrotikSeleccionado.Text = "Mikrotik seleccionado:";
+            // 
+            // txtMikrotik
+            // 
+            this.txtMikrotik.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMikrotik.Enabled = false;
+            this.txtMikrotik.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtMikrotik.Location = new System.Drawing.Point(822, 122);
+            this.txtMikrotik.Multiline = true;
+            this.txtMikrotik.Name = "txtMikrotik";
+            this.txtMikrotik.Size = new System.Drawing.Size(166, 103);
+            this.txtMikrotik.TabIndex = 11;
+            // 
+            // lblPassword
+            // 
+            this.lblPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblPassword.AutoSize = true;
+            this.lblPassword.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblPassword.Location = new System.Drawing.Point(807, 228);
+            this.lblPassword.Name = "lblPassword";
+            this.lblPassword.Size = new System.Drawing.Size(102, 25);
+            this.lblPassword.TabIndex = 12;
+            this.lblPassword.Text = "*Password:";
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtPassword.Location = new System.Drawing.Point(822, 256);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.Size = new System.Drawing.Size(166, 33);
+            this.txtPassword.TabIndex = 13;
             // 
             // PreregistroCliente
             // 
@@ -659,5 +712,9 @@
         private System.Windows.Forms.Panel panelBotones;
         private System.Windows.Forms.Button btnGuardar;
         private GMap.NET.WindowsForms.GMapControl gMapOculto;
+        private System.Windows.Forms.Label lblMikrotikSeleccionado;
+        private System.Windows.Forms.TextBox txtMikrotik;
+        private System.Windows.Forms.TextBox txtPassword;
+        private System.Windows.Forms.Label lblPassword;
     }
 }

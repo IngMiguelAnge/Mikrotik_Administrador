@@ -116,6 +116,7 @@ namespace Mikrotik_Administrador.Items
             }
 
             DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void btnConfirmar_Click(object sender, EventArgs e) => Confirmacion();
