@@ -308,7 +308,18 @@ namespace Mikrotik_Administrador
                         MessageBox.Show("Este servicio se encuentra ya eliminado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-
+                    AppRepository objM = new AppRepository();
+                    var list = objM.GetExistMensualidadesbyUserM(Id).Result;
+                    if(list == null || list.Count() <= 0)
+                    {
+                        IniciarPagos ini = new IniciarPagos();
+                        ini.IdMensualidad = 0;
+                        ini.IdUsuarioM = Id;
+                        ini.IdResponsable = IdResponsable;
+                        if (ini.ShowDialog() != DialogResult.OK)
+                        { return; }
+                    }
+                  
                     await CambiarEstatus(objUsuario);
                     break;
 
