@@ -2167,6 +2167,36 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
+        public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByName2(string Nombre, int IdMikrotik, string Cliente)
+        {
+            List<ListUsuariosGeneralModel> list = new List<ListUsuariosGeneralModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUsuariosMikrotiksByName2", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Cliente", Cliente));
+
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToUsuariosGeneral(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
         public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByIdCliente(int IdCliente)
         {
             List<ListUsuariosGeneralModel> list = new List<ListUsuariosGeneralModel>();
@@ -2184,7 +2214,7 @@ namespace Mikrotik_Administrador.Data
                         {
                             while (await reader.ReadAsync().ConfigureAwait(false))
                             {
-                                list.Add(MapToUsuariosGeneral(reader));
+                                list.Add(MapToUsuariosGeneralServicio(reader));
                             }
                         }
                     }
@@ -2213,11 +2243,32 @@ namespace Mikrotik_Administrador.Data
                 Mikrotik = (string)reader["Mikrotik"],
                 IdCliente = Convert.IsDBNull(reader["IdCliente"]) ? (int?)null : (int)reader["IdCliente"],
                 Cliente = Convert.IsDBNull(reader["Cliente"]) ? string.Empty : (string)reader["Cliente"],
+            };
+        }
+
+        private ListUsuariosGeneralModel MapToUsuariosGeneralServicio(SqlDataReader reader)
+        {
+            return new ListUsuariosGeneralModel()
+            {
+                Id = (int)reader["Id"],
+                IdInterno = (string)reader["IdInterno"],
+                Tipo = (string)reader["Tipo"],
+                Usuario = (string)reader["Nombre"],
+                Address = (string)reader["Address"],
+                Estatus = (string)reader["Estatus"],
+                IdPlan = (int)reader["IdPlan"],
+                IdPlanOriginal = (int)reader["IdPlanOriginal"],
+                Plan = (string)reader["Plan"],
+                UploadDownload = (string)reader["UploadDownload"],
+                IdMikrotik = (int)reader["IdMikrotik"],
+                Mikrotik = (string)reader["Mikrotik"],
+                IdCliente = Convert.IsDBNull(reader["IdCliente"]) ? (int?)null : (int)reader["IdCliente"],
+                Cliente = Convert.IsDBNull(reader["Cliente"]) ? string.Empty : (string)reader["Cliente"],
                 MinFechaInicio = Convert.IsDBNull(reader["MinFechaInicio"]) ? (DateTime?)null : (DateTime)reader["MinFechaInicio"],
                 MaxFechaFin = Convert.IsDBNull(reader["MaxFechaFin"]) ? (DateTime?)null : (DateTime)reader["MaxFechaFin"],
             };
         }
-      
+
         public async Task<bool> SaveUsuariosGeneral(UsuariosGeneralModel obj, int IdUsuario)
         {
             try

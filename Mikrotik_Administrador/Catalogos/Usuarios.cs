@@ -235,74 +235,74 @@ namespace Mikrotik_Administrador
             dgvUsuarios.Columns.Add(BtnEstatus);
             dgvUsuarios.AllowUserToAddRows = false;
         }
-        //public async void BuscarUsuarios(bool sinervicios)
-        //{
-        //    CrearGridViewUsuarios();
-        //    BtnAsignar.Visible = true;
-        //    cbTodos.Visible = true;
-        //    CBAsignar.Visible = true;
-        //    BtnAsignar.Visible = true;
-        //    BtnEliminar.Visible = true;
-        //    progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
-        //    progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-        //    BtnBuscar.Enabled = false;
-        //    BtnAsignar.Enabled = false;
-        //    btnClientesSin.Enabled = false;
-        //    BtnEliminar.Enabled = false;
-        //    int IdMikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
-        //    try
-        //    {
-        //        AppRepository obj = new AppRepository();
-        //        var lista = await obj.GetUsuariosMikrotiksByName(txtNombre.Text, IdMikrotik, txtCliente.Text);
-        //        lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
-        //        lblServiciossin.Text = "Usuarios sin servicios: " + lista.Where(x => x.IdCliente == null).Count();
+        public async void BuscarUsuarios(bool sinervicios)
+        {
+            CrearGridViewUsuarios();
+            BtnAsignar.Visible = true;
+            cbTodos.Visible = true;
+            CBAsignar.Visible = true;
+            BtnAsignar.Visible = true;
+            BtnEliminar.Visible = true;
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            BtnBuscar.Enabled = false;
+            BtnAsignar.Enabled = false;
+            btnClientesSin.Enabled = false;
+            BtnEliminar.Enabled = false;
+            int IdMikrotik = CBTodosMikrotiks.Checked == true ? 0 : (int)CBMikrotiks.SelectedValue;
+            try
+            {
+                AppRepository obj = new AppRepository();
+                var lista = await obj.GetUsuariosMikrotiksByName2(txtNombre.Text, IdMikrotik, txtCliente.Text);
+                lblMensaje4.Text = "Clientes sin servicios: " + await obj.GetClientesSinServicios().ContinueWith(t => t.Result.Count.ToString());
+                //lblServiciossin.Text = "Usuarios sin servicios: " + lista.Where(x => x.IdCliente == null).Count();
 
-        //        var listaFinal = lista?.ToList() ?? new List<ListUsuariosGeneralModel>();
-        //        dgvUsuarios.DataSource = new SortableBindingList<ListUsuariosGeneralModel>(listaFinal);
+                var listaFinal = lista?.ToList() ?? new List<ListUsuariosGeneralModel>();
+                dgvUsuarios.DataSource = new SortableBindingList<ListUsuariosGeneralModel>(listaFinal);
 
-        //        if (dgvUsuarios.Columns["Id"] != null)
-        //        {
-        //            dgvUsuarios.Columns["Id"].Visible = false;
-        //        }
-        //        if (dgvUsuarios.Columns["IdPlan"] != null)
-        //        {
-        //            dgvUsuarios.Columns["IdPlan"].Visible = false;
-        //        }
-        //        if (dgvUsuarios.Columns["IdPlanOriginal"] != null)
-        //        {
-        //            dgvUsuarios.Columns["IdPlanOriginal"].Visible = false;
-        //        }
-        //        if (dgvUsuarios.Columns["IdMikrotik"] != null)
-        //        {
-        //            dgvUsuarios.Columns["IdMikrotik"].Visible = false;
-        //        }
-        //        if (dgvUsuarios.Columns["IdCliente"] != null)
-        //        {
-        //            dgvUsuarios.Columns["IdCliente"].Visible = false;
-        //        }
-        //        if (dgvUsuarios.Columns["MinFechaInicio"] != null)
-        //        {
-        //            dgvUsuarios.Columns["MinFechaInicio"].Visible = false;
-        //        }
-        //        if (dgvUsuarios.Columns["MaxFechaFin"] != null)
-        //        {
-        //            dgvUsuarios.Columns["MaxFechaFin"].Visible = false;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //    finally
-        //    {
-        //        progressBar1.Style = ProgressBarStyle.Blocks;
-        //        progressBar1.Value = 0;
-        //        BtnBuscar.Enabled = true; // Rehabilitamos el botón
-        //        BtnAsignar.Enabled = true;
-        //        btnClientesSin.Enabled = true;
-        //        BtnEliminar.Enabled = true;
-        //    }
-        //}
+                if (dgvUsuarios.Columns["Id"] != null)
+                {
+                    dgvUsuarios.Columns["Id"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["IdPlan"] != null)
+                {
+                    dgvUsuarios.Columns["IdPlan"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["IdPlanOriginal"] != null)
+                {
+                    dgvUsuarios.Columns["IdPlanOriginal"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["IdMikrotik"] != null)
+                {
+                    dgvUsuarios.Columns["IdMikrotik"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["IdCliente"] != null)
+                {
+                    dgvUsuarios.Columns["IdCliente"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["MinFechaInicio"] != null)
+                {
+                    dgvUsuarios.Columns["MinFechaInicio"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["MaxFechaFin"] != null)
+                {
+                    dgvUsuarios.Columns["MaxFechaFin"].Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 0;
+                BtnBuscar.Enabled = true; // Rehabilitamos el botón
+                BtnAsignar.Enabled = true;
+                btnClientesSin.Enabled = true;
+                BtnEliminar.Enabled = true;
+            }
+        }
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
@@ -319,7 +319,7 @@ namespace Mikrotik_Administrador
                 }
             }
             BtnEliminar.Visible = true;
-            //BuscarUsuarios(false);
+            BuscarUsuarios(false);
         }
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
         {
@@ -406,7 +406,7 @@ namespace Mikrotik_Administrador
                     NombreAsignado = CBAsignar.Checked == false ? NombreAsignado : Regex.Replace(item.name, @"[-<>]", " ").Trim().ToUpper();
                     Insert = obj.SaveClienteInGeneral(item.id, NombreAsignado.ToUpper()).Result;
                 }
-                //BuscarUsuarios(false);
+                BuscarUsuarios(false);
             }
             catch (Exception ex)
             {
@@ -634,7 +634,7 @@ namespace Mikrotik_Administrador
                         Estatus = false
                     };
                     var r = obj.SaveHistorialMovimientos(H);
-                    //BuscarUsuarios(false);
+                    BuscarUsuarios(false);
                 }
                 else
                     MessageBox.Show("Error al actualizar el estatus", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -740,7 +740,7 @@ namespace Mikrotik_Administrador
                         if (mikro.Estatus == false)
                         {
                             MessageBox.Show("El Mikrotik "+ item.mikrotik +" está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            //BuscarUsuarios(false);
+                            BuscarUsuarios(false);
                             return;
                         }
                         if (mikrotik != null)
@@ -775,7 +775,7 @@ namespace Mikrotik_Administrador
                     obj.UpdateEstatusGeneral(item.id, "Eliminado", IdResponsable).Wait();
                 }
                 MessageBox.Show("Usuarios eliminados del Mikrotik correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //BuscarUsuarios(false);
+                BuscarUsuarios(false);
             }
             catch (Exception ex)
             {
