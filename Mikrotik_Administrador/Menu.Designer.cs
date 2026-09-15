@@ -873,7 +873,7 @@ namespace Mikrotik_Administrador
             this.btnExcel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnExcel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnExcel.UseVisualStyleBackColor = false;
-            this.btnExcel.Visible = false;
+            this.btnExcel.Click += new System.EventHandler(this.btnExcel_Click);
             // 
             // Menu
             // 

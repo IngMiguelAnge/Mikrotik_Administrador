@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Mikrotik_Administrador.Class
@@ -81,20 +82,6 @@ namespace Mikrotik_Administrador.Class
         {
             Send(co, false);
         }
-        public void Send(string co, bool endsentence = false)
-        {
-            byte[] bajty = Encoding.Default.GetBytes(co); // v7 prefiere UTF8
-            byte[] velikost = EncodeLength(bajty.Length);
-
-            byte[] paquete = new byte[velikost.Length + bajty.Length + (endsentence ? 1 : 0)];
-            System.Buffer.BlockCopy(velikost, 0, paquete, 0, velikost.Length);
-            System.Buffer.BlockCopy(bajty, 0, paquete, velikost.Length, bajty.Length);
-
-            if (endsentence) paquete[paquete.Length - 1] = 0;
-
-            connection.Write(paquete, 0, paquete.Length);
-            // NO uses Flush después de cada palabra, deja que el buffer de red decida
-        }
         private byte[] EncodeLength(int delka)
         {
             if (delka < 128)
@@ -110,6 +97,32 @@ namespace Mikrotik_Administrador.Class
                 return new byte[] { (byte)((delka >> 16) | 0xC0), (byte)((delka >> 8) & 0xFF), (byte)(delka & 0xFF) };
             }
             return new byte[] { (byte)delka };
+        }
+
+        public void Send(string co, bool endsentence = false)
+        {
+            // Cambiamos Encoding.Default por Encoding.UTF8
+            byte[] bajty = Encoding.UTF8.GetBytes(co);
+            byte[] velikost = EncodeLength(bajty.Length);
+
+            byte[] paquete = new byte[velikost.Length + bajty.Length + (endsentence ? 1 : 0)];
+            System.Buffer.BlockCopy(velikost, 0, paquete, 0, velikost.Length);
+            System.Buffer.BlockCopy(bajty, 0, paquete, velikost.Length, bajty.Length);
+
+            if (endsentence) paquete[paquete.Length - 1] = 0;
+
+            connection.Write(paquete, 0, paquete.Length);
+        }
+        private string UnescapeMikrotikString(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            // Detecta secuencias tipo \F1 o \C3 que envía MikroTik y las convierte a bytes
+            return Regex.Replace(input, @"\\([0-9A-Fa-f]{2})", match =>
+            {
+                byte b = Convert.ToByte(match.Groups[1].Value, 16);
+                return Encoding.GetEncoding("iso-8859-1").GetString(new byte[] { b });
+            });
         }
         public List<string> Read()
         {
@@ -166,7 +179,8 @@ namespace Mikrotik_Administrador.Class
                 }
 
                 // Se recomienda UTF8 para compatibilidad con MikroTik v7+
-                string word = Encoding.UTF8.GetString(buffer);
+                string word = Encoding.GetEncoding("iso-8859-1").GetString(buffer);
+                word = UnescapeMikrotikString(word);
                 output.Add(word);
 
                 // Guardamos las etiquetas especiales (!done, !re, !trap, etc.)
