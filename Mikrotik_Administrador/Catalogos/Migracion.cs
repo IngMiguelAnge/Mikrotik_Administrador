@@ -36,12 +36,12 @@ namespace Mikrotik_Administrador
             var listaMikrotiks = await obj.GetMikrotiks();
 
             // Insertamos un objeto "fantasma" al inicio para el placeholder
-            listaMikrotiks.Insert(0, new ListMikrotikModel { Id = 0, Nombre = "Selecciona un Mikrotik" });
+            listaMikrotiks.Insert(0, new ListMikrotikModel { Id = 0, Nombre = "Selecciona un Mikrotik", Estatus="Activo" });
 
             // Configuramos el ComboBox
             CBMikrotiks.DisplayMember = "Nombre"; // Lo que el usuario VE
             CBMikrotiks.ValueMember = "Id";      // El dato que procesas por DETRÁS
-            CBMikrotiks.DataSource = listaMikrotiks;
+            CBMikrotiks.DataSource = listaMikrotiks.Where(x => x.Estatus == "Activo").ToList();
             CBMikrotiks.SelectedIndex = 0;
         }
         public void CrearGridView()

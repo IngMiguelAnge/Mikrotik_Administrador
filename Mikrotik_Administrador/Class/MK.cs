@@ -269,14 +269,14 @@ namespace Mikrotik_Administrador.Class
 
             return bits.ToString(); // Si es menor a 1k, lo deja igual
         }
-        public string VerVelocidadQueue(string name)
+        public string VerVelocidadQueue(string IP)
         {
             string MaxLimit = string.Empty;
             try
             {
                 Send("/queue/simple/print");
-                Send("=.proplist=max-limit");// Esto ayuda a que el router no se pierda enviando datos extra
-                Send("?name=" + name, true);
+                Send("=.proplist=target,max-limit"); // Es obligatorio incluir target aquí
+                Send("?~target=" + IP.Trim() + "/32", true);
                 foreach (string row in Read())
                 {
                     if (row.StartsWith("!re"))
@@ -770,10 +770,11 @@ namespace Mikrotik_Administrador.Class
                                 string valueLimpio = value.Replace("\r", "").Replace("\n", "").Trim();
                                 currentObj.comment = value;
                                 currentObj.idplan = string.Empty;
-                                currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
-                                break;
+                                 break;
                             case "address":
                                 currentObj.address = value;
+                                currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
+
                                 if (currentObj != null && !string.IsNullOrEmpty(currentObj.address))
                                 {
                                     // Evitar duplicados si el !re se procesa varias veces
@@ -888,10 +889,11 @@ namespace Mikrotik_Administrador.Class
                                 string valueLimpio = value.Replace("\r", "").Replace("\n", "").Trim();
                                 currentObj.comment = value;
                                 currentObj.idplan = string.Empty;
-                                currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
                                 break;
                             case "address":
                                 currentObj.address = value;
+                                currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
+
                                 if (currentObj != null && !string.IsNullOrEmpty(currentObj.address))
                                 {
                                     // Evitar duplicados si el !re se procesa varias veces
@@ -1020,10 +1022,10 @@ namespace Mikrotik_Administrador.Class
                                 string valueLimpio = value.Replace("\r", "").Replace("\n", "").Trim();
                                 currentObj.comment = value;
                                 currentObj.idplan = string.Empty;
-                                currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
-                                break;
+                              break;
                             case "address":
                                 currentObj.address = value;
+                                currentObj.velocidad = VerVelocidadQueue(value.Replace("\r", "").Replace("\n", "").Trim());
                                 if (currentObj != null && !string.IsNullOrEmpty(currentObj.address))
                                 {
                                     bool coincide = ListWireless.Any(w => IpPerteneceARango(currentObj.address, w.Address));

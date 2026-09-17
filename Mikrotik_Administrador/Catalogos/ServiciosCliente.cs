@@ -452,7 +452,7 @@ namespace Mikrotik_Administrador
                 if (objUsuario.Tipo == "Antena")
                 {
                     //Primero revisamos si el servicio aun existe en el mikrotik
-                    string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Usuario));
+                    string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Address));
                     if (Queue == string.Empty)
                     {
                         obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", 1).Wait();
@@ -532,7 +532,7 @@ namespace Mikrotik_Administrador
                 if (objUsuario.Tipo == "Antena")
                 {
                     //Primero revisamos si el servicio aun existe en el mikrotik
-                    string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Usuario));
+                    string Queue = await Task.Run(() => mikrotik.VerVelocidadQueue(objUsuario.Address));
                     if (Queue == string.Empty)
                     {
                         obj.UpdateEstatusGeneral(objUsuario.Id, "Eliminado", 1).Wait();
