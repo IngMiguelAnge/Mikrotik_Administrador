@@ -796,7 +796,7 @@ namespace Mikrotik_Administrador
             this.grpHistoriales.Location = new System.Drawing.Point(23, 431);
             this.grpHistoriales.Margin = new System.Windows.Forms.Padding(3, 3, 3, 15);
             this.grpHistoriales.Name = "grpHistoriales";
-            this.grpHistoriales.Size = new System.Drawing.Size(514, 119);
+            this.grpHistoriales.Size = new System.Drawing.Size(430, 119);
             this.grpHistoriales.TabIndex = 3;
             this.grpHistoriales.TabStop = false;
             this.grpHistoriales.Text = "Historiales";
@@ -810,7 +810,7 @@ namespace Mikrotik_Administrador
             this.flowHistoriales.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowHistoriales.Location = new System.Drawing.Point(3, 33);
             this.flowHistoriales.Name = "flowHistoriales";
-            this.flowHistoriales.Size = new System.Drawing.Size(508, 83);
+            this.flowHistoriales.Size = new System.Drawing.Size(424, 83);
             this.flowHistoriales.TabIndex = 0;
             // 
             // btnCambios
@@ -826,7 +826,7 @@ namespace Mikrotik_Administrador
             this.btnCambios.Location = new System.Drawing.Point(8, 8);
             this.btnCambios.Margin = new System.Windows.Forms.Padding(8);
             this.btnCambios.Name = "btnCambios";
-            this.btnCambios.Size = new System.Drawing.Size(151, 67);
+            this.btnCambios.Size = new System.Drawing.Size(112, 67);
             this.btnCambios.TabIndex = 0;
             this.btnCambios.Text = "Cambios";
             this.btnCambios.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -844,7 +844,7 @@ namespace Mikrotik_Administrador
             this.btnHistorial.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
             this.btnHistorial.Image = ((System.Drawing.Image)(resources.GetObject("btnHistorial.Image")));
             this.btnHistorial.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnHistorial.Location = new System.Drawing.Point(175, 8);
+            this.btnHistorial.Location = new System.Drawing.Point(136, 8);
             this.btnHistorial.Margin = new System.Windows.Forms.Padding(8);
             this.btnHistorial.Name = "btnHistorial";
             this.btnHistorial.Size = new System.Drawing.Size(157, 67);
@@ -863,11 +863,12 @@ namespace Mikrotik_Administrador
             this.btnExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExcel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnExcel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.btnExcel.Image = ((System.Drawing.Image)(resources.GetObject("btnExcel.Image")));
             this.btnExcel.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnExcel.Location = new System.Drawing.Point(348, 8);
+            this.btnExcel.Location = new System.Drawing.Point(309, 8);
             this.btnExcel.Margin = new System.Windows.Forms.Padding(8);
             this.btnExcel.Name = "btnExcel";
-            this.btnExcel.Size = new System.Drawing.Size(152, 62);
+            this.btnExcel.Size = new System.Drawing.Size(107, 62);
             this.btnExcel.TabIndex = 2;
             this.btnExcel.Text = "Excel";
             this.btnExcel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;

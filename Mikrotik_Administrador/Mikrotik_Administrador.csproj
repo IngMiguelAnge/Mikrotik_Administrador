@@ -710,6 +710,7 @@
     <Content Include="Imagenes\assign.png" />
     <Content Include="Imagenes\bank.png" />
     <Content Include="Imagenes\comments.png" />
+    <Content Include="Imagenes\excel.png" />
     <Content Include="Imagenes\exchange.png" />
     <Content Include="Imagenes\google-maps.png" />
     <Content Include="Imagenes\history.png" />

@@ -26,6 +26,7 @@ namespace Mikrotik_Administrador.Catalogos
         public int IdResponsable { get; set; }
         MK mikrotik;
         private int IdPlan;
+        private decimal Costo;
         private int IdMikrotik;
         private string VelocidadPlan;
         private string NombrePlan;
@@ -186,6 +187,7 @@ namespace Mikrotik_Administrador.Catalogos
             int Id = (int)dgvPlanes.Rows[e.RowIndex].Cells["Id"].Value;
             string Plan = (string)dgvPlanes.Rows[e.RowIndex].Cells["Nombre"].Value;
             bool IsAntena = (bool)dgvPlanes.Rows[e.RowIndex].Cells["PlanDe"].Value.ToString().Contains("Antena");
+            decimal Precio = (decimal)dgvPlanes.Rows[e.RowIndex].Cells["Precio"].Value;
             switch (dgvPlanes.Columns[e.ColumnIndex].Name)
             {
                 case "btnAsignar":
@@ -227,6 +229,7 @@ namespace Mikrotik_Administrador.Catalogos
 
                     }
                     IdPlan = Id;
+                    Costo = Precio;
                     VelocidadPlan = (string)dgvPlanes.Rows[e.RowIndex].Cells["Velocidad"].Value;
                     NombrePlan = Plan;
                     foreach (DataGridViewRow r in dgvPlanes.Rows)
@@ -450,6 +453,7 @@ namespace Mikrotik_Administrador.Catalogos
             }
            
             IdPlan = 0;
+            Costo = 0;
             txtLatitud.Text = "18.68165869879";
             txtLongitud.Text = "-97.64837265014";
             // 1. Configurar el proveedor y modo (Internet)
@@ -531,6 +535,11 @@ namespace Mikrotik_Administrador.Catalogos
                 if (IdPlan == 0)
                 {
                     MessageBox.Show("Por favor, selecciona un plan antes de guardar.", "Plan no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (Costo == 0)
+                {
+                    MessageBox.Show("Por favor, selecciona un plan que tenga un costo disponible, para iniciar su servicio.", "Plan no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 bool IsAntena = txtPassword.Visible == true ? false : true;

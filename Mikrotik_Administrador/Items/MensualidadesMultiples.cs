@@ -140,7 +140,7 @@ namespace Mikrotik_Administrador.Catalogos
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Usuario",
-                HeaderText = "Usuario",
+                HeaderText = "Servicio",
                 DataPropertyName = "Usuario",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -214,18 +214,22 @@ namespace Mikrotik_Administrador.Catalogos
                             var wsCambios = workbook.Worksheets.Add("Cambios");
 
                             // Encabezados
-                            wsCambios.Cell(1, 1).Value = "IdUsuarioM";                 // A
-                            wsCambios.Cell(1, 2).Value = "Usuario del mikrotik";       // B
-                            wsCambios.Cell(1, 3).Value = "Servicio extra";              // C
+                            wsCambios.Cell(1, 1).Value = "IdServicio";                  // A
+                            wsCambios.Cell(1, 2).Value = "Servicio";                    // B
+                            wsCambios.Cell(1, 3).Value = "Operación realizada";         // C
                             wsCambios.Cell(1, 4).Value = "Cuando inicio";               // D
                             wsCambios.Cell(1, 5).Value = "Días que duro";               // E
-                            wsCambios.Cell(1, 6).Value = "Id Plan que recibiria";       // F
-                            wsCambios.Cell(1, 7).Value = "Nombre Plan que recibiria";   // G
-                            wsCambios.Cell(1, 8).Value = "Id mikrotik receptor";        // H
-                            wsCambios.Cell(1, 9).Value = "Nombre mikrotik receptor";    // I
+                            wsCambios.Cell(1, 6).Value = "IdPlan original";                // F
+                            wsCambios.Cell(1, 7).Value = "Nombre del plan original";   // G
+                            wsCambios.Cell(1, 8).Value = "IdMikrotik orginal";        // H
+                            wsCambios.Cell(1, 9).Value = "Nombre mikrotik original";    // I
+                            wsCambios.Cell(1, 10).Value = "IdPlan nuevo";                // J
+                            wsCambios.Cell(1, 11).Value = "Nombre del plan nuevo";   // K
+                            wsCambios.Cell(1, 12).Value = "IdMikrotik receptor";        // L
+                            wsCambios.Cell(1, 13).Value = "Nombre mikrotik receptor";    // M
 
-                            // Formato a los encabezados (A1 a I1)
-                            var headerCambios = wsCambios.Range("A1:I1");
+                            // Formato a los encabezados (A1 a M1)
+                            var headerCambios = wsCambios.Range("A1:M1");
                             headerCambios.Style.Font.Bold = true;
                             headerCambios.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
                             headerCambios.Style.Font.FontColor = XLColor.White;
@@ -237,12 +241,16 @@ namespace Mikrotik_Administrador.Catalogos
                                 wsCambios.Cell(filaCambios, 2).Value = item.Usuario;
                                 wsCambios.Cell(filaCambios, 3).Value = "Cambio de plan";
                                 wsCambios.Cell(filaCambios, 4).Value = DateTime.Now;
-                                wsCambios.Cell(filaCambios, 4).Style.DateFormat.Format = "dd/MM/yyyy HH:mm:ss";
+                                wsCambios.Cell(filaCambios, 4).Style.DateFormat.Format = "dd/MM/yyyy h:mm AM/PM";
                                 wsCambios.Cell(filaCambios, 5).Value = 1;
                                 wsCambios.Cell(filaCambios, 6).Value = 1;
                                 wsCambios.Cell(filaCambios, 7).Value = "Plan Basico";
                                 wsCambios.Cell(filaCambios, 8).Value = 1;
                                 wsCambios.Cell(filaCambios, 9).Value = "Santa Maria";
+                                wsCambios.Cell(filaCambios, 10).Value = 1;
+                                wsCambios.Cell(filaCambios, 11).Value = "Plan Basico";
+                                wsCambios.Cell(filaCambios, 12).Value = 1;
+                                wsCambios.Cell(filaCambios, 13).Value = "Santa Maria";
                                 filaCambios++;
                             }
 
@@ -252,80 +260,52 @@ namespace Mikrotik_Administrador.Catalogos
                             // ==============================================================
                             // HOJA 2: MENSUALIDADES (Aparecerá segundo)
                             // ==============================================================
-                            var wsMensualidades = workbook.Worksheets.Add("Mensualidades");
-
-                            // Encabezados
-                            wsMensualidades.Cell(1, 1).Value = "N°Mensualidad"; //A
-                            wsMensualidades.Cell(1, 2).Value = "IdCliente";                            // B
-                            wsMensualidades.Cell(1, 3).Value = "Cliente";                              // C
-                            wsMensualidades.Cell(1, 4).Value = "IdUsuarioM";                           // D
-                            wsMensualidades.Cell(1, 5).Value = "UsuarioM";                             // E
-                            wsMensualidades.Cell(1, 6).Value = "Fecha en que comenzo la mensualidad";  // F
-                            wsMensualidades.Cell(1, 7).Value = "Día de corte";                         // G
-                            wsMensualidades.Cell(1, 8).Value = "IdUsuarioResponsable";                            // H
-                            wsMensualidades.Cell(1, 9).Value = "Responsable de dar de alta la mensualidad"; // I
-
-                            // Formato a los encabezados (A1 a H1)
-                            var headerMensualidades = wsMensualidades.Range("A1:I1");
-                            headerMensualidades.Style.Font.Bold = true;
-                            headerMensualidades.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
-                            headerMensualidades.Style.Font.FontColor = XLColor.White;
-
-                            int filaMensualidades = 2;
-                            foreach (ListClientesDescargaModel item in Seleccionados)
-                            {
-                                wsMensualidades.Cell(filaMensualidades, 1).Value = 1;
-                                wsMensualidades.Cell(filaMensualidades, 2).Value = item.IdCliente;
-                                wsMensualidades.Cell(filaMensualidades, 3).Value = item.Cliente;
-                                wsMensualidades.Cell(filaMensualidades, 4).Value = item.IdUsuarioM;
-                                wsMensualidades.Cell(filaMensualidades, 5).Value = item.Usuario;
-                                wsMensualidades.Cell(filaMensualidades, 6).Value = DateTime.Now;
-                                wsMensualidades.Cell(filaMensualidades, 6).Style.DateFormat.Format = "dd/MM/yyyy";
-                                wsMensualidades.Cell(filaMensualidades, 7).Value = 1;
-                                wsMensualidades.Cell(filaMensualidades, 8).Value = 1;
-                                wsMensualidades.Cell(filaMensualidades, 9).Value = "Administrador";
-                                filaMensualidades++;
-                            }
-
-                            // Autoajuste de columnas para Hoja 2
-                            wsMensualidades.Columns().AdjustToContents();
-
-
-                            // ==============================================================
-                            // HOJA 2: MENSUALIDADES (Aparecerá segundo)
-                            // ==============================================================
                             var wsPagos = workbook.Worksheets.Add("Pagos");
 
                             // Encabezados
-                            wsPagos.Cell(1, 1).Value = "N°Mensualidad"; //A
-                            wsPagos.Cell(1, 2).Value = "N°Pago";        //B
-                            wsPagos.Cell(1, 3).Value = "Fecha en que se recibio";  // C
-                            wsPagos.Cell(1, 4).Value = "Cantidad";     // D
-                            wsPagos.Cell(1, 5).Value = "Comentario";   // E
-                            wsPagos.Cell(1, 6).Value = "IdBanco";  // F
-                            wsPagos.Cell(1, 7).Value = "Nombre de banco";  // G
-                            wsPagos.Cell(1, 8).Value = "Referencia";      // H
-                            wsPagos.Cell(1, 9).Value = "Ruta de la imagen"; // I
-                            wsPagos.Cell(1, 10).Value = "IdUsuarioResponsable"; // J
-                            wsPagos.Cell(1, 11).Value = "Responsable de recibir el pago"; // K
-                            // Formato a los encabezados (A1 a K1)
-                            var headerPagos = wsPagos.Range("A1:K1");
+                            wsPagos.Cell(1, 1).Value = "IdCliente";                 // A
+                            wsPagos.Cell(1, 2).Value = "Cliente";                   // B
+                            wsPagos.Cell(1, 3).Value = "IdServicio";                // C
+                            wsPagos.Cell(1, 4).Value = "Servicio";                  // D
+                            wsPagos.Cell(1, 5).Value = "Inicio la mensualidad";     // E
+                            wsPagos.Cell(1, 6).Value = "Día de corte";              // F
+                            wsPagos.Cell(1, 7).Value = "IdResponsable";             // G
+                            wsPagos.Cell(1, 8).Value = "Responsable";               // H
+                            wsPagos.Cell(1, 9).Value = "Cuando se recibio el pago"; // I
+                            wsPagos.Cell(1, 10).Value = "Cantidad recibida";        // J
+                            wsPagos.Cell(1, 11).Value = "Comentario";               // K
+                            wsPagos.Cell(1, 12).Value = "IdBanco";                  // L
+                            wsPagos.Cell(1, 13).Value = "Banco";                    // M
+                            wsPagos.Cell(1, 14).Value = "Referencia";               // N
+                            wsPagos.Cell(1, 15).Value = "Ruta de imagen";           // O
+                            // Formato a los encabezados (A1 a O1)
+                            var headerPagos = wsPagos.Range("A1:O1");
                             headerPagos.Style.Font.Bold = true;
                             headerPagos.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
                             headerPagos.Style.Font.FontColor = XLColor.White;
 
-                            wsPagos.Cell(2, 1).Value = 1;
-                            wsPagos.Cell(2, 2).Value = 1;
-                            wsPagos.Cell(2, 3).Value = DateTime.Now;
-                            wsPagos.Cell(2, 3).Style.DateFormat.Format = "dd/MM/yyyy HH:mm:ss";
-                            wsPagos.Cell(2, 4).Value = 0;
-                            wsPagos.Cell(2, 5).Value = "";
-                            wsPagos.Cell(2, 6).Value = 1;
-                            wsPagos.Cell(2, 7).Value = "PAGOS EFECTIVO";
-                            wsPagos.Cell(2, 8).Value = "1234ASD";
-                            wsPagos.Cell(2, 9).Value = "C:\\Users\\Lenovo\\OneDrive\\Desktop\\Imagenes\\1.jpg";
-                            wsPagos.Cell(2, 10).Value = 1;
-                            wsPagos.Cell(2, 11).Value = "Administrador";
+                            int filaPagos = 2;
+                            foreach (ListClientesDescargaModel item in Seleccionados)
+                            {
+                                wsPagos.Cell(filaPagos, 1).Value = item.IdCliente;
+                                wsPagos.Cell(filaPagos, 2).Value = item.Cliente;
+                                wsPagos.Cell(filaPagos, 3).Value = item.IdUsuarioM;
+                                wsPagos.Cell(filaPagos, 4).Value = item.Usuario;
+                                wsPagos.Cell(filaPagos, 5).Value = DateTime.Now;
+                                wsPagos.Cell(filaPagos, 5).Style.DateFormat.Format = "dd/MM/yyyy h:mm AM/PM";
+                                wsPagos.Cell(filaPagos, 6).Value = 1;
+                                wsPagos.Cell(filaPagos, 7).Value = 1;
+                                wsPagos.Cell(filaPagos, 8).Value = "Administrador";
+                                wsPagos.Cell(filaPagos, 9).Value = DateTime.Now;
+                                wsPagos.Cell(filaPagos, 9).Style.DateFormat.Format = "dd/MM/yyyy h:mm AM/PM";
+                                wsPagos.Cell(filaPagos, 10).Value = 0;
+                                wsPagos.Cell(filaPagos, 11).Value = "";
+                                wsPagos.Cell(filaPagos, 12).Value = 1;
+                                wsPagos.Cell(filaPagos, 13).Value = "PAGOS EFECTIVO";
+                                wsPagos.Cell(filaPagos, 14).Value = "1234ASD";
+                                wsPagos.Cell(filaPagos, 15).Value = "C:\\Users\\Lenovo\\OneDrive\\Desktop\\Imagenes\\1.jpg";
+                                filaPagos++;
+                            }
 
                             // Autoajuste de columnas para Hoja 2
                             wsPagos.Columns().AdjustToContents();
@@ -371,49 +351,412 @@ namespace Mikrotik_Administrador.Catalogos
         {
             try
             {
-                DataTable dt = new DataTable();
+                List<TiempoDefinidosModel> ListCambios = new List<TiempoDefinidosModel>();
+                List<MensualidadModel> ListMensualidades = new List<MensualidadModel>();
+                List<HistorialPagosModel> ListHistorialPagos = new List<HistorialPagosModel>();
+                List<UsuariosandPlanesModel> ListClientes = new List<UsuariosandPlanesModel>();
+                AppRepository obj = new AppRepository();
+                int contadorIdMensualidad = 1;
+                int contadorIdCambio = 1;
+
+                // Mantiene la última fecha de inicio procesada por cada servicio
+                Dictionary<int, DateTime> ultimasFechasInicio = new Dictionary<int, DateTime>();
 
                 using (var workbook = new XLWorkbook(rutaArchivo))
                 {
-                    // Tomar la primera hoja de trabajo
-                    var worksheet = workbook.Worksheet(1);
+                    // =========================================================================
+                    // PÁGINA 1: CAMBIOS Y SUSPENSIONES
+                    // =========================================================================
+                    var wsCambios = workbook.Worksheet("Cambios");
+                    bool primeraFila1 = true;
 
-                    // Define si la primera fila tiene nombres de columnas
-                    bool primeraFilaEsEncabezado = true;
-
-                    foreach (var row in worksheet.RowsUsed())
+                    foreach (var row in wsCambios.RowsUsed())
                     {
-                        if (primeraFilaEsEncabezado)
+                        if (primeraFila1) { primeraFila1 = false; continue; }
+
+                        int idServicio = row.Cell(1).GetValue<int>(); // Col A: IdServicio
+                        string operacion = row.Cell(3).GetValue<string>(); // Col C: Operación
+                        DateTime fechaInicio = row.Cell(4).GetValue<DateTime>(); // Col D: Inicio
+                        int diasDuro = row.Cell(5).GetValue<int>(); // Col E: Días que duró
+                        DateTime fechaFin = fechaInicio.AddDays(diasDuro);
+
+                        bool valido = !ListCambios.Any(x => x.IdUsuarioM == idServicio &&
+                                                            fechaInicio >= x.FechaInicio &&
+                                                            fechaInicio <= x.FechaFin);
+
+                        if (valido)
                         {
-                            // Crear las columnas en el DataTable con el texto del encabezado
-                            foreach (var cell in row.CellsUsed())
+                            ListCambios.Add(new TiempoDefinidosModel
                             {
-                                dt.Columns.Add(cell.Value.ToString());
-                            }
-                            primeraFilaEsEncabezado = false;
+                                Id = contadorIdCambio++,
+                                Dias = diasDuro,
+                                Horas = 0,
+                                FechaInicio = fechaInicio,
+                                FechaFin = fechaFin,
+                                Modo = "Temporal",
+                                IdUsuarioM = idServicio,
+                                Estatus = fechaFin <= DateTime.Now ? "Completado" : "Ejecutando",
+                                IdPlan = row.Cell(10).GetValue<int>(),              // Col J: Plan nuevo
+                                IdMikrotikReceptor = row.Cell(12).GetValue<int>(),  // Col L: Mikrotik
+                                Programacion = operacion,
+                                Password = "1234"
+                            });
+                        }
+                    }
+
+                    // =========================================================================
+                    // PÁGINA 2: PAGOS Y MENSUALIDADES
+                    // =========================================================================
+                    var wsPagos = workbook.Worksheet("Pagos");
+                    bool primeraFila2 = true;
+
+                    foreach (var row in wsPagos.RowsUsed())
+                    {
+                        if (primeraFila2) { primeraFila2 = false; continue; }
+                        int idCliente = row.Cell(1).GetValue<int>(); // Col C: IdCliente
+                        int idServicio = row.Cell(3).GetValue<int>(); // Col C: IdServicio
+                        DateTime fechaInicioExcel = row.Cell(5).GetValue<DateTime>(); // Col E: Inicio la mensualidad
+                        int diaCorte = row.Cell(6).GetValue<int>(); // Col F
+                        int idResponsable = row.Cell(7).GetValue<int>(); // Col G
+                        DateTime fechaPago = row.Cell(9).GetValue<DateTime>(); // Col I
+                        decimal saldoRestante = row.Cell(10).GetValue<decimal>(); // Col J: Cantidad recibida
+
+                        // Manejo seguro de celdas nulas o vacías
+                        string comentario = row.Cell(11).IsEmpty() ? "" : row.Cell(11).GetValue<string>();
+                        int idBanco = row.Cell(12).IsEmpty() ? 0 : row.Cell(12).GetValue<int>();
+                        string referencia = row.Cell(14).IsEmpty() ? "" : row.Cell(14).GetValue<string>();
+                        string rutaImagen = row.Cell(15).IsEmpty() ? "" : row.Cell(15).GetValue<string>();
+
+                        // ---------------------------------------------------------------------
+                        // REGLA: Si el servicio ya fue procesado con la MISMA fecha de inicio,
+                        // no reiniciamos desde cero, continuamos la distribución donde se quedó.
+                        // ---------------------------------------------------------------------
+                        DateTime fechaInicioActual;
+
+                        if (ultimasFechasInicio.ContainsKey(idServicio) && ultimasFechasInicio[idServicio] == fechaInicioExcel)
+                        {
+                            // Mismo mes/inicio repetido: tomar la fecha donde quedó la distribución previa
+                            var ultimaMensualidad = ListMensualidades.Where(m => m.IdUsuarioM == idServicio).OrderByDescending(m => m.FechaLimite).FirstOrDefault();
+                            fechaInicioActual = ultimaMensualidad != null ? ultimaMensualidad.FechaLimite : fechaInicioExcel;
                         }
                         else
                         {
-                            // Agregar las filas de datos
-                            dt.Rows.Add();
-                            int i = 0;
-                            foreach (var cell in row.Cells(1, dt.Columns.Count))
+                            // Mes de inicio diferente o primer registro del servicio
+                            fechaInicioActual = fechaInicioExcel;
+                            ultimasFechasInicio[idServicio] = fechaInicioExcel;
+                        }
+
+                        var planBase = obj.GetPlanByIdUsuarioM(idServicio).Result;
+                        decimal precioPlanBase = planBase != null ? planBase.Precio : 500;
+                        if(ListClientes.Where(x => x.IdCliente == idCliente && x.IdUser == idServicio).ToList().Count() == 0)
+                        {
+                            //lista de clientes
+                            ListClientes.Add(new UsuariosandPlanesModel
                             {
-                                dt.Rows[dt.Rows.Count - 1][i] = cell.Value.ToString();
-                                i++;
+                                Identificador = "Cli" + idCliente + "Us" + idServicio,
+                                IdCliente = idCliente,
+                                Cliente = row.Cell(2).GetValue<string>(), // Col B: Cliente
+                                IdUser = idServicio,
+                                Usuario = row.Cell(4).GetValue<string>(), // Col D: Servicio
+                                IdPlan = planBase != null ? planBase.Id : 0,
+                                Plan = planBase != null ? planBase.Nombre : "Plan Desconocido",
+                                Estatus = row.Cell(5).GetValue<string>(), // Col E: Inicio la mensualidad
+                                Mikrotik = planBase != null ? planBase.Nombre : "Mikrotik Desconocido",
+                                Mensualidad = "Disponible"
+                            }
+                            );
+                        }
+                       
+                        // Distribución del saldo
+                        while (saldoRestante > 0)
+                        {
+                            // 1. Calcular FechaLímite del período actual
+                            DateTime fechaLimiteActual;
+                            if (diaCorte <= fechaInicioActual.Day)
+                            {
+                                fechaLimiteActual = new DateTime(fechaInicioActual.Year, fechaInicioActual.Month, diaCorte).AddMonths(1);
+                            }
+                            else
+                            {
+                                fechaLimiteActual = new DateTime(fechaInicioActual.Year, fechaInicioActual.Month, diaCorte);
+                            }
+
+                            // 2. Calcular costo prorrateado considerando cambios/suspensiones
+                            decimal costoMensualidad = CalcularCostoMensualidad(idServicio, fechaInicioActual, fechaLimiteActual, diaCorte, precioPlanBase, ListCambios);
+                            if (costoMensualidad <= 0) costoMensualidad = precioPlanBase;
+
+                            // 3. Determinar el monto de este abono para esta mensualidad
+                            decimal pagoParaEstaMensualidad = Math.Min(saldoRestante, costoMensualidad);
+                            bool estaTotalmentePagado = saldoRestante >= costoMensualidad;
+
+                            int idMensualidad = contadorIdMensualidad++;
+
+                            // 4. Registrar la mensualidad
+                            ListMensualidades.Add(new MensualidadModel
+                            {
+                                Id = idMensualidad,
+                                Pagado = estaTotalmentePagado,
+                                IdUsuarioM = idServicio,
+                                DiaCorte = diaCorte,
+                                FechaInicio = fechaInicioActual,
+                                FechaLimite = fechaLimiteActual,
+                                IdUsuario = idResponsable
+                            });
+
+                          
+                            // 5. Registrar el pago en el historial
+                            ListHistorialPagos.Add(new HistorialPagosModel
+                            {
+                                Id = ListHistorialPagos.Count + 1,
+                                FechaRecibido = fechaPago,
+                                Cantidad = pagoParaEstaMensualidad,
+                                Comentario = comentario,
+                                IdBanco = idBanco,
+                                Referencia = referencia,
+                                Imagen = (!string.IsNullOrEmpty(rutaImagen) && File.Exists(rutaImagen)) ? File.ReadAllBytes(rutaImagen) : null,
+                                IdMensualidad = idMensualidad,
+                                IdUsuario = idResponsable
+                            });
+
+                            // 6. Restar la cantidad distribuida
+                            saldoRestante -= pagoParaEstaMensualidad;
+
+                            // Si sobra saldo, avanza al siguiente mes consecutivo
+                            if (saldoRestante > 0)
+                            {
+                                fechaInicioActual = fechaLimiteActual;
                             }
                         }
                     }
                 }
-                string mira = dt.Rows[0]["Producto"].ToString();
-                MessageBox.Show("Archivo Excel cargado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                CrearGridViewClientes();
+                var listaFinal = ListClientes?.ToList() ?? new List<UsuariosandPlanesModel>();
+                DGVClientes.DataSource = new SortableBindingList<UsuariosandPlanesModel>(listaFinal);
+                if (DGVClientes.Columns["IdCliente"] != null)
+                    DGVClientes.Columns["IdCliente"].Visible = false;
+                if (DGVClientes.Columns["IdUser"] != null)
+                    DGVClientes.Columns["IdUser"].Visible = false;
+                if (DGVClientes.Columns["IdPlan"] != null)
+                    DGVClientes.Columns["IdPlan"].Visible = false;
+                //MessageBox.Show("Archivo Excel procesado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+        private decimal CalcularCostoMensualidad(int idServicio, DateTime fechaInicio, DateTime fechaLimite, int diaCorte, decimal precioPlanBase, List<TiempoDefinidosModel> cambios)
+        {
+            // 1. Días totales del periodo comercial (Base 30)
+            int diasTotalesPeriodo;
+            if (fechaInicio.Day == diaCorte)
+            {
+                diasTotalesPeriodo = 30;
+            }
+            else if (fechaInicio.Day < diaCorte)
+            {
+                diasTotalesPeriodo = (diaCorte - fechaInicio.Day) + 1;
+            }
+            else
+            {
+                diasTotalesPeriodo = (30 - fechaInicio.Day) + diaCorte;
+            }
+
+            // 2. Filtrar cambios de plan dentro del periodo
+            var cambiosPeriodo = cambios.Where(x => x.IdUsuarioM == idServicio
+                                                 && x.FechaInicio <= fechaLimite
+                                                 && x.FechaFin >= fechaInicio
+                                                 && x.Programacion == "Cambio de plan"
+                                                 && x.Modo == "Temporal").ToList();
+
+            int diasConPlanNuevo = 0;
+            decimal costoPlanesNuevos = 0;
+
+            AppRepository obj = new AppRepository();
+
+            foreach (var tc in cambiosPeriodo)
+            {
+                DateTime fInicioEfectiva = fechaInicio > tc.FechaInicio ? fechaInicio : tc.FechaInicio;
+                DateTime fFinEfectiva = fechaLimite < tc.FechaFin ? fechaLimite : tc.FechaFin;
+
+                int diasEfectivos = (int)(fFinEfectiva.Date - fInicioEfectiva.Date).TotalDays + 1;
+
+                // Obtener el precio del plan nuevo asignado en el cambio
+                var planNuevo = obj.GetPlanById(tc.IdPlan).Result;
+                decimal precioPlanNuevo = planNuevo != null ? planNuevo.Precio : 0;
+
+                diasConPlanNuevo += diasEfectivos;
+                costoPlanesNuevos += diasEfectivos * (precioPlanNuevo / 30.0m);
+            }
+
+            // 3. Suspensiones (Días a costo 0)
+            var suspensionesPeriodo = cambios.Where(x => x.IdUsuarioM == idServicio
+                                                      && x.FechaInicio <= fechaLimite
+                                                      && x.FechaFin >= fechaInicio
+                                                      && x.Programacion == "Suspensión"
+                                                      && x.Modo == "Temporal").ToList();
+
+            int diasSuspendidos = 0;
+            foreach (var sus in suspensionesPeriodo)
+            {
+                DateTime fInicioEfectiva = fechaInicio > sus.FechaInicio ? fechaInicio : sus.FechaInicio;
+                DateTime fFinEfectiva = fechaLimite < sus.FechaFin ? fechaLimite : sus.FechaFin;
+
+                diasSuspendidos += (int)(fFinEfectiva.Date - fInicioEfectiva.Date).TotalDays + 1;
+            }
+
+            // 4. Días restantes con tarifa normal
+            int diasRestantes = diasTotalesPeriodo - diasConPlanNuevo - diasSuspendidos;
+            if (diasRestantes < 0) diasRestantes = 0;
+
+            decimal montoBruto = costoPlanesNuevos + (diasRestantes * (precioPlanBase / 30.0m));
+
+            // 5. Redondeo Financiero
+            decimal parteEntera = Math.Floor(montoBruto);
+            decimal parteDecimal = montoBruto - parteEntera;
+
+            if (parteDecimal > 0.00m && parteDecimal < 0.30m)
+                return parteEntera;
+            else if (parteDecimal >= 0.30m && parteDecimal <= 0.50m)
+                return parteEntera + 0.50m;
+            else if (parteDecimal > 0.50m)
+                return parteEntera + 1.00m;
+
+            return parteEntera;
+        }
+        public void CrearGridViewClientes()
+        {
+            DGVClientes.Columns.Clear();
+            DGVClientes.AutoGenerateColumns = false;
+            DGVClientes.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            DGVClientes.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            DGVClientes.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            DGVClientes.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            DGVClientes.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            DGVClientes.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            DGVClientes.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Identificador",
+                HeaderText = "Identificador",
+                DataPropertyName = "Identificador",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdCliente",
+                HeaderText = "IdCliente",
+                DataPropertyName = "IdCliente",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Cliente",
+                HeaderText = "Cliente",
+                DataPropertyName = "Cliente",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdUser",
+                HeaderText = "IdUser",
+                DataPropertyName = "IdUser",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Usuario",
+                HeaderText = "Servicio",
+                DataPropertyName = "Usuario",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdPlan",
+                HeaderText = "IdPlan",
+                DataPropertyName = "IdPlan",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Plan Actual",
+                HeaderText = "Plan",
+                DataPropertyName = "Plan",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus del servicio",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Mikrotik",
+                HeaderText = "Mikrotik",
+                DataPropertyName = "Mikrotik",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Mensualidad",
+                HeaderText = "Mensualidad",
+                DataPropertyName = "Mensualidad",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DataGridViewButtonColumn btnMensualidad = new DataGridViewButtonColumn
+            {
+                Name = "btnMensualidad",
+                HeaderText = "Acción",
+                Text = "Mensualidad",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVClientes.Columns.Add(btnMensualidad);
+
+
+            DGVClientes.AllowUserToAddRows = false;
         }
     }
 }

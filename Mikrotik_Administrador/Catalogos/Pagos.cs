@@ -192,7 +192,7 @@ namespace Mikrotik_Administrador.Catalogos
             dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Usuario",
-                HeaderText = "Usuario",
+                HeaderText = "Servicio",
                 DataPropertyName = "Usuario",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
