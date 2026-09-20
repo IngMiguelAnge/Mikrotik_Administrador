@@ -266,7 +266,6 @@ namespace Mikrotik_Administrador.Catalogos
             try
             {
                 dgvClientes.Enabled = false;
-                AppRepository r = new AppRepository();
                 switch (dgvClientes.Columns[e.ColumnIndex].Name)
                 {
                     case "btnMensualidad":

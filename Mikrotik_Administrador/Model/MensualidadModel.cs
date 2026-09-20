@@ -11,6 +11,6 @@ namespace Mikrotik_Administrador.Model
         public DateTime FechaInicio {  get; set; }
         public DateTime FechaLimite { get; set; }
         public int IdUsuario { get; set; }
-
+        public decimal? Mensualidad { get; set; }
     }
 }

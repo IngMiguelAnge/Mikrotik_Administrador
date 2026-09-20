@@ -109,6 +109,7 @@
             this.DGVClientes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DGVClientes.Size = new System.Drawing.Size(980, 284);
             this.DGVClientes.TabIndex = 12;
+            this.DGVClientes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVClientes_CellContentClick);
             // 
             // txtCliente
             // 

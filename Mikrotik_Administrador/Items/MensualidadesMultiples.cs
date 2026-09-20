@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
@@ -19,6 +20,10 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class MensualidadesMultiples : Form
     {
+        private List<TiempoDefinidosModel> ListCambios = new List<TiempoDefinidosModel>();
+        private List<MensualidadModel> ListMensualidades = new List<MensualidadModel>();
+        private List<HistorialPagosModel> ListHistorialPagos = new List<HistorialPagosModel>();
+        private List<UsuariosandPlanesModel> ListClientes = new List<UsuariosandPlanesModel>();
         public MensualidadesMultiples()
         {
             InitializeComponent();
@@ -291,8 +296,8 @@ namespace Mikrotik_Administrador.Catalogos
                                 wsPagos.Cell(filaPagos, 2).Value = item.Cliente;
                                 wsPagos.Cell(filaPagos, 3).Value = item.IdUsuarioM;
                                 wsPagos.Cell(filaPagos, 4).Value = item.Usuario;
-                                wsPagos.Cell(filaPagos, 5).Value = DateTime.Now;
-                                wsPagos.Cell(filaPagos, 5).Style.DateFormat.Format = "dd/MM/yyyy h:mm AM/PM";
+                                wsPagos.Cell(filaPagos, 5).Value = DateTime.Now.Date;
+                                wsPagos.Cell(filaPagos, 5).Style.DateFormat.Format = "dd/MM/yyyy";
                                 wsPagos.Cell(filaPagos, 6).Value = 1;
                                 wsPagos.Cell(filaPagos, 7).Value = 1;
                                 wsPagos.Cell(filaPagos, 8).Value = "Administrador";
@@ -351,10 +356,10 @@ namespace Mikrotik_Administrador.Catalogos
         {
             try
             {
-                List<TiempoDefinidosModel> ListCambios = new List<TiempoDefinidosModel>();
-                List<MensualidadModel> ListMensualidades = new List<MensualidadModel>();
-                List<HistorialPagosModel> ListHistorialPagos = new List<HistorialPagosModel>();
-                List<UsuariosandPlanesModel> ListClientes = new List<UsuariosandPlanesModel>();
+               ListCambios = new List<TiempoDefinidosModel>();
+                ListMensualidades = new List<MensualidadModel>();
+                ListHistorialPagos = new List<HistorialPagosModel>();
+                ListClientes = new List<UsuariosandPlanesModel>();
                 AppRepository obj = new AppRepository();
                 int contadorIdMensualidad = 1;
                 int contadorIdCambio = 1;
@@ -424,6 +429,7 @@ namespace Mikrotik_Administrador.Catalogos
                         // Manejo seguro de celdas nulas o vacías
                         string comentario = row.Cell(11).IsEmpty() ? "" : row.Cell(11).GetValue<string>();
                         int idBanco = row.Cell(12).IsEmpty() ? 0 : row.Cell(12).GetValue<int>();
+                        string Banco = row.Cell(13).IsEmpty() ? "" : row.Cell(13).GetValue<string>();
                         string referencia = row.Cell(14).IsEmpty() ? "" : row.Cell(14).GetValue<string>();
                         string rutaImagen = row.Cell(15).IsEmpty() ? "" : row.Cell(15).GetValue<string>();
 
@@ -447,7 +453,7 @@ namespace Mikrotik_Administrador.Catalogos
                         }
 
                         var planBase = obj.GetPlanByIdUsuarioM(idServicio).Result;
-                        decimal precioPlanBase = planBase != null ? planBase.Precio : 500;
+                        decimal precioPlanBase = planBase != null ? planBase.Precio : 0;
                         if(ListClientes.Where(x => x.IdCliente == idCliente && x.IdUser == idServicio).ToList().Count() == 0)
                         {
                             //lista de clientes
@@ -466,7 +472,11 @@ namespace Mikrotik_Administrador.Catalogos
                             }
                             );
                         }
-                       
+                        if (precioPlanBase == 0)
+                        {
+                            MessageBox.Show($"El servicio con ID {idServicio} no tiene un plan base con costo asignado. Por favor, revisa la configuración.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            continue; // Saltar a la siguiente fila
+                        }
                         // Distribución del saldo
                         while (saldoRestante > 0)
                         {
@@ -500,7 +510,8 @@ namespace Mikrotik_Administrador.Catalogos
                                 DiaCorte = diaCorte,
                                 FechaInicio = fechaInicioActual,
                                 FechaLimite = fechaLimiteActual,
-                                IdUsuario = idResponsable
+                                IdUsuario = idResponsable,
+                                Mensualidad = costoMensualidad
                             });
 
                           
@@ -512,6 +523,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 Cantidad = pagoParaEstaMensualidad,
                                 Comentario = comentario,
                                 IdBanco = idBanco,
+                                Banco= Banco,
                                 Referencia = referencia,
                                 Imagen = (!string.IsNullOrEmpty(rutaImagen) && File.Exists(rutaImagen)) ? File.ReadAllBytes(rutaImagen) : null,
                                 IdMensualidad = idMensualidad,
@@ -758,5 +770,311 @@ namespace Mikrotik_Administrador.Catalogos
 
             DGVClientes.AllowUserToAddRows = false;
         }
+
+        private void DGVClientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            try
+            {
+                DGVClientes.Enabled = false;
+                switch (DGVClientes.Columns[e.ColumnIndex].Name)
+                {
+                    case "btnMensualidad":
+                        string Mensualidad = (string)DGVClientes.Rows[e.RowIndex].Cells["Mensualidad"].Value;
+                        if (Mensualidad == "Falta Crear")
+                        {
+                            IniciarPagos ini = new IniciarPagos();
+                            ini.IdMensualidad = 0;
+                            ini.IdUsuarioM = (int)DGVClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
+                            ini.IdResponsable = 1;
+                            if (ini.ShowDialog() != DialogResult.OK)
+                            { return; }
+                        }
+                        //ListMensualidades
+                        int idUsuarioM = (int)DGVClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
+                        var Mensualidades = ListMensualidades.Where(x=> x.IdUsuarioM == idUsuarioM).ToList();
+                        List<ListMensualidadesModel> ListM = new List<ListMensualidadesModel>();
+                        decimal CostoMensualidad = 0;
+                        decimal Recibido = 0;
+                        foreach (var item in Mensualidades)
+                        {
+                            CostoMensualidad = item.Mensualidad == null ? 0 : (decimal)item.Mensualidad;
+                            Recibido = ListHistorialPagos.Where(x => x.IdMensualidad == item.Id).Sum(x => x.Cantidad);
+                            ListMensualidadesModel list = new ListMensualidadesModel()
+                            {
+                                Id = item.Id,
+                                DiaCorte = item.DiaCorte,
+                                FechaInicio = item.FechaInicio,
+                                FechaLimite = item.FechaLimite,
+                                Responsable = "Administrador",
+                                Mensualidad = CostoMensualidad,
+                                Recibido = Recibido,
+                                Faltante = CostoMensualidad - Recibido
+                            };
+                            ListM.Add(list);
+                        }
+                        CrearGridViewMensualidades();
+                        var listaFinal = ListM?.ToList() ?? new List<ListMensualidadesModel>();
+                        DGVClientes.DataSource = new SortableBindingList<ListMensualidadesModel>(listaFinal);
+                        break;
+                    case "btnHistorial":
+                        CrearGridViewHistorialPagos();
+                        var Pagos = ListHistorialPagos.Where(x => x.IdMensualidad == (int)DGVClientes.Rows[e.RowIndex].Cells["Id"].Value).ToList();
+                        List<ListHistorialPagosModel>ListPagos = new List<ListHistorialPagosModel>();
+                        foreach (var item in Pagos) {
+                            ListHistorialPagosModel HP = new ListHistorialPagosModel
+                            {
+                                Id=item.Id,
+                                FechaRecibido=item.FechaRecibido,
+                                Cantidad=item.Cantidad,
+                                Estatus= "Activo",
+                                Banco=item.Banco,
+                                Referencia=item.Referencia,
+                                Responsable= "Administrador"
+                            };
+                            ListPagos.Add(HP);
+                        }
+                         
+                        var listaFinalPagos = ListPagos?.ToList() ?? new List<ListHistorialPagosModel>();
+                        DGVClientes.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinalPagos);
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}");
+            }
+            finally
+            {
+                DGVClientes.Enabled = true;
+            }
+        }
+        public void CrearGridViewHistorialPagos()
+        {
+            DGVClientes.Columns.Clear();
+            DGVClientes.AutoGenerateColumns = false;
+            DGVClientes.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            DGVClientes.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            DGVClientes.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            DGVClientes.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            DGVClientes.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            DGVClientes.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            DGVClientes.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "NoTicket",
+                DataPropertyName = "Id",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "FechaRecibido",
+                HeaderText = "Fecha en que se recibe",
+                DataPropertyName = "FechaRecibido",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Cantidad",
+                HeaderText = "Cantidad",
+                DataPropertyName = "Cantidad",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Banco",
+                HeaderText = "Banco",
+                DataPropertyName = "Banco",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Referencia",
+                HeaderText = "Referencia",
+                DataPropertyName = "Referencia",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Responsable",
+                HeaderText = "Responsable",
+                DataPropertyName = "Responsable",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.AllowUserToAddRows = false;
+        }
+        public void CrearGridViewMensualidades()
+        {
+            DGVClientes.Columns.Clear();
+            DGVClientes.AutoGenerateColumns = false;
+            DGVClientes.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            DGVClientes.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            DGVClientes.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            DGVClientes.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            DGVClientes.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            DGVClientes.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            DGVClientes.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "Id",
+                DataPropertyName = "Id",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "DiaCorte",
+                HeaderText = "Día Corte",
+                DataPropertyName = "DiaCorte",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "FechaInicio",
+                HeaderText = "Inicia Mes",
+                DataPropertyName = "FechaInicio",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "FechaLimite",
+                HeaderText = "Fecha Limite",
+                DataPropertyName = "FechaLimite",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Responsable",
+                HeaderText = "Responsable",
+                DataPropertyName = "Responsable",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Mensualidad",
+                HeaderText = "Mensualidad",
+                DataPropertyName = "Mensualidad",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2", // Aplica formato de moneda local (ej: $120.00 o $120.50)
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
+                }
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Recibido",
+                HeaderText = "Recibido",
+                DataPropertyName = "Recibido",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2", // Aplica formato de moneda local (ej: $120.00 o $120.50)
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
+                }
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Faltante",
+                HeaderText = "Faltante",
+                DataPropertyName = "Faltante",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2", // Aplica formato de moneda local (ej: $120.00 o $120.50)
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
+                }
+            });
+            DataGridViewButtonColumn btnHistorial = new DataGridViewButtonColumn
+            {
+                Name = "btnHistorial",
+                HeaderText = "Acción",
+                Text = "Historial de pagos",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVClientes.Columns.Add(btnHistorial);
+            DataGridViewButtonColumn btnVerDetalles = new DataGridViewButtonColumn
+            {
+                Name = "btnVerDetalles",
+                HeaderText = "Acción",
+                Text = "Detalles",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVClientes.Columns.Add(btnVerDetalles);
+            DGVClientes.AllowUserToAddRows = false;
+        }
+
     }
 }
