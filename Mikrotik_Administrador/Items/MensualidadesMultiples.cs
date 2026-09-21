@@ -24,6 +24,10 @@ namespace Mikrotik_Administrador.Catalogos
         private List<MensualidadModel> ListMensualidades = new List<MensualidadModel>();
         private List<HistorialPagosModel> ListHistorialPagos = new List<HistorialPagosModel>();
         private List<UsuariosandPlanesModel> ListClientes = new List<UsuariosandPlanesModel>();
+        private List<ListMensualidadesModel> ListM = new List<ListMensualidadesModel>();
+        private List<ListHistorialPagosModel> ListPagos = new List<ListHistorialPagosModel>();
+        private int Opcion = 0;
+
         public MensualidadesMultiples()
         {
             InitializeComponent();
@@ -356,7 +360,7 @@ namespace Mikrotik_Administrador.Catalogos
         {
             try
             {
-               ListCambios = new List<TiempoDefinidosModel>();
+                ListCambios = new List<TiempoDefinidosModel>();
                 ListMensualidades = new List<MensualidadModel>();
                 ListHistorialPagos = new List<HistorialPagosModel>();
                 ListClientes = new List<UsuariosandPlanesModel>();
@@ -454,7 +458,7 @@ namespace Mikrotik_Administrador.Catalogos
 
                         var planBase = obj.GetPlanByIdUsuarioM(idServicio).Result;
                         decimal precioPlanBase = planBase != null ? planBase.Precio : 0;
-                        if(ListClientes.Where(x => x.IdCliente == idCliente && x.IdUser == idServicio).ToList().Count() == 0)
+                        if (ListClientes.Where(x => x.IdCliente == idCliente && x.IdUser == idServicio).ToList().Count() == 0)
                         {
                             //lista de clientes
                             ListClientes.Add(new UsuariosandPlanesModel
@@ -514,7 +518,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 Mensualidad = costoMensualidad
                             });
 
-                          
+
                             // 5. Registrar el pago en el historial
                             ListHistorialPagos.Add(new HistorialPagosModel
                             {
@@ -523,7 +527,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 Cantidad = pagoParaEstaMensualidad,
                                 Comentario = comentario,
                                 IdBanco = idBanco,
-                                Banco= Banco,
+                                Banco = Banco,
                                 Referencia = referencia,
                                 Imagen = (!string.IsNullOrEmpty(rutaImagen) && File.Exists(rutaImagen)) ? File.ReadAllBytes(rutaImagen) : null,
                                 IdMensualidad = idMensualidad,
@@ -541,15 +545,7 @@ namespace Mikrotik_Administrador.Catalogos
                         }
                     }
                 }
-                CrearGridViewClientes();
-                var listaFinal = ListClientes?.ToList() ?? new List<UsuariosandPlanesModel>();
-                DGVClientes.DataSource = new SortableBindingList<UsuariosandPlanesModel>(listaFinal);
-                if (DGVClientes.Columns["IdCliente"] != null)
-                    DGVClientes.Columns["IdCliente"].Visible = false;
-                if (DGVClientes.Columns["IdUser"] != null)
-                    DGVClientes.Columns["IdUser"].Visible = false;
-                if (DGVClientes.Columns["IdPlan"] != null)
-                    DGVClientes.Columns["IdPlan"].Visible = false;
+                CargarTablaClientes();
                 //MessageBox.Show("Archivo Excel procesado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -557,6 +553,18 @@ namespace Mikrotik_Administrador.Catalogos
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+        public void CargarTablaClientes()
+        {
+            CrearGridViewClientes();
+            var listaFinal = ListClientes?.ToList() ?? new List<UsuariosandPlanesModel>();
+            DGVClientes.DataSource = new SortableBindingList<UsuariosandPlanesModel>(listaFinal);
+            if (DGVClientes.Columns["IdCliente"] != null)
+                DGVClientes.Columns["IdCliente"].Visible = false;
+            if (DGVClientes.Columns["IdUser"] != null)
+                DGVClientes.Columns["IdUser"].Visible = false;
+            if (DGVClientes.Columns["IdPlan"] != null)
+                DGVClientes.Columns["IdPlan"].Visible = false;
         }
         private decimal CalcularCostoMensualidad(int idServicio, DateTime fechaInicio, DateTime fechaLimite, int diaCorte, decimal precioPlanBase, List<TiempoDefinidosModel> cambios)
         {
@@ -792,8 +800,8 @@ namespace Mikrotik_Administrador.Catalogos
                         }
                         //ListMensualidades
                         int idUsuarioM = (int)DGVClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
-                        var Mensualidades = ListMensualidades.Where(x=> x.IdUsuarioM == idUsuarioM).ToList();
-                        List<ListMensualidadesModel> ListM = new List<ListMensualidadesModel>();
+                        var Mensualidades = ListMensualidades.Where(x => x.IdUsuarioM == idUsuarioM).ToList();
+                        ListM = new List<ListMensualidadesModel>();
                         decimal CostoMensualidad = 0;
                         decimal Recibido = 0;
                         foreach (var item in Mensualidades)
@@ -813,30 +821,29 @@ namespace Mikrotik_Administrador.Catalogos
                             };
                             ListM.Add(list);
                         }
-                        CrearGridViewMensualidades();
-                        var listaFinal = ListM?.ToList() ?? new List<ListMensualidadesModel>();
-                        DGVClientes.DataSource = new SortableBindingList<ListMensualidadesModel>(listaFinal);
+                        btnAtras.Visible = true;
+                        Opcion = 1;
+                        CrearTablaMensualidades();
                         break;
                     case "btnHistorial":
-                        CrearGridViewHistorialPagos();
                         var Pagos = ListHistorialPagos.Where(x => x.IdMensualidad == (int)DGVClientes.Rows[e.RowIndex].Cells["Id"].Value).ToList();
-                        List<ListHistorialPagosModel>ListPagos = new List<ListHistorialPagosModel>();
-                        foreach (var item in Pagos) {
+                        ListPagos = new List<ListHistorialPagosModel>();
+                        foreach (var item in Pagos)
+                        {
                             ListHistorialPagosModel HP = new ListHistorialPagosModel
                             {
-                                Id=item.Id,
-                                FechaRecibido=item.FechaRecibido,
-                                Cantidad=item.Cantidad,
-                                Estatus= "Activo",
-                                Banco=item.Banco,
-                                Referencia=item.Referencia,
-                                Responsable= "Administrador"
+                                Id = item.Id,
+                                FechaRecibido = item.FechaRecibido,
+                                Cantidad = item.Cantidad,
+                                Estatus = "Activo",
+                                Banco = item.Banco,
+                                Referencia = item.Referencia,
+                                Responsable = "Administrador"
                             };
                             ListPagos.Add(HP);
                         }
-                         
-                        var listaFinalPagos = ListPagos?.ToList() ?? new List<ListHistorialPagosModel>();
-                        DGVClientes.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinalPagos);
+                        Opcion = 2;
+                        CrearTablaHistorial();
 
                         break;
                     default:
@@ -851,6 +858,18 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 DGVClientes.Enabled = true;
             }
+        }
+        public void CrearTablaHistorial()
+        {
+            CrearGridViewHistorialPagos();
+            var listaFinal = ListPagos?.ToList() ?? new List<ListHistorialPagosModel>();
+            DGVClientes.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
+        }
+        public void CrearTablaMensualidades()
+        {
+            CrearGridViewMensualidades();
+            var listaFinal = ListM?.ToList() ?? new List<ListMensualidadesModel>();
+            DGVClientes.DataSource = new SortableBindingList<ListMensualidadesModel>(listaFinal);
         }
         public void CrearGridViewHistorialPagos()
         {
@@ -1076,5 +1095,20 @@ namespace Mikrotik_Administrador.Catalogos
             DGVClientes.AllowUserToAddRows = false;
         }
 
+        private void btnAtras_Click(object sender, EventArgs e)
+        {
+            switch (Opcion)
+            {
+                case 1:
+                    CargarTablaClientes();
+                    Opcion = 0;
+                    btnAtras.Visible = false;
+                    break;
+                case 2:
+                    CrearTablaMensualidades();
+                    Opcion = 1;
+                    break;
+            }
+        }
     }
 }
