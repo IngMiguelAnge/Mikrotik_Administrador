@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using Microsoft.Identity.Client.Extensibility;
 using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Items;
@@ -66,6 +67,8 @@ namespace Mikrotik_Administrador.Catalogos
                     return;
                 }
             }
+            btnConfirmar.Visible = false;
+            btnAtras.Visible = false;
             CargarClientes();
         }
         public async void CargarClientes()
@@ -183,6 +186,11 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void btnDescargar_Click(object sender, EventArgs e)
         {
+            if (btnAtras.Visible == true || btnConfirmar.Visible == true)
+            {
+                MessageBox.Show("Busque y seleccione usuarios para esta opción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             btnCargar.Enabled = false;
@@ -346,6 +354,19 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void btnCargar_Click(object sender, EventArgs e)
         {
+            AppRepository obj = new AppRepository();
+            var ListBancos = obj.GetBancos(string.Empty, string.Empty);
+            if (ListBancos.Result.Count <= 0)
+            {
+                MessageBox.Show("Para cargar un excel se requiere tener bancos registrados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var ListUsuarios = obj.GetUsuarios(string.Empty, string.Empty);
+            if (ListBancos.Result.Count <= 0)
+            {
+                MessageBox.Show("Para cargar un excel se requiere tener usuarios registrados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "Archivos de Excel (*.xlsx)|*.xlsx";
@@ -355,6 +376,7 @@ namespace Mikrotik_Administrador.Catalogos
                 {
                     // Llamar al método para leer e mostrar en el DataGridView
                     CargarDatosExcel(openFileDialog.FileName);
+                    btnConfirmar.Visible = true;
                 }
             }
 
@@ -408,6 +430,8 @@ namespace Mikrotik_Administrador.Catalogos
                                 Modo = "Temporal",
                                 IdUsuarioM = idServicio,
                                 Estatus = fechaFin <= DateTime.Now ? "Completado" : "Ejecutando",
+                                IdPlanOriginal = row.Cell(6).GetValue<int>(),
+                                IdMikrotikOriginal = row.Cell(8).GetValue<int>(),
                                 IdPlan = row.Cell(10).GetValue<int>(),              // Col J: Plan nuevo
                                 Plan = row.Cell(11).GetValue<string>(),
                                 IdMikrotikReceptor = row.Cell(12).GetValue<int>(),  // Col L: Mikrotik
@@ -1220,6 +1244,227 @@ namespace Mikrotik_Administrador.Catalogos
                     CrearTablaMensualidades();
                     Opcion = 1;
                     break;
+            }
+        }
+
+        private void btnConfirmar_Click(object sender, EventArgs e)
+        {
+            DialogResult resultado = MessageBox.Show("Esta confirmando que la información mostrada es la correcta ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+            if (resultado == DialogResult.No)
+            {
+                return;
+            }
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            btnCargar.Enabled = false;
+            BtnBuscar.Enabled = false;
+            btnDescargar.Enabled = false;
+            try
+            {
+                AppRepository obj = new AppRepository();
+                int ContadorCambios = -1;
+                
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Archivo de Excel (*.xlsx)|*.xlsx";
+                    saveFileDialog.FileName = "Reporte de carga de excel.xlsx";
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        // 2. Crear el libro de trabajo (Workbook)
+                        using (var workbook = new XLWorkbook())
+                        {
+                            // ==============================================================
+                            // HOJA 1: CAMBIOS Y SUSPENSIONES (Aparecerá primero)
+                            // ==============================================================
+                            var wsCambios = workbook.Worksheets.Add("Cambios");
+
+                            // Encabezados
+                            wsCambios.Cell(1, 1).Value = "Descupción";  // A
+                            wsCambios.Cell(1, 2).Value = "Resultado";  // B
+                            // Formato a los encabezados (A1 a B1)
+                            var headerCambios = wsCambios.Range("A1:B1");
+                            headerCambios.Style.Font.Bold = true;
+                            headerCambios.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
+                            headerCambios.Style.Font.FontColor = XLColor.White;
+
+                            int filaCambios = 2;
+                            foreach (var item in ListCambios)
+                            {
+                                ContadorCambios += 1;
+                                var existServicio = obj.GetUsuariosMikrotiksById(item.IdUsuarioM).Result;
+                                if (existServicio.Id == 0)
+                                {
+                                    wsCambios.Cell(filaCambios, 1).Value = 
+                                        "El servicio con id " + item.IdUsuarioM.ToString() + " no existe en el sistema";
+                                    wsCambios.Cell(filaCambios, 2).Value = "Error";
+                                    filaCambios++;
+                                    continue;
+                                }
+                                var existPlan = obj.GetPlanById(item.IdPlanOriginal).Result;
+                                if (existServicio.Id == 0)
+                                {
+                                    wsCambios.Cell(filaCambios, 1).Value =
+                                        "El plan origen con id " + item.IdPlanOriginal.ToString() + " no existe en el sistema";
+                                    wsCambios.Cell(filaCambios, 2).Value = "Error";
+                                    filaCambios++;
+                                    continue;
+                                }
+                                if(item.IdPlanOriginal != item.IdPlan)
+                                {
+                                    existPlan = obj.GetPlanById(item.IdPlan).Result;
+                                    if (existServicio.Id == 0)
+                                    {
+                                        wsCambios.Cell(filaCambios, 1).Value =
+                                            "El plan nuevo con id " + item.IdPlan.ToString() + " no existe en el sistema";
+                                        wsCambios.Cell(filaCambios, 2).Value = "Error";
+                                        filaCambios++;
+                                        continue;
+                                    }
+                                }
+                                var existMikrotik = obj.GetMikrotikById(item.IdMikrotikOriginal).Result;
+                                if (existServicio.Id == 0)
+                                {
+                                    wsCambios.Cell(filaCambios, 1).Value =
+                                        "El mikrotik origen con id " + item.IdMikrotikOriginal.ToString() + " no existe en el sistema";
+                                    wsCambios.Cell(filaCambios, 2).Value = "Error";
+                                    filaCambios++;
+                                    continue;
+                                }
+                                if(item.IdMikrotikOriginal != item.IdMikrotikReceptor)
+                                {
+                                    existMikrotik = obj.GetMikrotikById(item.IdMikrotikReceptor).Result;
+                                    if (existServicio.Id == 0)
+                                    {
+                                        wsCambios.Cell(filaCambios, 1).Value =
+                                            "El mikrotik receptor con id " + item.IdMikrotikReceptor.ToString() + " no existe en el sistema";
+                                        wsCambios.Cell(filaCambios, 2).Value = "Error";
+                                        filaCambios++;
+                                        continue;
+                                    }
+                                }
+                                var Anidado = obj.GetPlanesAnidadosbyParametros(item.IdMikrotikReceptor,item.IdPlan).Result;
+                                int IdPlanAnidado = Anidado?.Id ?? 0;
+                                if(IdPlanAnidado == 0)
+                                {
+                                    wsCambios.Cell(filaCambios, 1).Value =
+                                          "No existe el plan nuevo: " + item.IdPlan.ToString() + " en el mikrotik receptor: " + item.IdMikrotikReceptor.ToString() ;
+                                    wsCambios.Cell(filaCambios, 2).Value = "Error";
+                                    filaCambios++;
+                                    continue;
+                                }
+                                Anidado = obj.GetPlanesAnidadosbyParametros(item.IdMikrotikOriginal, item.IdPlanOriginal).Result;
+                                IdPlanAnidado = Anidado?.Id ?? 0;
+                                if (IdPlanAnidado == 0)
+                                {
+                                    wsCambios.Cell(filaCambios, 1).Value =
+                                          "No existe el plan original: " + item.IdPlan.ToString() + " en el mikrotik original: " + item.IdMikrotikOriginal.ToString();
+                                    wsCambios.Cell(filaCambios, 2).Value = "Error";
+                                    filaCambios++;
+                                    continue;
+                                }
+                                var exitCambiot = obj.GetTiempoCambiobyIdUsuarioM(item.IdUsuarioM, item.FechaInicio, item.FechaFin).Result;
+                                if (exitCambiot.Count() == 0)
+                                {
+                                    var resultcambio = obj.SaveTiempoCambio(ListCambios[ContadorCambios]).Result;
+                                    if(resultcambio)
+                                    {
+                                        wsCambios.Cell(filaCambios, 1).Value =
+                                    "Ya existe el(la) " + item.Programacion + " registrado en el sistema para el servicio " + item.IdUsuarioM +
+                                    " con fecha de inicio " + item.FechaInicio.ToString();
+                                        wsCambios.Cell(filaCambios, 2).Value = "Satisfactorio";
+                                    }
+                                    else
+                                    {
+                                        wsCambios.Cell(filaCambios, 2).Value = "Error";
+                                    }
+                                    filaCambios++;
+                                }
+                                else
+                                {
+                                    wsCambios.Cell(filaCambios, 1).Value =
+                                         "Ya existe el(la) " + item.Programacion + " registrado en el sistema para el servicio " + item.IdUsuarioM +
+                                         " con fecha de inicio " + item.FechaInicio.ToString();
+                                    wsCambios.Cell(filaCambios, 2).Value = "Error";
+                                    filaCambios++;
+                                    continue;
+                                }
+                            }
+                            // Autoajuste de columnas para Hoja 1
+                            wsCambios.Columns().AdjustToContents();
+
+                            //// ==============================================================
+                            //// HOJA 2: MENSUALIDADES (Aparecerá segundo)
+                            //// ==============================================================
+                            //var wsPagos = workbook.Worksheets.Add("Pagos");
+
+                            //// Encabezados
+                            //wsPagos.Cell(1, 1).Value = "IdCliente";                 // A
+                            //wsPagos.Cell(1, 2).Value = "Cliente";                   // B
+                            //wsPagos.Cell(1, 3).Value = "IdServicio";                // C
+                            //wsPagos.Cell(1, 4).Value = "Servicio";                  // D
+                            //wsPagos.Cell(1, 5).Value = "Inicio la mensualidad";     // E
+                            //wsPagos.Cell(1, 6).Value = "Día de corte";              // F
+                            //wsPagos.Cell(1, 7).Value = "IdResponsable";             // G
+                            //wsPagos.Cell(1, 8).Value = "Responsable";               // H
+                            //wsPagos.Cell(1, 9).Value = "Cuando se recibio el pago"; // I
+                            //wsPagos.Cell(1, 10).Value = "Cantidad recibida";        // J
+                            //wsPagos.Cell(1, 11).Value = "Comentario";               // K
+                            //wsPagos.Cell(1, 12).Value = "IdBanco";                  // L
+                            //wsPagos.Cell(1, 13).Value = "Banco";                    // M
+                            //wsPagos.Cell(1, 14).Value = "Referencia";               // N
+                            //wsPagos.Cell(1, 15).Value = "Ruta de imagen";           // O
+                            //// Formato a los encabezados (A1 a O1)
+                            //var headerPagos = wsPagos.Range("A1:O1");
+                            //headerPagos.Style.Font.Bold = true;
+                            //headerPagos.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
+                            //headerPagos.Style.Font.FontColor = XLColor.White;
+
+                            //int filaPagos = 2;
+                            //foreach (ListClientesDescargaModel item in Seleccionados)
+                            //{
+                            //    wsPagos.Cell(filaPagos, 1).Value = item.IdCliente;
+                            //    wsPagos.Cell(filaPagos, 2).Value = item.Cliente;
+                            //    wsPagos.Cell(filaPagos, 3).Value = item.IdUsuarioM;
+                            //    wsPagos.Cell(filaPagos, 4).Value = item.Usuario;
+                            //    wsPagos.Cell(filaPagos, 5).Value = DateTime.Now.Date;
+                            //    wsPagos.Cell(filaPagos, 5).Style.DateFormat.Format = "dd/MM/yyyy";
+                            //    wsPagos.Cell(filaPagos, 6).Value = 1;
+                            //    wsPagos.Cell(filaPagos, 7).Value = 1;
+                            //    wsPagos.Cell(filaPagos, 8).Value = "Administrador";
+                            //    wsPagos.Cell(filaPagos, 9).Value = DateTime.Now;
+                            //    wsPagos.Cell(filaPagos, 9).Style.DateFormat.Format = "dd/MM/yyyy h:mm AM/PM";
+                            //    wsPagos.Cell(filaPagos, 10).Value = 0;
+                            //    wsPagos.Cell(filaPagos, 11).Value = "";
+                            //    wsPagos.Cell(filaPagos, 12).Value = 1;
+                            //    wsPagos.Cell(filaPagos, 13).Value = "PAGOS EFECTIVO";
+                            //    wsPagos.Cell(filaPagos, 14).Value = "1234ASD";
+                            //    wsPagos.Cell(filaPagos, 15).Value = "C:\\Users\\Lenovo\\OneDrive\\Desktop\\Imagenes\\1.jpg";
+                            //    filaPagos++;
+                            //}
+
+                            //// Autoajuste de columnas para Hoja 2
+                            //wsPagos.Columns().AdjustToContents();
+                            //// 5. Guardar el archivo
+                            workbook.SaveAs(saveFileDialog.FileName);
+                        }
+
+                        MessageBox.Show("Reporte generado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 100;
+                BtnBuscar.Enabled = true;
+                btnDescargar.Enabled = true;
+                btnCargar.Enabled = true;
             }
         }
     }

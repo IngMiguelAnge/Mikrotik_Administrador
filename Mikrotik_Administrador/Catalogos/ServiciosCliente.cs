@@ -202,17 +202,17 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DataGridViewButtonColumn btnProgramar = new DataGridViewButtonColumn
+            DataGridViewButtonColumn btnPlan = new DataGridViewButtonColumn
             {
-                Name = "btnProgramar",
+                Name = "btnPlan",
                 HeaderText = "Acción",
-                Text = "Programar",
+                Text = "Cambiar plan",
                 UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
-            DGVServicios.Columns.Add(btnProgramar);
+            DGVServicios.Columns.Add(btnPlan);
             DataGridViewButtonColumn btnUbicacion = new DataGridViewButtonColumn
             {
                 Name = "btnUbicacion",
@@ -323,7 +323,7 @@ namespace Mikrotik_Administrador
                     await CambiarEstatus(objUsuario);
                     break;
 
-                case "btnProgramar":
+                case "btnPlan":
                     MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                     int IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value);

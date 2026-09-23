@@ -177,13 +177,9 @@ namespace Mikrotik_Administrador
             {
                 try
                 {
-                    PlanAnidadoModel PlanInstroducir = new PlanAnidadoModel();
-                    PlanInstroducir.IdPlan = Plan.Id;
-                    PlanInstroducir.IdMikrotik = Fila.Id;
-                    PlanInstroducir.IsAntena = false;
-                    var Anidado = obj.GetPlanesAnidadosbyParametros(PlanInstroducir).Result;
+                    var Anidado = obj.GetPlanesAnidadosbyParametros(Fila.Id, Plan.Id).Result;
                     int IdPlanAnidado = Anidado?.Id ?? 0;
-                    if (Anidado is null)
+                    if (IdPlanAnidado == 0)
                     {
                         Anidado = new PlanAnidadoModel();
                         Anidado.IdMikrotik = Fila.Id;

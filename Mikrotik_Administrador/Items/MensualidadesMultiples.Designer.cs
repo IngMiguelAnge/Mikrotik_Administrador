@@ -44,6 +44,7 @@
             this.txtUsuario = new System.Windows.Forms.TextBox();
             this.lblUsuario = new System.Windows.Forms.Label();
             this.btnAtras = new System.Windows.Forms.Button();
+            this.btnConfirmar = new System.Windows.Forms.Button();
             this.panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVClientes)).BeginInit();
             this.SuspendLayout();
@@ -71,7 +72,7 @@
             this.panelContenedor.Location = new System.Drawing.Point(5, 176);
             this.panelContenedor.Name = "panelContenedor";
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenedor.Size = new System.Drawing.Size(1201, 324);
+            this.panelContenedor.Size = new System.Drawing.Size(1278, 324);
             this.panelContenedor.TabIndex = 11;
             // 
             // DGVClientes
@@ -108,7 +109,7 @@
             this.DGVClientes.RowHeadersWidth = 51;
             this.DGVClientes.RowTemplate.Height = 30;
             this.DGVClientes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DGVClientes.Size = new System.Drawing.Size(1161, 284);
+            this.DGVClientes.Size = new System.Drawing.Size(1238, 284);
             this.DGVClientes.TabIndex = 12;
             this.DGVClientes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVClientes_CellContentClick);
             // 
@@ -232,12 +233,28 @@
             this.btnAtras.Visible = false;
             this.btnAtras.Click += new System.EventHandler(this.btnAtras_Click);
             // 
+            // btnConfirmar
+            // 
+            this.btnConfirmar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnConfirmar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnConfirmar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.btnConfirmar.ForeColor = System.Drawing.Color.White;
+            this.btnConfirmar.Location = new System.Drawing.Point(1170, 100);
+            this.btnConfirmar.Name = "btnConfirmar";
+            this.btnConfirmar.Size = new System.Drawing.Size(100, 36);
+            this.btnConfirmar.TabIndex = 13;
+            this.btnConfirmar.Text = "Confirmar";
+            this.btnConfirmar.UseVisualStyleBackColor = false;
+            this.btnConfirmar.Visible = false;
+            this.btnConfirmar.Click += new System.EventHandler(this.btnConfirmar_Click);
+            // 
             // MensualidadesMultiples
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1211, 511);
+            this.ClientSize = new System.Drawing.Size(1288, 511);
+            this.Controls.Add(this.btnConfirmar);
             this.Controls.Add(this.btnAtras);
             this.Controls.Add(this.txtUsuario);
             this.Controls.Add(this.lblUsuario);
@@ -281,5 +298,6 @@
         private System.Windows.Forms.TextBox txtUsuario;
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Button btnAtras;
+        private System.Windows.Forms.Button btnConfirmar;
     }
 }

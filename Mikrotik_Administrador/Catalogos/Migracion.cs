@@ -14,6 +14,7 @@ using System.Data.Entity.Infrastructure;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -296,7 +297,7 @@ namespace Mikrotik_Administrador
                     }
                     item.velocidad = item.velocidad.Trim().Replace(" ", "");
                     existeplan = ListaPlanes.FirstOrDefault(p => p.Velocidad == item.velocidad
-                    && p.IsAntena == cbAntenas.Checked);
+                    && p.IsAntena == IsAntena);
                     if (existeplan == null)
                     {
                         PlanModel objPlan = new PlanModel();
@@ -420,79 +421,154 @@ namespace Mikrotik_Administrador
             btnEliminar.Enabled = false;
             try
             {
-                List<UsuariosExtraidosModel> Seleccionados = new List<UsuariosExtraidosModel>();
-                Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
-                 .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
-                  .Select(r => new UsuariosExtraidosModel
-                  {
-                      id = Convert.ToString(r.Cells["id"].Value),
-                      comment = Convert.ToString(r.Cells["comment"].Value),
-                      address = Convert.ToString(r.Cells["address"].Value),
-                      estatus = Convert.ToString(r.Cells["estatus"].Value),
-                      idplan = Convert.ToString(r.Cells["idplan"].Value),
-                      velocidad = Convert.ToString(r.Cells["velocidad"].Value)
-                  })
-                   .ToList();
+                if (cbReconfirmar.Checked == false)
+                {
+                    List<UsuariosExtraidosModel> Seleccionados = new List<UsuariosExtraidosModel>();
+                    Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
+                     .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
+                      .Select(r => new UsuariosExtraidosModel
+                      {
+                          id = Convert.ToString(r.Cells["id"].Value),
+                          comment = Convert.ToString(r.Cells["comment"].Value),
+                          address = Convert.ToString(r.Cells["address"].Value),
+                          estatus = Convert.ToString(r.Cells["estatus"].Value),
+                          idplan = Convert.ToString(r.Cells["idplan"].Value),
+                          velocidad = Convert.ToString(r.Cells["velocidad"].Value)
+                      })
+                       .ToList();
 
-                if (Seleccionados.Count == 0)
-                {
-                    MessageBox.Show("No has seleccionado ningún usuario para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                int IdMikrotik = (int)CBMikrotiks.SelectedValue;
-                if (IdMikrotik == 0)
-                {
-                    MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
-                    return;
-                }
-                AppRepository obj = new AppRepository();
-                MikrotikModel mikro = new MikrotikModel();
-                mikro = obj.GetMikrotikById(IdMikrotik).Result;
-                if (mikro.Estatus == false)
-                {
-                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (mikrotik != null)
-                {
-                    await Task.Run(() => mikrotik.Close());
-                    mikrotik = null;
-                }
-                mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
-                // Usamos Task.Run para que la conexión no detenga la ventana
-                bool login = await Task.Run(() =>
-                {
-                     return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
-                });
-                if (login == false)
-                {
-                    MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                foreach (UsuariosExtraidosModel item in Seleccionados)
-                {
-                    if (cbAntenas.Checked == true)
+                    if (Seleccionados.Count == 0)
                     {
-                        mikrotik.EliminarQueuePorNombre(item.comment);
-                        mikrotik.EliminarAntena(item.id);
+                        MessageBox.Show("No has seleccionado ningún usuario para exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
                     }
-                    else { 
-                        mikrotik.EliminarFibra(item.id);
-                        mikrotik.DeleteInterfacebyName(item.comment);
-                    }
-                    HistorialMovimientosModel H = new HistorialMovimientosModel
+                    int IdMikrotik = (int)CBMikrotiks.SelectedValue;
+                    if (IdMikrotik == 0)
                     {
-                        Id = 0,
-                        Descripcion = "Se elimino al usuario " + item.comment + " con ip: " + item.address,
-                        Pagina = "En la página de migración",
-                        IdUsuario = IdResponsable,
-                        Estatus = false
-                    };
-                    var r = obj.SaveHistorialMovimientos(H);
-                    obj.UpdateEstatusGeneralbyIdInterno(IdMikrotik,item.id,cbAntenas.Checked, "Eliminado", IdResponsable).Wait();
+                        MessageBox.Show("Selecciona un Mikrotik válido de la lista.");
+                        return;
+                    }
+                    AppRepository obj = new AppRepository();
+                    MikrotikModel mikro = new MikrotikModel();
+                    mikro = obj.GetMikrotikById(IdMikrotik).Result;
+                    if (mikro.Estatus == false)
+                    {
+                        MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (mikrotik != null)
+                    {
+                        await Task.Run(() => mikrotik.Close());
+                        mikrotik = null;
+                    }
+                    mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+                    // Usamos Task.Run para que la conexión no detenga la ventana
+                    bool login = await Task.Run(() =>
+                    {
+                        return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                    });
+                    if (login == false)
+                    {
+                        MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    foreach (UsuariosExtraidosModel item in Seleccionados)
+                    {
+                        if (cbAntenas.Checked == true)
+                        {
+                            await mikrotik.EliminarQueuePorNombre(item.comment);
+                            await mikrotik.EliminarAntena(item.id);
+                        }
+                        else
+                        {
+                            await mikrotik.EliminarFibra(item.id);
+                            await mikrotik.DeleteInterfacebyName(item.comment);
+                        }
+                        string donde = IsAntena == false ? "Fibra" : "Antena";
+                        HistorialMovimientosModel H = new HistorialMovimientosModel
+                        {
+                            Id = 0,
+                            Descripcion = "Se elimino al usuario " + item.comment + " del mikrotik " + mikro.Nombre 
+                            + " de " + donde + " con ip: " + item.address ,
+                            Pagina = "En la página de migración",
+                            IdUsuario = IdResponsable,
+                            Estatus = false
+                        };
+                        var r = obj.SaveHistorialMovimientos(H);
+                        obj.UpdateEstatusGeneralbyIdInterno(IdMikrotik, item.id, cbAntenas.Checked, "Eliminado", IdResponsable).Wait();
+                    }
+
+                }
+                else
+                {
+                    AppRepository obj = new AppRepository();
+                    var lista = await Task.Run(() => obj.GetHistorialMovimientos(dtpFechaInicio.Value, dtpFechaFinal.Value));
+                    List<string> IPS = lista.Where(x => x.Pagina == "En la página de migración").Select(c => c.Descripcion).ToList();
+                    string patronIp = @"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b";
+                    int MikrotkConexion = 0;
+                    bool EsAntena = false;
+                    string NombreUsuario = string.Empty;
+                    string patronNombre = @"usuario\s+(.*?)\s+con ip:";
+                    foreach (string direcciones in IPS)
+                    {
+                        NombreUsuario = string.Empty;
+                        Match match = Regex.Match(direcciones, patronIp);
+                        Match matchNombre = Regex.Match(direcciones, patronNombre, RegexOptions.IgnoreCase);
+                        if (matchNombre.Success)
+                        {
+                            NombreUsuario = matchNombre.Groups[1].Value.Trim();
+                        }
+                        if (match.Success)
+                        {
+                            string ipExtraida = match.Value;
+                            int ultimoPunto = ipExtraida.LastIndexOf('.');
+                            if (ultimoPunto != -1)
+                            {
+                                string subred = ipExtraida.Substring(0, ultimoPunto);
+              
+                                    var Mikrotiks = obj.GetMikrotikbyIPAntena(subred).Result;
+                                    EsAntena = true;
+                                    if(Mikrotiks.Id == 0)
+                                    {
+                                        Mikrotiks = obj.GetMikrotikbyIPFibra(subred).Result;
+                                        EsAntena = false;
+                                    }
+                                if (MikrotkConexion != Mikrotiks.Id)
+                                {
+                                    MikrotkConexion = Mikrotiks.Id;
+                                    if (mikrotik != null)
+                                    {
+                                        await Task.Run(() => mikrotik.Close());
+                                        mikrotik = null;
+                                    }
+                                    mikrotik = new MK(Mikrotiks.IP, Convert.ToInt32(Mikrotiks.Port));
+                                    // Usamos Task.Run para que la conexión no detenga la ventana
+                                    bool login = await Task.Run(() =>
+                                    {
+                                        return mikrotik.ConectarYLogin(Mikrotiks.Usuario, Mikrotiks.Password);
+                                    });
+                                    if (login == false)
+                                    {
+                                        MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        return;
+                                    }
+                                }
+                                if (EsAntena == true)
+                                {
+                                    await mikrotik.EliminarQueuePorTarjet(ipExtraida);
+                                    await mikrotik.EliminarAntenabyTarjet(ipExtraida);
+                                }
+                                else
+                                {
+                                    await mikrotik.EliminarFibrabyTarjet(ipExtraida);
+                                    await mikrotik.DeleteInterfacebyName(NombreUsuario);
+                                }
+                            }
+                        }
+                    }
                 }
                 MessageBox.Show("Usuarios eliminados del Mikrotik correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                BuscarUsuarios();
+
             }
             catch (Exception ex)
             {
@@ -507,5 +583,6 @@ namespace Mikrotik_Administrador
                 btnEliminar.Enabled = true;
             }
         }
+
     }
 }
