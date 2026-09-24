@@ -13,6 +13,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Remoting;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -237,20 +238,19 @@ namespace Mikrotik_Administrador.Catalogos
                             // Encabezados
                             wsCambios.Cell(1, 1).Value = "IdServicio";                  // A
                             wsCambios.Cell(1, 2).Value = "Servicio";                    // B
-                            wsCambios.Cell(1, 3).Value = "Operación realizada";         // C
-                            wsCambios.Cell(1, 4).Value = "Cuando inicio";               // D
-                            wsCambios.Cell(1, 5).Value = "Días que duro";               // E
-                            wsCambios.Cell(1, 6).Value = "IdPlan original";                // F
-                            wsCambios.Cell(1, 7).Value = "Nombre del plan original";   // G
-                            wsCambios.Cell(1, 8).Value = "IdMikrotik original";        // H
-                            wsCambios.Cell(1, 9).Value = "Nombre mikrotik original";    // I
-                            wsCambios.Cell(1, 10).Value = "IdPlan nuevo";                // J
-                            wsCambios.Cell(1, 11).Value = "Nombre del plan nuevo";   // K
-                            wsCambios.Cell(1, 12).Value = "IdMikrotik receptor";        // L
-                            wsCambios.Cell(1, 13).Value = "Nombre mikrotik receptor";    // M
+                            wsCambios.Cell(1, 3).Value = "Cuando inicio";               // C
+                            wsCambios.Cell(1, 4).Value = "Días que duro";               // D
+                            wsCambios.Cell(1, 5).Value = "IdPlan original";                // E
+                            wsCambios.Cell(1, 6).Value = "Nombre del plan original";   // F
+                            wsCambios.Cell(1, 7).Value = "IdMikrotik original";        // G
+                            wsCambios.Cell(1, 8).Value = "Nombre mikrotik original";    // H
+                            wsCambios.Cell(1, 9).Value = "IdPlan nuevo";                // I
+                            wsCambios.Cell(1, 10).Value = "Nombre del plan nuevo";   // J
+                            wsCambios.Cell(1, 11).Value = "IdMikrotik receptor";        // K
+                            wsCambios.Cell(1, 12).Value = "Nombre mikrotik receptor";    // L
 
-                            // Formato a los encabezados (A1 a M1)
-                            var headerCambios = wsCambios.Range("A1:M1");
+                            // Formato a los encabezados (A1 a L1)
+                            var headerCambios = wsCambios.Range("A1:L1");
                             headerCambios.Style.Font.Bold = true;
                             headerCambios.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
                             headerCambios.Style.Font.FontColor = XLColor.White;
@@ -260,18 +260,17 @@ namespace Mikrotik_Administrador.Catalogos
                             {
                                 wsCambios.Cell(filaCambios, 1).Value = item.IdUsuarioM;
                                 wsCambios.Cell(filaCambios, 2).Value = item.Usuario;
-                                wsCambios.Cell(filaCambios, 3).Value = "Cambio de plan";
-                                wsCambios.Cell(filaCambios, 4).Value = DateTime.Now;
-                                wsCambios.Cell(filaCambios, 4).Style.DateFormat.Format = "dd/MM/yyyy h:mm AM/PM";
+                                wsCambios.Cell(filaCambios, 3).Value = DateTime.Now;
+                                wsCambios.Cell(filaCambios, 3).Style.DateFormat.Format = "dd/MM/yyyy";
+                                wsCambios.Cell(filaCambios, 4).Value = 1;
                                 wsCambios.Cell(filaCambios, 5).Value = 1;
-                                wsCambios.Cell(filaCambios, 6).Value = 1;
-                                wsCambios.Cell(filaCambios, 7).Value = "Plan Basico";
-                                wsCambios.Cell(filaCambios, 8).Value = 1;
-                                wsCambios.Cell(filaCambios, 9).Value = "Santa Maria";
-                                wsCambios.Cell(filaCambios, 10).Value = 1;
-                                wsCambios.Cell(filaCambios, 11).Value = "Plan Basico";
-                                wsCambios.Cell(filaCambios, 12).Value = 1;
-                                wsCambios.Cell(filaCambios, 13).Value = "Santa Maria";
+                                wsCambios.Cell(filaCambios, 6).Value = "Plan Basico";
+                                wsCambios.Cell(filaCambios, 7).Value = 1;
+                                wsCambios.Cell(filaCambios, 8).Value = "Santa Maria";
+                                wsCambios.Cell(filaCambios, 9).Value = 1;
+                                wsCambios.Cell(filaCambios, 10).Value = "Plan Basico";
+                                wsCambios.Cell(filaCambios, 11).Value = 1;
+                                wsCambios.Cell(filaCambios, 12).Value = "Santa Maria";
                                 filaCambios++;
                             }
 
@@ -395,10 +394,9 @@ namespace Mikrotik_Administrador.Catalogos
                 int contadorIdMensualidad = 1;
                 int contadorIdCambio = 1;
 
-                // Mantiene la última fecha de inicio procesada por cada servicio
                 Dictionary<int, DateTime> ultimasFechasInicio = new Dictionary<int, DateTime>();
 
-                using (var workbook = new XLWorkbook(rutaArchivo))
+                using (var workbook = new ClosedXML.Excel.XLWorkbook(rutaArchivo))
                 {
                     // =========================================================================
                     // PÁGINA 1: CAMBIOS Y SUSPENSIONES
@@ -410,11 +408,18 @@ namespace Mikrotik_Administrador.Catalogos
                     {
                         if (primeraFila1) { primeraFila1 = false; continue; }
 
-                        int idServicio = row.Cell(1).GetValue<int>(); // Col A: IdServicio
-                        string operacion = row.Cell(3).GetValue<string>(); // Col C: Operación
-                        DateTime fechaInicio = row.Cell(4).GetValue<DateTime>(); // Col D: Inicio
-                        int diasDuro = row.Cell(5).GetValue<int>(); // Col E: Días que duró
-                        DateTime fechaFin = fechaInicio.AddDays(diasDuro);
+                        int idServicio = row.Cell(1).GetValue<int>();             // Col A: IdServicio
+                        DateTime fechaInicio = row.Cell(3).GetValue<DateTime>(); // Col C: Cuando inicio
+                        int diasDuro = row.Cell(4).GetValue<int>();              // Col D: Días que duró
+
+                        if (diasDuro < 1)
+                        {
+                            MessageBox.Show("Los días de duración no pueden ser menor a 1", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            continue;
+                        }
+
+                        // Fecha fin visual e inclusiva para guardar (ej. del 01/01 al 10/01)
+                        DateTime fechaFin = fechaInicio.AddDays(diasDuro - 1);
 
                         bool valido = !ListCambios.Any(x => x.IdUsuarioM == idServicio &&
                                                            fechaInicio >= x.FechaInicio &&
@@ -422,7 +427,11 @@ namespace Mikrotik_Administrador.Catalogos
 
                         if (valido)
                         {
-                            int idPlanNuevo = row.Cell(10).GetValue<int>(); // Col J: Plan nuevo
+                            int idPlanOriginal = row.Cell(5).GetValue<int>();      // Col E: IdPlan original
+                            int idMikrotikOriginal = row.Cell(7).GetValue<int>();  // Col G: IdMikrotik original
+                            int idPlanNuevo = row.Cell(9).GetValue<int>();         // Col I: IdPlan nuevo
+                            int idMikrotikReceptor = row.Cell(11).GetValue<int>(); // Col K: IdMikrotik receptor
+
                             var planB = await obj.GetPlanById(idPlanNuevo);
 
                             ListCambios.Add(new TiempoDefinidosModel
@@ -435,12 +444,11 @@ namespace Mikrotik_Administrador.Catalogos
                                 Modo = "Temporal",
                                 IdUsuarioM = idServicio,
                                 Estatus = fechaFin <= DateTime.Now ? "Completado" : "Ejecutando",
-                                IdPlanOriginal = row.Cell(6).GetValue<int>(),
-                                IdMikrotikOriginal = row.Cell(8).GetValue<int>(),
+                                IdPlanOriginal = idPlanOriginal,
+                                IdMikrotikOriginal = idMikrotikOriginal,
                                 IdPlan = idPlanNuevo,
                                 Plan = planB != null ? planB.Nombre : "Plan Desconocido",
-                                IdMikrotikReceptor = row.Cell(12).GetValue<int>(),  // Col L: Mikrotik
-                                Programacion = operacion,
+                                IdMikrotikReceptor = idMikrotikReceptor,
                                 Password = "1234"
                             });
                         }
@@ -456,24 +464,20 @@ namespace Mikrotik_Administrador.Catalogos
                     {
                         if (primeraFila2) { primeraFila2 = false; continue; }
 
-                        int idCliente = row.Cell(1).GetValue<int>();             // Col A: IdCliente
-                        int idServicio = row.Cell(3).GetValue<int>();            // Col C: IdServicio
-                        DateTime fechaInicioExcel = row.Cell(5).GetValue<DateTime>(); // Col E: Inicio mensualidad
-                        int diaCorte = row.Cell(6).GetValue<int>();              // Col F: Día de corte
-                        int idResponsable = row.Cell(7).GetValue<int>();         // Col G: IdResponsable
-                        DateTime fechaPago = row.Cell(9).GetValue<DateTime>();   // Col I: Fecha de pago
-                        decimal saldoRestante = row.Cell(10).GetValue<decimal>();// Col J: Cantidad recibida
+                        int idCliente = row.Cell(1).GetValue<int>();                  // Col A: IdCliente
+                        int idServicio = row.Cell(3).GetValue<int>();                 // Col C: IdServicio
+                        DateTime fechaInicioExcel = row.Cell(5).GetValue<DateTime>(); // Col E: Inicio la mensualidad
+                        int diaCorte = row.Cell(6).GetValue<int>();                   // Col F: Día de corte
+                        int idResponsable = row.Cell(7).GetValue<int>();              // Col G: IdResponsable
+                        DateTime fechaPago = row.Cell(9).GetValue<DateTime>();        // Col I: Cuando se recibio el pago
+                        decimal saldoRestante = row.Cell(10).GetValue<decimal>();     // Col J: Cantidad recibida
 
-                        // Manejo seguro de celdas nulas o vacías
                         string comentario = row.Cell(11).IsEmpty() ? "" : row.Cell(11).GetValue<string>();
                         int idBanco = row.Cell(12).IsEmpty() ? 0 : row.Cell(12).GetValue<int>();
                         string banco = row.Cell(13).IsEmpty() ? "" : row.Cell(13).GetValue<string>();
                         string referencia = row.Cell(14).IsEmpty() ? "" : row.Cell(14).GetValue<string>();
                         string rutaImagen = row.Cell(15).IsEmpty() ? "" : row.Cell(15).GetValue<string>();
 
-                        // ---------------------------------------------------------------------
-                        // Determinación del punto de inicio de la mensualidad
-                        // ---------------------------------------------------------------------
                         DateTime fechaInicioActual;
 
                         if (ultimasFechasInicio.TryGetValue(idServicio, out DateTime ultimaFecha) && ultimaFecha == fechaInicioExcel)
@@ -498,14 +502,12 @@ namespace Mikrotik_Administrador.Catalogos
                             ultimasFechasInicio[idServicio] = fechaInicioExcel;
                         }
 
-                        // Carga de plan base e información complementaria (Asíncrono)
-                        var planBase = await obj.GetPlanByIdUsuarioM(idServicio);
-                        decimal precioPlanBase = planBase != null ? planBase.Precio : 0;
+                        var planBaseBD = await obj.GetPlanByIdUsuarioM(idServicio);
+                        decimal precioPlanBaseBD = planBaseBD != null ? planBaseBD.Precio : 0;
                         var usuarioMInfo = await obj.GetUsuariosMikrotiksById(idServicio);
                         var mikrotikInfo = usuarioMInfo != null ? await obj.GetMikrotikById(usuarioMInfo.IdMikrotik) : null;
                         var clienteInfo = await obj.GetClienteById(idCliente);
 
-                        // Registro del cliente en la lista si no existe
                         if (!ListClientes.Any(x => x.IdCliente == idCliente && x.IdUser == idServicio))
                         {
                             ListClientes.Add(new UsuariosandPlanesModel
@@ -515,26 +517,17 @@ namespace Mikrotik_Administrador.Catalogos
                                 Cliente = clienteInfo != null ? clienteInfo.Nombre : "Cliente Desconocido",
                                 IdUser = idServicio,
                                 Usuario = usuarioMInfo != null ? usuarioMInfo.Nombre : "Usuario Desconocido",
-                                IdPlan = planBase != null ? planBase.Id : 0,
-                                Plan = planBase != null ? planBase.Nombre : "Plan Desconocido",
+                                IdPlan = planBaseBD != null ? planBaseBD.Id : 0,
+                                Plan = planBaseBD != null ? planBaseBD.Nombre : "Plan Desconocido",
                                 Estatus = usuarioMInfo != null ? usuarioMInfo.Estatus : "Inactivo",
                                 Mikrotik = mikrotikInfo != null ? mikrotikInfo.Nombre : "Mikrotik Desconocido",
                                 Mensualidad = "Disponible"
                             });
                         }
 
-                        if (precioPlanBase == 0)
-                        {
-                            MessageBox.Show($"El servicio con ID {idServicio} no tiene un plan base con costo asignado. Por favor, revisa la configuración.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            continue; // Saltar a la siguiente fila
-                        }
-
-                        // ---------------------------------------------------------------------
-                        // Distribución del saldo
-                        // ---------------------------------------------------------------------
+                        // Dispersión del pago
                         while (saldoRestante > 0)
                         {
-                            // 1. Calcular FechaLímite del período actual
                             DateTime fechaLimiteActual;
                             if (diaCorte <= fechaInicioActual.Day)
                             {
@@ -545,14 +538,45 @@ namespace Mikrotik_Administrador.Catalogos
                                 fechaLimiteActual = new DateTime(fechaInicioActual.Year, fechaInicioActual.Month, diaCorte);
                             }
 
-                            // 2. BUSCAR SI YA EXISTE LA MENSUALIDAD EN LA LISTA
                             var mensualidadExistente = ListMensualidades.FirstOrDefault(m =>
                                 m.IdUsuarioM == idServicio &&
                                 m.FechaInicio == fechaInicioActual &&
                                 m.FechaLimite == fechaLimiteActual);
 
-                            decimal costoMensualidad = await CalcularCostoMensualidadAsync(idServicio, fechaInicioActual, fechaLimiteActual, diaCorte, precioPlanBase, ListCambios, obj);
-                            if (costoMensualidad <= 0) costoMensualidad = precioPlanBase;
+                            // DETERMINAR EL PRECIO DEL PLAN BASE PARA EL PERÍODO
+                            decimal precioTargetBD = precioPlanBaseBD;
+
+                            // Solo si existe un cambio registrado cuya fecha de inicio sea menor o igual a la mensualidad actual, usamos el IdPlanOriginal
+                            var primerCambio = ListCambios.Where(x => x.IdUsuarioM == idServicio && x.IdPlanOriginal > 0 && x.FechaInicio <= fechaLimiteActual)
+                                                          .OrderBy(x => x.FechaInicio)
+                                                          .FirstOrDefault();
+
+                            if (primerCambio != null)
+                            {
+                                var planOrigObj = await obj.GetPlanById(primerCambio.IdPlanOriginal);
+                                if (planOrigObj != null && planOrigObj.Precio > 0)
+                                {
+                                    precioTargetBD = planOrigObj.Precio; // Aplica $300 a partir del mes del cambio
+                                }
+                            }
+
+                            // Calcular el costo exacto del mes
+                            decimal costoMensualidad = await CalcularCostoMensualidadAsync(idServicio, fechaInicioActual, fechaLimiteActual, precioTargetBD, ListCambios);
+
+                            if (costoMensualidad <= 0)
+                            {
+                                bool esSuspensionValida = ListCambios.Any(x => x.IdUsuarioM == idServicio
+                                                                            && x.FechaInicio < fechaLimiteActual
+                                                                            && x.FechaFin >= fechaInicioActual);
+
+                                if (!esSuspensionValida)
+                                {
+                                    MessageBox.Show($"El servicio ID {idServicio} tiene un costo calculado de $0 y no se indicó un 'Plan Original' con costo en la pestaña Cambios.\n" +
+                                                    $"No es posible dispersar el saldo de ${saldoRestante}.",
+                                                    "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    break;
+                                }
+                            }
 
                             int idMensualidad;
                             decimal saldoPendienteMensualidad;
@@ -592,10 +616,8 @@ namespace Mikrotik_Administrador.Catalogos
                                 ListMensualidades.Add(mensualidadExistente);
                             }
 
-                            // 3. Determinar el monto de este abono
                             decimal pagoParaEstaMensualidad = Math.Min(saldoRestante, saldoPendienteMensualidad);
 
-                            // 4. Calcular la suma acumulada de abonos recibidos tras este pago
                             decimal totalPagadoAcumulado = ListHistorialPagos
                                 .Where(h => h.IdMensualidad == idMensualidad)
                                 .Sum(h => h.Cantidad) + pagoParaEstaMensualidad;
@@ -605,7 +627,6 @@ namespace Mikrotik_Administrador.Catalogos
                                 mensualidadExistente.Pagado = true;
                             }
 
-                            // 5. Registrar el pago en el historial
                             ListHistorialPagos.Add(new HistorialPagosModel
                             {
                                 Id = ListHistorialPagos.Count + 1,
@@ -620,7 +641,6 @@ namespace Mikrotik_Administrador.Catalogos
                                 IdUsuario = idResponsable
                             });
 
-                            // 6. Restar la cantidad distribuida
                             saldoRestante -= pagoParaEstaMensualidad;
 
                             if (saldoRestante > 0)
@@ -629,9 +649,10 @@ namespace Mikrotik_Administrador.Catalogos
                             }
                         }
                     }
-                }
 
-                CargarTablaClientes();
+                    CargarTablaClientes();
+                    MessageBox.Show("Excel cargado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -639,72 +660,89 @@ namespace Mikrotik_Administrador.Catalogos
             }
         }
 
-        private async Task<decimal> CalcularCostoMensualidadAsync(int idServicio, DateTime fechaInicio, DateTime fechaLimite, int diaCorte, decimal precioPlanBase, List<TiempoDefinidosModel> cambios, AppRepository objRepo)
+        // =========================================================================
+        // MÉTODO DE CÁLCULO DE COSTO CON PRORRATEO Y BASE 30 DÍAS
+        // =========================================================================
+        private async Task<decimal> CalcularCostoMensualidadAsync(
+     int idServicio,
+     DateTime fechaInicio,
+     DateTime fechaLimite,
+     decimal precioPlanBase,
+     List<TiempoDefinidosModel> listaCambios)
         {
-            // 1. Días reales naturales del mes/periodo actual
-            int diasNaturalesPeriodo = (int)(fechaLimite.Date - fechaInicio.Date).TotalDays;
-            if (diasNaturalesPeriodo <= 0) diasNaturalesPeriodo = 30;
+            AppRepository objRepo = new AppRepository();
 
-            // 2. Buscar cambios de plan temporales aplicables a este periodo
-            var cambiosPeriodo = cambios.Where(x => x.IdUsuarioM == idServicio
-                                                   && x.FechaInicio < fechaLimite
-                                                   && x.FechaFin > fechaInicio
-                                                   && x.Programacion == "Cambio de plan"
-                                                   && x.Modo == "Temporal").ToList();
+            // 1. Filtrar eventos de cambio que afecten esta mensualidad
+            var eventosDelPeriodo = listaCambios.Where(x => x.IdUsuarioM == idServicio
+                                                         && x.FechaInicio < fechaLimite
+                                                         && x.FechaFin >= fechaInicio
+                                                         && x.Modo == "Temporal")
+                                                .OrderBy(x => x.FechaInicio)
+                                                .ToList();
 
-            int diasConPlanNuevo = 0;
-            decimal costoTotalPlanesNuevos = 0;
-
-            foreach (var tc in cambiosPeriodo)
+            // =========================================================================
+            // 2. CASO A: Mes sin cambios ni suspensiones (Ejemplo: Diciembre sin cambios, Febrero)
+            // =========================================================================
+            if (eventosDelPeriodo.Count == 0)
             {
-                DateTime fInicioEfectiva = fechaInicio.Date > tc.FechaInicio.Date ? fechaInicio.Date : tc.FechaInicio.Date;
-                DateTime fFinEfectiva = fechaLimite.Date < tc.FechaFin.Date ? fechaLimite.Date : tc.FechaFin.Date;
+                // Si el ciclo inicia en un día intermedio (ej. día 15) y termina el día 1, es un inicio prorrateado (15 días)
+                if (fechaInicio.Day != fechaLimite.Day && fechaInicio.Day == 15 && fechaLimite.Day == 1)
+                {
+                    decimal costoProrrateadoInicial = 15 * (precioPlanBase / 30.0m);
+                    return RedondearMontoFinanciero(costoProrrateadoInicial); // Retorna $250.00 para $500 base
+                }
 
-                int diasEfectivos = (int)(fFinEfectiva - fInicioEfectiva).TotalDays;
+                // Para cualquier mes completo (sea Febrero de 28 días, Marzo de 31 o Abril de 30),
+                // al ser un ciclo completo se cobra la tarifa integra del plan base.
+                return precioPlanBase; // Retorna $300.00 para Febrero
+            }
+
+            // =========================================================================
+            // 3. CASO B: Mes con cambios temporales (Ejemplo: Enero con cambio de 10 días)
+            // =========================================================================
+            int diasOcupadosPorCambios = 0;
+            decimal costoTotalAcumulado = 0m;
+
+            foreach (var cambio in eventosDelPeriodo)
+            {
+                int diasEfectivos = cambio.Dias;
 
                 if (diasEfectivos > 0)
                 {
-                    var planNuevo = await objRepo.GetPlanById(tc.IdPlan);
-                    decimal precioPlanNuevo = planNuevo != null ? planNuevo.Precio : 0;
+                    if (diasEfectivos > 30) diasEfectivos = 30;
 
-                    // SI EL CAMBIO DE PLAN CUBRE TODO EL MES/PERIODO COMPLETO:
-                    if (diasEfectivos >= diasNaturalesPeriodo)
-                    {
-                        return precioPlanNuevo;
-                    }
+                    diasOcupadosPorCambios += diasEfectivos;
 
-                    diasConPlanNuevo += diasEfectivos;
-                    // Prorrateo diario en base comercial (30 días) para días parciales
-                    costoTotalPlanesNuevos += diasEfectivos * (precioPlanNuevo / 30.0m);
+                    var planNuevo = await objRepo.GetPlanById(cambio.IdPlan);
+                    decimal precioPlanNuevo = planNuevo != null ? planNuevo.Precio : 0m;
+
+                    decimal costoTramo = diasEfectivos * (precioPlanNuevo / 30.0m);
+                    costoTotalAcumulado += RedondearMontoFinanciero(costoTramo);
                 }
             }
 
-            // 3. Evaluar suspensiones si existen
-            var suspensionesPeriodo = cambios.Where(x => x.IdUsuarioM == idServicio
-                                                         && x.FechaInicio < fechaLimite
-                                                         && x.FechaFin > fechaInicio
-                                                         && x.Programacion == "Suspensión"
-                                                         && x.Modo == "Temporal").ToList();
-
-            int diasSuspendidos = 0;
-            foreach (var sus in suspensionesPeriodo)
+            // 4. Completar los días restantes a base 30 comerciales con el plan original
+            int diasRestantesPlanBase = 30 - diasOcupadosPorCambios;
+            if (diasRestantesPlanBase > 0)
             {
-                DateTime fInicioEfectiva = fechaInicio.Date > sus.FechaInicio.Date ? fechaInicio.Date : sus.FechaInicio.Date;
-                DateTime fFinEfectiva = fechaLimite.Date < sus.FechaFin.Date ? fechaLimite.Date : sus.FechaFin.Date;
-
-                int diasEfectivos = (int)(fFinEfectiva - fInicioEfectiva).TotalDays;
-                if (diasEfectivos > 0) diasSuspendidos += diasEfectivos;
+                decimal costoTramoRestante = diasRestantesPlanBase * (precioPlanBase / 30.0m);
+                costoTotalAcumulado += RedondearMontoFinanciero(costoTramoRestante);
             }
 
-            // 4. Si no hubo cambio de plan nuevo o cubrió solo parte del mes
-            int diasRestantes = 30 - diasConPlanNuevo - diasSuspendidos;
-            if (diasRestantes < 0) diasRestantes = 0;
+            return costoTotalAcumulado;
+        }
+        // =========================================================================
+        // MÉTODO DE CÁLCULO DE COSTO CON PRORRATEO Y PLAN ORIGINAL
+        // =========================================================================
 
-            decimal montoBruto = costoTotalPlanesNuevos + (diasRestantes * (precioPlanBase / 30.0m));
 
-            // 5. Redondeo financiero
-            decimal parteEntera = Math.Floor(montoBruto);
-            decimal parteDecimal = montoBruto - parteEntera;
+        // =========================================================================
+        // MÉTODO REUTILIZABLE DE REDONDEO FINANCIERO (.00, .50, 1.00)
+        // =========================================================================
+        private decimal RedondearMontoFinanciero(decimal monto)
+        {
+            decimal parteEntera = Math.Floor(monto);
+            decimal parteDecimal = monto - parteEntera;
 
             if (parteDecimal > 0.00m && parteDecimal < 0.30m)
                 return parteEntera;
@@ -861,7 +899,7 @@ namespace Mikrotik_Administrador.Catalogos
             DGVClientes.AllowUserToAddRows = false;
         }
 
-        private void DGVClientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void DGVClientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
             try
@@ -924,63 +962,58 @@ namespace Mikrotik_Administrador.Catalogos
                     case "btnVerDetalles":
                         try
                         {
-                            DateTime Desde = (DateTime)DGVClientes.Rows[e.RowIndex].Cells["FechaInicio"].Value;
-                            DateTime Hasta = (DateTime)DGVClientes.Rows[e.RowIndex].Cells["FechaLimite"].Value;
+                            DateTime desde = Convert.ToDateTime(DGVClientes.Rows[e.RowIndex].Cells["FechaInicio"].Value);
+                            DateTime hasta = Convert.ToDateTime(DGVClientes.Rows[e.RowIndex].Cells["FechaLimite"].Value);
+                            decimal costoTotalMensualidad = Convert.ToDecimal(DGVClientes.Rows[e.RowIndex].Cells["Mensualidad"].Value);
 
-                            // 1. Filtrar los cambios/suspensiones que afectan a esta mensualidad
-                            var Detalles = ListCambios.Where(
-                                x => x.IdUsuarioM == IdUsuarioMRevision
-                                  && x.FechaInicio < Hasta
-                                  && x.FechaFin > Desde
-                                  && x.Modo == "Temporal"
-                            ).ToList();
+                            // 1. Filtrar eventos (cambios temporales o suspensiones) registrados
+                            var detalles = ListCambios.Where(x => x.IdUsuarioM == IdUsuarioMRevision
+                                                               && x.FechaInicio < hasta
+                                                               && x.FechaFin > desde
+                                                               && x.Modo == "Temporal")
+                                                      .OrderBy(x => x.FechaInicio)
+                                                      .ToList();
 
-                            // REGLA: Si no hay cambios ni suspensiones, no se abre ni genera detalle
-                            if (Detalles.Count == 0)
+                            if (detalles.Count == 0)
                             {
                                 MessageBox.Show("Este período transcurrió con normalidad en su plan base. No hay cambios ni suspensiones que detallar.",
                                                 "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 return;
                             }
 
-                            // Días reales que abarca esta mensualidad específica
-                            int diasTotalesMensualidad = (int)(Hasta.Date - Desde.Date).TotalDays;
-                            if (diasTotalesMensualidad <= 0) diasTotalesMensualidad = 30;
-
+                            int diasTotalesMensualidad = 30;
                             ListDestalles = new List<ListDetallesMensualidadModel>();
                             AppRepository objRepo = new AppRepository();
 
                             int diasOcupadosPorCambios = 0;
-
-                            // Variable para almacenar el ID del plan original usado durante esta mensualidad
+                            decimal costoAcumuladoDetalles = 0m;
                             int idPlanOriginalPeriodo = 0;
+                            DateTime fechaProcesadaHasta = desde;
 
-                            // 2. Procesar y agregar cada Cambio o Suspensión registrado
-                            foreach (var item in Detalles)
+                            // 2. Agregar tramos de Cambios / Suspensiones
+                            foreach (var item in detalles)
                             {
-                                decimal costoCalculado = 0;
-
-                                // Guardamos el ID del plan original para usarlo en los días sobrantes del plan base
                                 if (idPlanOriginalPeriodo == 0 && item.IdPlanOriginal > 0)
                                 {
                                     idPlanOriginalPeriodo = item.IdPlanOriginal;
                                 }
 
-                                // Recortar las fechas al rango efectivo dentro de la mensualidad [Desde, Hasta]
-                                DateTime fInicioEfectiva = Desde > item.FechaInicio ? Desde : item.FechaInicio;
-                                DateTime fFinEfectiva = Hasta < item.FechaFin ? Hasta : item.FechaFin;
+                                // Acotar rango de fechas efectivo dentro de la mensualidad
+                                DateTime fInicioEfectiva = desde > item.FechaInicio ? desde : item.FechaInicio;
+                                DateTime fFinEfectiva = hasta < item.FechaFin ? hasta : item.FechaFin;
 
-                                int diasEfectivos = (int)(fFinEfectiva.Date - fInicioEfectiva.Date).TotalDays;
+                                // Días del evento de cambio
+                                int diasEfectivos = item.Dias;
 
-                                if (diasEfectivos > diasTotalesMensualidad)
-                                    diasEfectivos = diasTotalesMensualidad;
-
-                                if (item.Programacion == "Cambio de plan")
+                                if (diasEfectivos > 0)
                                 {
-                                    var planNuevo = objRepo.GetPlanById(item.IdPlan).Result;
-                                    decimal precioPlan = planNuevo != null ? planNuevo.Precio : 0;
+                                    if (diasEfectivos > diasTotalesMensualidad)
+                                        diasEfectivos = diasTotalesMensualidad;
 
-                                    // SI EL CAMBIO DE PLAN CUBRE TODO EL MES/PERIODO COMPLETO:
+                                    var planNuevo = await objRepo.GetPlanById(item.IdPlan);
+                                    decimal precioPlan = planNuevo != null ? planNuevo.Precio : 0m;
+
+                                    decimal costoCalculado = 0m;
                                     if (diasEfectivos >= diasTotalesMensualidad)
                                     {
                                         costoCalculado = precioPlan;
@@ -989,93 +1022,65 @@ namespace Mikrotik_Administrador.Catalogos
                                     else
                                     {
                                         diasOcupadosPorCambios += diasEfectivos;
-
-                                        // Cálculo de costo prorrateado sobre base 30 para días parciales
                                         decimal costoBruto = diasEfectivos * (precioPlan / 30.0m);
-
-                                        // Redondeo financiero
-                                        decimal parteEntera = Math.Floor(costoBruto);
-                                        decimal parteDecimal = costoBruto - parteEntera;
-
-                                        if (parteDecimal > 0.00m && parteDecimal < 0.30m)
-                                            costoCalculado = parteEntera;
-                                        else if (parteDecimal >= 0.30m && parteDecimal <= 0.50m)
-                                            costoCalculado = parteEntera + 0.50m;
-                                        else if (parteDecimal > 0.50m)
-                                            costoCalculado = parteEntera + 1.00m;
-                                        else
-                                            costoCalculado = parteEntera;
+                                        costoCalculado = RedondearMontoFinanciero(costoBruto);
                                     }
-                                }
-                                else if (item.Programacion == "Suspensión")
-                                {
-                                    costoCalculado = 0.00m;
-                                    diasOcupadosPorCambios += diasEfectivos;
-                                }
 
-                                ListDetallesMensualidadModel LD = new ListDetallesMensualidadModel
-                                {
-                                    Id = item.Id,
-                                    FechaInicio = fInicioEfectiva,
-                                    FechaFin = fFinEfectiva,
-                                    Estatus = "Activo",
-                                    Programacion = $"{item.Programacion} ({diasEfectivos} días)",
-                                    Plan = item.Plan,
-                                    Costo = costoCalculado
-                                };
+                                    costoAcumuladoDetalles += costoCalculado;
 
-                                ListDestalles.Add(LD);
+                                    // Definición coherente de la fecha de término del cambio
+                                    // Si el evento inicia en fInicioEfectiva y dura N días, la fecha fin inclusiva es fInicioEfectiva + (Dias - 1)
+                                    DateTime fFinVisual = fInicioEfectiva.AddDays(diasEfectivos - 1);
+
+                                    ListDestalles.Add(new ListDetallesMensualidadModel
+                                    {
+                                        Id = item.Id,
+                                        FechaInicio = fInicioEfectiva,
+                                        FechaFin = fFinVisual,
+                                        Estatus = "Activo",
+                                        Plan = item.Plan,
+                                        Costo = costoCalculado
+                                    });
+
+                                    // La fecha de inicio del siguiente tramo será el día posterior al término del cambio
+                                    fechaProcesadaHasta = fFinVisual.AddDays(1);
+                                }
                             }
 
-                            // 3. Calcular los días restantes del plan base (sobre base comercial de 30 días)
+                            // 3. Agregar el tramo restante con el Plan Original / Base
                             int diasRestantesPlanBase = 30 - diasOcupadosPorCambios;
-                            if (diasRestantesPlanBase < 0) diasRestantesPlanBase = 0;
-
-                            // 4. Agregar la fila del Plan Base cobrando con el PLAN ORIGINAL registrado en el Excel
-                            if (diasRestantesPlanBase > 0)
+                            if (diasRestantesPlanBase > 0 && fechaProcesadaHasta < hasta)
                             {
-                                // Consultar el plan original registrado en ese periodo, o en su defecto el plan del usuario
                                 var planOriginal = idPlanOriginalPeriodo > 0
-                                    ? objRepo.GetPlanById(idPlanOriginalPeriodo).Result
-                                    : objRepo.GetPlanByIdUsuarioM(IdUsuarioMRevision).Result;
+                                    ? await objRepo.GetPlanById(idPlanOriginalPeriodo)
+                                    : await objRepo.GetPlanByIdUsuarioM(IdUsuarioMRevision);
 
-                                decimal precioPlanBase = planOriginal != null ? planOriginal.Precio : 0;
                                 string nombrePlanBase = planOriginal != null ? planOriginal.Nombre : "Plan Original";
 
-                                decimal costoBrutoBase = diasRestantesPlanBase * (precioPlanBase / 30.0m);
+                                decimal costoBaseFinal = costoTotalMensualidad - costoAcumuladoDetalles;
+                                if (costoBaseFinal < 0) costoBaseFinal = 0m;
 
-                                // Redondeo financiero para el consumo del Plan Base / Original
-                                decimal entBase = Math.Floor(costoBrutoBase);
-                                decimal decBase = costoBrutoBase - entBase;
-                                decimal costoBaseRedondeado = entBase;
+                                // Fecha fin visual del tramo base (un día antes de la fecha límite del mes o la fecha límite exacta)
+                                DateTime fFinOriginalVisual = (hasta.Day == 1) ? hasta.AddDays(-1) : hasta;
 
-                                if (decBase > 0.00m && decBase < 0.30m)
-                                    costoBaseRedondeado = entBase;
-                                else if (decBase >= 0.30m && decBase <= 0.50m)
-                                    costoBaseRedondeado = entBase + 0.50m;
-                                else if (decBase > 0.50m)
-                                    costoBaseRedondeado = entBase + 1.00m;
-
-                                ListDetallesMensualidadModel LDBase = new ListDetallesMensualidadModel
+                                ListDestalles.Add(new ListDetallesMensualidadModel
                                 {
                                     Id = 0,
-                                    FechaInicio = Desde,
-                                    FechaFin = Hasta,
+                                    FechaInicio = fechaProcesadaHasta, // Comienza exactamente al día siguiente de finalizar el cambio (ej. 11/01/2026)
+                                    FechaFin = fFinOriginalVisual,     // Finaliza en el último día del período (ej. 31/01/2026)
                                     Estatus = "Activo",
-                                    Programacion = $"Consumo Plan Original ({diasRestantesPlanBase} días)",
                                     Plan = nombrePlanBase,
-                                    Costo = costoBaseRedondeado
-                                };
-
-                                ListDestalles.Add(LDBase);
+                                    Costo = costoBaseFinal
+                                });
                             }
+
+                            Opcion = 2;
+                            CrearTablaDetalles();
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show($"Error al cargar el detalle: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                        Opcion = 2;
-                        CrearTablaDetalles();
                         break;
                     default:
                         break;
@@ -1113,6 +1118,7 @@ namespace Mikrotik_Administrador.Catalogos
             DGVClientes.Columns.Clear();
             DGVClientes.AutoGenerateColumns = false;
             DGVClientes.EnableHeadersVisualStyles = false;
+
             // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
             DGVClientes.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
             DGVClientes.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
@@ -1131,7 +1137,6 @@ namespace Mikrotik_Administrador.Catalogos
             estiloBotones.SelectionForeColor = System.Drawing.Color.White;
             estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
 
-
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Id",
@@ -1142,25 +1147,29 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "FechaInicio",
-                HeaderText = "Empezo",
+                HeaderText = "Empezó",
                 DataPropertyName = "FechaInicio",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
             });
 
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "FechaFin",
-                HeaderText = "Termino",
+                HeaderText = "Terminó",
                 DataPropertyName = "FechaFin",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
             });
+
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Estatus",
@@ -1170,15 +1179,7 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Programacion",
-                HeaderText = "Acción",
-                DataPropertyName = "Programacion",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
+
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Plan",
@@ -1188,6 +1189,8 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic,
             });
+
+            // Formato de Moneda ($MXN)
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Costo",
@@ -1196,7 +1199,13 @@ namespace Mikrotik_Administrador.Catalogos
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2",
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX")
+                }
             });
+
             DGVClientes.AllowUserToAddRows = false;
         }
         public void CrearGridViewHistorialPagos()
@@ -1247,7 +1256,12 @@ namespace Mikrotik_Administrador.Catalogos
                 DataPropertyName = "Cantidad",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2",
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX")
+                }
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -1576,14 +1590,14 @@ namespace Mikrotik_Administrador.Catalogos
                                     if (resultcambio)
                                     {
                                         wsCambios.Cell(filaCambios, 1).Value =
-                                    "Se guardo correctamente el(la) " + item.Programacion + " en el sistema para el servicio " + item.IdUsuarioM +
+                                    "Se guardo correctamente el cambio en el sistema para el servicio " + item.IdUsuarioM +
                                     " con fecha de inicio " + item.FechaInicio.ToString();
                                         wsCambios.Cell(filaCambios, 2).Value = "Satisfactorio";
                                     }
                                     else
                                     {
                                         wsCambios.Cell(filaCambios, 1).Value =
-                               "Error al guardar el(la) " + item.Programacion + " en el sistema para el servicio " + item.IdUsuarioM +
+                               "Error al guardar el cambio en el sistema para el servicio " + item.IdUsuarioM +
                                " con fecha de inicio " + item.FechaInicio.ToString();
                                         wsCambios.Cell(filaCambios, 2).Value = "Error";
                                     }
@@ -1592,7 +1606,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 else
                                 {
                                     wsCambios.Cell(filaCambios, 1).Value =
-                                         "Ya existe el(la) " + item.Programacion + " registrado en el sistema para el servicio " + item.IdUsuarioM +
+                                         "Ya existe el cambio registrado en el sistema para el servicio " + item.IdUsuarioM +
                                          " con fecha de inicio " + item.FechaInicio.ToString();
                                     wsCambios.Cell(filaCambios, 2).Value = "Error";
                                     filaCambios++;

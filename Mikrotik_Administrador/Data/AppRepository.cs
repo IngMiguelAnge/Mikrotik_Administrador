@@ -590,7 +590,6 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotikReceptor", obj.IdMikrotikReceptor));
-                        cmd.Parameters.Add(new SqlParameter("@Programacion", obj.Programacion));
                         cmd.Parameters.Add(new SqlParameter("@Password", obj.Password));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
@@ -896,7 +895,6 @@ namespace Mikrotik_Administrador.Data
                 FechaInicio = (DateTime)reader["FechaInicio"],
                 FechaFin = (DateTime)reader["FechaFin"],
                 Estatus = (string)reader["Estatus"],
-                Programacion = (string)reader["Programacion"],
                 Plan = (string)reader["Plan"],
             };
         }

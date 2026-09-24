@@ -399,7 +399,6 @@ namespace Mikrotik_Administrador
                         Estatus = "Pendiente",
                         IdPlan = IdPlanSeccionado,
                         IdMikrotikReceptor = td.IdMikrotik,
-                        Programacion = pr.SePrograma,
                         Password = td.Password
                     };
                     HistorialMovimientosModel H = new HistorialMovimientosModel
