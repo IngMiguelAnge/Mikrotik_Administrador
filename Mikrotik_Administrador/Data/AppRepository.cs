@@ -959,6 +959,36 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
+        public async Task<List<ListMensualidadesModel>> GetMensualidadbyIdUsuarioM(int IdUsuarioM, DateTime FechaInicio, DateTime FechaLimite)
+        {
+            List<ListMensualidadesModel> list = new List<ListMensualidadesModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetMensualidadbyIdUsuarioM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@FechaInicio", FechaInicio));
+                        cmd.Parameters.Add(new SqlParameter("@FechaLimite", FechaLimite));    
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToMensualidades(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
         public async Task<List<ListMensualidadesModel>> GetExistMensualidadesbyUserM(int IdUsuarioM)
         {
             List<ListMensualidadesModel> list = new List<ListMensualidadesModel>();
@@ -1001,7 +1031,7 @@ namespace Mikrotik_Administrador.Data
                 Faltante = (decimal)reader["Faltante"],
             };
         }
-        public async Task<bool> SaveMensualidad(MensualidadModel obj)
+        public async Task<int> SaveMensualidad(MensualidadModel obj)
         {
             try
             {
@@ -1017,15 +1047,22 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@FechaInicio", obj.FechaInicio));
                         cmd.Parameters.Add(new SqlParameter("@FechaLimite", obj.FechaLimite));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        return true;
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+
+                        return idGenerado;
                     }
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return 0;
             }
         }
         public async Task<List<UsuariosandPlanesModel>> GetUsuariosandPlanes(int IdCliente, int IdUsuario, string Cliente, string Usuario, int IdPlan, int IdMikrotik)
@@ -2351,9 +2388,15 @@ namespace Mikrotik_Administrador.Data
             return new UsuariosGeneralModel()
             {
                 Id = (int)reader["Id"],
-                IdInterno = (string)reader["IdInterno"],
-                Nombre = (string)reader["Usuario"],
+                Nombre = (string)reader["Nombre"],
+                IdMikrotik = (int)reader["IdMikrotik"],
+                Address = (string)reader["Address"],
+                IdInterno = (string)reader["IdInterno"],        
                 Estatus = (string)reader["Estatus"],
+                IdCliente = (int)reader["IdCliente"],
+                IdPlan = (int)reader["IdPlan"], 
+                IdPlanOriginal = (int)reader["IdPlanOriginal"],
+                IdMikrotikOriginal = (int)reader["IdMikrotikOriginal"],
             };
         }
         public async Task<List<ListUsuariosGeneralModel>> GetUsuariosMikrotiksByIdCliente(int IdCliente)
@@ -2504,6 +2547,29 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", Estatus));
                         cmd.Parameters.Add(new SqlParameter("@Responsable", Responsable));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> UpdateOriginalesbyIdUsuarioM(int Id, int IdPlanOriginal, int IdMikrotikOriginal)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateOriginalesbyIdUsuarioM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlanOriginal", IdPlanOriginal));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotikOriginal", IdMikrotikOriginal));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;

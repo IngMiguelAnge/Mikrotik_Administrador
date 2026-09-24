@@ -478,10 +478,13 @@ namespace Mikrotik_Administrador
                         {
                             await mikrotik.EliminarQueuePorNombre(item.comment);
                             await mikrotik.EliminarAntena(item.id);
+                            await mikrotik.EliminarQueuePorTarjet(item.address);
+                            await mikrotik.EliminarAntenabyTarjet(item.address);
                         }
                         else
                         {
                             await mikrotik.EliminarFibra(item.id);
+                            await mikrotik.EliminarFibrabyTarjet(item.address);
                             await mikrotik.DeleteInterfacebyName(item.comment);
                         }
                         string donde = IsAntena == false ? "Fibra" : "Antena";

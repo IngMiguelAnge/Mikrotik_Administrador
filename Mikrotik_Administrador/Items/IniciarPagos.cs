@@ -51,9 +51,9 @@ namespace Mikrotik_Administrador.Items
             };
 
             // 4. Guardamos usando await en lugar de .Result (evita bloqueos de interfaz)
-            bool guardado = await obj.SaveMensualidad(mensualidad);
+            int guardado = await obj.SaveMensualidad(mensualidad);
 
-            if (guardado)
+            if (guardado != 0)
             {
                 MessageBox.Show("Mensualidad guardada");
                 DialogResult = DialogResult.OK;

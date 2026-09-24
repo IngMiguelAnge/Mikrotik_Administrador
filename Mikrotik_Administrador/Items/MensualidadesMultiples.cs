@@ -17,7 +17,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.Windows.Media.Animation;
 
 namespace Mikrotik_Administrador.Catalogos
 {
@@ -242,7 +242,7 @@ namespace Mikrotik_Administrador.Catalogos
                             wsCambios.Cell(1, 5).Value = "Días que duro";               // E
                             wsCambios.Cell(1, 6).Value = "IdPlan original";                // F
                             wsCambios.Cell(1, 7).Value = "Nombre del plan original";   // G
-                            wsCambios.Cell(1, 8).Value = "IdMikrotik orginal";        // H
+                            wsCambios.Cell(1, 8).Value = "IdMikrotik original";        // H
                             wsCambios.Cell(1, 9).Value = "Nombre mikrotik original";    // I
                             wsCambios.Cell(1, 10).Value = "IdPlan nuevo";                // J
                             wsCambios.Cell(1, 11).Value = "Nombre del plan nuevo";   // K
@@ -353,7 +353,7 @@ namespace Mikrotik_Administrador.Catalogos
             }
         }
 
-        private void btnCargar_Click(object sender, EventArgs e)
+        private async void btnCargar_Click(object sender, EventArgs e)
         {
             AppRepository obj = new AppRepository();
             var ListBancos = obj.GetBancos(string.Empty, string.Empty);
@@ -376,13 +376,13 @@ namespace Mikrotik_Administrador.Catalogos
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     // Llamar al método para leer e mostrar en el DataGridView
-                    CargarDatosExcel(openFileDialog.FileName);
+                    await CargarDatosExcelAsync(openFileDialog.FileName);
                     btnConfirmar.Visible = true;
                 }
             }
 
         }
-        private void CargarDatosExcel(string rutaArchivo)
+        private async Task CargarDatosExcelAsync(string rutaArchivo)
         {
             try
             {
@@ -422,8 +422,9 @@ namespace Mikrotik_Administrador.Catalogos
 
                         if (valido)
                         {
-                            AppRepository ob = new AppRepository();
-                            var planB = ob.GetPlanById(row.Cell(10).GetValue<int>()).Result;
+                            int idPlanNuevo = row.Cell(10).GetValue<int>(); // Col J: Plan nuevo
+                            var planB = await obj.GetPlanById(idPlanNuevo);
+
                             ListCambios.Add(new TiempoDefinidosModel
                             {
                                 Id = contadorIdCambio++,
@@ -436,8 +437,8 @@ namespace Mikrotik_Administrador.Catalogos
                                 Estatus = fechaFin <= DateTime.Now ? "Completado" : "Ejecutando",
                                 IdPlanOriginal = row.Cell(6).GetValue<int>(),
                                 IdMikrotikOriginal = row.Cell(8).GetValue<int>(),
-                                IdPlan = row.Cell(10).GetValue<int>(),              // Col J: Plan nuevo
-                                Plan = planB.Nombre,
+                                IdPlan = idPlanNuevo,
+                                Plan = planB != null ? planB.Nombre : "Plan Desconocido",
                                 IdMikrotikReceptor = row.Cell(12).GetValue<int>(),  // Col L: Mikrotik
                                 Programacion = operacion,
                                 Password = "1234"
@@ -455,18 +456,18 @@ namespace Mikrotik_Administrador.Catalogos
                     {
                         if (primeraFila2) { primeraFila2 = false; continue; }
 
-                        int idCliente = row.Cell(1).GetValue<int>();            // Col A: IdCliente
-                        int idServicio = row.Cell(3).GetValue<int>();           // Col C: IdServicio
-                        DateTime fechaInicioExcel = row.Cell(5).GetValue<DateTime>(); // Col E: Inicio la mensualidad
+                        int idCliente = row.Cell(1).GetValue<int>();             // Col A: IdCliente
+                        int idServicio = row.Cell(3).GetValue<int>();            // Col C: IdServicio
+                        DateTime fechaInicioExcel = row.Cell(5).GetValue<DateTime>(); // Col E: Inicio mensualidad
                         int diaCorte = row.Cell(6).GetValue<int>();              // Col F: Día de corte
                         int idResponsable = row.Cell(7).GetValue<int>();         // Col G: IdResponsable
-                        DateTime fechaPago = row.Cell(9).GetValue<DateTime>();   // Col I: Cuando se recibio el pago
+                        DateTime fechaPago = row.Cell(9).GetValue<DateTime>();   // Col I: Fecha de pago
                         decimal saldoRestante = row.Cell(10).GetValue<decimal>();// Col J: Cantidad recibida
 
                         // Manejo seguro de celdas nulas o vacías
                         string comentario = row.Cell(11).IsEmpty() ? "" : row.Cell(11).GetValue<string>();
                         int idBanco = row.Cell(12).IsEmpty() ? 0 : row.Cell(12).GetValue<int>();
-                        string Banco = row.Cell(13).IsEmpty() ? "" : row.Cell(13).GetValue<string>();
+                        string banco = row.Cell(13).IsEmpty() ? "" : row.Cell(13).GetValue<string>();
                         string referencia = row.Cell(14).IsEmpty() ? "" : row.Cell(14).GetValue<string>();
                         string rutaImagen = row.Cell(15).IsEmpty() ? "" : row.Cell(15).GetValue<string>();
 
@@ -475,9 +476,8 @@ namespace Mikrotik_Administrador.Catalogos
                         // ---------------------------------------------------------------------
                         DateTime fechaInicioActual;
 
-                        if (ultimasFechasInicio.ContainsKey(idServicio) && ultimasFechasInicio[idServicio] == fechaInicioExcel)
+                        if (ultimasFechasInicio.TryGetValue(idServicio, out DateTime ultimaFecha) && ultimaFecha == fechaInicioExcel)
                         {
-                            // Consultamos la última mensualidad de este servicio (esté pagada o no)
                             var ultimaMensualidad = ListMensualidades
                                 .Where(m => m.IdUsuarioM == idServicio)
                                 .OrderByDescending(m => m.FechaLimite)
@@ -485,8 +485,6 @@ namespace Mikrotik_Administrador.Catalogos
 
                             if (ultimaMensualidad != null)
                             {
-                                // Si no está completamente pagada, seguimos cubriendo la misma fecha de inicio
-                                // Si ya está pagada por completo, avanzamos al siguiente periodo
                                 fechaInicioActual = ultimaMensualidad.Pagado ? ultimaMensualidad.FechaLimite : ultimaMensualidad.FechaInicio;
                             }
                             else
@@ -500,24 +498,27 @@ namespace Mikrotik_Administrador.Catalogos
                             ultimasFechasInicio[idServicio] = fechaInicioExcel;
                         }
 
-                        // Carga de plan base
-                        var planBase = obj.GetPlanByIdUsuarioM(idServicio).Result;
+                        // Carga de plan base e información complementaria (Asíncrono)
+                        var planBase = await obj.GetPlanByIdUsuarioM(idServicio);
                         decimal precioPlanBase = planBase != null ? planBase.Precio : 0;
+                        var usuarioMInfo = await obj.GetUsuariosMikrotiksById(idServicio);
+                        var mikrotikInfo = usuarioMInfo != null ? await obj.GetMikrotikById(usuarioMInfo.IdMikrotik) : null;
+                        var clienteInfo = await obj.GetClienteById(idCliente);
 
-                        // Registro del cliente en la lista
+                        // Registro del cliente en la lista si no existe
                         if (!ListClientes.Any(x => x.IdCliente == idCliente && x.IdUser == idServicio))
                         {
                             ListClientes.Add(new UsuariosandPlanesModel
                             {
-                                Identificador = "Cli" + idCliente + "Us" + idServicio,
+                                Identificador = $"Cli{idCliente}Us{idServicio}",
                                 IdCliente = idCliente,
-                                Cliente = row.Cell(2).GetValue<string>(),  // Col B: Cliente
+                                Cliente = clienteInfo != null ? clienteInfo.Nombre : "Cliente Desconocido",
                                 IdUser = idServicio,
-                                Usuario = row.Cell(4).GetValue<string>(),  // Col D: Servicio
+                                Usuario = usuarioMInfo != null ? usuarioMInfo.Nombre : "Usuario Desconocido",
                                 IdPlan = planBase != null ? planBase.Id : 0,
                                 Plan = planBase != null ? planBase.Nombre : "Plan Desconocido",
-                                Estatus = row.Cell(5).GetValue<string>(),  // Col E: Inicio la mensualidad
-                                Mikrotik = planBase != null ? planBase.Nombre : "Mikrotik Desconocido",
+                                Estatus = usuarioMInfo != null ? usuarioMInfo.Estatus : "Inactivo",
+                                Mikrotik = mikrotikInfo != null ? mikrotikInfo.Nombre : "Mikrotik Desconocido",
                                 Mensualidad = "Disponible"
                             });
                         }
@@ -550,7 +551,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 m.FechaInicio == fechaInicioActual &&
                                 m.FechaLimite == fechaLimiteActual);
 
-                            decimal costoMensualidad = CalcularCostoMensualidad(idServicio, fechaInicioActual, fechaLimiteActual, diaCorte, precioPlanBase, ListCambios);
+                            decimal costoMensualidad = await CalcularCostoMensualidadAsync(idServicio, fechaInicioActual, fechaLimiteActual, diaCorte, precioPlanBase, ListCambios, obj);
                             if (costoMensualidad <= 0) costoMensualidad = precioPlanBase;
 
                             int idMensualidad;
@@ -558,7 +559,6 @@ namespace Mikrotik_Administrador.Catalogos
 
                             if (mensualidadExistente != null)
                             {
-                                // Ya existe: Calculamos cuánto se le ha abonado en pagos anteriores
                                 decimal yaPagado = ListHistorialPagos
                                     .Where(h => h.IdMensualidad == mensualidadExistente.Id)
                                     .Sum(h => h.Cantidad);
@@ -568,14 +568,12 @@ namespace Mikrotik_Administrador.Catalogos
 
                                 if (saldoPendienteMensualidad <= 0)
                                 {
-                                    // Si esta mensualidad ya fue pagada al 100%, avanzamos a la siguiente
                                     fechaInicioActual = fechaLimiteActual;
                                     continue;
                                 }
                             }
                             else
                             {
-                                // No existe: Creamos un nuevo registro de mensualidad
                                 saldoPendienteMensualidad = costoMensualidad;
                                 idMensualidad = contadorIdMensualidad++;
 
@@ -602,7 +600,6 @@ namespace Mikrotik_Administrador.Catalogos
                                 .Where(h => h.IdMensualidad == idMensualidad)
                                 .Sum(h => h.Cantidad) + pagoParaEstaMensualidad;
 
-                            // Si con este abono se liquida el monto total, marcamos como pagado
                             if (totalPagadoAcumulado >= costoMensualidad)
                             {
                                 mensualidadExistente.Pagado = true;
@@ -616,7 +613,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 Cantidad = pagoParaEstaMensualidad,
                                 Comentario = comentario,
                                 IdBanco = idBanco,
-                                Banco = Banco,
+                                Banco = banco,
                                 Referencia = referencia,
                                 Imagen = (!string.IsNullOrEmpty(rutaImagen) && File.Exists(rutaImagen)) ? File.ReadAllBytes(rutaImagen) : null,
                                 IdMensualidad = idMensualidad,
@@ -626,7 +623,6 @@ namespace Mikrotik_Administrador.Catalogos
                             // 6. Restar la cantidad distribuida
                             saldoRestante -= pagoParaEstaMensualidad;
 
-                            // Si sobra saldo, avanzamos al siguiente periodo consecutivo
                             if (saldoRestante > 0)
                             {
                                 fechaInicioActual = fechaLimiteActual;
@@ -642,72 +638,71 @@ namespace Mikrotik_Administrador.Catalogos
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private decimal CalcularCostoMensualidad(int idServicio, DateTime fechaInicio, DateTime fechaLimite, int diaCorte, decimal precioPlanBase, List<TiempoDefinidosModel> cambios)
+
+        private async Task<decimal> CalcularCostoMensualidadAsync(int idServicio, DateTime fechaInicio, DateTime fechaLimite, int diaCorte, decimal precioPlanBase, List<TiempoDefinidosModel> cambios, AppRepository objRepo)
         {
-            // 1. Días totales del periodo ajustados a Base Comercial (30 días)
-            int diasRealesPeriodo = (int)(fechaLimite.Date - fechaInicio.Date).TotalDays;
+            // 1. Días reales naturales del mes/periodo actual
+            int diasNaturalesPeriodo = (int)(fechaLimite.Date - fechaInicio.Date).TotalDays;
+            if (diasNaturalesPeriodo <= 0) diasNaturalesPeriodo = 30;
 
-            // Si el mes tiene más o menos días (ej. 31 días o 28/29 días de febrero),
-            // se normaliza a 30 días si es un periodo mensual completo.
-            int diasTotalesPeriodo = diasRealesPeriodo;
-
-            if (fechaInicio.Day == diaCorte || diasRealesPeriodo >= 28)
-            {
-                diasTotalesPeriodo = 30; // Normalización a mes comercial
-            }
-
-            // 2. Filtrar cambios de plan dentro del periodo
+            // 2. Buscar cambios de plan temporales aplicables a este periodo
             var cambiosPeriodo = cambios.Where(x => x.IdUsuarioM == idServicio
-                                                 && x.FechaInicio <= fechaLimite
-                                                 && x.FechaFin >= fechaInicio
-                                                 && x.Programacion == "Cambio de plan"
-                                                 && x.Modo == "Temporal").ToList();
+                                                   && x.FechaInicio < fechaLimite
+                                                   && x.FechaFin > fechaInicio
+                                                   && x.Programacion == "Cambio de plan"
+                                                   && x.Modo == "Temporal").ToList();
 
             int diasConPlanNuevo = 0;
-            decimal costoPlanesNuevos = 0;
-
-            AppRepository obj = new AppRepository();
+            decimal costoTotalPlanesNuevos = 0;
 
             foreach (var tc in cambiosPeriodo)
             {
-                DateTime fInicioEfectiva = fechaInicio > tc.FechaInicio ? fechaInicio : tc.FechaInicio;
-                DateTime fFinEfectiva = fechaLimite < tc.FechaFin ? fechaLimite : tc.FechaFin;
+                DateTime fInicioEfectiva = fechaInicio.Date > tc.FechaInicio.Date ? fechaInicio.Date : tc.FechaInicio.Date;
+                DateTime fFinEfectiva = fechaLimite.Date < tc.FechaFin.Date ? fechaLimite.Date : tc.FechaFin.Date;
 
-                int diasEfectivos = (int)(fFinEfectiva.Date - fInicioEfectiva.Date).TotalDays + 1;
-                if (diasEfectivos > diasRealesPeriodo)
-                    diasEfectivos = 30;
+                int diasEfectivos = (int)(fFinEfectiva - fInicioEfectiva).TotalDays;
 
-                // Obtener el precio del plan nuevo asignado en el cambio
-                var planNuevo = obj.GetPlanById(tc.IdPlan).Result;
-                decimal precioPlanNuevo = planNuevo != null ? planNuevo.Precio : 0;
+                if (diasEfectivos > 0)
+                {
+                    var planNuevo = await objRepo.GetPlanById(tc.IdPlan);
+                    decimal precioPlanNuevo = planNuevo != null ? planNuevo.Precio : 0;
 
-                diasConPlanNuevo += diasEfectivos;
-                costoPlanesNuevos += diasEfectivos * (precioPlanNuevo / 30.0m);
+                    // SI EL CAMBIO DE PLAN CUBRE TODO EL MES/PERIODO COMPLETO:
+                    if (diasEfectivos >= diasNaturalesPeriodo)
+                    {
+                        return precioPlanNuevo;
+                    }
+
+                    diasConPlanNuevo += diasEfectivos;
+                    // Prorrateo diario en base comercial (30 días) para días parciales
+                    costoTotalPlanesNuevos += diasEfectivos * (precioPlanNuevo / 30.0m);
+                }
             }
 
-            // 3. Suspensiones (Días a costo 0)
+            // 3. Evaluar suspensiones si existen
             var suspensionesPeriodo = cambios.Where(x => x.IdUsuarioM == idServicio
-                                                      && x.FechaInicio <= fechaLimite
-                                                      && x.FechaFin >= fechaInicio
-                                                      && x.Programacion == "Suspensión"
-                                                      && x.Modo == "Temporal").ToList();
+                                                         && x.FechaInicio < fechaLimite
+                                                         && x.FechaFin > fechaInicio
+                                                         && x.Programacion == "Suspensión"
+                                                         && x.Modo == "Temporal").ToList();
 
             int diasSuspendidos = 0;
             foreach (var sus in suspensionesPeriodo)
             {
-                DateTime fInicioEfectiva = fechaInicio > sus.FechaInicio ? fechaInicio : sus.FechaInicio;
-                DateTime fFinEfectiva = fechaLimite < sus.FechaFin ? fechaLimite : sus.FechaFin;
+                DateTime fInicioEfectiva = fechaInicio.Date > sus.FechaInicio.Date ? fechaInicio.Date : sus.FechaInicio.Date;
+                DateTime fFinEfectiva = fechaLimite.Date < sus.FechaFin.Date ? fechaLimite.Date : sus.FechaFin.Date;
 
-                diasSuspendidos += (int)(fFinEfectiva.Date - fInicioEfectiva.Date).TotalDays + 1;
+                int diasEfectivos = (int)(fFinEfectiva - fInicioEfectiva).TotalDays;
+                if (diasEfectivos > 0) diasSuspendidos += diasEfectivos;
             }
 
-            // 4. Días restantes con tarifa normal
-            int diasRestantes = diasTotalesPeriodo - diasConPlanNuevo - diasSuspendidos;
+            // 4. Si no hubo cambio de plan nuevo o cubrió solo parte del mes
+            int diasRestantes = 30 - diasConPlanNuevo - diasSuspendidos;
             if (diasRestantes < 0) diasRestantes = 0;
 
-            decimal montoBruto = costoPlanesNuevos + (diasRestantes * (precioPlanBase / 30.0m));
+            decimal montoBruto = costoTotalPlanesNuevos + (diasRestantes * (precioPlanBase / 30.0m));
 
-            // 5. Redondeo Financiero
+            // 5. Redondeo financiero
             decimal parteEntera = Math.Floor(montoBruto);
             decimal parteDecimal = montoBruto - parteEntera;
 
@@ -720,7 +715,6 @@ namespace Mikrotik_Administrador.Catalogos
 
             return parteEntera;
         }
-
         public void CargarTablaClientes()
         {
             CrearGridViewClientes();
@@ -936,8 +930,8 @@ namespace Mikrotik_Administrador.Catalogos
                             // 1. Filtrar los cambios/suspensiones que afectan a esta mensualidad
                             var Detalles = ListCambios.Where(
                                 x => x.IdUsuarioM == IdUsuarioMRevision
-                                  && x.FechaInicio <= Hasta
-                                  && x.FechaFin >= Desde
+                                  && x.FechaInicio < Hasta
+                                  && x.FechaFin > Desde
                                   && x.Modo == "Temporal"
                             ).ToList();
 
@@ -946,59 +940,77 @@ namespace Mikrotik_Administrador.Catalogos
                             {
                                 MessageBox.Show("Este período transcurrió con normalidad en su plan base. No hay cambios ni suspensiones que detallar.",
                                                 "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                                 return;
                             }
 
-                            // Días reales que abarca esta mensualidad específica (ej. del 15 al 15)
+                            // Días reales que abarca esta mensualidad específica
                             int diasTotalesMensualidad = (int)(Hasta.Date - Desde.Date).TotalDays;
+                            if (diasTotalesMensualidad <= 0) diasTotalesMensualidad = 30;
 
                             ListDestalles = new List<ListDetallesMensualidadModel>();
                             AppRepository objRepo = new AppRepository();
 
                             int diasOcupadosPorCambios = 0;
 
+                            // Variable para almacenar el ID del plan original usado durante esta mensualidad
+                            int idPlanOriginalPeriodo = 0;
+
                             // 2. Procesar y agregar cada Cambio o Suspensión registrado
                             foreach (var item in Detalles)
                             {
                                 decimal costoCalculado = 0;
 
+                                // Guardamos el ID del plan original para usarlo en los días sobrantes del plan base
+                                if (idPlanOriginalPeriodo == 0 && item.IdPlanOriginal > 0)
+                                {
+                                    idPlanOriginalPeriodo = item.IdPlanOriginal;
+                                }
+
                                 // Recortar las fechas al rango efectivo dentro de la mensualidad [Desde, Hasta]
                                 DateTime fInicioEfectiva = Desde > item.FechaInicio ? Desde : item.FechaInicio;
                                 DateTime fFinEfectiva = Hasta < item.FechaFin ? Hasta : item.FechaFin;
 
-                                int diasEfectivos = (int)(fFinEfectiva.Date - fInicioEfectiva.Date).TotalDays + 1;
+                                int diasEfectivos = (int)(fFinEfectiva.Date - fInicioEfectiva.Date).TotalDays;
 
-                                // Limitar los días si superan la duración real del período
                                 if (diasEfectivos > diasTotalesMensualidad)
                                     diasEfectivos = diasTotalesMensualidad;
-
-                                diasOcupadosPorCambios += diasEfectivos;
 
                                 if (item.Programacion == "Cambio de plan")
                                 {
                                     var planNuevo = objRepo.GetPlanById(item.IdPlan).Result;
                                     decimal precioPlan = planNuevo != null ? planNuevo.Precio : 0;
 
-                                    // Cálculo de costo prorrateado sobre base 30
-                                    decimal costoBruto = diasEfectivos * (precioPlan / 30.0m);
-
-                                    // Redondeo financiero
-                                    decimal parteEntera = Math.Floor(costoBruto);
-                                    decimal parteDecimal = costoBruto - parteEntera;
-
-                                    if (parteDecimal > 0.00m && parteDecimal < 0.30m)
-                                        costoCalculado = parteEntera;
-                                    else if (parteDecimal >= 0.30m && parteDecimal <= 0.50m)
-                                        costoCalculado = parteEntera + 0.50m;
-                                    else if (parteDecimal > 0.50m)
-                                        costoCalculado = parteEntera + 1.00m;
+                                    // SI EL CAMBIO DE PLAN CUBRE TODO EL MES/PERIODO COMPLETO:
+                                    if (diasEfectivos >= diasTotalesMensualidad)
+                                    {
+                                        costoCalculado = precioPlan;
+                                        diasOcupadosPorCambios = 30;
+                                    }
                                     else
-                                        costoCalculado = parteEntera;
+                                    {
+                                        diasOcupadosPorCambios += diasEfectivos;
+
+                                        // Cálculo de costo prorrateado sobre base 30 para días parciales
+                                        decimal costoBruto = diasEfectivos * (precioPlan / 30.0m);
+
+                                        // Redondeo financiero
+                                        decimal parteEntera = Math.Floor(costoBruto);
+                                        decimal parteDecimal = costoBruto - parteEntera;
+
+                                        if (parteDecimal > 0.00m && parteDecimal < 0.30m)
+                                            costoCalculado = parteEntera;
+                                        else if (parteDecimal >= 0.30m && parteDecimal <= 0.50m)
+                                            costoCalculado = parteEntera + 0.50m;
+                                        else if (parteDecimal > 0.50m)
+                                            costoCalculado = parteEntera + 1.00m;
+                                        else
+                                            costoCalculado = parteEntera;
+                                    }
                                 }
                                 else if (item.Programacion == "Suspensión")
                                 {
-                                    costoCalculado = 0.00m; // Sin costo por consumo durante suspensión
+                                    costoCalculado = 0.00m;
+                                    diasOcupadosPorCambios += diasEfectivos;
                                 }
 
                                 ListDetallesMensualidadModel LD = new ListDetallesMensualidadModel
@@ -1015,19 +1027,24 @@ namespace Mikrotik_Administrador.Catalogos
                                 ListDestalles.Add(LD);
                             }
 
-                            // 3. Calcular los días restantes exactos del plan base en esta mensualidad
-                            int diasRestantesPlanBase = diasTotalesMensualidad - diasOcupadosPorCambios;
+                            // 3. Calcular los días restantes del plan base (sobre base comercial de 30 días)
+                            int diasRestantesPlanBase = 30 - diasOcupadosPorCambios;
                             if (diasRestantesPlanBase < 0) diasRestantesPlanBase = 0;
 
-                            // 4. Agregar la fila del Plan Base si quedan días en el período
+                            // 4. Agregar la fila del Plan Base cobrando con el PLAN ORIGINAL registrado en el Excel
                             if (diasRestantesPlanBase > 0)
                             {
-                                var planBase = objRepo.GetPlanByIdUsuarioM(IdUsuarioMRevision).Result;
-                                decimal precioPlanBase = planBase != null ? planBase.Precio : 0;
+                                // Consultar el plan original registrado en ese periodo, o en su defecto el plan del usuario
+                                var planOriginal = idPlanOriginalPeriodo > 0
+                                    ? objRepo.GetPlanById(idPlanOriginalPeriodo).Result
+                                    : objRepo.GetPlanByIdUsuarioM(IdUsuarioMRevision).Result;
+
+                                decimal precioPlanBase = planOriginal != null ? planOriginal.Precio : 0;
+                                string nombrePlanBase = planOriginal != null ? planOriginal.Nombre : "Plan Original";
 
                                 decimal costoBrutoBase = diasRestantesPlanBase * (precioPlanBase / 30.0m);
 
-                                // Redondeo financiero para el consumo del Plan Base
+                                // Redondeo financiero para el consumo del Plan Base / Original
                                 decimal entBase = Math.Floor(costoBrutoBase);
                                 decimal decBase = costoBrutoBase - entBase;
                                 decimal costoBaseRedondeado = entBase;
@@ -1044,9 +1061,9 @@ namespace Mikrotik_Administrador.Catalogos
                                     Id = 0,
                                     FechaInicio = Desde,
                                     FechaFin = Hasta,
-                                    Estatus = "Normal",
-                                    Programacion = $"Consumo Plan Base ({diasRestantesPlanBase} días)",
-                                    Plan = planBase != null ? planBase.Nombre : "Plan Base",
+                                    Estatus = "Activo",
+                                    Programacion = $"Consumo Plan Original ({diasRestantesPlanBase} días)",
+                                    Plan = nombrePlanBase,
                                     Costo = costoBaseRedondeado
                                 };
 
@@ -1442,7 +1459,7 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 AppRepository obj = new AppRepository();
                 int ContadorCambios = -1;
-                
+
                 using (SaveFileDialog saveFileDialog = new SaveFileDialog())
                 {
                     saveFileDialog.Filter = "Archivo de Excel (*.xlsx)|*.xlsx";
@@ -1459,7 +1476,7 @@ namespace Mikrotik_Administrador.Catalogos
                             var wsCambios = workbook.Worksheets.Add("Cambios");
 
                             // Encabezados
-                            wsCambios.Cell(1, 1).Value = "Descupción";  // A
+                            wsCambios.Cell(1, 1).Value = "Descripción";  // A
                             wsCambios.Cell(1, 2).Value = "Resultado";  // B
                             // Formato a los encabezados (A1 a B1)
                             var headerCambios = wsCambios.Range("A1:B1");
@@ -1474,8 +1491,8 @@ namespace Mikrotik_Administrador.Catalogos
                                 var existServicio = obj.GetUsuariosMikrotiksById(item.IdUsuarioM).Result;
                                 if (existServicio.Id == 0)
                                 {
-                                    wsCambios.Cell(filaCambios, 1).Value = 
-                                        "El servicio con id " + item.IdUsuarioM.ToString() + " no existe en el sistema";
+                                    wsCambios.Cell(filaCambios, 1).Value =
+                                        "El servicio en cambios con id " + item.IdUsuarioM.ToString() + " no existe en el sistema";
                                     wsCambios.Cell(filaCambios, 2).Value = "Error";
                                     filaCambios++;
                                     continue;
@@ -1489,7 +1506,7 @@ namespace Mikrotik_Administrador.Catalogos
                                     filaCambios++;
                                     continue;
                                 }
-                                if(item.IdPlanOriginal != item.IdPlan)
+                                if (item.IdPlanOriginal != item.IdPlan)
                                 {
                                     existPlan = obj.GetPlanById(item.IdPlan).Result;
                                     if (existServicio.Id == 0)
@@ -1510,7 +1527,7 @@ namespace Mikrotik_Administrador.Catalogos
                                     filaCambios++;
                                     continue;
                                 }
-                                if(item.IdMikrotikOriginal != item.IdMikrotikReceptor)
+                                if (item.IdMikrotikOriginal != item.IdMikrotikReceptor)
                                 {
                                     existMikrotik = obj.GetMikrotikById(item.IdMikrotikReceptor).Result;
                                     if (existServicio.Id == 0)
@@ -1522,12 +1539,12 @@ namespace Mikrotik_Administrador.Catalogos
                                         continue;
                                     }
                                 }
-                                var Anidado = obj.GetPlanesAnidadosbyParametros(item.IdMikrotikReceptor,item.IdPlan).Result;
+                                var Anidado = obj.GetPlanesAnidadosbyParametros(item.IdMikrotikReceptor, item.IdPlan).Result;
                                 int IdPlanAnidado = Anidado?.Id ?? 0;
-                                if(IdPlanAnidado == 0)
+                                if (IdPlanAnidado == 0)
                                 {
                                     wsCambios.Cell(filaCambios, 1).Value =
-                                          "No existe el plan nuevo: " + item.IdPlan.ToString() + " en el mikrotik receptor: " + item.IdMikrotikReceptor.ToString() ;
+                                          "No existe el plan nuevo: " + item.IdPlan.ToString() + " en el mikrotik receptor: " + item.IdMikrotikReceptor.ToString();
                                     wsCambios.Cell(filaCambios, 2).Value = "Error";
                                     filaCambios++;
                                     continue;
@@ -1545,16 +1562,29 @@ namespace Mikrotik_Administrador.Catalogos
                                 var exitCambiot = obj.GetTiempoCambiobyIdUsuarioM(item.IdUsuarioM, item.FechaInicio, item.FechaFin).Result;
                                 if (exitCambiot.Count() == 0)
                                 {
+                                    ListCambios[ContadorCambios].Id = 0;
+                                    var infocliente = obj.GetUsuariosMikrotiksById(ListCambios[ContadorCambios].IdUsuarioM).Result;
+                                    if(infocliente.IdMikrotikOriginal != ListCambios[ContadorCambios].IdMikrotikOriginal ||
+                                       infocliente.IdPlanOriginal != ListCambios[ContadorCambios].IdPlanOriginal)
+                                    {
+                                       bool roriginal= obj.UpdateOriginalesbyIdUsuarioM(ListCambios[ContadorCambios].IdUsuarioM,
+                                            ListCambios[ContadorCambios].IdPlanOriginal,
+                                            ListCambios[ContadorCambios].IdMikrotikOriginal
+                                            ).Result;
+                                    }
                                     var resultcambio = obj.SaveTiempoCambio(ListCambios[ContadorCambios]).Result;
-                                    if(resultcambio)
+                                    if (resultcambio)
                                     {
                                         wsCambios.Cell(filaCambios, 1).Value =
-                                    "Ya existe el(la) " + item.Programacion + " registrado en el sistema para el servicio " + item.IdUsuarioM +
+                                    "Se guardo correctamente el(la) " + item.Programacion + " en el sistema para el servicio " + item.IdUsuarioM +
                                     " con fecha de inicio " + item.FechaInicio.ToString();
                                         wsCambios.Cell(filaCambios, 2).Value = "Satisfactorio";
                                     }
                                     else
                                     {
+                                        wsCambios.Cell(filaCambios, 1).Value =
+                               "Error al guardar el(la) " + item.Programacion + " en el sistema para el servicio " + item.IdUsuarioM +
+                               " con fecha de inicio " + item.FechaInicio.ToString();
                                         wsCambios.Cell(filaCambios, 2).Value = "Error";
                                     }
                                     filaCambios++;
@@ -1569,69 +1599,161 @@ namespace Mikrotik_Administrador.Catalogos
                                     continue;
                                 }
                             }
-                            // Autoajuste de columnas para Hoja 1
                             wsCambios.Columns().AdjustToContents();
+                            // ==============================================================
+                            // HOJA 21: Mensualidades y pagos (Aparecerá segundo)
+                            // ==============================================================
+                            var wPagos = workbook.Worksheets.Add("Pagos");
 
-                            //// ==============================================================
-                            //// HOJA 2: MENSUALIDADES (Aparecerá segundo)
-                            //// ==============================================================
-                            //var wsPagos = workbook.Worksheets.Add("Pagos");
+                            // Encabezados
+                            wPagos.Cell(1, 1).Value = "Descripción";  // A
+                            wPagos.Cell(1, 2).Value = "Resultado";  // B
+                            // Formato a los encabezados (A1 a B1)
+                            var headerPagos = wsCambios.Range("A1:B1");
+                            headerPagos.Style.Font.Bold = true;
+                            headerPagos.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
+                            headerPagos.Style.Font.FontColor = XLColor.White;
+                            int ContadorPagos = -1;
+                            int filaPagos = 2;
+                            int IdMensualidad = 0;
+                            foreach (var item in ListMensualidades)
+                            {
+                                ContadorPagos += 1;
+                                var existServicio = obj.GetUsuariosMikrotiksById(item.IdUsuarioM).Result;
+                                if (existServicio.Id == 0)
+                                {
+                                    wPagos.Cell(filaPagos, 1).Value =
+                                        "El servicio en pagos con id " + item.IdUsuarioM.ToString() + " no existe en el sistema";
+                                    wPagos.Cell(filaPagos, 2).Value = "Error";
+                                    filaPagos++;
+                                    continue;
+                                }
+                                var exitMensualidad = obj.GetMensualidadbyIdUsuarioM(item.IdUsuarioM, item.FechaInicio, item.FechaLimite).Result;
+                                if (exitMensualidad.Count() == 0)
+                                {
+                                    IdMensualidad = ListMensualidades[ContadorPagos].Id;
+                                    ListMensualidades[ContadorPagos].Id = 0;
+                                    var resultMensualidad = obj.SaveMensualidad(ListMensualidades[ContadorPagos]).Result;
+                                    if (resultMensualidad != 0)
+                                    {
+                                        wPagos.Cell(filaPagos, 1).Value =
+                                    "Se guardo correctamente la mensualidad con fecha " + item.FechaInicio.ToString() +
+                                    " en el sistema para el servicio " + item.IdUsuarioM;
+                                        wPagos.Cell(filaPagos, 2).Value = "Satisfactorio";
+                                        filaPagos++;
+                                        var Pagos = ListHistorialPagos.Where(x => x.IdMensualidad == IdMensualidad).ToList();
+                                        ListPagos = new List<ListHistorialPagosModel>();
+                                        foreach (var itempagos in Pagos)
+                                        {
+                                            HistorialPagosModel HP = new HistorialPagosModel
+                                            {
+                                                Id = 0,
+                                                FechaRecibido = itempagos.FechaRecibido,
+                                                Cantidad = itempagos.Cantidad,
+                                                Comentario = itempagos.Comentario,
+                                                IdBanco = itempagos.IdBanco,
+                                                Referencia = itempagos.Referencia,
+                                                Imagen = itempagos.Imagen,
+                                                IdMensualidad = resultMensualidad,
+                                                IdUsuario = itempagos.IdUsuario
+                                            };
+                                            int rhp = obj.SaveHistorialPagos(HP).Result;
+                                            if (rhp != 0)
+                                            {
+                                                wPagos.Cell(filaPagos, 1).Value =
+                                    "Se guardo correctamente el pago con fecha " + itempagos.FechaRecibido.ToString() +
+                                       "de la mensualidad con fecha " + item.FechaInicio.ToString() +
+                                    " en el sistema";
+                                                wPagos.Cell(filaPagos, 2).Value = "Satisfactorio";
+                                                filaPagos++;
+                                            }
+                                            else
+                                            {
+                                                wPagos.Cell(filaPagos, 1).Value =
+                                   "Error al guardar el pago con fecha " + itempagos.FechaRecibido.ToString() +
+                                      "de la mensualidad con fecha " + item.FechaInicio.ToString() +
+                                   " en el sistema";
+                                                wPagos.Cell(filaPagos, 2).Value = "Error";
+                                                filaPagos++;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        wPagos.Cell(filaPagos, 1).Value =
+                           "Error al intentar guaardar la mensualidad con fecha " + item.FechaInicio.ToString() +
+                           " en el sistema para el servicio " + item.IdUsuarioM;
+                                        wPagos.Cell(filaPagos, 2).Value = "Error";
+                                    }
+                                    filaPagos++;
+                                }
+                                else
+                                {
+                                    wPagos.Cell(filaPagos, 1).Value =
+                                         "Ya existe la mensualidad con fecha " + item.FechaInicio.ToString() +
+                                         " registrado en el sistema para el servicio " + item.IdUsuarioM;
+                                    wPagos.Cell(filaPagos, 2).Value = "Error";
+                                    filaPagos++;
+                                    var Pagos = ListHistorialPagos.Where(x => x.IdMensualidad == exitMensualidad[0].Id).ToList();
+                                    ListPagos = new List<ListHistorialPagosModel>();
+                                    int PagosGuardados = obj.GetHistorialPagos(exitMensualidad[0].Id, string.Empty, 0, 0).Result.ToList().Count();
+                                   if(PagosGuardados >  0)
+                                    {
+                                        wPagos.Cell(filaPagos, 1).Value =
+                                        "La mensualidad con fecha " + item.FechaInicio.ToString() +
+                                        " ya cuenta con " + PagosGuardados.ToString() + " pagos guardados previamente registrado en el sistema";
+                                        wPagos.Cell(filaPagos, 2).Value = "Información";
+                                        filaPagos++;
+                                    }
+                                    foreach (var itempagos in Pagos)
+                                    {
+                                        PagosGuardados--;
+                                        if(PagosGuardados <= 0)
+                                        {
+                                            HistorialPagosModel HP = new HistorialPagosModel
+                                            {
+                                                Id = 0,
+                                                FechaRecibido = itempagos.FechaRecibido,
+                                                Cantidad = itempagos.Cantidad,
+                                                Comentario = itempagos.Comentario,
+                                                IdBanco = itempagos.IdBanco,
+                                                Referencia = itempagos.Referencia,
+                                                Imagen = itempagos.Imagen,
+                                                IdMensualidad = exitMensualidad[0].Id,
+                                                IdUsuario = itempagos.IdUsuario
+                                            };
 
-                            //// Encabezados
-                            //wsPagos.Cell(1, 1).Value = "IdCliente";                 // A
-                            //wsPagos.Cell(1, 2).Value = "Cliente";                   // B
-                            //wsPagos.Cell(1, 3).Value = "IdServicio";                // C
-                            //wsPagos.Cell(1, 4).Value = "Servicio";                  // D
-                            //wsPagos.Cell(1, 5).Value = "Inicio la mensualidad";     // E
-                            //wsPagos.Cell(1, 6).Value = "Día de corte";              // F
-                            //wsPagos.Cell(1, 7).Value = "IdResponsable";             // G
-                            //wsPagos.Cell(1, 8).Value = "Responsable";               // H
-                            //wsPagos.Cell(1, 9).Value = "Cuando se recibio el pago"; // I
-                            //wsPagos.Cell(1, 10).Value = "Cantidad recibida";        // J
-                            //wsPagos.Cell(1, 11).Value = "Comentario";               // K
-                            //wsPagos.Cell(1, 12).Value = "IdBanco";                  // L
-                            //wsPagos.Cell(1, 13).Value = "Banco";                    // M
-                            //wsPagos.Cell(1, 14).Value = "Referencia";               // N
-                            //wsPagos.Cell(1, 15).Value = "Ruta de imagen";           // O
-                            //// Formato a los encabezados (A1 a O1)
-                            //var headerPagos = wsPagos.Range("A1:O1");
-                            //headerPagos.Style.Font.Bold = true;
-                            //headerPagos.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
-                            //headerPagos.Style.Font.FontColor = XLColor.White;
-
-                            //int filaPagos = 2;
-                            //foreach (ListClientesDescargaModel item in Seleccionados)
-                            //{
-                            //    wsPagos.Cell(filaPagos, 1).Value = item.IdCliente;
-                            //    wsPagos.Cell(filaPagos, 2).Value = item.Cliente;
-                            //    wsPagos.Cell(filaPagos, 3).Value = item.IdUsuarioM;
-                            //    wsPagos.Cell(filaPagos, 4).Value = item.Usuario;
-                            //    wsPagos.Cell(filaPagos, 5).Value = DateTime.Now.Date;
-                            //    wsPagos.Cell(filaPagos, 5).Style.DateFormat.Format = "dd/MM/yyyy";
-                            //    wsPagos.Cell(filaPagos, 6).Value = 1;
-                            //    wsPagos.Cell(filaPagos, 7).Value = 1;
-                            //    wsPagos.Cell(filaPagos, 8).Value = "Administrador";
-                            //    wsPagos.Cell(filaPagos, 9).Value = DateTime.Now;
-                            //    wsPagos.Cell(filaPagos, 9).Style.DateFormat.Format = "dd/MM/yyyy h:mm AM/PM";
-                            //    wsPagos.Cell(filaPagos, 10).Value = 0;
-                            //    wsPagos.Cell(filaPagos, 11).Value = "";
-                            //    wsPagos.Cell(filaPagos, 12).Value = 1;
-                            //    wsPagos.Cell(filaPagos, 13).Value = "PAGOS EFECTIVO";
-                            //    wsPagos.Cell(filaPagos, 14).Value = "1234ASD";
-                            //    wsPagos.Cell(filaPagos, 15).Value = "C:\\Users\\Lenovo\\OneDrive\\Desktop\\Imagenes\\1.jpg";
-                            //    filaPagos++;
-                            //}
-
-                            //// Autoajuste de columnas para Hoja 2
-                            //wsPagos.Columns().AdjustToContents();
-                            //// 5. Guardar el archivo
+                                            int rhp = obj.SaveHistorialPagos(HP).Result;
+                                            if (rhp != 0)
+                                            {
+                                                wPagos.Cell(filaPagos, 1).Value =
+                                    "Se guardo correctamente el pago con fecha " + itempagos.FechaRecibido.ToString() +
+                                       "de la mensualidad con fecha " + item.FechaInicio.ToString() +
+                                    " en el sistema";
+                                                wPagos.Cell(filaPagos, 2).Value = "Satisfactorio";
+                                                filaPagos++;
+                                            }
+                                            else
+                                            {
+                                                wPagos.Cell(filaPagos, 1).Value =
+                                   "Error al guardar el pago con fecha " + itempagos.FechaRecibido.ToString() +
+                                      "de la mensualidad con fecha " + item.FechaInicio.ToString() +
+                                   " en el sistema";
+                                                wPagos.Cell(filaPagos, 2).Value = "Error";
+                                                filaPagos++;
+                                            }
+                                        }                                        
+                                    }
+                                }
+                            }
+                            wPagos.Columns().AdjustToContents();
                             workbook.SaveAs(saveFileDialog.FileName);
                         }
 
                         MessageBox.Show("Reporte generado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
-               
+
             }
             catch (Exception ex)
             {
