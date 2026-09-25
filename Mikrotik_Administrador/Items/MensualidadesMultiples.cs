@@ -449,6 +449,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 IdPlan = idPlanNuevo,
                                 Plan = planB != null ? planB.Nombre : "Plan Desconocido",
                                 IdMikrotikReceptor = idMikrotikReceptor,
+                                Nota = "Introducido por Excel",
                                 Password = "1234"
                             });
                         }
@@ -968,15 +969,15 @@ namespace Mikrotik_Administrador.Catalogos
 
                             // 1. Filtrar eventos (cambios temporales o suspensiones) registrados
                             var detalles = ListCambios.Where(x => x.IdUsuarioM == IdUsuarioMRevision
-                                                               && x.FechaInicio < hasta
-                                                               && x.FechaFin > desde
+                                                               && x.FechaInicio <= hasta
+                                                               && x.FechaFin >= desde
                                                                && x.Modo == "Temporal")
                                                       .OrderBy(x => x.FechaInicio)
                                                       .ToList();
 
                             if (detalles.Count == 0)
                             {
-                                MessageBox.Show("Este período transcurrió con normalidad en su plan base. No hay cambios ni suspensiones que detallar.",
+                                MessageBox.Show("Este período transcurrió con normalidad. No hay cambios que detallar.",
                                                 "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 return;
                             }
@@ -1037,7 +1038,7 @@ namespace Mikrotik_Administrador.Catalogos
                                         Id = item.Id,
                                         FechaInicio = fInicioEfectiva,
                                         FechaFin = fFinVisual,
-                                        Estatus = "Activo",
+                                        Estatus = item.Estatus,
                                         Plan = item.Plan,
                                         Costo = costoCalculado
                                     });
@@ -1573,7 +1574,7 @@ namespace Mikrotik_Administrador.Catalogos
                                     filaCambios++;
                                     continue;
                                 }
-                                var exitCambiot = obj.GetTiempoCambiobyIdUsuarioM(item.IdUsuarioM, item.FechaInicio, item.FechaFin).Result;
+                                var exitCambiot = obj.GetTiempoCambio(item.IdUsuarioM, item.FechaInicio, item.FechaFin).Result;
                                 if (exitCambiot.Count() == 0)
                                 {
                                     ListCambios[ContadorCambios].Id = 0;
@@ -1656,7 +1657,7 @@ namespace Mikrotik_Administrador.Catalogos
                                         wPagos.Cell(filaPagos, 2).Value = "Satisfactorio";
                                         filaPagos++;
                                         var Pagos = ListHistorialPagos.Where(x => x.IdMensualidad == IdMensualidad).ToList();
-                                        ListPagos = new List<ListHistorialPagosModel>();
+                                        
                                         foreach (var itempagos in Pagos)
                                         {
                                             HistorialPagosModel HP = new HistorialPagosModel
@@ -1709,7 +1710,7 @@ namespace Mikrotik_Administrador.Catalogos
                                     wPagos.Cell(filaPagos, 2).Value = "Error";
                                     filaPagos++;
                                     var Pagos = ListHistorialPagos.Where(x => x.IdMensualidad == exitMensualidad[0].Id).ToList();
-                                    ListPagos = new List<ListHistorialPagosModel>();
+                           
                                     int PagosGuardados = obj.GetHistorialPagos(exitMensualidad[0].Id, string.Empty, 0, 0).Result.ToList().Count();
                                    if(PagosGuardados >  0)
                                     {

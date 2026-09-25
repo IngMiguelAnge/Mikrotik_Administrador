@@ -212,7 +212,7 @@ namespace Mikrotik_Administrador.Catalogos
             try
             {
                 AppRepository obj = new AppRepository();
-                var lista = obj.GetTiempoCambio(dtpFechaInicio.Value, dtpFechaFinal.Value).Result;
+                var lista = obj.GetTiempoCambio(1,dtpFechaInicio.Value, dtpFechaFinal.Value).Result;
                 var listaFinal = lista?.ToList() ?? new List<ListTiempoCambioModel>();
                 DGVCambios.DataSource = new SortableBindingList<ListTiempoCambioModel>(listaFinal);
                 if (DGVCambios.Columns["Id"] != null)

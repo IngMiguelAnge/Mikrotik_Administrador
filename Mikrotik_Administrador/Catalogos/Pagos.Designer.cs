@@ -36,12 +36,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtIdentificador = new System.Windows.Forms.TextBox();
             this.lblIdentificador = new System.Windows.Forms.Label();
-            this.CBMikrotik = new System.Windows.Forms.ComboBox();
-            this.lblMikrotik = new System.Windows.Forms.Label();
-            this.CBPlan = new System.Windows.Forms.ComboBox();
-            this.lblPlan = new System.Windows.Forms.Label();
-            this.CBTipo = new System.Windows.Forms.ComboBox();
-            this.lblTipo = new System.Windows.Forms.Label();
             this.txtUsuario = new System.Windows.Forms.TextBox();
             this.lblUsuario = new System.Windows.Forms.Label();
             this.txtCliente = new System.Windows.Forms.TextBox();
@@ -96,7 +90,7 @@
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBuscar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnBuscar.ForeColor = System.Drawing.Color.White;
-            this.btnBuscar.Location = new System.Drawing.Point(1037, 130);
+            this.btnBuscar.Location = new System.Drawing.Point(463, 131);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(110, 38);
             this.btnBuscar.TabIndex = 13;
@@ -110,12 +104,6 @@
             this.panelTop.Controls.Add(this.label2);
             this.panelTop.Controls.Add(this.txtIdentificador);
             this.panelTop.Controls.Add(this.lblIdentificador);
-            this.panelTop.Controls.Add(this.CBMikrotik);
-            this.panelTop.Controls.Add(this.lblMikrotik);
-            this.panelTop.Controls.Add(this.CBPlan);
-            this.panelTop.Controls.Add(this.lblPlan);
-            this.panelTop.Controls.Add(this.CBTipo);
-            this.panelTop.Controls.Add(this.lblTipo);
             this.panelTop.Controls.Add(this.txtUsuario);
             this.panelTop.Controls.Add(this.lblUsuario);
             this.panelTop.Controls.Add(this.txtCliente);
@@ -156,74 +144,6 @@
             this.lblIdentificador.Size = new System.Drawing.Size(123, 25);
             this.lblIdentificador.TabIndex = 0;
             this.lblIdentificador.Text = "Identificador:";
-            // 
-            // CBMikrotik
-            // 
-            this.CBMikrotik.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CBMikrotik.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.CBMikrotik.FormattingEnabled = true;
-            this.CBMikrotik.Location = new System.Drawing.Point(815, 135);
-            this.CBMikrotik.Name = "CBMikrotik";
-            this.CBMikrotik.Size = new System.Drawing.Size(175, 33);
-            this.CBMikrotik.TabIndex = 12;
-            // 
-            // lblMikrotik
-            // 
-            this.lblMikrotik.AutoSize = true;
-            this.lblMikrotik.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblMikrotik.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblMikrotik.Location = new System.Drawing.Point(811, 105);
-            this.lblMikrotik.Name = "lblMikrotik";
-            this.lblMikrotik.Size = new System.Drawing.Size(87, 25);
-            this.lblMikrotik.TabIndex = 11;
-            this.lblMikrotik.Text = "Mikrotik:";
-            // 
-            // CBPlan
-            // 
-            this.CBPlan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CBPlan.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.CBPlan.FormattingEnabled = true;
-            this.CBPlan.Location = new System.Drawing.Point(625, 135);
-            this.CBPlan.Name = "CBPlan";
-            this.CBPlan.Size = new System.Drawing.Size(175, 33);
-            this.CBPlan.TabIndex = 10;
-            // 
-            // lblPlan
-            // 
-            this.lblPlan.AutoSize = true;
-            this.lblPlan.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblPlan.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblPlan.Location = new System.Drawing.Point(621, 105);
-            this.lblPlan.Name = "lblPlan";
-            this.lblPlan.Size = new System.Drawing.Size(52, 25);
-            this.lblPlan.TabIndex = 9;
-            this.lblPlan.Text = "Plan:";
-            // 
-            // CBTipo
-            // 
-            this.CBTipo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CBTipo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.CBTipo.FormattingEnabled = true;
-            this.CBTipo.Items.AddRange(new object[] {
-            "Seleccione",
-            "Fibra",
-            "Antena"});
-            this.CBTipo.Location = new System.Drawing.Point(435, 135);
-            this.CBTipo.Name = "CBTipo";
-            this.CBTipo.Size = new System.Drawing.Size(175, 33);
-            this.CBTipo.TabIndex = 8;
-            this.CBTipo.SelectedIndexChanged += new System.EventHandler(this.CBTipo_SelectedIndexChanged);
-            // 
-            // lblTipo
-            // 
-            this.lblTipo.AutoSize = true;
-            this.lblTipo.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblTipo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblTipo.Location = new System.Drawing.Point(431, 105);
-            this.lblTipo.Name = "lblTipo";
-            this.lblTipo.Size = new System.Drawing.Size(53, 25);
-            this.lblTipo.TabIndex = 7;
-            this.lblTipo.Text = "Tipo:";
             // 
             // txtUsuario
             // 
@@ -301,12 +221,6 @@
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Panel panelContenedor;
-        private System.Windows.Forms.ComboBox CBMikrotik;
-        private System.Windows.Forms.Label lblMikrotik;
-        private System.Windows.Forms.ComboBox CBPlan;
-        private System.Windows.Forms.Label lblPlan;
-        private System.Windows.Forms.ComboBox CBTipo;
-        private System.Windows.Forms.Label lblTipo;
         private System.Windows.Forms.TextBox txtUsuario;
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.TextBox txtCliente;

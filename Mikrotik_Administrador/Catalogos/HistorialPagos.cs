@@ -39,6 +39,7 @@ namespace Mikrotik_Administrador.Catalogos
             CBBanco.ValueMember = "Id";
             CBBanco.DataSource = ListBancos;
             CBBanco.SelectedIndex = 0;
+            Buscar();
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
@@ -185,7 +186,9 @@ namespace Mikrotik_Administrador.Catalogos
                 switch (dgvHistorialPagos.Columns[e.ColumnIndex].Name)
                 {
                     case "btnCambiarStatus":
-                        if((string)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value == "Inactivo"
+                        MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                        if ((string)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value == "Inactivo"
                             && (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Cantidad"].Value > Faltante)
                         {
                             MessageBox.Show("No se puede reactivar este pago, sobre pasa el faltante a pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -197,6 +200,8 @@ namespace Mikrotik_Administrador.Catalogos
                         Buscar();
                         break;
                     case "btnEditar":
+                        MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
                         Pagar iniP = new Pagar();
                         iniP.Id = Id;
                         iniP.IdMensualidad = IdMensualidad;

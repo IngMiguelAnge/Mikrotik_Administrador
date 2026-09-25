@@ -223,6 +223,8 @@ namespace Mikrotik_Administrador.Catalogos
                 switch (dgvMensualidades.Columns[e.ColumnIndex].Name)
                 {
                     case "btnModificar":
+                        MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
                         IniciarPagos ini = new IniciarPagos();
                         ini.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
                         ini.IdUsuarioM = IdUsuarioM;
@@ -235,6 +237,7 @@ namespace Mikrotik_Administrador.Catalogos
                         detalles.IdUsuarioM = IdUsuarioM;
                         detalles.Desde = (DateTime)dgvMensualidades.Rows[e.RowIndex].Cells["FechaInicio"].Value;
                         detalles.Hasta = (DateTime)dgvMensualidades.Rows[e.RowIndex].Cells["FechaLimite"].Value;
+                        detalles.Mensualidad = Convert.ToDecimal(dgvMensualidades.Rows[e.RowIndex].Cells["Mensualidad"].Value);
                         detalles.ShowDialog();
                         break;
                     case "btnHistorial":
@@ -248,7 +251,9 @@ namespace Mikrotik_Administrador.Catalogos
                         Hi.ShowDialog();
                         break;
                      case "btnPagar":
-                        if((decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value == 0)
+                        MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                        if ((decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value == 0)
                         {
                             MessageBox.Show("Esta mensualidad se encuentra completamente pagada", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
@@ -280,6 +285,8 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void btnNuevo_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
             IniciarPagos ini = new IniciarPagos();
             ini.IdMensualidad = 0;
             ini.IdUsuarioM = IdUsuarioM;

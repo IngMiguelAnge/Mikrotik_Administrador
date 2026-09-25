@@ -28,32 +28,6 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void Pagos_Load(object sender, EventArgs e)
         {
-            CBTipo.SelectedIndex = 0;
-            AppRepository obj = new AppRepository();
-            var ListMikrotiks = obj.GetMikrotiks().Result.OrderBy(x => x.Nombre).ToList();
-            // Insertamos un objeto "fantasma" al inicio para el placeholder
-            ListMikrotiks.Insert(0, new ListMikrotikModel { Id = 0, Nombre = "Seleccione" });
-            CBMikrotik.DataSource = null;
-            CBMikrotik.DisplayMember = "Nombre";
-            CBMikrotik.ValueMember = "Id";
-            CBMikrotik.DataSource = ListMikrotiks;
-            CBMikrotik.SelectedIndex = 0;
-        }
-
-        private void CBTipo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            CBPlan.DataSource = null;
-            if (CBTipo.SelectedIndex != 0)
-            {
-                AppRepository obj = new AppRepository();
-                bool IsAntena = CBTipo.Text == "Antena" ? true : false;
-                var ListPlanes = obj.GetPlanes(IsAntena).Result.OrderBy(x => x.Nombre).ToList();
-                ListPlanes.Insert(0, new PlanesModel { Id = 0, Nombre = "Seleccione" });
-                CBPlan.DisplayMember = "Nombre";
-                CBPlan.ValueMember = "Id";
-                CBPlan.DataSource = ListPlanes;
-                CBPlan.SelectedIndex = 0;
-            }
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
@@ -95,19 +69,9 @@ namespace Mikrotik_Administrador.Catalogos
             AppRepository obj = new AppRepository();
             try
             {
-
-                int IdPlan = CBPlan.SelectedIndex <= 0  ? 0 : (int)CBPlan.SelectedValue;
-                int IdMikrotik = CBMikrotik.SelectedIndex <= 0 ? 0 : (int)CBMikrotik.SelectedValue;
                 string Cliente = txtCliente.Text.Trim();
                 string Usuario = txtUsuario.Text.Trim();
-                if (IdCliente != 0 && IdUsuario != 0)
-                {
-                    IdPlan = 0;
-                    IdMikrotik = 0;
-                    Cliente = string.Empty;
-                    Usuario = string.Empty;
-                }
-                var Servicios = await obj.GetUsuariosandPlanes(IdCliente, IdUsuario, Cliente, Usuario, IdPlan, IdMikrotik);
+                var Servicios = await obj.GetUsuariosandPlanes(IdCliente, IdUsuario, Cliente, Usuario);
                 var listaFinal = Servicios?.ToList() ?? new List<UsuariosandPlanesModel>();
                 dgvClientes.DataSource = new SortableBindingList<UsuariosandPlanesModel>(listaFinal);
                 if (dgvClientes.Columns["IdCliente"] != null)
@@ -272,12 +236,14 @@ namespace Mikrotik_Administrador.Catalogos
                         string Mensualidad = (string)dgvClientes.Rows[e.RowIndex].Cells["Mensualidad"].Value;
                         if (Mensualidad == "Falta Crear")
                         {
-                            IniciarPagos ini = new IniciarPagos();
-                            ini.IdMensualidad = 0;
-                            ini.IdUsuarioM = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
-                            ini.IdResponsable = IdResponsable;
-                            if (ini.ShowDialog() != DialogResult.OK)
-                            { return; }                        
+                            MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                            //IniciarPagos ini = new IniciarPagos();
+                            //ini.IdMensualidad = 0;
+                            //ini.IdUsuarioM = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
+                            //ini.IdResponsable = IdResponsable;
+                            //if (ini.ShowDialog() != DialogResult.OK)
+                            //{ return; }                        
                         }
                         Mensualidades M = new Mensualidades();
                         M.IdResponsable = IdResponsable;

@@ -495,7 +495,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<List<ListTiempoCambioModel>> GetTiempoCambio(DateTime FechaInicio, DateTime FechaFin)
+        public async Task<List<ListTiempoCambioModel>> GetTiempoCambio(int IdUSuarioM, DateTime FechaInicio, DateTime FechaFin)
         {
             List<ListTiempoCambioModel> list = new List<ListTiempoCambioModel>();
             try
@@ -505,6 +505,7 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("GetTiempoCambio", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUSuarioM", IdUSuarioM));
                         cmd.Parameters.Add(new SqlParameter("@FechaInicio", FechaInicio));
                         cmd.Parameters.Add(new SqlParameter("@FechaFin", FechaFin));
                         await sql.OpenAsync().ConfigureAwait(false);
@@ -523,14 +524,14 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-        public async Task<List<ListTiempoCambioModel>> GetTiempoCambiobyIdUsuarioM(int IdUsuarioM, DateTime FechaInicio, DateTime FechaFin)
+        public async Task<List<TiempoDefinidosModel>> GetTiempoCambioforDetalles(int IdUsuarioM, DateTime FechaInicio, DateTime FechaFin)
         {
-            List<ListTiempoCambioModel> list = new List<ListTiempoCambioModel>();
+            List<TiempoDefinidosModel> list = new List<TiempoDefinidosModel>();
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("GetTiempoCambiobyIdUsuarioM", sql))
+                    using (SqlCommand cmd = new SqlCommand("GetTiempoCambioforDetalles", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
@@ -541,7 +542,7 @@ namespace Mikrotik_Administrador.Data
                         {
                             while (await reader.ReadAsync().ConfigureAwait(false))
                             {
-                                list.Add(MapToListTiempoCambio(reader));
+                                list.Add(MapToTiempoDefinidos(reader));
                             }
                         }
                     }
@@ -552,6 +553,24 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
+        private TiempoDefinidosModel MapToTiempoDefinidos(SqlDataReader reader)
+        {
+            return new TiempoDefinidosModel()
+            {
+                Id = (int)reader["Id"],
+                Dias = (int)reader["Dias"],
+                Horas = (int)reader["Horas"],
+                FechaInicio = (DateTime)reader["FechaInicio"],
+                FechaFin = (DateTime)reader["FechaFin"],
+                Estatus = (string)reader["Estatus"],
+                Modo = (string)reader["Modo"],
+                IdUsuarioM = (int)reader["IdUsuarioM"],
+                Nota = Convert.IsDBNull(reader["Nota"]) ? string.Empty : (string)reader["Nota"],
+                IdPlan = (int)reader["IdPlan"],
+                Plan = (string)reader["Plan"]
+            };
+        }
+      
         private ListTiempoCambioModel MapToListTiempoCambio(SqlDataReader reader)
         {
             return new ListTiempoCambioModel()
@@ -567,8 +586,7 @@ namespace Mikrotik_Administrador.Data
                 Nota = Convert.IsDBNull(reader["Nota"]) ? string.Empty : (string)reader["Nota"],
                 IdPlan = (int)reader["IdPlan"],
                 PlanNuevo = (string)reader["PlanNuevo"],
-                Usuario = (string)reader["Usuario"],
-                Programacion = (string)reader["Programacion"]
+                Usuario = (string)reader["Usuario"]
             };
         }
         public async Task<bool> SaveTiempoCambio(TiempoDefinidosModel obj)
@@ -591,6 +609,9 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@IdPlan", obj.IdPlan));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotikReceptor", obj.IdMikrotikReceptor));
                         cmd.Parameters.Add(new SqlParameter("@Password", obj.Password));
+                        cmd.Parameters.Add(new SqlParameter("@IdPlanOriginal", obj.IdPlanOriginal));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotikOriginal", obj.IdMikrotikOriginal));
+                        cmd.Parameters.Add(new SqlParameter("@Nota", obj.Nota));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -857,47 +878,7 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
-        public async Task<List<ListDetallesMensualidadModel>> GetDetallesMensualidad(int IdUsuarioM, DateTime Desde, DateTime Hasta)
-        {
-            List<ListDetallesMensualidadModel> list = new List<ListDetallesMensualidadModel>();
-            try
-            {
-                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
-                {
-                    using (SqlCommand cmd = new SqlCommand("GetDetallesMensualidad", sql))
-                    {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
-                        cmd.Parameters.Add(new SqlParameter("@Desde", Desde));
-                        cmd.Parameters.Add(new SqlParameter("@Hasta", Hasta));
-                        await sql.OpenAsync().ConfigureAwait(false);
-                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
-                        {
-                            while (await reader.ReadAsync().ConfigureAwait(false))
-                            {
-                                list.Add(MapToListDetallesMensualidad(reader));
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return list;
-        }
-        private ListDetallesMensualidadModel MapToListDetallesMensualidad(SqlDataReader reader)
-        {
-            return new ListDetallesMensualidadModel()
-            {
-                Id = (int)reader["Id"],
-                FechaInicio = (DateTime)reader["FechaInicio"],
-                FechaFin = (DateTime)reader["FechaFin"],
-                Estatus = (string)reader["Estatus"],
-                Plan = (string)reader["Plan"],
-            };
-        }
+       
         public async Task<List<ListMensualidadesModel>> GetExistMensualidadProxima(int IdUsuarioM, int IdMensualidad, DateTime FechaInicio, DateTime FechaFin)
         {
             List<ListMensualidadesModel> list = new List<ListMensualidadesModel>();
@@ -1045,6 +1026,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@FechaInicio", obj.FechaInicio));
                         cmd.Parameters.Add(new SqlParameter("@FechaLimite", obj.FechaLimite));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
+                        cmd.Parameters.Add(new SqlParameter("@Mensualidad", obj.Mensualidad));
                         SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
                         {
                             Direction = System.Data.ParameterDirection.Output
@@ -1063,7 +1045,7 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
-        public async Task<List<UsuariosandPlanesModel>> GetUsuariosandPlanes(int IdCliente, int IdUsuario, string Cliente, string Usuario, int IdPlan, int IdMikrotik)
+        public async Task<List<UsuariosandPlanesModel>> GetUsuariosandPlanes(int IdCliente, int IdUsuario, string Cliente, string Usuario)
         {
             List<UsuariosandPlanesModel> list = new List<UsuariosandPlanesModel>();
             try
@@ -1077,8 +1059,6 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", IdUsuario));
                         cmd.Parameters.Add(new SqlParameter("@Cliente", Cliente));
                         cmd.Parameters.Add(new SqlParameter("@Usuario", Usuario));
-                        cmd.Parameters.Add(new SqlParameter("@IdPlan", IdPlan));
-                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
