@@ -1029,9 +1029,8 @@ namespace Mikrotik_Administrador.Catalogos
 
                                     costoAcumuladoDetalles += costoCalculado;
 
-                                    // Definición coherente de la fecha de término del cambio
-                                    // Si el evento inicia en fInicioEfectiva y dura N días, la fecha fin inclusiva es fInicioEfectiva + (Dias - 1)
-                                    DateTime fFinVisual = fInicioEfectiva.AddDays(diasEfectivos - 1);
+                                    // CORRECCIÓN: Usar directamente fFinEfectiva para respetar los días reales (ej. del 15 al 25 exactos)
+                                    DateTime fFinVisual = fFinEfectiva;
 
                                     ListDestalles.Add(new ListDetallesMensualidadModel
                                     {
@@ -1043,7 +1042,7 @@ namespace Mikrotik_Administrador.Catalogos
                                         Costo = costoCalculado
                                     });
 
-                                    // La fecha de inicio del siguiente tramo será el día posterior al término del cambio
+                                    // La fecha de inicio del siguiente tramo será el día posterior a la finalización de este cambio
                                     fechaProcesadaHasta = fFinVisual.AddDays(1);
                                 }
                             }
@@ -1067,8 +1066,8 @@ namespace Mikrotik_Administrador.Catalogos
                                 ListDestalles.Add(new ListDetallesMensualidadModel
                                 {
                                     Id = 0,
-                                    FechaInicio = fechaProcesadaHasta, // Comienza exactamente al día siguiente de finalizar el cambio (ej. 11/01/2026)
-                                    FechaFin = fFinOriginalVisual,     // Finaliza en el último día del período (ej. 31/01/2026)
+                                    FechaInicio = fechaProcesadaHasta, // Comienza exactamente al día siguiente de finalizar el cambio
+                                    FechaFin = fFinOriginalVisual,     // Finaliza en el último día del período
                                     Estatus = "Activo",
                                     Plan = nombrePlanBase,
                                     Costo = costoBaseFinal
