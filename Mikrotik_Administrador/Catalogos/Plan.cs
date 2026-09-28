@@ -89,11 +89,6 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Datos incompletos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if(CBSinCosto.Checked == false && NUDPrecio.Value <= 0)
-            {
-                MessageBox.Show("Se requiere un costo para el plan", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
             // 1. Convertimos la subida a una unidad base (kB)
             double totalSubida = (double)NUDSubida.Value;
             if (Convert.ToString(cbSubida.SelectedItem) == "M")

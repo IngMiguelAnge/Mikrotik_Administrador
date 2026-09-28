@@ -1,24 +1,14 @@
 ﻿using ClosedXML.Excel;
-using Microsoft.Identity.Client.Extensibility;
-using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
-using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-using System.Runtime.Remoting;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.Animation;
 
 namespace Mikrotik_Administrador.Catalogos
 {
@@ -165,6 +155,15 @@ namespace Mikrotik_Administrador.Catalogos
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
+                Name = "Mikrotik",
+                HeaderText = "Mikrotik",
+                DataPropertyName = "Mikrotik",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 Name = "Estatus",
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
@@ -209,6 +208,7 @@ namespace Mikrotik_Administrador.Catalogos
                       Cliente = Convert.ToString(r.Cells["Cliente"].Value),
                       IdUsuarioM = Convert.ToInt32(r.Cells["IdUsuarioM"].Value),
                       Usuario = Convert.ToString(r.Cells["Usuario"].Value),
+                      Mikrotik = Convert.ToString(r.Cells["Mikrotik"].Value),
                       Estatus = Convert.ToString(r.Cells["Estatus"].Value)
                   })
                    .ToList();
@@ -287,19 +287,20 @@ namespace Mikrotik_Administrador.Catalogos
                             wsPagos.Cell(1, 2).Value = "Cliente";                   // B
                             wsPagos.Cell(1, 3).Value = "IdServicio";                // C
                             wsPagos.Cell(1, 4).Value = "Servicio";                  // D
-                            wsPagos.Cell(1, 5).Value = "Inicio la mensualidad";     // E
-                            wsPagos.Cell(1, 6).Value = "Día de corte";              // F
-                            wsPagos.Cell(1, 7).Value = "IdResponsable";             // G
-                            wsPagos.Cell(1, 8).Value = "Responsable";               // H
-                            wsPagos.Cell(1, 9).Value = "Cuando se recibio el pago"; // I
-                            wsPagos.Cell(1, 10).Value = "Cantidad recibida";        // J
-                            wsPagos.Cell(1, 11).Value = "Comentario";               // K
-                            wsPagos.Cell(1, 12).Value = "IdBanco";                  // L
-                            wsPagos.Cell(1, 13).Value = "Banco";                    // M
-                            wsPagos.Cell(1, 14).Value = "Referencia";               // N
-                            wsPagos.Cell(1, 15).Value = "Ruta de imagen";           // O
-                            // Formato a los encabezados (A1 a O1)
-                            var headerPagos = wsPagos.Range("A1:O1");
+                            wsPagos.Cell(1, 5).Value = "Mikrotik";                  // E
+                            wsPagos.Cell(1, 6).Value = "Inicio la mensualidad";     // F
+                            wsPagos.Cell(1, 7).Value = "Día de corte";              // G
+                            wsPagos.Cell(1, 8).Value = "IdResponsable";             // H
+                            wsPagos.Cell(1, 9).Value = "Responsable";               // I
+                            wsPagos.Cell(1, 10).Value = "Cuando se recibio el pago"; // J
+                            wsPagos.Cell(1, 11).Value = "Cantidad recibida";        // K
+                            wsPagos.Cell(1, 12).Value = "Comentario";               // L
+                            wsPagos.Cell(1, 13).Value = "IdBanco";                  // M
+                            wsPagos.Cell(1, 14).Value = "Banco";                    // N
+                            wsPagos.Cell(1, 15).Value = "Referencia";               // O
+                            wsPagos.Cell(1, 16).Value = "Ruta de imagen";           // P
+                            // Formato a los encabezados (A1 a P1)
+                            var headerPagos = wsPagos.Range("A1:P1");
                             headerPagos.Style.Font.Bold = true;
                             headerPagos.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
                             headerPagos.Style.Font.FontColor = XLColor.White;
@@ -311,19 +312,20 @@ namespace Mikrotik_Administrador.Catalogos
                                 wsPagos.Cell(filaPagos, 2).Value = item.Cliente;
                                 wsPagos.Cell(filaPagos, 3).Value = item.IdUsuarioM;
                                 wsPagos.Cell(filaPagos, 4).Value = item.Usuario;
-                                wsPagos.Cell(filaPagos, 5).Value = DateTime.Now.Date;
-                                wsPagos.Cell(filaPagos, 5).Style.DateFormat.Format = "dd/MM/yyyy";
-                                wsPagos.Cell(filaPagos, 6).Value = 1;
+                                wsPagos.Cell(filaPagos, 5).Value = item.Mikrotik;
+                                wsPagos.Cell(filaPagos, 6).Value = DateTime.Now.Date;
+                                wsPagos.Cell(filaPagos, 6).Style.DateFormat.Format = "dd/MM/yyyy";
                                 wsPagos.Cell(filaPagos, 7).Value = 1;
-                                wsPagos.Cell(filaPagos, 8).Value = "Administrador";
-                                wsPagos.Cell(filaPagos, 9).Value = DateTime.Now;
-                                wsPagos.Cell(filaPagos, 9).Style.DateFormat.Format = "dd/MM/yyyy h:mm AM/PM";
-                                wsPagos.Cell(filaPagos, 10).Value = 0;
-                                wsPagos.Cell(filaPagos, 11).Value = "";
-                                wsPagos.Cell(filaPagos, 12).Value = 1;
-                                wsPagos.Cell(filaPagos, 13).Value = "PAGOS EFECTIVO";
-                                wsPagos.Cell(filaPagos, 14).Value = "1234ASD";
-                                wsPagos.Cell(filaPagos, 15).Value = "C:\\Users\\Lenovo\\OneDrive\\Desktop\\Imagenes\\1.jpg";
+                                wsPagos.Cell(filaPagos, 8).Value = 1;
+                                wsPagos.Cell(filaPagos, 9).Value = "Administrador";
+                                wsPagos.Cell(filaPagos, 10).Value = DateTime.Now;
+                                wsPagos.Cell(filaPagos, 10).Style.DateFormat.Format = "dd/MM/yyyy h:mm AM/PM";
+                                wsPagos.Cell(filaPagos, 11).Value = 0;
+                                wsPagos.Cell(filaPagos, 12).Value = "";
+                                wsPagos.Cell(filaPagos, 13).Value = 1;
+                                wsPagos.Cell(filaPagos, 14).Value = "PAGOS EFECTIVO";
+                                wsPagos.Cell(filaPagos, 15).Value = "1234ASD";
+                                wsPagos.Cell(filaPagos, 16).Value = "C:\\Users\\Lenovo\\OneDrive\\Desktop\\Imagenes\\1.jpg";
                                 filaPagos++;
                             }
 
@@ -403,7 +405,7 @@ namespace Mikrotik_Administrador.Catalogos
                     // =========================================================================
                     var wsCambios = workbook.Worksheet("Cambios");
                     bool primeraFila1 = true;
-
+                    int IdPlanPrincipal = 0;
                     foreach (var row in wsCambios.RowsUsed())
                     {
                         if (primeraFila1) { primeraFila1 = false; continue; }
@@ -431,7 +433,10 @@ namespace Mikrotik_Administrador.Catalogos
                             int idMikrotikOriginal = row.Cell(7).GetValue<int>();  // Col G: IdMikrotik original
                             int idPlanNuevo = row.Cell(9).GetValue<int>();         // Col I: IdPlan nuevo
                             int idMikrotikReceptor = row.Cell(11).GetValue<int>(); // Col K: IdMikrotik receptor
-
+                            if(IdPlanPrincipal== 0)
+                            {
+                                IdPlanPrincipal = idPlanOriginal;
+                            }
                             var planB = await obj.GetPlanById(idPlanNuevo);
 
                             ListCambios.Add(new TiempoDefinidosModel
@@ -467,15 +472,14 @@ namespace Mikrotik_Administrador.Catalogos
 
                         int idCliente = row.Cell(1).GetValue<int>();                  // Col A: IdCliente
                         int idServicio = row.Cell(3).GetValue<int>();                 // Col C: IdServicio
-                        DateTime fechaInicioExcel = row.Cell(5).GetValue<DateTime>(); // Col E: Inicio la mensualidad
-                        int diaCorte = row.Cell(6).GetValue<int>();                   // Col F: Día de corte
-                        int idResponsable = row.Cell(7).GetValue<int>();              // Col G: IdResponsable
-                        DateTime fechaPago = row.Cell(9).GetValue<DateTime>();        // Col I: Cuando se recibio el pago
-                        decimal saldoRestante = row.Cell(10).GetValue<decimal>();     // Col J: Cantidad recibida
+                        DateTime fechaInicioExcel = row.Cell(6).GetValue<DateTime>(); // Col F: Inicio la mensualidad
+                        int diaCorte = row.Cell(7).GetValue<int>();                   // Col G: Día de corte
+                        int idResponsable = row.Cell(8).GetValue<int>();              // Col H: IdResponsable
+                        DateTime fechaPago = row.Cell(10).GetValue<DateTime>();        // Col J: Cuando se recibio el pago
+                        decimal saldoRestante = row.Cell(11).GetValue<decimal>();     // Col K: Cantidad recibida
 
-                        string comentario = row.Cell(11).IsEmpty() ? "" : row.Cell(11).GetValue<string>();
-                        int idBanco = row.Cell(12).IsEmpty() ? 0 : row.Cell(12).GetValue<int>();
-                        string banco = row.Cell(13).IsEmpty() ? "" : row.Cell(13).GetValue<string>();
+                        string comentario = row.Cell(12).IsEmpty() ? "" : row.Cell(12).GetValue<string>(); // Col L: Comentario
+                        int idBanco = row.Cell(13).IsEmpty() ? 0 : row.Cell(13).GetValue<int>(); // Col M: IdBanco
                         string referencia = row.Cell(14).IsEmpty() ? "" : row.Cell(14).GetValue<string>();
                         string rutaImagen = row.Cell(15).IsEmpty() ? "" : row.Cell(15).GetValue<string>();
 
@@ -560,7 +564,15 @@ namespace Mikrotik_Administrador.Catalogos
                                     precioTargetBD = planOrigObj.Precio; // Aplica $300 a partir del mes del cambio
                                 }
                             }
-
+                            if(precioTargetBD == 0)
+                            {
+                                var planOrigObj = await obj.GetPlanById(IdPlanPrincipal);
+                                if (planOrigObj != null && planOrigObj.Precio > 0)
+                                {
+                                    precioTargetBD = planOrigObj.Precio; // Aplica $300 a partir del mes del cambio
+                                }
+                            }
+                            
                             // Calcular el costo exacto del mes
                             decimal costoMensualidad = await CalcularCostoMensualidadAsync(idServicio, fechaInicioActual, fechaLimiteActual, precioTargetBD, ListCambios);
 
@@ -628,6 +640,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 mensualidadExistente.Pagado = true;
                             }
 
+                           var Banco = obj.GetBancobyId(idBanco).Result;
                             ListHistorialPagos.Add(new HistorialPagosModel
                             {
                                 Id = ListHistorialPagos.Count + 1,
@@ -635,7 +648,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 Cantidad = pagoParaEstaMensualidad,
                                 Comentario = comentario,
                                 IdBanco = idBanco,
-                                Banco = banco,
+                                Banco = Banco.Nombre,
                                 Referencia = referencia,
                                 Imagen = (!string.IsNullOrEmpty(rutaImagen) && File.Exists(rutaImagen)) ? File.ReadAllBytes(rutaImagen) : null,
                                 IdMensualidad = idMensualidad,

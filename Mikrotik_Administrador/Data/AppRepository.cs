@@ -2988,6 +2988,7 @@ namespace Mikrotik_Administrador.Data
                 Cliente = (string)reader["Cliente"],
                 IdUsuarioM = (int)reader["IdUsuarioM"],
                 Usuario = (string)reader["Usuario"],
+                Mikrotik = (string)reader["Mikrotik"],
                 Estatus = (string)reader["Estatus"],
             };
         }

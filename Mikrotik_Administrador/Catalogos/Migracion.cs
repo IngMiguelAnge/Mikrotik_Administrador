@@ -491,8 +491,8 @@ namespace Mikrotik_Administrador
                         HistorialMovimientosModel H = new HistorialMovimientosModel
                         {
                             Id = 0,
-                            Descripcion = "Se elimino al usuario " + item.comment + " del mikrotik " + mikro.Nombre 
-                            + " de " + donde + " con ip: " + item.address ,
+                            Descripcion = "Se elimino al usuario " + item.comment + " del mikrotik " + mikro.Nombre
+                            + " de " + donde + " con ip: " + item.address,
                             Pagina = "En la página de migración",
                             IdUsuario = IdResponsable,
                             Estatus = false
@@ -500,7 +500,7 @@ namespace Mikrotik_Administrador
                         var r = obj.SaveHistorialMovimientos(H);
                         obj.UpdateEstatusGeneralbyIdInterno(IdMikrotik, item.id, cbAntenas.Checked, "Eliminado", IdResponsable).Wait();
                     }
-
+                    BuscarUsuarios();
                 }
                 else
                 {
@@ -528,14 +528,14 @@ namespace Mikrotik_Administrador
                             if (ultimoPunto != -1)
                             {
                                 string subred = ipExtraida.Substring(0, ultimoPunto);
-              
-                                    var Mikrotiks = obj.GetMikrotikbyIPAntena(subred).Result;
-                                    EsAntena = true;
-                                    if(Mikrotiks.Id == 0)
-                                    {
-                                        Mikrotiks = obj.GetMikrotikbyIPFibra(subred).Result;
-                                        EsAntena = false;
-                                    }
+
+                                var Mikrotiks = obj.GetMikrotikbyIPAntena(subred).Result;
+                                EsAntena = true;
+                                if (Mikrotiks.Id == 0)
+                                {
+                                    Mikrotiks = obj.GetMikrotikbyIPFibra(subred).Result;
+                                    EsAntena = false;
+                                }
                                 if (MikrotkConexion != Mikrotiks.Id)
                                 {
                                     MikrotkConexion = Mikrotiks.Id;
