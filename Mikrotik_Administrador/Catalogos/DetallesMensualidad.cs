@@ -27,112 +27,137 @@ namespace Mikrotik_Administrador.Catalogos
 
         private async void DetallesMensualidad_Load(object sender, EventArgs e)
         {
-     
             AppRepository obj = new AppRepository();
             try
             {
                 var Detalles = await obj.GetTiempoCambioforDetalles(IdUsuarioM, Desde, Hasta);
-                if(Detalles.Count() == 0)
+                if (Detalles == null || !Detalles.Any())
                 {
                     MessageBox.Show("Este período transcurrió con normalidad. No hay cambios que detallar.",
-                                          "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                     return;
                 }
-                int diasTotalesMensualidad = 30;
+
                 CrearGridView();
                 List<ListDetallesMensualidadModel> ListDestalles = new List<ListDetallesMensualidadModel>();
 
-                int diasOcupadosPorCambios = 0;
-                decimal costoAcumuladoDetalles = 0m;
-                int idPlanOriginalPeriodo = 0;
-                DateTime fechaProcesadaHasta = Desde;
+                // Obtener el plan base vigente al inicio de este período
+                var planBasePeriodo = await obj.GetPlanByIdUsuarioM(IdUsuarioM);
+                int idPlanActual = planBasePeriodo != null ? planBasePeriodo.Id : 0;
+                string nombrePlanActual = planBasePeriodo != null ? planBasePeriodo.Nombre : "Plan Base";
+                decimal precioPlanActual = planBasePeriodo != null ? planBasePeriodo.Precio : 0m;
 
-                // 2. Agregar tramos de Cambios / Suspensiones
-                foreach (var item in Detalles)
+                // Si hay un cambio previo que afecte el inicio, buscamos su plan original
+                var cambioAnterior = Detalles
+                    .Where(x => x.FechaFin < Desde)
+                    .OrderByDescending(x => x.FechaFin)
+                    .FirstOrDefault();
+
+                if (cambioAnterior != null)
                 {
-                    if (idPlanOriginalPeriodo == 0 && item.IdPlanOriginal > 0)
+                    var planAnt = await obj.GetPlanById(cambioAnterior.IdPlanOriginal);
+                    if (planAnt != null)
                     {
-                        idPlanOriginalPeriodo = item.IdPlanOriginal;
+                        nombrePlanActual = planAnt.Nombre;
+                        precioPlanActual = planAnt.Precio;
+                    }
+                }
+
+                // Ordenar los eventos de cambio cronológicamente dentro del rango relevante
+                var cambiosOrdenados = Detalles
+                    .Where(x => x.FechaInicio <= Hasta && x.FechaFin >= Desde)
+                    .OrderBy(x => x.FechaInicio)
+                    .ToList();
+
+                DateTime cursor = Desde;
+
+                // Recorrer de forma continua desde la fecha 'Desde' hasta la fecha 'Hasta'
+                foreach (var cambio in cambiosOrdenados)
+                {
+                    // Si hay un espacio libre antes de que empiece este cambio, pertenece al plan base actual
+                    if (cursor < cambio.FechaInicio)
+                    {
+                        DateTime finTramoBase = cambio.FechaInicio.AddDays(-1);
+                        if (finTramoBase > Hasta) finTramoBase = Hasta;
+
+                        if (cursor <= finTramoBase)
+                        {
+                            int diasBase = (int)(finTramoBase - cursor).TotalDays + 1;
+                            decimal costoBase = RedondearMontoFinanciero(diasBase * (precioPlanActual / 30.0m));
+
+                            ListDestalles.Add(new ListDetallesMensualidadModel
+                            {
+                                Id = 0,
+                                FechaInicio = cursor,
+                                FechaFin = finTramoBase,
+                                Estatus = "Activo",
+                                Plan = nombrePlanActual,
+                                Costo = costoBase
+                            });
+                        }
+                        cursor = cambio.FechaInicio;
                     }
 
-                    // Acotar rango de fechas efectivo dentro de la mensualidad
-                    DateTime fInicioEfectiva = Desde > item.FechaInicio ? Desde : item.FechaInicio;
-                    DateTime fFinEfectiva = Hasta < item.FechaFin ? Hasta : item.FechaFin;
+                    // Acotar el rango del cambio dentro de los límites del período
+                    DateTime inicioCambioEfectivo = cursor > cambio.FechaInicio ? cursor : cambio.FechaInicio;
+                    DateTime finCambioEfectivo = Hasta < cambio.FechaFin ? Hasta : cambio.FechaFin;
 
-                    // Días del evento de cambio
-                    int diasEfectivos = item.Dias;
-
-                    if (diasEfectivos > 0)
+                    if (inicioCambioEfectivo <= finCambioEfectivo)
                     {
-                        if (diasEfectivos > diasTotalesMensualidad)
-                            diasEfectivos = diasTotalesMensualidad;
-
-                        var planNuevo = await obj.GetPlanById(item.IdPlan);
-                        decimal precioPlan = planNuevo != null ? planNuevo.Precio : 0m;
-
-                        decimal costoCalculado = 0m;
-                        if (diasEfectivos >= diasTotalesMensualidad)
-                        {
-                            costoCalculado = precioPlan;
-                            diasOcupadosPorCambios = 30;
-                        }
-                        else
-                        {
-                            diasOcupadosPorCambios += diasEfectivos;
-                            decimal costoBruto = diasEfectivos * (precioPlan / 30.0m);
-                            costoCalculado = RedondearMontoFinanciero(costoBruto);
-                        }
-
-                        costoAcumuladoDetalles += costoCalculado;
-
-                        // Definición coherente de la fecha de término del cambio
-                        // Si el evento inicia en fInicioEfectiva y dura N días, la fecha fin inclusiva es fInicioEfectiva + (Dias - 1)
-                        DateTime fFinVisual = fInicioEfectiva.AddDays(diasEfectivos - 1);
+                        int diasCambio = (int)(finCambioEfectivo - inicioCambioEfectivo).TotalDays + 1;
+                        var planNuevo = await obj.GetPlanById(cambio.IdPlan);
+                        decimal precioPlanNuevo = planNuevo != null ? planNuevo.Precio : 0m;
+                        decimal costoCambio = RedondearMontoFinanciero(diasCambio * (precioPlanNuevo / 30.0m));
 
                         ListDestalles.Add(new ListDetallesMensualidadModel
                         {
-                            Id = item.Id,
-                            FechaInicio = fInicioEfectiva,
-                            FechaFin = fFinVisual,
-                            Estatus = item.Estatus,
-                            Plan = item.Plan,
-                            Costo = costoCalculado
+                            Id = cambio.Id,
+                            FechaInicio = inicioCambioEfectivo,
+                            FechaFin = finCambioEfectivo,
+                            Estatus = cambio.Estatus,
+                            Plan = cambio.Plan,
+                            Costo = costoCambio
                         });
 
-                        // La fecha de inicio del siguiente tramo será el día posterior al término del cambio
-                        fechaProcesadaHasta = fFinVisual.AddDays(1);
+                        cursor = finCambioEfectivo.AddDays(1);
+                    }
+
+                    // Actualizar el plan base posterior según el IdPlanOriginal de este cambio
+                    var planOrigCambio = await obj.GetPlanById(cambio.IdPlanOriginal);
+                    if (planOrigCambio != null)
+                    {
+                        nombrePlanActual = planOrigCambio.Nombre;
+                        precioPlanActual = planOrigCambio.Precio;
                     }
                 }
 
-                // 3. Agregar el tramo restante con el Plan Original / Base
-                int diasRestantesPlanBase = 30 - diasOcupadosPorCambios;
-                if (diasRestantesPlanBase > 0 && fechaProcesadaHasta < Hasta)
+                // Si queda tiempo después del último cambio hasta llegar a la fecha límite ('Hasta')
+                if (cursor <= Hasta)
                 {
-                    var planOriginal = idPlanOriginalPeriodo > 0
-                        ? await obj.GetPlanById(idPlanOriginalPeriodo)
-                        : await obj.GetPlanByIdUsuarioM(IdUsuarioM);
+                    DateTime fechaFinTramoFinal = Hasta;
 
-                    string nombrePlanBase = planOriginal != null ? planOriginal.Nombre : "Plan Original";
+                    // Opcional si manejas el cierre un día antes cuando es el inicio del mes siguiente:
+                    // if (fechaFinTramoFinal.Day == 1 && ListDestalles.Count > 0) fechaFinTramoFinal = fechaFinTramoFinal.AddDays(-1);
 
-                    decimal costoBaseFinal = Mensualidad - costoAcumuladoDetalles;
-                    if (costoBaseFinal < 0) costoBaseFinal = 0m;
-
-                    // Fecha fin visual del tramo base (un día antes de la fecha límite del mes o la fecha límite exacta)
-                    DateTime fFinOriginalVisual = (Hasta.Day == 1) ? Hasta.AddDays(-1) : Hasta;
-
-                    ListDestalles.Add(new ListDetallesMensualidadModel
+                    if (cursor <= fechaFinTramoFinal)
                     {
-                        Id = 0,
-                        FechaInicio = fechaProcesadaHasta, // Comienza exactamente al día siguiente de finalizar el cambio (ej. 11/01/2026)
-                        FechaFin = fFinOriginalVisual,     // Finaliza en el último día del período (ej. 31/01/2026)
-                        Estatus = "Activo",
-                        Plan = nombrePlanBase,
-                        Costo = costoBaseFinal
-                    });
+                        int diasFinales = (int)(fechaFinTramoFinal - cursor).TotalDays + 1;
+                        decimal costoFinal = RedondearMontoFinanciero(diasFinales * (precioPlanActual / 30.0m));
+
+                        ListDestalles.Add(new ListDetallesMensualidadModel
+                        {
+                            Id = 0,
+                            FechaInicio = cursor,
+                            FechaFin = fechaFinTramoFinal,
+                            Estatus = "Activo",
+                            Plan = nombrePlanActual,
+                            Costo = costoFinal
+                        });
+                    }
                 }
-                var listaFinal = ListDestalles?.ToList() ?? new List<ListDetallesMensualidadModel>();
-                dgvDetalles.DataSource = new SortableBindingList<ListDetallesMensualidadModel>(listaFinal);
+
+                dgvDetalles.DataSource = new SortableBindingList<ListDetallesMensualidadModel>(ListDestalles);
             }
             catch (Exception ex)
             {

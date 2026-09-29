@@ -567,7 +567,11 @@ namespace Mikrotik_Administrador.Data
                 IdUsuarioM = (int)reader["IdUsuarioM"],
                 Nota = Convert.IsDBNull(reader["Nota"]) ? string.Empty : (string)reader["Nota"],
                 IdPlan = (int)reader["IdPlan"],
-                Plan = (string)reader["Plan"]
+                Plan = (string)reader["Plan"],
+                IdMikrotikReceptor = (int)reader["IdMikrotikReceptor"],
+                Password = (string)reader["PasswordFibra"],
+                IdMikrotikOriginal = (int)reader["IdMikrotikOriginal"],
+                IdPlanOriginal = (int)reader["IdPlanOriginal"]
             };
         }
       
