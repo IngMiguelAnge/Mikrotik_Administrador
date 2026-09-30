@@ -1660,16 +1660,6 @@ namespace Mikrotik_Administrador.Catalogos
                                 {
                                     ListCambios[ContadorCambios].Id = 0;
 
-                                    if (existServicio.IdMikrotikOriginal != ListCambios[ContadorCambios].IdMikrotikOriginal ||
-                                         existServicio.IdPlanOriginal != ListCambios[ContadorCambios].IdPlanOriginal)
-                                    {
-                                        bool roriginal = obj.UpdateOriginalesbyIdUsuarioM(
-                                             ListCambios[ContadorCambios].IdUsuarioM,
-                                             ListCambios[ContadorCambios].IdPlanOriginal,
-                                             ListCambios[ContadorCambios].IdMikrotikOriginal
-                                        ).Result;
-                                    }
-
                                     var resultcambio = obj.SaveTiempoCambio(ListCambios[ContadorCambios]).Result;
                                     if (resultcambio)
                                     {

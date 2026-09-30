@@ -213,7 +213,7 @@ namespace Mikrotik_Administrador.Data
 
             return string.Empty;
         }
-        public async Task<string> GetIPDisponible(int IdMikrotik, bool IsAntena)
+        public async Task<string> GetIPDisponible(int IdMikrotik, bool IsAntena,string IPNousar)
         {
             try
             {
@@ -226,7 +226,7 @@ namespace Mikrotik_Administrador.Data
                         // Parámetros obligatorios para el SP
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
-
+                        cmd.Parameters.Add(new SqlParameter("@IPNousar", IPNousar));
                         await sql.OpenAsync().ConfigureAwait(false);
 
                         // ExecuteScalarAsync ejecuta la consulta y retorna únicamente la 1ra columna de la 1ra fila
@@ -2162,7 +2162,9 @@ namespace Mikrotik_Administrador.Data
                 Servicio = (string)reader["Servicio"],
                 Address = (string)reader["Address"],
                 Estatus = (string)reader["Estatus"],
-                Mikrotik = (string)reader["Mikrotik"]
+                Mikrotik = (string)reader["Mikrotik"],
+                Latitud = (string)reader["Latitud"],
+                Longitud = (string)reader["Longitud"],
             };
         }
 
@@ -2420,11 +2422,14 @@ namespace Mikrotik_Administrador.Data
                 Address = (string)reader["Address"],
                 Estatus = (string)reader["Estatus"],
                 IdPlan = (int)reader["IdPlan"],
-                IdPlanOriginal = (int)reader["IdPlanOriginal"],
                 Plan = (string)reader["Plan"],
+                IdPlanOriginal = (int)reader["IdPlanOriginal"],
+                PlanOriginal = (string)reader["PlanOriginal"],
                 UploadDownload = (string)reader["UploadDownload"],
                 IdMikrotik = (int)reader["IdMikrotik"],
                 Mikrotik = (string)reader["Mikrotik"],
+                IdMikrotikOriginal = (int)reader["IdMikrotikOriginal"],
+                MikrotikOriginal= (string)reader["MikrotikOriginal"],
                 IdCliente = Convert.IsDBNull(reader["IdCliente"]) ? (int?)null : (int)reader["IdCliente"],
                 Cliente = Convert.IsDBNull(reader["Cliente"]) ? string.Empty : (string)reader["Cliente"],
             };

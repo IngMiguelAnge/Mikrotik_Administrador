@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using Mikrotik_Administrador.Class;
 using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
@@ -126,6 +127,15 @@ namespace Mikrotik_Administrador
             });
             dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
             {
+                Name = "PlanOriginal",
+                HeaderText = "Plan Original",
+                DataPropertyName = "PlanOriginal",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 Name = "UploadDownload",
                 HeaderText = "UploadDownload",
                 DataPropertyName = "UploadDownload",
@@ -148,6 +158,25 @@ namespace Mikrotik_Administrador
                 Name = "Mikrotik",
                 HeaderText = "Mikrotik",
                 DataPropertyName = "Mikrotik",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdMikrotikOriginal",
+                HeaderText = "IdMikrotikOriginal",
+                DataPropertyName = "IdMikrotikOriginal",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "MikrotikOriginal",
+                HeaderText = "Mikrotik Original",
+                DataPropertyName = "MikrotikOriginal",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
@@ -275,6 +304,10 @@ namespace Mikrotik_Administrador
                 if (dgvUsuarios.Columns["IdMikrotik"] != null)
                 {
                     dgvUsuarios.Columns["IdMikrotik"].Visible = false;
+                }
+                if (dgvUsuarios.Columns["IdMikrotikOriginal"] != null)
+                {
+                    dgvUsuarios.Columns["IdMikrotikOriginal"].Visible = false;
                 }
                 if (dgvUsuarios.Columns["IdCliente"] != null)
                 {
@@ -794,6 +827,73 @@ namespace Mikrotik_Administrador
                 btnClientesSin.Enabled = true;
                 BtnEliminar.Enabled = true;
             }
+        }
+
+        private void btnPlanOrigen_Click(object sender, EventArgs e)
+        {
+            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
+            {
+                MessageBox.Show("Por favor, selecciona un Mikrotik.");
+                return;
+            }
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            btnClientesSin.Enabled = false;
+            BtnAsignar.Enabled = false;
+            BtnBuscar.Enabled = false;
+            BtnEliminar.Enabled = false;
+            try
+            {
+                List<UsuariosModel> Seleccionados = new List<UsuariosModel>();
+                Seleccionados = dgvUsuarios.Rows.Cast<DataGridViewRow>()
+                 .Where(r => Convert.ToBoolean(r.Cells["chkSeleccionar"].Value))
+                  .Select(r => new UsuariosModel
+                  {
+                      id = Convert.ToInt32(r.Cells["Id"].Value),
+                      idmikrotik = Convert.ToInt32(r.Cells["IdMikrotik"].Value),
+                      idinterno = Convert.ToString(r.Cells["IdInterno"].Value),
+                      name = Convert.ToString(r.Cells["Usuario"].Value),
+                      tipo = Convert.ToString(r.Cells["Tipo"].Value),
+                  })
+                  .ToList();
+                if (Seleccionados.Count() == 0)
+                {
+                    MessageBox.Show("No hay usuarios seleccionados");
+                    return;
+                }
+                PlanesyMikrotiks PM = new PlanesyMikrotiks();
+                PM.ShowDialog();
+                if(PM.IdMikrotik == 0)
+                {
+                    return;
+                }
+                bool Insert = false;
+                AppRepository obj = new AppRepository();
+
+                foreach (UsuariosModel item in Seleccionados)
+                {
+                    Insert = obj.UpdateOriginalesbyIdUsuarioM(
+                                             item.id,
+                                             PM.IdPlan,
+                                             PM.IdMikrotik
+                                        ).Result;
+                }
+                BuscarUsuarios(false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnClientesSin.Enabled = true;
+                BtnAsignar.Enabled = true;
+                BtnBuscar.Enabled = true;
+                BtnEliminar.Enabled = true;
+                progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
+                progressBar1.Value = 100;
+            }
+   
         }
     }
 }

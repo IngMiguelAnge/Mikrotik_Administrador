@@ -9,5 +9,7 @@ namespace Mikrotik_Administrador.Model
         public string Address { get; set; }
         public string Estatus { get; set; }
         public string Mikrotik { get; set; }
+        public string Latitud { get; set; }
+        public string Longitud { get; set; }
     }
 }
