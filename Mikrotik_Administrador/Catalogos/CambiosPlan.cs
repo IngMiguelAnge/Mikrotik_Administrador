@@ -72,7 +72,7 @@ namespace Mikrotik_Administrador.Catalogos
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Usuario",
-                HeaderText = "Usuario ha afectar",
+                HeaderText = "Servicio",
                 DataPropertyName = "Usuario",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -80,19 +80,26 @@ namespace Mikrotik_Administrador.Catalogos
             });
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Programacion",
-                HeaderText = "Se realizara",
-                DataPropertyName = "Programacion",
+                Name = "PlanNuevo",
+                HeaderText = "Plan utilizado",
+                DataPropertyName = "PlanNuevo",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-
-
+            DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "FechaInicio",
+                HeaderText = "Comenzara el",
+                DataPropertyName = "FechaInicio",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Dias",
-                HeaderText = "Días que durará",
+                HeaderText = "Días",
                 DataPropertyName = "Dias",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
@@ -102,38 +109,18 @@ namespace Mikrotik_Administrador.Catalogos
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Horas",
-                HeaderText = "Horas que durará",
+                HeaderText = "Horas",
                 DataPropertyName = "Horas",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
-            });
-
-            DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "FechaInicio",
-                HeaderText = "Fecha que se iniciara",
-                DataPropertyName = "FechaInicio",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
+            });        
 
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "FechaFin",
                 HeaderText = "Fecha que terminara",
                 DataPropertyName = "FechaFin",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-
-            DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Modo",
-                HeaderText = "Modo",
-                DataPropertyName = "Modo",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
@@ -156,16 +143,16 @@ namespace Mikrotik_Administrador.Catalogos
                 ReadOnly = true,
                 Visible = false // Oculta este ID si no es necesario mostrarlo en pantalla
             });
-
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "PlanNuevo",
-                HeaderText = "Se cambiara por el plan",
-                DataPropertyName = "PlanNuevo",
+                Name = "PlanRetorno",
+                HeaderText = "Plan que que se tendra al terminar",
+                DataPropertyName = "PlanRetorno",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+
 
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -189,18 +176,18 @@ namespace Mikrotik_Administrador.Catalogos
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
 
-            DataGridViewButtonColumn btnCancelar = new DataGridViewButtonColumn
+            DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn
             {
-                Name = "btnCancelar",
+                Name = "btnEditar",
                 HeaderText = "Acción",
-                Text = "Cancelar",
+                Text = "Editar",
                 UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
 
-            DGVCambios.Columns.Add(btnCancelar);
+            DGVCambios.Columns.Add(btnEditar);
             DGVCambios.AllowUserToAddRows = false;
         }
         public void Buscar()
@@ -212,7 +199,7 @@ namespace Mikrotik_Administrador.Catalogos
             try
             {
                 AppRepository obj = new AppRepository();
-                var lista = obj.GetTiempoCambio(1,dtpFechaInicio.Value, dtpFechaFinal.Value).Result;
+                var lista = obj.GetTiempoCambio(0,dtpFechaInicio.Value, dtpFechaFinal.Value).Result;
                 var listaFinal = lista?.ToList() ?? new List<ListTiempoCambioModel>();
                 DGVCambios.DataSource = new SortableBindingList<ListTiempoCambioModel>(listaFinal);
                 if (DGVCambios.Columns["Id"] != null)
@@ -252,7 +239,7 @@ namespace Mikrotik_Administrador.Catalogos
 
             switch (DGVCambios.Columns[e.ColumnIndex].Name)
             {
-                case "btnCancelar":
+                case "btnEditar":
                     var Estatus = DGVCambios.Rows[e.RowIndex].Cells["Estatus"].Value.ToString();
                     if(Estatus == "Cancelado")
                     {

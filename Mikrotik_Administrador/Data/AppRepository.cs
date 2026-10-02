@@ -598,7 +598,8 @@ namespace Mikrotik_Administrador.Data
                 Nota = Convert.IsDBNull(reader["Nota"]) ? string.Empty : (string)reader["Nota"],
                 IdPlan = (int)reader["IdPlan"],
                 PlanNuevo = (string)reader["PlanNuevo"],
-                Usuario = (string)reader["Usuario"]
+                Usuario = (string)reader["Usuario"],
+                PlanRetorno = (string)reader["PlanRetorno"],
             };
         }
         public async Task<bool> SaveTiempoCambio(TiempoDefinidosModel obj)
