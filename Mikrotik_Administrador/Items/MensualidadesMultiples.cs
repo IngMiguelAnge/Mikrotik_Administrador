@@ -485,8 +485,8 @@ namespace Mikrotik_Administrador.Catalogos
 
                         string comentario = row.Cell(12).IsEmpty() ? "" : row.Cell(12).GetValue<string>();
                         int idBanco = row.Cell(13).IsEmpty() ? 0 : row.Cell(13).GetValue<int>();
-                        string referencia = row.Cell(14).IsEmpty() ? "" : row.Cell(14).GetValue<string>();
-                        string rutaImagen = row.Cell(15).IsEmpty() ? "" : row.Cell(15).GetValue<string>();
+                        string referencia = row.Cell(15).IsEmpty() ? "" : row.Cell(15).GetValue<string>();
+                        string rutaImagen = row.Cell(16).IsEmpty() ? "" : row.Cell(16).GetValue<string>();
 
                         DateTime fechaInicioActual;
 
