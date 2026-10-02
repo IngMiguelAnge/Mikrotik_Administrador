@@ -27,11 +27,12 @@ namespace Mikrotik_Administrador
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             try
             {
-                mikrotik = new MK(txtIP.Text.ToString(), Convert.ToInt32(this.txtPort.Text));
                 if (mikrotik != null)
                 {
                     await Task.Run(() => mikrotik.Close());
                 }
+                mikrotik = new MK(txtIP.Text.ToString(), Convert.ToInt32(this.txtPort.Text));
+                
                 // Usamos Task.Run para que la conexión no detenga la ventana
                 bool login = await Task.Run(() => {
                     return mikrotik.ConectarYLogin(txtUsuario.Text, txtPassword.Text);

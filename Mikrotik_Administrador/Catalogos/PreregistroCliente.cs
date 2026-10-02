@@ -206,7 +206,6 @@ namespace Mikrotik_Administrador.Catalogos
                     }
                     txtMikrotik.Text = m.Nombre;
                     IdMikrotik = m.IdMikrotik;
-                    string comment = string.Empty;
                     if (IsAntena)
                     {
                         lblPassword.Visible = false;
@@ -218,7 +217,6 @@ namespace Mikrotik_Administrador.Catalogos
                             MessageBox.Show("No se encontraron commments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-                        comment = listacomments.First().Nombre;
                     }
                     else
                     {
@@ -563,7 +561,15 @@ namespace Mikrotik_Administrador.Catalogos
                         MessageBox.Show("No se encontraron commments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    comment = listacomments.First().Nombre;
+                    Programar pr = new Programar();
+                    pr.listComments = listacomments.ToList();
+                    pr.ShowDialog();
+                    if(pr.SePrograma == string.Empty)
+                    {
+                        MessageBox.Show("No se selecciono un comment para el servicio a crear, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    comment = pr.SePrograma;
                 }
                 if (mikrotik != null)
                 {
@@ -614,20 +620,8 @@ namespace Mikrotik_Administrador.Catalogos
                         //Checamos que no exista el ip que continua, si existe mandaremos una mensaje para que lo revisen
                         ExisteEnQueue = mikrotik.VerIdQueuebyAddress(IPDisponible);//Se extrae el id del queues
                         ExisteEnAntenas = mikrotik.VerAntenasbyAddress(IPDisponible);
-                        if (ExisteEnAntenas.Count() == 0 && ExisteEnQueue != string.Empty)//No existe en firewall pero si en queue
-                        {                            
-                            HistorialMovimientosModel H = new HistorialMovimientosModel
-                            {
-                                Id = 0,
-                                Descripcion = "En el recorrido de las ips se encontro un error logico, en quest existe la ip " + IPDisponible + " pero en firewall no se encontro cohincidencia, perteneciente al mikrotik " + txtMikrotik.Text + ", se cancela la solicitud",
-                                Pagina = "PreRegistroCliente",
-                                IdUsuario = 1,
-                                Estatus = true
-                            };
-                            await obj.SaveHistorialMovimientos(H);
-                            goto buscaotraipAntena;
-                        }
-                        if (ExisteEnAntenas.Count() > 0) //Si existe en firewall
+                        
+                        if (ExisteEnAntenas.Count() > 0 || ExisteEnQueue != string.Empty)
                         {
                             HistorialMovimientosModel H = new HistorialMovimientosModel
                             {

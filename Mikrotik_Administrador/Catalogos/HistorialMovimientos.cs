@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Data;
+﻿using Mikrotik_Administrador.Class;
+using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
@@ -17,6 +18,7 @@ namespace Mikrotik_Administrador.Catalogos
     public partial class HistorialMovimientos : Form
     {
         public bool Urgente = false;
+        MK mikrotik;
         public HistorialMovimientos()
         {
             InitializeComponent();
@@ -110,7 +112,46 @@ namespace Mikrotik_Administrador.Catalogos
                 Width = 100,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-
+            dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IdMikrotik",
+                HeaderText = "IdMikrotik",
+                DataPropertyName = "IdMikrotik",
+                ReadOnly = false,
+                Visible = false,
+                Width = 100,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Address",
+                HeaderText = "Address",
+                DataPropertyName = "Address",
+                ReadOnly = false,
+                Visible = false,
+                Width = 100,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Comment",
+                HeaderText = "Comment",
+                DataPropertyName = "Comment",
+                ReadOnly = false,
+                Visible = false,
+                Width = 100,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            dgvHistorial.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "IsAntena",
+                HeaderText = "IsAntena",
+                DataPropertyName = "IsAntena",
+                ReadOnly = false,
+                Visible = false,
+                Width = 100,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
             DataGridViewButtonColumn btnCambiar = new DataGridViewButtonColumn
             {
                 Name = "btnCambiar",
@@ -122,11 +163,22 @@ namespace Mikrotik_Administrador.Catalogos
                 DefaultCellStyle = estiloBotones
             };
             dgvHistorial.Columns.Add(btnCambiar);
+            DataGridViewButtonColumn btnRestaurar = new DataGridViewButtonColumn
+            {
+                Name = "btnRestaurar",
+                HeaderText = "Acción",
+                Text = "Restaurar",
+                UseColumnTextForButtonValue = true,
+                Width = 130,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvHistorial.Columns.Add(btnRestaurar);
 
             dgvHistorial.AllowUserToAddRows = false;
         }
 
-        private  void btnBuscar_Click(object sender, EventArgs e)
+        private void btnBuscar_Click(object sender, EventArgs e)
         {
             Urgente = false;
             Buscar();
@@ -140,7 +192,7 @@ namespace Mikrotik_Administrador.Catalogos
                 progressBar1.Style = ProgressBarStyle.Marquee;
                 progressBar1.MarqueeAnimationSpeed = 30;
                 AppRepository obj = new AppRepository();
-                if(Urgente == false)
+                if (Urgente == false)
                 {
                     var lista = await Task.Run(() => obj.GetHistorialMovimientos(dtpFechaInicio.Value, dtpFechaFinal.Value));
                     var listaFinal = lista?.ToList() ?? new List<ListHistorialMovimientosModel>();
@@ -154,7 +206,14 @@ namespace Mikrotik_Administrador.Catalogos
                 }
                 if (dgvHistorial.Columns["Id"] != null)
                     dgvHistorial.Columns["Id"].Visible = false;
-
+                if (dgvHistorial.Columns["IdMikrotik"] != null)
+                    dgvHistorial.Columns["IdMikrotik"].Visible = false;
+                if (dgvHistorial.Columns["Address"] != null)
+                    dgvHistorial.Columns["Address"].Visible = false;
+                if (dgvHistorial.Columns["Comment"] != null)
+                    dgvHistorial.Columns["Comment"].Visible = false;
+                if (dgvHistorial.Columns["IsAntena"] != null)
+                    dgvHistorial.Columns["IsAntena"].Visible = false;
             }
             catch (Exception ex)
             {
@@ -168,7 +227,7 @@ namespace Mikrotik_Administrador.Catalogos
             }
         }
 
-        private void dgvHistorial_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void dgvHistorial_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
             var Id = (int)dgvHistorial.Rows[e.RowIndex].Cells["Id"].Value;
@@ -186,6 +245,140 @@ namespace Mikrotik_Administrador.Catalogos
                     else
                         MessageBox.Show("Error al desactivar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                    break;
+                case "btnRestaurar":
+                    var Pagina = (string)dgvHistorial.Rows[e.RowIndex].Cells["Pagina"].Value;
+                    var Address = (string)dgvHistorial.Rows[e.RowIndex].Cells["Address"].Value;
+                    var IdMikrotik = (int)dgvHistorial.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
+                    var IsAntena = (bool)dgvHistorial.Rows[e.RowIndex].Cells["IsAntena"].Value;
+                    var NombreServicio = (string)dgvHistorial.Rows[e.RowIndex].Cells["Comment"].Value;
+                    if (Address == string.Empty)
+                    {
+                        MessageBox.Show("Error esta opción es solo valida para la restauración de una ip borrada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    DialogResult resultado = MessageBox.Show("Este usuario no se encuentra registrado en el sistema, solo se recuperara dentro del mikrotik ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                    if (resultado == DialogResult.No)
+                    {
+                        return;
+                    }
+                    AppRepository obj = new AppRepository();
+                    MikrotikModel mikro = new MikrotikModel();
+                    mikro = obj.GetMikrotikById(IdMikrotik).Result;
+                    string IdInternoNuevo = string.Empty;
+                    if (mikro.Estatus == false)
+                    {
+                        MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+                    bool login = await Task.Run(() =>
+                    {
+                        return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                    });
+                    if (login == false)
+                    {
+                        MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (IsAntena == true)
+                    {
+                        string ExisteEnQueue = string.Empty;
+                        ExisteEnQueue = mikrotik.VerIdQueue(NombreServicio);
+                        if (ExisteEnQueue != string.Empty)
+                        {
+                            MessageBox.Show("Ya existe un servicio con el mismo nombre en el mikrotik seleccionado y no esta informado el sistema", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        List<Antenas> ExisteEnAntenas = new List<Antenas>();
+                        ExisteEnAntenas = mikrotik.VerAntenasbyComment(NombreServicio);
+                        if (ExisteEnAntenas.Count() > 0)
+                        {
+                            MessageBox.Show("Ya existe un servicio con el mismo nombre en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        ExisteEnQueue = mikrotik.VerIdQueuebyAddress(Address);//Se extrae el id del queues
+                        ExisteEnAntenas = mikrotik.VerAntenasbyAddress(Address);
+                        if (ExisteEnAntenas.Count() > 0 || ExisteEnQueue != string.Empty)//No existe en firewall pero si en queue
+                        {
+                            MessageBox.Show(
+                                 "Ya se encuentra registrado el ip " + Address + " para antena, en el mikrotik " + mikro.Nombre + " y no esta informado el sistema favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        var listacomments = await Task.Run(() => obj.GetCommentsActivos(IdMikrotik));
+                        if (listacomments.Count == 0)
+                        {
+                            MessageBox.Show("No se encontraron commments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        Programar pr = new Programar();
+                        pr.listComments = listacomments.ToList();
+                        pr.ShowDialog();
+                        if (pr.SePrograma == string.Empty)
+                        {
+                            MessageBox.Show("No se selecciono un comment para el servicio a restaurar, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        PlanesyMikrotiks PM = new PlanesyMikrotiks();
+                        PM.ShowDialog();
+                        if (PM.IdMikrotik == 0)
+                        {
+                            MessageBox.Show("No se selecciono un plan de velocidad, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        if(PM.IdMikrotik != IdMikrotik)
+                        {
+                            MessageBox.Show("El plan de velocidad seleccionado no pertenece al mikrotik donde se va a restaurar el servicio, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        NombreServicio = NombreServicio.Trim();
+                        bool r = mikrotik.CrearSimpleQueue(NombreServicio, Address, PM.VelocidadElegida, pr.SePrograma);
+                        bool r2 = mikrotik.AgregarAntena(pr.SePrograma, Address, NombreServicio, true);
+                        ExisteEnAntenas = new List<Antenas>();
+                        ExisteEnAntenas = mikrotik.VerAntenasbyAddress(Address);
+                        IdInternoNuevo = ExisteEnAntenas.First().id;
+                    }
+                    else
+                    {
+                        //Procesos para introducir en fibra
+                        List<Fibra> ExisteEnFibra = mikrotik.VerFibra(NombreServicio);
+                        if (ExisteEnFibra.Count() > 0)
+                        {
+                            MessageBox.Show("Ya existe un servicio con el mismo nombre en el mikrotik seleccionado y no esta informado el sistema", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        ExisteEnFibra = mikrotik.VerFibrabyAddress(Address);
+                        if (ExisteEnFibra.Count() > 0) //Ya existe en secret
+                        {
+                            MessageBox.Show(
+                              "Ya se encuentra registrado el ip " + Address + " para antena, en el mikrotik " + mikro.Nombre + " y no esta informado el sistema favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        PlanesyMikrotiks PM = new PlanesyMikrotiks();
+                        PM.ShowDialog();
+                        if (PM.IdMikrotik == 0)
+                        {
+                            MessageBox.Show("No se selecciono un plan de velocidad, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        if (PM.IdMikrotik != IdMikrotik)
+                        {
+                            MessageBox.Show("El plan de velocidad seleccionado no pertenece al mikrotik donde se va a restaurar el servicio, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        string IdPlanInterno = mikrotik.BuscarPerfil(PM.NombrePlanElegido);
+                        if (IdPlanInterno == string.Empty)
+                        {
+                            MessageBox.Show("No se logro extraer el perfil del plan para la solicitud asignada en el mikrotik, es posible que lo hayan borrado fuera del sistema. Favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        PasswordFibra pw = new PasswordFibra();
+                        pw.ShowDialog();
+                        NombreServicio = NombreServicio.Trim();
+                        IdInternoNuevo = mikrotik.CrearFibra(NombreServicio, Address, PM.NombrePlanElegido, pw.Password);
+                    }
+                        obj.UpdateEstatusGeneralbyIdInterno(IdMikrotik, IdInternoNuevo, IsAntena, "Restauración", Address).Wait();
+                    MessageBox.Show("El usuario a sido restaurado, en caso de estar registrado en el sistema revisar sus datos en asignaciones.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
             }
         }

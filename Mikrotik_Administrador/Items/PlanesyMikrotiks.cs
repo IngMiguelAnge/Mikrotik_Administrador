@@ -17,6 +17,8 @@ namespace Mikrotik_Administrador.Items
     {
         public int IdMikrotik { get; set; } = 0;
         public int IdPlan { get; set; } = 0;
+        public string VelocidadElegida { get; set; } = string.Empty;
+        public string NombrePlanElegido { get; set; } = string.Empty;
         public PlanesyMikrotiks()
         {
             InitializeComponent();
@@ -147,6 +149,7 @@ namespace Mikrotik_Administrador.Items
             if (e.RowIndex < 0) return;
             int Id = (int)dgvPlanes.Rows[e.RowIndex].Cells["Id"].Value;
             string Plan = (string)dgvPlanes.Rows[e.RowIndex].Cells["Nombre"].Value;
+            string Velocidad = (string)dgvPlanes.Rows[e.RowIndex].Cells["Velocidad"].Value;
             bool IsAntena = (bool)dgvPlanes.Rows[e.RowIndex].Cells["PlanDe"].Value.ToString().Contains("Antena");
             decimal Precio = (decimal)dgvPlanes.Rows[e.RowIndex].Cells["Precio"].Value;
             switch (dgvPlanes.Columns[e.ColumnIndex].Name)
@@ -154,10 +157,12 @@ namespace Mikrotik_Administrador.Items
                 case "btnAsignar":
                     if (Plan.Trim() == string.Empty)
                     {
-                        MessageBox.Show("Solo se pueden asignar planes sin nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Solo se pueden asignar planes con nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     IdPlan = Id;
+                    VelocidadElegida = Velocidad;
+                    NombrePlanElegido = Plan;
                     AppRepository obj = new AppRepository();
                     var listaMikrotiks = await obj.GetMikrotiksByIdPlan(Id);
                     // Insertamos un objeto "fantasma" al inicio para el placeholder
@@ -194,6 +199,11 @@ namespace Mikrotik_Administrador.Items
             }
             IdMikrotik = (int)CBMikrotiks.SelectedValue;
             this.Close();
+        }
+
+        private void PlanesyMikrotiks_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

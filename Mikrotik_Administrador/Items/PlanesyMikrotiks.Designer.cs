@@ -31,22 +31,22 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelContenedor = new System.Windows.Forms.Panel();
+            this.CBMikrotiks = new System.Windows.Forms.ComboBox();
             this.gbPlanes = new System.Windows.Forms.GroupBox();
             this.tblPlanes = new System.Windows.Forms.TableLayoutPanel();
             this.lblNombre = new System.Windows.Forms.Label();
             this.txtNombrePlan = new System.Windows.Forms.TextBox();
-            this.btnBuscar = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.dgvPlanes = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.CBMikrotiks = new System.Windows.Forms.ComboBox();
+            this.dgvPlanes = new System.Windows.Forms.DataGridView();
+            this.btnBuscar = new System.Windows.Forms.Button();
             this.btnContinuar = new System.Windows.Forms.Button();
             this.lblFecha = new System.Windows.Forms.Label();
             this.panelContenedor.SuspendLayout();
             this.gbPlanes.SuspendLayout();
             this.tblPlanes.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPlanes)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPlanes)).BeginInit();
             this.SuspendLayout();
             // 
             // panelContenedor
@@ -61,6 +61,16 @@
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
             this.panelContenedor.Size = new System.Drawing.Size(746, 495);
             this.panelContenedor.TabIndex = 4;
+            // 
+            // CBMikrotiks
+            // 
+            this.CBMikrotiks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBMikrotiks.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBMikrotiks.FormattingEnabled = true;
+            this.CBMikrotiks.Location = new System.Drawing.Point(41, 378);
+            this.CBMikrotiks.Name = "CBMikrotiks";
+            this.CBMikrotiks.Size = new System.Drawing.Size(278, 33);
+            this.CBMikrotiks.TabIndex = 4;
             // 
             // gbPlanes
             // 
@@ -115,15 +125,6 @@
             this.txtNombrePlan.Size = new System.Drawing.Size(365, 33);
             this.txtNombrePlan.TabIndex = 1;
             // 
-            // btnBuscar
-            // 
-            this.btnBuscar.Location = new System.Drawing.Point(374, 31);
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(122, 33);
-            this.btnBuscar.TabIndex = 2;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
-            // 
             // progressBar1
             // 
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -132,6 +133,16 @@
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(371, 18);
             this.progressBar1.TabIndex = 3;
+            // 
+            // panel1
+            // 
+            this.tblPlanes.SetColumnSpan(this.panel1, 2);
+            this.panel1.Controls.Add(this.dgvPlanes);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 98);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(655, 159);
+            this.panel1.TabIndex = 6;
             // 
             // dgvPlanes
             // 
@@ -168,25 +179,14 @@
             this.dgvPlanes.TabIndex = 0;
             this.dgvPlanes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPlanes_CellContentClick);
             // 
-            // panel1
+            // btnBuscar
             // 
-            this.tblPlanes.SetColumnSpan(this.panel1, 2);
-            this.panel1.Controls.Add(this.dgvPlanes);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 98);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(655, 159);
-            this.panel1.TabIndex = 6;
-            // 
-            // CBMikrotiks
-            // 
-            this.CBMikrotiks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CBMikrotiks.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.CBMikrotiks.FormattingEnabled = true;
-            this.CBMikrotiks.Location = new System.Drawing.Point(41, 378);
-            this.CBMikrotiks.Name = "CBMikrotiks";
-            this.CBMikrotiks.Size = new System.Drawing.Size(278, 33);
-            this.CBMikrotiks.TabIndex = 4;
+            this.btnBuscar.Location = new System.Drawing.Point(374, 31);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(122, 33);
+            this.btnBuscar.TabIndex = 2;
+            this.btnBuscar.Text = "Buscar";
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // btnContinuar
             // 
@@ -209,9 +209,9 @@
             this.lblFecha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.lblFecha.Location = new System.Drawing.Point(36, 350);
             this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(232, 25);
+            this.lblFecha.Size = new System.Drawing.Size(222, 25);
             this.lblFecha.TabIndex = 3;
-            this.lblFecha.Text = "Perteneceiente al mikrotik";
+            this.lblFecha.Text = "Perteneciente al mikrotik";
             // 
             // PlanesyMikrotiks
             // 
@@ -227,13 +227,14 @@
             this.Name = "PlanesyMikrotiks";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.PlanesyMikrotiks_Load);
             this.panelContenedor.ResumeLayout(false);
             this.panelContenedor.PerformLayout();
             this.gbPlanes.ResumeLayout(false);
             this.tblPlanes.ResumeLayout(false);
             this.tblPlanes.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPlanes)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPlanes)).EndInit();
             this.ResumeLayout(false);
 
         }

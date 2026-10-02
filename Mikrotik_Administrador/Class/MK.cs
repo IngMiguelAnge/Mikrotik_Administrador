@@ -347,7 +347,7 @@ namespace Mikrotik_Administrador.Class
             }
             return Id;
         }
-        public bool AgregarAntena(string listName, string ipAddress, string comment = "", bool disabled = false)
+        public bool AgregarAntena(string comment, string ipAddress, string Nombre = "", bool disabled = false)
         {
             try
             {
@@ -355,13 +355,13 @@ namespace Mikrotik_Administrador.Class
                 Send("/ip/firewall/address-list/add");
 
                 // 2. Parámetros obligatorios
-                Send("=list=" + listName);
+                Send("=list=" + comment);
                 Send("=address=" + ipAddress);
 
                 // 3. Parámetros opcionales
-                if (!string.IsNullOrEmpty(comment))
+                if (!string.IsNullOrEmpty(Nombre))
                 {
-                    Send("=comment=" + comment);
+                    Send("=comment=" + Nombre);
                 }
 
                 // El 'true' en el último Send envía la señal de fin de frase al RouterOS

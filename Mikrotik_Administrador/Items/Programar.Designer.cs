@@ -71,7 +71,7 @@
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
             this.panelContenedor.Size = new System.Drawing.Size(341, 171);
             this.panelContenedor.TabIndex = 4;
-            // 
+             // 
             // CBAccion
             // 
             this.CBAccion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;

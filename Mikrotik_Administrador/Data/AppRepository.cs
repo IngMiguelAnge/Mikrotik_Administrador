@@ -395,6 +395,10 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Pagina", obj.Pagina));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
+                        cmd.Parameters.Add(new SqlParameter("@Address", obj.Address));
+                        cmd.Parameters.Add(new SqlParameter("@Comment", obj.Comment));
+                        cmd.Parameters.Add(new SqlParameter("@IsAntena", obj.IsAntena));
+                        cmd.Parameters.Add(new SqlParameter("@IdMikrotik", obj.IdMikrotik));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -470,6 +474,10 @@ namespace Mikrotik_Administrador.Data
                 Usuario = (string)reader["Usuario"],
                 FechaCreacion = (DateTime)reader["FechaCreacion"],
                 Estatus = (string)reader["Estatus"],
+                IdMikrotik = Convert.IsDBNull(reader["IdMikrotik"]) ? 0 : (int)reader["IdMikrotik"],
+                Address = Convert.IsDBNull(reader["Address"]) ? string.Empty : (string)reader["Address"],
+                Comment = Convert.IsDBNull(reader["Comment"]) ? string.Empty : (string)reader["Comment"],
+                IsAntena = Convert.IsDBNull(reader["IsAntena"]) ? false : (bool)reader["IsAntena"],
             };
         }
         #endregion
@@ -2568,7 +2576,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<bool> UpdateEstatusGeneralbyIdInterno(int IdMikrotik, string IdInterno, bool IsAntena, string Estatus, int Responsable)
+        public async Task<bool> UpdateEstatusGeneralbyIdInterno(int IdMikrotik, string IdInterno, bool IsAntena, string Estatus,string IP)
         {
             try
             {
@@ -2577,33 +2585,11 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("UpdateEstatusGeneralbyIdInterno", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdInterno", IdInterno));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
                         cmd.Parameters.Add(new SqlParameter("@IsAntena", IsAntena));
-                        cmd.Parameters.Add(new SqlParameter("@IdInterno", IdInterno));
+                        cmd.Parameters.Add(new SqlParameter("@IP", IP));
                         cmd.Parameters.Add(new SqlParameter("@Estatus", Estatus));
-                        cmd.Parameters.Add(new SqlParameter("@Responsable", Responsable));
-                        await sql.OpenAsync().ConfigureAwait(false);
-                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-        public async Task<bool> UpdatePlanGeneral(int Id, int IdPlan)
-        {
-            try
-            {
-                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
-                {
-                    using (SqlCommand cmd = new SqlCommand("UpdatePlanGeneral", sql))
-                    {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
-                        cmd.Parameters.Add(new SqlParameter("@IdPlan", IdPlan));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
