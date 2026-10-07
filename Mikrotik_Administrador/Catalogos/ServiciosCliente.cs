@@ -344,26 +344,26 @@ namespace Mikrotik_Administrador
                     {
                         return;
                     }
-                    Programar pr = new Programar();
-                    if (pr.ShowDialog() != DialogResult.OK)
-                        return;
+                    //Programar pr = new Programar();
+                    //if (pr.ShowDialog() != DialogResult.OK)
+                    //    return;
                     int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
                     int IdPlanActual = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
                     int IdPlanSeccionado = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
                     string NombrePlan = string.Empty;
-                    if (pr.SePrograma == "Cambio de plan")
-                    {
-                        Planes p = new Planes();
-                        p.IdResponsable = IdResponsable;
-                        p.PorUsuarios = true;
-                        p.Tipo = string.Empty;
-                        if (p.ShowDialog()!= DialogResult.OK)
-                        {
-                            return;
-                        }
-                        IdPlanSeccionado = p.IdSeleccionado;
-                        NombrePlan = p.NombrePlan;
-                    }
+                    //if (pr.SePrograma == "Cambio de plan")
+                    //{
+                    //    Planes p = new Planes();
+                    //    p.IdResponsable = IdResponsable;
+                    //    p.PorUsuarios = true;
+                    //    p.Tipo = string.Empty;
+                    //    if (p.ShowDialog()!= DialogResult.OK)
+                    //    {
+                    //        return;
+                    //    }
+                    //    IdPlanSeccionado = p.IdSeleccionado;
+                    //    NombrePlan = p.NombrePlan;
+                    //}
                     if (checar == false)
                     {
                         return;
@@ -374,7 +374,7 @@ namespace Mikrotik_Administrador
                     td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
                         ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value);
                     td.IdPlan = IdPlanSeccionado;
-                    td.Programacion = pr.SePrograma;
+                    //td.Programacion = pr.SePrograma;
                     td.IdMikrotik = objUsuario.IdMikrotik;
                     td.NombrePlan = NombrePlan;
                
@@ -383,11 +383,11 @@ namespace Mikrotik_Administrador
                         MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    if (IdPlanActual == IdPlanSeccionado && td.IdMikrotik == objUsuario.IdMikrotik && pr.SePrograma == "Cambio de plan") //No tiene caso designar el mismo plan
-                    {
-                        MessageBox.Show("Esta plan ya se encuentra funcionando actualmente en el mikrotik seleccionado, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                    //if (IdPlanActual == IdPlanSeccionado && td.IdMikrotik == objUsuario.IdMikrotik && pr.SePrograma == "Cambio de plan") //No tiene caso designar el mismo plan
+                    //{
+                    //    MessageBox.Show("Esta plan ya se encuentra funcionando actualmente en el mikrotik seleccionado, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //    return;
+                    //}
                     TiempoDefinidosModel TD = new TiempoDefinidosModel
                     {
                         Dias = td.Dias,
@@ -401,16 +401,16 @@ namespace Mikrotik_Administrador
                         IdMikrotikReceptor = td.IdMikrotik,
                         Password = td.Password
                     };
-                    HistorialMovimientosModel H = new HistorialMovimientosModel
-                    {
-                        Id = 0,
-                        Descripcion = "Se a solicitado " + pr.SePrograma + " para el usuario " + objUsuario.Usuario + " plan seleccionado: " + NombrePlan,
-                        Pagina = "Servicio cliente",
-                        IdUsuario = IdResponsable,
-                        Estatus = false
-                    };
+                    //HistorialMovimientosModel H = new HistorialMovimientosModel
+                    //{
+                    //    Id = 0,
+                    //    Descripcion = "Se a solicitado " + pr.SePrograma + " para el usuario " + objUsuario.Usuario + " plan seleccionado: " + NombrePlan,
+                    //    Pagina = "Servicio cliente",
+                    //    IdUsuario = IdResponsable,
+                    //    Estatus = false
+                    //};
                     
-                    await obj.SaveHistorialMovimientos(H);
+                    //await obj.SaveHistorialMovimientos(H);
                     var result = obj.SaveTiempoCambio(TD);
                     MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     BuscarServicios();

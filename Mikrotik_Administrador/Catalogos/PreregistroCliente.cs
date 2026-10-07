@@ -580,7 +580,7 @@ namespace Mikrotik_Administrador.Catalogos
                 mikro = obj.GetMikrotikById(IdMikrotik).Result;
                 if (mikro.Estatus == false)
                 {
-                    MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("El Mikrotik " + mikro.Nombre + " está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
@@ -598,8 +598,7 @@ namespace Mikrotik_Administrador.Catalogos
                 if (txtPassword.Visible == false)//es antena si sale false
                 {
                     //Procesos para introducir en antena
-                    string ExisteEnQueue = string.Empty;
-                    ExisteEnQueue = mikrotik.VerIdQueue(txtNombreServicio.Text.Trim());
+                    string ExisteEnQueue = mikrotik.VerIdQueue(txtNombreServicio.Text.Trim());
                     if (ExisteEnQueue != string.Empty)
                     {
                         MessageBox.Show("Ya existe un servicio con el mismo nombre en el mikrotik seleccionado y no esta informado el sistema", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -613,6 +612,12 @@ namespace Mikrotik_Administrador.Catalogos
                         return;
                     }
                     string IPDisponible = string.Empty;
+                    var listwiriless = obj.GetWirelessbyIdMikrotik(IdMikrotik, true).Result;
+                    if (listwiriless.Count() == 0)
+                    {
+                        MessageBox.Show("Se han acompletado todos los addreslist disponibles para antena, crear más para confirmar el cambio en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 buscaotraipAntena:
                      IPDisponible = obj.GetIPDisponible(IdMikrotik, true, IPDisponible).Result;
                     if (IPDisponible != string.Empty)
@@ -681,72 +686,29 @@ namespace Mikrotik_Administrador.Catalogos
                     }
                     else
                     {
-                        return;//falta reparar esta parte porque ahora debera de existir un wireles disponible
-                    NuevaIpAddres:
-                        //Se acabaron las ips disponibles de esa serie 
-                        var IPDisponibleAddress = obj.GetIPDisponibleAdresslist(IdMikrotik, true);
-                        var ExisteAddresList = mikrotik.VerAddresbyAddress(IPDisponibleAddress.Result);
-                        string IpExist = obj.GetIPExist(IdMikrotik, true, IPDisponibleAddress.Result).Result;
-                        if (IpExist == string.Empty && ExisteAddresList.ToList().Count() > 0)
+                        listwiriless = obj.GetWirelessbyIdMikrotik(IdMikrotik, true).Result;
+                        if (listwiriless.Count() == 0)
                         {
-                            //No existe en la base pero si en el mikrotik
-                            //Lo introduciremos para que lo saltemos y no recorreremos su serie
-                            InsertListWirelessModel model = new InsertListWirelessModel
-                            {
-                                IdMikrotik = IdMikrotik,
-                                Address = IPDisponibleAddress.Result,
-                                Comment = ExisteAddresList.First().comment,
-                                Estatus = ExisteAddresList.First().estatus,
-                                IdInterno = ExisteAddresList.First().id,
-                                Completado = true
-                            };
-                            await obj.SaveWireless(model);
-                            HistorialMovimientosModel H = new HistorialMovimientosModel
-                            {
-                                Id = 0,
-                                Descripcion = "La ip " + IPDisponibleAddress.Result + " se encontro en el addres list del mikrotik " + txtMikrotik.Text + " pero no esta registrado en la base, se agregara a la base de forma automatica",
-                                Pagina = "PreRegistroCliente",
-                                IdUsuario = 1,
-                                Estatus = false
-                            };
-                            await obj.SaveHistorialMovimientos(H);
-                            goto NuevaIpAddres;
+                            MessageBox.Show("Se han acompletado todos los addreslist disponibles para antena, crear más para confirmar el cambio en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
                         }
-                        if (ExisteAddresList.ToList().Count() == 0)
+                        else
                         {
-                            //No existe en el mikrotik se procede a instroducirlo
-                            var resultaddres = mikrotik.AgregarIPAddress(IPDisponibleAddress.Result, "LAN_ServiciosCliente" + IdCliente.ToString(), "LAN_ServiciosCliente" + IdCliente.ToString());
-                            string text = resultaddres == true ? "La ip " + IPDisponibleAddress.Result + " no se encontro en el addres list del mikrotik " + txtMikrotik.Text + ", se agregara a la base e introducira en el mikrotik de forma automatica" :
-                                "La ip " + IPDisponibleAddress.Result + " no se logro introducir en el addres list del mikrotik " + txtMikrotik.Text;
-                            bool Estatushistory = resultaddres == true ? false : true;
-                            HistorialMovimientosModel H = new HistorialMovimientosModel
-                            {
-                                Id = 0,
-                                Descripcion = text,
-                                Pagina = "PreRegistroCliente",
-                                IdUsuario = 1,
-                                Estatus = Estatushistory
-                            };
-                            await obj.SaveHistorialMovimientos(H);
-                            if (Estatushistory == true)
-                            {
-                                MessageBox.Show("No se logro introducir la ip en el addres list del mikrotik " + txtMikrotik.Text + ", se cancela la solicitud", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
-                            }
-                            else
-                            {
-                                goto buscaotraipAntena;
-                            }
-                        }
-                        if (IpExist != string.Empty && ExisteAddresList.ToList().Count() > 0)
-                        {
-                            //Existe en el mikrotik y tambien en la base
+                            MessageBox.Show("Se continuara con la serie " + listwiriless.First().Address + " en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             goto buscaotraipAntena;
                         }
                     }
                 }
                 else
                 {
+                    string IdPlanInterno = mikrotik.BuscarPerfil(NombrePlan);
+                    if (IdPlanInterno == string.Empty)
+                    {
+                        MessageBox.Show("No se logro extraer el perfil del plan " +
+                            NombrePlan
+                            + " para la solicitud asignada en el mikrotik, es posible que lo hayan borrado fuera del sistema. Favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     //Procesos para introducir en fibra
                     List<Fibra> ExisteEnFibra = mikrotik.VerFibra(txtNombreServicio.Text.Trim());
                     if (ExisteEnFibra.Count() > 0)
@@ -778,12 +740,7 @@ namespace Mikrotik_Administrador.Catalogos
                         {
                             //No existe en el mikrotik ahora si podemos meter el nuevo ip
                             //Insertamos en mikrotik
-                            string IdPlanInterno = mikrotik.BuscarPerfil(NombrePlan);
-                            if (IdPlanInterno == string.Empty)
-                            {
-                                MessageBox.Show("No se logro extraer el perfil del plan para la solicitud asignada en el mikrotik, es posible que lo hayan borrado fuera del sistema. Favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
-                            }
+                         
                             if (gbDatosCliente.Visible == true)
                             {
                                 ClienteModel cliente = new ClienteModel();
@@ -823,58 +780,15 @@ namespace Mikrotik_Administrador.Catalogos
                     }
                     else
                     {
-                        return;//falta reparar esta parte porque ahora debera de existir un pool disponible
-                    NuevaIpAddressFibra:
-                        //Se acabaron las ips disponibles de esa serie 
-                        var IPDisponibleAddress = obj.GetIPDisponibleAdresslist(IdMikrotik, false);
-                        var ExisteAddresList = mikrotik.BuscarPoolbyAddress(IPDisponibleAddress.Result);
-                        string IpExist = obj.GetIPExist(IdMikrotik, false, IPDisponibleAddress.Result).Result;
-
-                        if (IpExist == string.Empty && ExisteAddresList == true)
+                        var listPools = obj.GetPoolsbyIdMikrotik(IdMikrotik, true).Result;
+                        if (listPools.Count() == 0)
                         {
-                            //No existe en la base pero si en el mikrotik
-                            //Lo introduciremos para que lo saltemos y no recorreremos su serie
-                            await obj.SavePool(IdMikrotik, IPDisponibleAddress.Result, true);
-                            HistorialMovimientosModel H = new HistorialMovimientosModel
-                            {
-                                Id = 0,
-                                Descripcion = "La ip " + IPDisponibleAddress.Result + " se encontro en el pool del mikrotik " + txtMikrotik.Text + " pero no esta registrado en la base, se agregara a la base de forma automatica",
-                                Pagina = "Preregistro Cliente",
-                                IdUsuario = 1,
-                                Estatus = false
-                            };
-                            await obj.SaveHistorialMovimientos(H);
-                            goto NuevaIpAddressFibra;
+                            MessageBox.Show("Se han acompletado todos los pool disponibles para fibra, crear más para confirmar el cambio en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
                         }
-                        if (ExisteAddresList == false)
+                        else
                         {
-                            //No existe en el mikrotik se procede a instroducirlo
-                            var resultpool = mikrotik.AgregarPool(IPDisponibleAddress.Result);
-                            string text = resultpool == true ? "La ip " + IPDisponibleAddress.Result + " no se encontro en el pool del mikrotik " + txtMikrotik.Text + ", se agregara a la base e introducira en el mikrotik de forma automatica" :
-                                "La ip " + IPDisponibleAddress.Result + " no se logro introducir en el pool del mikrotik " + txtMikrotik.Text;
-                            bool Estatushistory = resultpool == true ? false : true;
-                            HistorialMovimientosModel H = new HistorialMovimientosModel
-                            {
-                                Id = 0,
-                                Descripcion = text,
-                                Pagina = "Preregistro Cliente",
-                                IdUsuario = 1,
-                                Estatus = Estatushistory
-                            };
-                            await obj.SaveHistorialMovimientos(H);
-                            if (Estatushistory == true)
-                            {
-                                MessageBox.Show("No se logro introducir la ip en el pool del mikrotik " + txtMikrotik.Text + ", se cancela la solicitud", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
-                            }
-                            else
-                            {
-                                goto buscaotraipFibra;
-                            }
-                        }
-                        if (IpExist != string.Empty && ExisteAddresList == true)
-                        {
-                            //Existe en el mikrotik y tambien en la base
+                            MessageBox.Show("Se continuara con la serie " + listPools.First().IP + " en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             goto buscaotraipFibra;
                         }
                     }

@@ -283,8 +283,7 @@ namespace Mikrotik_Administrador.Catalogos
                     }
                     if (IsAntena == true)
                     {
-                        string ExisteEnQueue = string.Empty;
-                        ExisteEnQueue = mikrotik.VerIdQueue(NombreServicio);
+                        string ExisteEnQueue = mikrotik.VerIdQueue(NombreServicio);
                         if (ExisteEnQueue != string.Empty)
                         {
                             MessageBox.Show("Ya existe un servicio con el mismo nombre en el mikrotik seleccionado y no esta informado el sistema", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

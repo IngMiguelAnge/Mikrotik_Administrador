@@ -284,7 +284,7 @@
             this.btnPlanOrigen.Name = "btnPlanOrigen";
             this.btnPlanOrigen.Size = new System.Drawing.Size(176, 42);
             this.btnPlanOrigen.TabIndex = 29;
-            this.btnPlanOrigen.Text = "Plan de origen";
+            this.btnPlanOrigen.Text = "Datos Reales";
             this.btnPlanOrigen.UseVisualStyleBackColor = false;
             this.btnPlanOrigen.Click += new System.EventHandler(this.btnPlanOrigen_Click);
             // 

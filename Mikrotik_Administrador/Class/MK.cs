@@ -223,6 +223,38 @@ namespace Mikrotik_Administrador.Class
                 return false;
             }
         }
+        public bool ActualizalistdeQueue(string id, string comment)
+        {
+            try
+            {
+                Send("/ip/firewall/address-list/set");
+
+
+                // 2. Especificas el ID único del registro que quieres mover/cambiar de lista
+                Send("=.id="+ id);
+
+                // 3. Envías la propiedad 'list' con el nuevo nombre de la lista y el 'true' para ejecutar
+                Send("=list="+ comment, true);
+                // Leemos la respuesta para confirmar que no hubo errores
+                foreach (string row in Read())
+                {
+                    if (row.StartsWith("!trap"))
+                    {
+                        // Si el router devuelve !trap, hubo un error (ej. el nombre no existe)
+                        return false;
+                    }
+                    if (row.StartsWith("!done"))
+                    {
+                        return true; // Éxito
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return false;
+        }
         public bool ActualizarVelocidadQueue(string Name, string Velocidad)
         {
             try

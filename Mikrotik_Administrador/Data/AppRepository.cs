@@ -296,7 +296,7 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-        public async Task<List<ListPoolsModel>> GetPoolsbyIdMikrotik(int IdMikrotik)
+        public async Task<List<ListPoolsModel>> GetPoolsbyIdMikrotik(int IdMikrotik, bool Faltantes)
         {
             List<ListPoolsModel> list = new List<ListPoolsModel>();
             try
@@ -307,6 +307,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Completado", Faltantes));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -482,7 +483,7 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region TiempoDefinido
-        public async Task<bool> UpdateEstatusTiempoCambio(int Id)
+        public async Task<bool> UpdateEstatusTiempoCambio(int Id, string Status)
         {
             try
             {
@@ -492,6 +493,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", Status));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -595,11 +597,17 @@ namespace Mikrotik_Administrador.Data
                 Estatus = (string)reader["Estatus"],
                 Modo = (string)reader["Modo"],
                 IdUsuarioM = (int)reader["IdUsuarioM"],
-                Nota = Convert.IsDBNull(reader["Nota"]) ? string.Empty : (string)reader["Nota"],
-                IdPlan = (int)reader["IdPlan"],
-                PlanNuevo = (string)reader["PlanNuevo"],
                 Usuario = (string)reader["Usuario"],
+                Nota = Convert.IsDBNull(reader["Nota"]) ? string.Empty : (string)reader["Nota"],
+                IdPlanNuevo = (int)reader["IdPlanNuevo"],
+                PlanNuevo = (string)reader["PlanNuevo"],
+                IdMikrotikReceptor = (int)reader["IdMikrotikReceptor"],
+                MikrotikNuevo = (string)reader["MikrotikNuevo"],
+                IdPlanRetorno = (int)reader["IdPlanRetorno"],
                 PlanRetorno = (string)reader["PlanRetorno"],
+                IdMikrotikOriginal = (int)reader["IdMikrotikOriginal"],
+                MikrotikOriginal = (string)reader["MikrotikOriginal"],
+                PasswordFibra = (string)reader["PasswordFibra"],
             };
         }
         public async Task<bool> SaveTiempoCambio(TiempoDefinidosModel obj)
@@ -2675,7 +2683,7 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-        public async Task<List<ListWirelessModel>> GetWirelessbyIdMikrotik(int IdMikrotik)
+        public async Task<List<ListWirelessModel>> GetWirelessbyIdMikrotik(int IdMikrotik, bool Faltantes)
         {
             List<ListWirelessModel> list = new List<ListWirelessModel>();
             try
@@ -2686,6 +2694,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));
+                        cmd.Parameters.Add(new SqlParameter("@Completado", Faltantes));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {

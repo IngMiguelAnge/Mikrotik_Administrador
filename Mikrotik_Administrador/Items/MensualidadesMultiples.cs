@@ -450,7 +450,8 @@ namespace Mikrotik_Administrador.Catalogos
                                 FechaFin = fechaFin,
                                 Modo = "Temporal",
                                 IdUsuarioM = idServicio,
-                                Estatus = fechaFin <= DateTime.Now ? "Completado" : "Ejecutando",
+                                Estatus = fechaFin <= DateTime.Now ? "Completado" :
+                                fechaInicio <= DateTime.Now && fechaFin > DateTime.Now ? "Ejecutando":"Pendiente",
                                 IdPlanOriginal = idPlanOriginal,
                                 IdMikrotikOriginal = idMikrotikOriginal,
                                 IdPlan = idPlanNuevo,

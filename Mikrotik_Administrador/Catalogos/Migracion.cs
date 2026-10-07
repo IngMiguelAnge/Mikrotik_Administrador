@@ -188,7 +188,7 @@ namespace Mikrotik_Administrador
                 if (cbAntenas.Checked == true)
                 {
                     IsAntena = true;
-                    var listaddress = await obj.GetWirelessbyIdMikrotik(IdMikrotik);
+                    var listaddress = await obj.GetWirelessbyIdMikrotik(IdMikrotik, false);
                     var listaaddresactivos = listaddress.Where(x => x.Estatus == "Activo").ToList();
                     if (listaaddresactivos == null || listaaddresactivos.Count == 0)
                     {

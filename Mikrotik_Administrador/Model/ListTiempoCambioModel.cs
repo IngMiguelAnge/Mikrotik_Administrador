@@ -12,10 +12,16 @@ namespace Mikrotik_Administrador.Model
         public string Estatus { get; set; }
         public string Modo { get; set; }
         public int IdUsuarioM { get; set; }
-        public string Nota { get; set; }
-        public int IdPlan { get; set; }
-        public string PlanNuevo { get; set; }
         public string Usuario { get; set; }
+        public string Nota { get; set; }
+        public int IdPlanNuevo { get; set; }
+        public string PlanNuevo { get; set; }
+        public int IdPlanRetorno { get; set; }
         public string PlanRetorno { get; set; }
+        public int IdMikrotikReceptor { get; set; }
+        public string MikrotikNuevo { get; set; }
+        public int IdMikrotikOriginal { get; set; }
+        public string MikrotikOriginal { get; set; }
+        public string PasswordFibra { get; set; }
     }
 }

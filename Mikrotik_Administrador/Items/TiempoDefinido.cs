@@ -172,7 +172,7 @@ namespace Mikrotik_Administrador.Items
             IdMikrotik = (int)CBMikrotiks.SelectedValue;
             if(plan.IsAntena ==  true)
             {
-                var listwireles = await obj.GetWirelessbyIdMikrotik(IdMikrotik);
+                var listwireles = await obj.GetWirelessbyIdMikrotik(IdMikrotik, false);
                 if (listwireles.Where(x => x.Estatus == "Activo").ToList().Count() == 0)
                 {
                     MessageBox.Show("El mikrotik seleccionado no contiene wireless agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -187,7 +187,7 @@ namespace Mikrotik_Administrador.Items
             }
             else
             {
-                var listPool = await obj.GetPoolsbyIdMikrotik(IdMikrotik);
+                var listPool = await obj.GetPoolsbyIdMikrotik(IdMikrotik,false);
                 if (listPool.Where(x => x.Estatus == "Activo").ToList().Count() == 0)
                 {
                     MessageBox.Show("El mikrotik seleccionado no contiene pools agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

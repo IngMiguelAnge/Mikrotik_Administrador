@@ -194,6 +194,7 @@ namespace Mikrotik_Administrador
         {
             OcultarSubMenuHistoriales();
             CambiosPlan cp = new CambiosPlan();
+            cp.IdResponsable = IdResponsable;
             cp.Show();
         }
         private void Menu_FormClosed(object sender, FormClosedEventArgs e)

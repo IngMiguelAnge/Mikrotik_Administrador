@@ -836,6 +836,11 @@ namespace Mikrotik_Administrador
                 MessageBox.Show("Por favor, selecciona un Mikrotik.");
                 return;
             }
+            DialogResult resultado = MessageBox.Show("Esta opción modificara datos directos de la base, no afectara al mikrotik ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+            if (resultado == DialogResult.No)
+            {
+                return;
+            }
             progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
             progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
             btnClientesSin.Enabled = false;
