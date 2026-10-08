@@ -43,14 +43,15 @@ namespace Mikrotik_Administrador.Catalogos
                 List<ListDetallesMensualidadModel> ListDestalles = new List<ListDetallesMensualidadModel>();
 
                 // Obtener el plan base vigente al inicio de este período
-                var planBasePeriodo = await obj.GetPlanByIdUsuarioM(IdUsuarioM);
+                var usuarioMikrotik = obj.GetUsuariosMikrotiksById(IdUsuarioM).Result;
+                var planBasePeriodo = await obj.GetPlanById(usuarioMikrotik.IdPlanOriginal);
                 int idPlanActual = planBasePeriodo != null ? planBasePeriodo.Id : 0;
                 string nombrePlanActual = planBasePeriodo != null ? planBasePeriodo.Nombre : "Plan Base";
                 decimal precioPlanActual = planBasePeriodo != null ? planBasePeriodo.Precio : 0m;
 
                 // Si hay un cambio previo que afecte el inicio, buscamos su plan original
                 var cambioAnterior = Detalles
-                    .Where(x => x.FechaFin < Desde)
+                    .Where(x => x.FechaFin < Desde && x.Estatus != "Cancelado")
                     .OrderByDescending(x => x.FechaFin)
                     .FirstOrDefault();
 
@@ -66,7 +67,7 @@ namespace Mikrotik_Administrador.Catalogos
 
                 // Ordenar los eventos de cambio cronológicamente dentro del rango relevante
                 var cambiosOrdenados = Detalles
-                    .Where(x => x.FechaInicio <= Hasta && x.FechaFin >= Desde)
+                    .Where(x => x.FechaInicio <= Hasta && x.FechaFin >= Desde && x.Estatus != "Cancelado")
                     .OrderBy(x => x.FechaInicio)
                     .ToList();
 

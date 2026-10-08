@@ -1676,7 +1676,10 @@ namespace Mikrotik_Administrador.Catalogos
                                 }
                                 else
                                 {
-                                    wsCambios.Cell(filaCambios, 1).Value = "Ya existe el cambio registrado en el sistema para el servicio " + item.IdUsuarioM + " con fecha de inicio " + item.FechaInicio.ToString();
+                                    wsCambios.Cell(filaCambios, 1).Value = "El servicio " + item.IdUsuarioM + " ya cuenta con " +
+                                        " un cambio de la fecha "+
+                                        item.FechaInicio.ToString() + " hasta la fecha" + item.FechaFin.ToString() +
+                                        " registrado, para ajustar debe de ir a la sección de cambios";
                                     wsCambios.Cell(filaCambios, 2).Value = "Error";
                                     filaCambios++;
                                 }
@@ -1712,7 +1715,7 @@ namespace Mikrotik_Administrador.Catalogos
                                     continue;
                                 }
 
-                                var exitMensualidad = obj.GetMensualidadbyIdUsuarioM(item.IdUsuarioM, item.FechaInicio, item.FechaLimite).Result;
+                                var exitMensualidad = obj.GetMensualidadbyIdUsuarioM(item.IdUsuarioM).Result;
                                 if (exitMensualidad == null || exitMensualidad.Count() == 0)
                                 {
                                     int idMensualidadOriginalLocal = ListMensualidades[ContadorPagos].Id;
@@ -1766,57 +1769,9 @@ namespace Mikrotik_Administrador.Catalogos
                                 else
                                 {
                                     // La mensualidad ya existe, pero evaluamos si le incrementaron pagos nuevos (comportamiento incremental sin sobreescribir)
-                                    wPagos.Cell(filaPagos, 1).Value = "Ya existe la mensualidad con fecha " + item.FechaInicio.ToString() + " registrada en el sistema para el servicio " + item.IdUsuarioM;
+                                    wPagos.Cell(filaPagos, 1).Value = "Ya existe la mensualidad registradas en el sistema para el servicio " + item.IdUsuarioM;
                                     wPagos.Cell(filaPagos, 2).Value = "Error";
                                     filaPagos++;
-
-                                    var mensualidadExistenteId = exitMensualidad[0].Id;
-                                    var Pagos = ListHistorialPagos.Where(x => x.IdMensualidad == item.Id).ToList();
-
-                                    int PagosGuardadosCount = obj.GetHistorialPagos(mensualidadExistenteId, string.Empty, 0, 0).Result.Count();
-                                    if (PagosGuardadosCount > 0)
-                                    {
-                                        wPagos.Cell(filaPagos, 1).Value = "La mensualidad con fecha " + item.FechaInicio.ToString() + " ya cuenta con " + PagosGuardadosCount.ToString() + " pagos guardados previamente en el sistema";
-                                        wPagos.Cell(filaPagos, 2).Value = "Información";
-                                        filaPagos++;
-                                    }
-
-                                    // Solo insertamos los pagos nuevos que vengan en el Excel incrementado
-                                    foreach (var itempagos in Pagos)
-                                    {
-                                        if (PagosGuardadosCount > 0)
-                                        {
-                                            PagosGuardadosCount--;
-                                            continue; // Salta los que ya estaban registrados para no duplicar ni pisar
-                                        }
-
-                                        HistorialPagosModel HP = new HistorialPagosModel
-                                        {
-                                            Id = 0,
-                                            FechaRecibido = itempagos.FechaRecibido,
-                                            Cantidad = itempagos.Cantidad,
-                                            Comentario = itempagos.Comentario,
-                                            IdBanco = itempagos.IdBanco,
-                                            Referencia = itempagos.Referencia,
-                                            Imagen = itempagos.Imagen,
-                                            IdMensualidad = mensualidadExistenteId,
-                                            IdUsuario = itempagos.IdUsuario
-                                        };
-
-                                        int rhp = obj.SaveHistorialPagos(HP).Result;
-                                        if (rhp != 0)
-                                        {
-                                            wPagos.Cell(filaPagos, 1).Value = "Se guardó correctamente el pago nuevo con fecha " + itempagos.FechaRecibido.ToString() + " en el sistema";
-                                            wPagos.Cell(filaPagos, 2).Value = "Satisfactorio";
-                                            filaPagos++;
-                                        }
-                                        else
-                                        {
-                                            wPagos.Cell(filaPagos, 1).Value = "Error al guardar el pago nuevo con fecha " + itempagos.FechaRecibido.ToString() + " en el sistema";
-                                            wPagos.Cell(filaPagos, 2).Value = "Error";
-                                            filaPagos++;
-                                        }
-                                    }
                                 }
                             }
                             wPagos.Columns().AdjustToContents();

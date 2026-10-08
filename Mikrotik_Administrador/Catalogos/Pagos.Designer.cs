@@ -160,9 +160,9 @@
             this.lblUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.lblUsuario.Location = new System.Drawing.Point(221, 105);
             this.lblUsuario.Name = "lblUsuario";
-            this.lblUsuario.Size = new System.Drawing.Size(80, 25);
+            this.lblUsuario.Size = new System.Drawing.Size(82, 25);
             this.lblUsuario.TabIndex = 5;
-            this.lblUsuario.Text = "Usuario:";
+            this.lblUsuario.Text = "Servicio:";
             // 
             // txtCliente
             // 

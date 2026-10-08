@@ -55,7 +55,7 @@
             this.btnCargar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCargar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.btnCargar.ForeColor = System.Drawing.Color.White;
-            this.btnCargar.Location = new System.Drawing.Point(433, 148);
+            this.btnCargar.Location = new System.Drawing.Point(424, 164);
             this.btnCargar.Name = "btnCargar";
             this.btnCargar.Size = new System.Drawing.Size(100, 36);
             this.btnCargar.TabIndex = 9;
@@ -191,7 +191,7 @@
             this.btnDescargar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDescargar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnDescargar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.btnDescargar.Location = new System.Drawing.Point(295, 148);
+            this.btnDescargar.Location = new System.Drawing.Point(286, 164);
             this.btnDescargar.Name = "btnDescargar";
             this.btnDescargar.Size = new System.Drawing.Size(109, 36);
             this.btnDescargar.TabIndex = 8;
@@ -224,7 +224,7 @@
             this.btnAtras.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAtras.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnAtras.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.btnAtras.Location = new System.Drawing.Point(565, 146);
+            this.btnAtras.Location = new System.Drawing.Point(556, 162);
             this.btnAtras.Name = "btnAtras";
             this.btnAtras.Size = new System.Drawing.Size(109, 36);
             this.btnAtras.TabIndex = 12;
@@ -239,7 +239,7 @@
             this.btnConfirmar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnConfirmar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.btnConfirmar.ForeColor = System.Drawing.Color.White;
-            this.btnConfirmar.Location = new System.Drawing.Point(691, 146);
+            this.btnConfirmar.Location = new System.Drawing.Point(682, 162);
             this.btnConfirmar.Name = "btnConfirmar";
             this.btnConfirmar.Size = new System.Drawing.Size(100, 36);
             this.btnConfirmar.TabIndex = 13;

@@ -505,6 +505,33 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
+        public async Task<List<ListTiempoCambioModel>> GetTiempoCambioByIdUsuarioM(int IdUSuarioM)
+        {
+            List<ListTiempoCambioModel> list = new List<ListTiempoCambioModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetTiempoCambioByIdUsuarioM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUSuarioM", IdUSuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListTiempoCambio(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
         public async Task<List<ListTiempoCambioModel>> GetTiempoCambio(int IdUSuarioM, DateTime FechaInicio, DateTime FechaFin)
         {
             List<ListTiempoCambioModel> list = new List<ListTiempoCambioModel>();
@@ -919,7 +946,7 @@ namespace Mikrotik_Administrador.Data
                         {
                             while (await reader.ReadAsync().ConfigureAwait(false))
                             {
-                                list.Add(MapToMensualidades(reader));
+                                list.Add(MapToListMensualidades(reader));
                             }
                         }
                     }
@@ -947,6 +974,36 @@ namespace Mikrotik_Administrador.Data
                         {
                             while (await reader.ReadAsync().ConfigureAwait(false))
                             {
+                                list.Add(MapToListMensualidades(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+        public async Task<List<MensualidadModel>> GetMensualidadesAfectadas(int IdUsuarioM, DateTime FechaInicioCambio, DateTime FechaFinCambio)
+        {
+            List<MensualidadModel> list = new List<MensualidadModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetMensualidadesAfectadas", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@FechaInicioCambio", FechaInicioCambio));
+                        cmd.Parameters.Add(new SqlParameter("@FechaFinCambio", FechaFinCambio));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
                                 list.Add(MapToMensualidades(reader));
                             }
                         }
@@ -959,7 +1016,7 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-        public async Task<List<ListMensualidadesModel>> GetMensualidadbyIdUsuarioM(int IdUsuarioM, DateTime FechaInicio, DateTime FechaLimite)
+        public async Task<List<ListMensualidadesModel>> GetMensualidadbyIdUsuarioM(int IdUsuarioM)
         {
             List<ListMensualidadesModel> list = new List<ListMensualidadesModel>();
             try
@@ -970,14 +1027,12 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
-                        cmd.Parameters.Add(new SqlParameter("@FechaInicio", FechaInicio));
-                        cmd.Parameters.Add(new SqlParameter("@FechaLimite", FechaLimite));    
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
                             while (await reader.ReadAsync().ConfigureAwait(false))
                             {
-                                list.Add(MapToMensualidades(reader));
+                                list.Add(MapToListMensualidades(reader));
                             }
                         }
                     }
@@ -1005,7 +1060,7 @@ namespace Mikrotik_Administrador.Data
                         {
                             while (await reader.ReadAsync().ConfigureAwait(false))
                             {
-                                list.Add(MapToMensualidades(reader));
+                                list.Add(MapToListMensualidades(reader));
                             }
                         }
                     }
@@ -1017,7 +1072,7 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-        private ListMensualidadesModel MapToMensualidades(SqlDataReader reader)
+        private ListMensualidadesModel MapToListMensualidades(SqlDataReader reader)
         {
             return new ListMensualidadesModel()
             {
@@ -1029,6 +1084,20 @@ namespace Mikrotik_Administrador.Data
                 Mensualidad = (decimal)reader["Mensualidad"],
                 Recibido = (decimal)reader["Recibido"],
                 Faltante = (decimal)reader["Faltante"],
+            };
+        }
+        private MensualidadModel MapToMensualidades(SqlDataReader reader)
+        {
+            return new MensualidadModel()
+            {
+                Id = (int)reader["Id"],
+                Pagado = (bool)reader["Pagado"],
+                IdUsuarioM = (int)reader["IdUsuarioM"],
+                DiaCorte = (int)reader["DiaCorte"],
+                FechaInicio = (DateTime)reader["FechaInicio"],
+                FechaLimite = (DateTime)reader["FechaLimite"],
+                IdUsuario = (int)reader["IdUsuario"],
+                Mensualidad = (decimal)reader["Mensualidad"],
             };
         }
         public async Task<int> SaveMensualidad(MensualidadModel obj)
@@ -2470,8 +2539,6 @@ namespace Mikrotik_Administrador.Data
                 Mikrotik = (string)reader["Mikrotik"],
                 IdCliente = Convert.IsDBNull(reader["IdCliente"]) ? (int?)null : (int)reader["IdCliente"],
                 Cliente = Convert.IsDBNull(reader["Cliente"]) ? string.Empty : (string)reader["Cliente"],
-                MinFechaInicio = Convert.IsDBNull(reader["MinFechaInicio"]) ? (DateTime?)null : (DateTime)reader["MinFechaInicio"],
-                MaxFechaFin = Convert.IsDBNull(reader["MaxFechaFin"]) ? (DateTime?)null : (DateTime)reader["MaxFechaFin"],
             };
         }
 

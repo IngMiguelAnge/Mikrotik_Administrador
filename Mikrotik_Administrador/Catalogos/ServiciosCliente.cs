@@ -184,24 +184,6 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "MinFechaInicio",
-                HeaderText = "Cambio de plan inicia",
-                DataPropertyName = "MinFechaInicio",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            DGVServicios.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "MaxFechaFin",
-                HeaderText = "Cambio de plan termina",
-                DataPropertyName = "MaxFechaFin",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
             DataGridViewButtonColumn btnPlan = new DataGridViewButtonColumn
             {
                 Name = "btnPlan",
