@@ -45,48 +45,14 @@ namespace Mikrotik_Administrador.Items
                 IdUsuarioM = Cambios.IdUsuarioM;
                 cbPlanNuevo.SelectedValue = Cambios.IdPlan;
                 CBPlanOriginal.SelectedValue = Cambios.IdPlanOriginal;
+                if(CBMikrotiksNuevo.DataSource != null)
+                    CBMikrotiksNuevo.SelectedValue = Cambios.IdMikrotikReceptor;
+                if(CBMikrotiksOriginal.DataSource != null)
+                    CBMikrotiksOriginal.SelectedValue = Cambios.IdMikrotikOriginal; 
             }
          
         }
 
-        public bool checarfechas()
-        {
-            //if (CBModo.SelectedIndex == 0)
-            //{
-            //    MessageBox.Show("Debe seleccionar de que forma aplicara el cambio.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return false;
-            //}
-            //if (CBModo.SelectedIndex != 3 && (NUDDias.Value == 0 && NUDHoras.Value == 0))
-            //{
-            //    MessageBox.Show("Debe seleccionar al menos un día o una hora para el plan de prueba.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return false;
-            //}
-            //if(FechaInicio != null && FechaFin != null)
-            //{
-            //    if (dtpFechaInicio.Value >= FechaInicio && dtpFechaInicio.Value <= FechaFin)
-            //    {
-            //        MessageBox.Show("La fecha de inicio seleccionada no es válida. No debe estar entre " + FechaInicio?.ToString("dd/MM/yyyy HH:mm:ss") + " y " + FechaFin?.ToString("dd/MM/yyyy HH:mm:ss"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        return false;
-            //    }
-            //    if (lblFechaFin.Visible == true)
-            //    if (Convert.ToDateTime(lblFechaFin.Text) >= FechaInicio && Convert.ToDateTime(lblFechaFin.Text) <= FechaFin)
-            //    {
-            //        MessageBox.Show("La fecha que termina no es válida. No debe estar entre " + FechaInicio?.ToString("dd/MM/yyyy HH:mm:ss") + " y " + FechaFin?.ToString("dd/MM/yyyy HH:mm:ss"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        return false;
-            //    }
-            //}
-            //if (CBModo.SelectedIndex == 3 && Programacion == "Suspensión")
-            //{
-            //    DialogResult resultado = MessageBox.Show("Si selecciona permanente, el usuario sera eliminado del mikrotik. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //    if (resultado == DialogResult.No)
-            //    {
-            //        return false;
-            //    }
-            //}
-            //Dias = (int)NUDDias.Value;
-            //Horas = (int)NUDHoras.Value;
-            return true;
-        }
         public void CambiarFinal()
         {
             //if (primera || CBModo.SelectedIndex == 0)
@@ -140,114 +106,65 @@ namespace Mikrotik_Administrador.Items
             }
         }
 
-        private async void btnGuardar_Click(object sender, EventArgs e)
+        private void btnGuardar_Click(object sender, EventArgs e)
         {
-            //Password = string.Empty;
-            //if (CBMikrotiks.SelectedIndex == 0)
-            //{
-            //    MessageBox.Show("Debe seleccionar un Mikrotik", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return;
-            //}
-            //Modo = CBModo.Text;
-            //if (!checarfechas())
-            //{
-            //    return;
-            //}
-            //if (IdMikrotik != (int)CBMikrotiks.SelectedValue)
-            //{
-            //    DialogResult resultado = MessageBox.Show("Esta intentado mover un usuario de un mikrotik a otro. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //    if (resultado == DialogResult.No)
-            //    {
-            //        return;
-            //    }
-            //}
-            //AppRepository obj = new AppRepository();
-            //var plan = obj.GetPlanById(IdPlan).Result;
-            //IdMikrotik = (int)CBMikrotiks.SelectedValue;
-            //if(plan.IsAntena ==  true)
-            //{
-            //    var listwireles = await obj.GetWirelessbyIdMikrotik(IdMikrotik, false);
-            //    if (listwireles.Where(x => x.Estatus == "Activo").ToList().Count() == 0)
-            //    {
-            //        MessageBox.Show("El mikrotik seleccionado no contiene wireless agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        return;
-            //    }
-            //    var listacomments = await Task.Run(() => obj.GetCommentsActivos(IdMikrotik));
-            //    if(listacomments.ToList().Count() == 0)
-            //    {
-            //        MessageBox.Show("El mikrotik seleccionado no contiene comentarios agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        return;
-            //    }
-            //}
-            //else
-            //{
-            //    var listPool = await obj.GetPoolsbyIdMikrotik(IdMikrotik,false);
-            //    if (listPool.Where(x => x.Estatus == "Activo").ToList().Count() == 0)
-            //    {
-            //        MessageBox.Show("El mikrotik seleccionado no contiene pools agregados, favor de completar la informacion del mikrotik antes de continuar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        return;
-            //    }
-            //    PasswordFibra pf = new PasswordFibra();
-            //    pf.ShowDialog();
-            //    Password = pf.Password;
-
-            //    progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
-            //    progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
-            //    btnGuardar.Enabled = false;
-            //    try
-            //    {
-            //        if (mikrotik != null)
-            //        {
-            //            await Task.Run(() => mikrotik.Close());
-            //            mikrotik = null;
-            //        }
-            //        MikrotikModel mikro = new MikrotikModel();
-            //        mikro = obj.GetMikrotikById(IdMikrotik).Result;
-            //        if (mikro.Estatus == false)
-            //        {
-            //            MessageBox.Show("El Mikrotik seleccionado está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //            return;
-            //        }
-            //        mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
-
-            //        bool login = await Task.Run(() =>
-            //        {
-            //            return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
-            //        });
-            //        if (login == false)
-            //        {
-            //            MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //            return;
-            //        }
-            //        string IdInterno = mikrotik.BuscarPerfil(NombrePlan);
-            //        if(IdInterno == string.Empty)
-            //        {
-            //            MessageBox.Show("Error este plan fue eliminado del mikrotik de manera interna y no fue informado el sistema, favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //            return;
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show("El mikrotik seleccionado no responde, favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        return;
-            //    }
-            //    finally
-            //    {
-            //        if (mikrotik != null)
-            //        {
-            //            await Task.Run(() => mikrotik.Close());
-            //        }
-            //        btnGuardar.Enabled = true;
-            //        progressBar1.Style = ProgressBarStyle.Blocks; // Detenemos el movimiento
-            //        progressBar1.Value = 100;
-            //    }
-               
-            //}
-
-            //this.DialogResult = DialogResult.OK;
-            //this.Close();
+            if (CBModo.SelectedIndex == 0)
+            {
+                MessageBox.Show("Debe seleccionar de que forma aplicara el cambio.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            } 
+            if(cbPlanNuevo.SelectedValue == null || (int)cbPlanNuevo.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar un plan a utilizar durante el periodo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (CBPlanOriginal.SelectedValue == null || (int)CBPlanOriginal.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar un plan a utilizar despues del periodo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if(CBMikrotiksNuevo.SelectedValue == null || (int)CBMikrotiksNuevo.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar un mikrotik a utilizar durante el periodo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if(CBMikrotiksOriginal.SelectedValue == null || (int)CBMikrotiksOriginal.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar un mikrotik a utilizar despues del periodo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            TiempoCambioModel td = new TiempoCambioModel
+            { 
+            Id=Id,
+            IdUsuarioM=IdUsuarioM,
+            Modo=CBModo.SelectedItem.ToString(),
+            FechaInicio=dtpFechaInicio.Value,
+            Dias=(int)NUDDias.Value,
+            Horas=(int)NUDHoras.Value,
+            FechaFin=Convert.ToDateTime(lblFechaFin.Text),
+            IdPlan=(int)cbPlanNuevo.SelectedValue,
+            IdPlanOriginal=(int)CBPlanOriginal.SelectedValue,
+            IdMikrotikReceptor=(int)CBMikrotiksNuevo.SelectedValue,
+            IdMikrotikOriginal=(int)CBMikrotiksOriginal.SelectedValue,
+            Nota = "Modificado por la página de cambios",
+            Estatus = Convert.ToDateTime(lblFechaFin.Text) < DateTime.Now ? "Completado" :
+            dtpFechaInicio.Value > DateTime.Now ? "Pendiente" :
+            "Ejecutando"
+            };
+            AppRepository obj = new AppRepository();
+            bool r = obj.SaveTiempoCambio(td).Result;
+            if (r) {
+                MessageBox.Show("Se guardo correctamente el cambio de plan.", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Ocurrio un error al guardar el cambio de plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
+        
         private void cbPlanNuevo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if((int)cbPlanNuevo.SelectedValue == 0)

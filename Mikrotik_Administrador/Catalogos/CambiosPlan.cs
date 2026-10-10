@@ -322,7 +322,24 @@ namespace Mikrotik_Administrador.Catalogos
                     TiempoDefinido TD = new TiempoDefinido();
                     TD.Id= Convert.ToInt32(Id);
                     TD.ShowDialog();
-                    Buscar();
+                    if(TD.DialogResult == DialogResult.OK)
+                    {
+                        var mensualidadAfectadas = await obj.GetMensualidadesAfectadas(IdUsuarioM, FechaInicioCambio, FechaFinCambio);
+                        foreach (var mens in mensualidadAfectadas)
+                        {
+                            // Para CADA mensualidad afectada (ej. su propio FechaInicio y FechaLimite), 
+                            // recalculamos sus tramos limpios
+                            var tramosCalculados = await CalcularTramosMensualidadAsync(IdUsuarioM, mens.FechaInicio, mens.FechaLimite);
+
+                            // Sumamos el costo total de los tramos que cayeron dentro de esta mensualidad
+                            decimal costoTotalMensualidad = tramosCalculados.Sum(t => t.Costo);
+
+                            // Actualizamos el costo final de ESTA mensualidad en la base de datos
+                            mens.Mensualidad = costoTotalMensualidad;
+                            await obj.SaveMensualidad(mens);
+                        }
+                    }
+                        Buscar();
                     break;
                 case "btnEstatus":
                     var EstatusActual = DGVCambios.Rows[e.RowIndex].Cells["Estatus"].Value.ToString();
