@@ -37,12 +37,18 @@
             this.lblFechaInicio = new System.Windows.Forms.Label();
             this.dtpFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.lblFechaFinal = new System.Windows.Forms.Label();
-            this.lblFechaFin = new System.Windows.Forms.Label();
             this.CBModo = new System.Windows.Forms.ComboBox();
             this.lblModo = new System.Windows.Forms.Label();
-            this.lblMikrotik = new System.Windows.Forms.Label();
-            this.CBMikrotiks = new System.Windows.Forms.ComboBox();
+            this.lblMikrotikNuevo = new System.Windows.Forms.Label();
+            this.CBMikrotiksNuevo = new System.Windows.Forms.ComboBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.lblFechaFin = new System.Windows.Forms.Label();
+            this.cbPlanNuevo = new System.Windows.Forms.ComboBox();
+            this.lblPlanNuevo = new System.Windows.Forms.Label();
+            this.CBPlanOriginal = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.CBMikrotiksOriginal = new System.Windows.Forms.ComboBox();
+            this.lblMikrotikOrigen = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.NUDDias)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDHoras)).BeginInit();
             this.SuspendLayout();
@@ -52,10 +58,10 @@
             this.lblTiempo.AutoSize = true;
             this.lblTiempo.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.lblTiempo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblTiempo.Location = new System.Drawing.Point(40, 117);
+            this.lblTiempo.Location = new System.Drawing.Point(228, 108);
             this.lblTiempo.Name = "lblTiempo";
             this.lblTiempo.Size = new System.Drawing.Size(275, 28);
-            this.lblTiempo.TabIndex = 0;
+            this.lblTiempo.TabIndex = 4;
             this.lblTiempo.Text = "Tiempo que desea que dure:";
             // 
             // lblDias
@@ -63,10 +69,10 @@
             this.lblDias.AutoSize = true;
             this.lblDias.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblDias.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblDias.Location = new System.Drawing.Point(40, 167);
+            this.lblDias.Location = new System.Drawing.Point(228, 163);
             this.lblDias.Name = "lblDias";
             this.lblDias.Size = new System.Drawing.Size(52, 25);
-            this.lblDias.TabIndex = 1;
+            this.lblDias.TabIndex = 5;
             this.lblDias.Text = "DÍAS";
             // 
             // lblHoras
@@ -74,25 +80,30 @@
             this.lblHoras.AutoSize = true;
             this.lblHoras.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblHoras.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblHoras.Location = new System.Drawing.Point(195, 167);
+            this.lblHoras.Location = new System.Drawing.Point(375, 163);
             this.lblHoras.Name = "lblHoras";
             this.lblHoras.Size = new System.Drawing.Size(72, 25);
-            this.lblHoras.TabIndex = 2;
+            this.lblHoras.TabIndex = 7;
             this.lblHoras.Text = "HORAS";
             // 
             // NUDDias
             // 
             this.NUDDias.Enabled = false;
             this.NUDDias.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.NUDDias.Location = new System.Drawing.Point(44, 197);
+            this.NUDDias.Location = new System.Drawing.Point(286, 155);
             this.NUDDias.Maximum = new decimal(new int[] {
-            30,
+            9999,
+            0,
+            0,
+            0});
+            this.NUDDias.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
             this.NUDDias.Name = "NUDDias";
-            this.NUDDias.Size = new System.Drawing.Size(130, 33);
-            this.NUDDias.TabIndex = 3;
+            this.NUDDias.Size = new System.Drawing.Size(67, 33);
+            this.NUDDias.TabIndex = 6;
             this.NUDDias.Value = new decimal(new int[] {
             8,
             0,
@@ -104,10 +115,10 @@
             // 
             this.NUDHoras.Enabled = false;
             this.NUDHoras.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.NUDHoras.Location = new System.Drawing.Point(199, 197);
+            this.NUDHoras.Location = new System.Drawing.Point(453, 155);
             this.NUDHoras.Name = "NUDHoras";
-            this.NUDHoras.Size = new System.Drawing.Size(130, 33);
-            this.NUDHoras.TabIndex = 4;
+            this.NUDHoras.Size = new System.Drawing.Size(68, 33);
+            this.NUDHoras.TabIndex = 8;
             this.NUDHoras.ValueChanged += new System.EventHandler(this.NUDHoras_ValueChanged);
             // 
             // btnGuardar
@@ -116,7 +127,7 @@
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(209, 570);
+            this.btnGuardar.Location = new System.Drawing.Point(680, 495);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(120, 38);
             this.btnGuardar.TabIndex = 6;
@@ -129,22 +140,22 @@
             this.lblFechaInicio.AutoSize = true;
             this.lblFechaInicio.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.lblFechaInicio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFechaInicio.Location = new System.Drawing.Point(39, 246);
+            this.lblFechaInicio.Location = new System.Drawing.Point(40, 108);
             this.lblFechaInicio.Name = "lblFechaInicio";
-            this.lblFechaInicio.Size = new System.Drawing.Size(250, 28);
-            this.lblFechaInicio.TabIndex = 7;
-            this.lblFechaInicio.Text = "Cuando iniciara el cambio:";
+            this.lblFechaInicio.Size = new System.Drawing.Size(156, 28);
+            this.lblFechaInicio.TabIndex = 2;
+            this.lblFechaInicio.Text = "Cuando iniciara:";
             // 
             // dtpFechaInicio
             // 
-            this.dtpFechaInicio.CustomFormat = "dd/MM/yyyy hh:mm tt";
+            this.dtpFechaInicio.CustomFormat = "dd/MM/yyyy";
             this.dtpFechaInicio.Enabled = false;
             this.dtpFechaInicio.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.dtpFechaInicio.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpFechaInicio.Location = new System.Drawing.Point(44, 289);
+            this.dtpFechaInicio.Location = new System.Drawing.Point(45, 151);
             this.dtpFechaInicio.Name = "dtpFechaInicio";
-            this.dtpFechaInicio.Size = new System.Drawing.Size(285, 33);
-            this.dtpFechaInicio.TabIndex = 8;
+            this.dtpFechaInicio.Size = new System.Drawing.Size(152, 33);
+            this.dtpFechaInicio.TabIndex = 3;
             this.dtpFechaInicio.ValueChanged += new System.EventHandler(this.dtpFechaInicio_ValueChanged);
             // 
             // lblFechaFinal
@@ -152,22 +163,11 @@
             this.lblFechaFinal.AutoSize = true;
             this.lblFechaFinal.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.lblFechaFinal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFechaFinal.Location = new System.Drawing.Point(40, 342);
+            this.lblFechaFinal.Location = new System.Drawing.Point(40, 211);
             this.lblFechaFinal.Name = "lblFechaFinal";
-            this.lblFechaFinal.Size = new System.Drawing.Size(186, 28);
+            this.lblFechaFinal.Size = new System.Drawing.Size(244, 28);
             this.lblFechaFinal.TabIndex = 9;
-            this.lblFechaFinal.Text = "Fecha que termina:";
-            // 
-            // lblFechaFin
-            // 
-            this.lblFechaFin.AutoSize = true;
-            this.lblFechaFin.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.lblFechaFin.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFechaFin.Location = new System.Drawing.Point(40, 389);
-            this.lblFechaFin.Name = "lblFechaFin";
-            this.lblFechaFin.Size = new System.Drawing.Size(186, 28);
-            this.lblFechaFin.TabIndex = 10;
-            this.lblFechaFin.Text = "Fecha que termina:";
+            this.lblFechaFinal.Text = "Este cambio durara hasta:";
             // 
             // CBModo
             // 
@@ -180,8 +180,8 @@
             "Temporal"});
             this.CBModo.Location = new System.Drawing.Point(44, 65);
             this.CBModo.Name = "CBModo";
-            this.CBModo.Size = new System.Drawing.Size(285, 33);
-            this.CBModo.TabIndex = 11;
+            this.CBModo.Size = new System.Drawing.Size(153, 33);
+            this.CBModo.TabIndex = 1;
             this.CBModo.SelectedIndexChanged += new System.EventHandler(this.CBModo_SelectedIndexChanged);
             // 
             // lblModo
@@ -192,46 +192,128 @@
             this.lblModo.Location = new System.Drawing.Point(40, 23);
             this.lblModo.Name = "lblModo";
             this.lblModo.Size = new System.Drawing.Size(138, 25);
-            this.lblModo.TabIndex = 12;
+            this.lblModo.TabIndex = 0;
             this.lblModo.Text = "Aplicar cambio:";
             // 
-            // lblMikrotik
+            // lblMikrotikNuevo
             // 
-            this.lblMikrotik.AutoSize = true;
-            this.lblMikrotik.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.lblMikrotik.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblMikrotik.Location = new System.Drawing.Point(39, 430);
-            this.lblMikrotik.Name = "lblMikrotik";
-            this.lblMikrotik.Size = new System.Drawing.Size(303, 28);
-            this.lblMikrotik.TabIndex = 13;
-            this.lblMikrotik.Text = "En que mikrotik aplicara el plan:";
+            this.lblMikrotikNuevo.AutoSize = true;
+            this.lblMikrotikNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lblMikrotikNuevo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMikrotikNuevo.Location = new System.Drawing.Point(40, 367);
+            this.lblMikrotikNuevo.Name = "lblMikrotikNuevo";
+            this.lblMikrotikNuevo.Size = new System.Drawing.Size(303, 28);
+            this.lblMikrotikNuevo.TabIndex = 13;
+            this.lblMikrotikNuevo.Text = "En que mikrotik aplicara el plan:";
             // 
-            // CBMikrotiks
+            // CBMikrotiksNuevo
             // 
-            this.CBMikrotiks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CBMikrotiks.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.CBMikrotiks.FormattingEnabled = true;
-            this.CBMikrotiks.Location = new System.Drawing.Point(44, 471);
-            this.CBMikrotiks.Name = "CBMikrotiks";
-            this.CBMikrotiks.Size = new System.Drawing.Size(285, 33);
-            this.CBMikrotiks.TabIndex = 14;
+            this.CBMikrotiksNuevo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBMikrotiksNuevo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBMikrotiksNuevo.FormattingEnabled = true;
+            this.CBMikrotiksNuevo.Location = new System.Drawing.Point(44, 415);
+            this.CBMikrotiksNuevo.Name = "CBMikrotiksNuevo";
+            this.CBMikrotiksNuevo.Size = new System.Drawing.Size(285, 33);
+            this.CBMikrotiksNuevo.TabIndex = 14;
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(45, 540);
+            this.progressBar1.Location = new System.Drawing.Point(251, 86);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(235, 12);
             this.progressBar1.TabIndex = 15;
+            // 
+            // lblFechaFin
+            // 
+            this.lblFechaFin.AutoSize = true;
+            this.lblFechaFin.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lblFechaFin.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblFechaFin.Location = new System.Drawing.Point(290, 211);
+            this.lblFechaFin.Name = "lblFechaFin";
+            this.lblFechaFin.Size = new System.Drawing.Size(186, 28);
+            this.lblFechaFin.TabIndex = 10;
+            this.lblFechaFin.Text = "Fecha que termina:";
+            // 
+            // cbPlanNuevo
+            // 
+            this.cbPlanNuevo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPlanNuevo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.cbPlanNuevo.FormattingEnabled = true;
+            this.cbPlanNuevo.Location = new System.Drawing.Point(44, 315);
+            this.cbPlanNuevo.Name = "cbPlanNuevo";
+            this.cbPlanNuevo.Size = new System.Drawing.Size(285, 33);
+            this.cbPlanNuevo.TabIndex = 17;
+            this.cbPlanNuevo.SelectedIndexChanged += new System.EventHandler(this.cbPlanNuevo_SelectedIndexChanged);
+            // 
+            // lblPlanNuevo
+            // 
+            this.lblPlanNuevo.AutoSize = true;
+            this.lblPlanNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lblPlanNuevo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblPlanNuevo.Location = new System.Drawing.Point(39, 274);
+            this.lblPlanNuevo.Name = "lblPlanNuevo";
+            this.lblPlanNuevo.Size = new System.Drawing.Size(353, 28);
+            this.lblPlanNuevo.TabIndex = 16;
+            this.lblPlanNuevo.Text = "Plan que se usara durante el periodo:";
+            // 
+            // CBPlanOriginal
+            // 
+            this.CBPlanOriginal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBPlanOriginal.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBPlanOriginal.FormattingEnabled = true;
+            this.CBPlanOriginal.Location = new System.Drawing.Point(435, 315);
+            this.CBPlanOriginal.Name = "CBPlanOriginal";
+            this.CBPlanOriginal.Size = new System.Drawing.Size(285, 33);
+            this.CBPlanOriginal.TabIndex = 21;
+            this.CBPlanOriginal.SelectedIndexChanged += new System.EventHandler(this.CBPlanOriginal_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.label1.Location = new System.Drawing.Point(430, 274);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(370, 28);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "Plan que se usara despues del periodo:";
+            // 
+            // CBMikrotiksOriginal
+            // 
+            this.CBMikrotiksOriginal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBMikrotiksOriginal.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBMikrotiksOriginal.FormattingEnabled = true;
+            this.CBMikrotiksOriginal.Location = new System.Drawing.Point(435, 410);
+            this.CBMikrotiksOriginal.Name = "CBMikrotiksOriginal";
+            this.CBMikrotiksOriginal.Size = new System.Drawing.Size(285, 33);
+            this.CBMikrotiksOriginal.TabIndex = 19;
+            // 
+            // lblMikrotikOrigen
+            // 
+            this.lblMikrotikOrigen.AutoSize = true;
+            this.lblMikrotikOrigen.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lblMikrotikOrigen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMikrotikOrigen.Location = new System.Drawing.Point(430, 367);
+            this.lblMikrotikOrigen.Name = "lblMikrotikOrigen";
+            this.lblMikrotikOrigen.Size = new System.Drawing.Size(303, 28);
+            this.lblMikrotikOrigen.TabIndex = 18;
+            this.lblMikrotikOrigen.Text = "En que mikrotik aplicara el plan:";
             // 
             // TiempoDefinido
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(369, 625);
+            this.ClientSize = new System.Drawing.Size(830, 547);
+            this.Controls.Add(this.CBPlanOriginal);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.CBMikrotiksOriginal);
+            this.Controls.Add(this.lblMikrotikOrigen);
+            this.Controls.Add(this.cbPlanNuevo);
+            this.Controls.Add(this.lblPlanNuevo);
             this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.CBMikrotiks);
-            this.Controls.Add(this.lblMikrotik);
+            this.Controls.Add(this.CBMikrotiksNuevo);
+            this.Controls.Add(this.lblMikrotikNuevo);
             this.Controls.Add(this.CBModo);
             this.Controls.Add(this.lblModo);
             this.Controls.Add(this.lblFechaFin);
@@ -270,11 +352,17 @@
         private System.Windows.Forms.Label lblFechaInicio;
         private System.Windows.Forms.DateTimePicker dtpFechaInicio;
         private System.Windows.Forms.Label lblFechaFinal;
-        private System.Windows.Forms.Label lblFechaFin;
         private System.Windows.Forms.ComboBox CBModo;
         private System.Windows.Forms.Label lblModo;
-        private System.Windows.Forms.Label lblMikrotik;
-        private System.Windows.Forms.ComboBox CBMikrotiks;
+        private System.Windows.Forms.Label lblMikrotikNuevo;
+        private System.Windows.Forms.ComboBox CBMikrotiksNuevo;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label lblFechaFin;
+        private System.Windows.Forms.ComboBox cbPlanNuevo;
+        private System.Windows.Forms.Label lblPlanNuevo;
+        private System.Windows.Forms.ComboBox CBPlanOriginal;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox CBMikrotiksOriginal;
+        private System.Windows.Forms.Label lblMikrotikOrigen;
     }
 }

@@ -18,7 +18,7 @@ namespace Mikrotik_Administrador.Items
         private async void MikrotiksDisponibles_Load(object sender, EventArgs e)
         {
             AppRepository obj = new AppRepository();
-            var listaMikrotiks = await obj.GetMikrotiksByIdPlan(IdPlan);
+            var listaMikrotiks = await obj.GetMikrotiksByIdPlan(IdPlan,false);
             // Insertamos un objeto "fantasma" al inicio para el placeholder
             listaMikrotiks.Insert(0, new ListMikrotikModel { Id = 0, Nombre = "Selecciona un Mikrotik" });
 

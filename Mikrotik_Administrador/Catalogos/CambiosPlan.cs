@@ -103,6 +103,15 @@ namespace Mikrotik_Administrador.Catalogos
             });
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {
+                Name = "Modo",
+                HeaderText = "Tipo de cambio",
+                DataPropertyName = "Modo",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 Name = "PlanNuevo",
                 HeaderText = "Plan ha utilizar",
                 DataPropertyName = "PlanNuevo",
@@ -220,14 +229,6 @@ namespace Mikrotik_Administrador.Catalogos
                 MinimumWidth = 250, // Garantiza un espacio horizontal mínimo holgado
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "PasswordFibra",
-                HeaderText = "PasswordFibra",
-                DataPropertyName = "PasswordFibra",
-                ReadOnly = true,
-                Visible = false,
-            });
             DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn
             {
                 Name = "btnEditar",
@@ -290,10 +291,6 @@ namespace Mikrotik_Administrador.Catalogos
                 {
                     DGVCambios.Columns["IdUsuarioM"].Visible = false;
                 }
-                if (DGVCambios.Columns["PasswordFibra"] != null)
-                {
-                    DGVCambios.Columns["PasswordFibra"].Visible = false;
-                }
             }
             catch (Exception ex)
             {
@@ -322,7 +319,9 @@ namespace Mikrotik_Administrador.Catalogos
             switch (DGVCambios.Columns[e.ColumnIndex].Name)
             {
                 case "btnEditar":
-
+                    TiempoDefinido TD = new TiempoDefinido();
+                    TD.Id= Convert.ToInt32(Id);
+                    TD.ShowDialog();
                     Buscar();
                     break;
                 case "btnEstatus":
@@ -354,318 +353,316 @@ namespace Mikrotik_Administrador.Catalogos
                             return;
                         }
                     }
-                //    bool primeravuelta = true;
-                ////Primera vuelta insertamos o activamos
-                ////segun vuelta desactivamos el origen
-                //Vuelta2:
-                //    int IdMikrotik = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdMikrotikReceptor"].Value);
-                //    int IdPlan = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdPlanNuevo"].Value);
-                //    if (pr.SePrograma != "Ejecutando" && primeravuelta)
-                //    {
-                //        IdMikrotik = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdMikrotikOriginal"].Value);
-                //        IdPlan = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdPlanRetorno"].Value);
-                //    }
+                    bool primeravuelta = true;
+                //Primera vuelta insertamos o activamos
+                //segun vuelta desactivamos el origen
+                Vuelta2:
+                    int IdMikrotik = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdMikrotikReceptor"].Value);
+                    int IdPlan = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdPlanNuevo"].Value);
+                    if (pr.SePrograma != "Ejecutando" && primeravuelta)
+                    {
+                        IdMikrotik = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdMikrotikOriginal"].Value);
+                        IdPlan = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdPlanRetorno"].Value);
+                    }
 
-                //    var plan = obj.GetPlanById(IdPlan).Result;
-                //    string comment = string.Empty;
-                //    if (plan.IsAntena == true)//es antena si sale false
-                //    {
-                //        var listacomments = await Task.Run(() => obj.GetCommentsActivos(IdMikrotik));
-                //        if (listacomments.Count == 0)
-                //        {
-                //            MessageBox.Show("No se encontraron comments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //            return;
-                //        }
-                //        Programar pro = new Programar();
-                //        pro.listComments = listacomments.ToList();
-                //        pro.ShowDialog();
-                //        if (pro.SePrograma == string.Empty)
-                //        {
-                //            MessageBox.Show("No se selecciono un comment para el servicio a crear, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //            return;
-                //        }
-                //        comment = pro.SePrograma;
-                //    }
-                //    if (mikrotik != null)
-                //    {
-                //        await Task.Run(() => mikrotik.Close());
-                //        mikrotik = null;
-                //    }
-                //    MikrotikModel mikro = new MikrotikModel();
-                //    mikro = obj.GetMikrotikById(IdMikrotik).Result;
-                //    if (mikro.Estatus == false)
-                //    {
-                //        MessageBox.Show("El Mikrotik " + mikro.Nombre + " está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //        return;
-                //    }
-                //    mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+                    var plan = obj.GetPlanById(IdPlan).Result;
+                    string comment = string.Empty;
+                    if (plan.IsAntena == true)//es antena si sale false
+                    {
+                        var listacomments = await Task.Run(() => obj.GetCommentsActivos(IdMikrotik));
+                        if (listacomments.Count == 0)
+                        {
+                            MessageBox.Show("No se encontraron comments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        Programar pro = new Programar();
+                        pro.listComments = listacomments.ToList();
+                        pro.ShowDialog();
+                        if (pro.SePrograma == string.Empty)
+                        {
+                            MessageBox.Show("No se selecciono un comment para el servicio a crear, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        comment = pro.SePrograma;
+                    }
+                    if (mikrotik != null)
+                    {
+                        await Task.Run(() => mikrotik.Close());
+                        mikrotik = null;
+                    }
+                    MikrotikModel mikro = new MikrotikModel();
+                    mikro = obj.GetMikrotikById(IdMikrotik).Result;
+                    if (mikro.Estatus == false)
+                    {
+                        MessageBox.Show("El Mikrotik " + mikro.Nombre + " está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
 
-                //    bool login = await Task.Run(() =>
-                //    {
-                //        return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
-                //    });
-                //    if (login == false)
-                //    {
-                //        MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //        return;
-                //    }
-                //    if (plan.IsAntena == true)
-                //    {
-                //        string ExisteEnQueue = mikrotik.VerIdQueue(Servicio.Trim());
-                //        List<Antenas> Antenas = mikrotik.VerAntenasbyComment(Servicio.Trim());
-                //        if (Antenas.ToList().Count() > 0 && ExisteEnQueue == string.Empty)
-                //        {
-                //            MessageBox.Show("Se encontro el servicio en firewall " + Servicio +
-                //                " pero en queues no existe. Favor de revisar"
-                //                , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //            return;
-                //        }
-                //        if (Antenas.ToList().Count() == 0 && ExisteEnQueue != string.Empty)
-                //        {
-                //            MessageBox.Show("Se encontro el servicio queues " + Servicio +
-                //                " pero en firewall no existe. Favor de revisar"
-                //                , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //            return;
-                //        }
-                //        if (Antenas.ToList().Count() > 0 && ExisteEnQueue != string.Empty)
-                //        {
-                //            if (primeravuelta == false)
-                //            {
-                //                var Result4 = mikrotik.CambiarEstatusQueues(Servicio, "Activo");
-                //            }
-                //            else
-                //            {
-                //                MessageBox.Show("Ya existe un servicio con el nombre " + Servicio + " en el mikrotik "
-                //       + mikro.Nombre + ", se procedera solo ha activarlo y otorgar el plan correspondiente", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    bool login = await Task.Run(() =>
+                    {
+                        return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                    });
+                    if (login == false)
+                    {
+                        MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (plan.IsAntena == true)
+                    {
+                        string ExisteEnQueue = mikrotik.VerIdQueue(Servicio.Trim());
+                        List<Antenas> Antenas = mikrotik.VerAntenasbyComment(Servicio.Trim());
+                        if (Antenas.ToList().Count() > 0 && ExisteEnQueue == string.Empty)
+                        {
+                            MessageBox.Show("Se encontro el servicio en firewall " + Servicio +
+                                " pero en queues no existe. Favor de revisar"
+                                , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                        if (Antenas.ToList().Count() == 0 && ExisteEnQueue != string.Empty)
+                        {
+                            MessageBox.Show("Se encontro el servicio queues " + Servicio +
+                                " pero en firewall no existe. Favor de revisar"
+                                , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                        if (Antenas.ToList().Count() > 0 && ExisteEnQueue != string.Empty)
+                        {
+                            if (primeravuelta == false)
+                            {
+                                var Result4 = mikrotik.CambiarEstatusQueues(Servicio, "Activo");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Ya existe un servicio con el nombre " + Servicio + " en el mikrotik "
+                            + mikro.Nombre + ", se procedera solo ha activarlo y otorgar el plan correspondiente", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                //                var Result1 = mikrotik.ActualizarVelocidadQueue(Servicio, plan.Velocidad);
-                //                var Result2 = mikrotik.CambiarEstatusQueues(Servicio, "Inactivo");
-                //                var Result3 = mikrotik.ActualizalistdeQueue(Antenas.First().id, comment);
-                //                UsuariosGeneralModel ug = new UsuariosGeneralModel()
-                //                {
-                //                    Id = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdUsuarioM"].Value),
-                //                    IdMikrotik = mikro.Id,
-                //                    IdPlan = plan.Id,
-                //                    Nombre = Servicio,
-                //                    Address = Antenas.First().address,
-                //                    IdInterno = Antenas.First().id,
-                //                    Estatus = "Activo"
-                //                };
-                //                var result = obj.SaveUsuariosGeneral(ug, IdResponsable).Result;
-                //                HistorialMovimientosModel hm = new HistorialMovimientosModel()
-                //                {
-                //                    Descripcion = "Se actualizo el servicio " + Servicio + " con la ip " + Antenas.First().address + " y la velocidad " + plan.Velocidad + " en el mikrotik " + mikro.Nombre,
-                //                    Pagina = "CambiosPlan",
-                //                    IdUsuario = IdResponsable,
-                //                    Fecha = DateTime.Now,
-                //                    Estatus = false,
-                //                    Address = Antenas.First().address,
-                //                    Comment = Servicio,
-                //                    IsAntena = true,
-                //                    IdMikrotik = mikro.Id
-                //                };
-                //                await obj.SaveHistorialMovimientos(hm);
-                //                MessageBox.Show("El servicio " + Servicio +
-                //            " se actualizo con la ip " + Antenas.First().address + " y la velocidad " + plan.Velocidad +
-                //            " en el mikrotik " + mikro.Nombre + " y se"
-                //            , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //            }
+                                var Result1 = mikrotik.ActualizarVelocidadQueue(Servicio, plan.Velocidad);
+                                var Result2 = mikrotik.CambiarEstatusQueues(Servicio, "Inactivo");
+                                var Result3 = mikrotik.ActualizalistdeQueue(Antenas.First().id, comment);
+                                UsuariosGeneralModel ug = new UsuariosGeneralModel()
+                                {
+                                    Id = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdUsuarioM"].Value),
+                                    IdMikrotik = mikro.Id,
+                                    IdPlan = plan.Id,
+                                    Nombre = Servicio,
+                                    Address = Antenas.First().address,
+                                    IdInterno = Antenas.First().id,
+                                    Estatus = "Activo"
+                                };
+                                var result = obj.SaveUsuariosGeneral(ug, IdResponsable).Result;
+                                HistorialMovimientosModel hm = new HistorialMovimientosModel()
+                                {
+                                    Descripcion = "Se actualizo el servicio " + Servicio + " con la ip " + Antenas.First().address + " y la velocidad " + plan.Velocidad + " en el mikrotik " + mikro.Nombre,
+                                    Pagina = "CambiosPlan",
+                                    IdUsuario = IdResponsable,
+                                    Fecha = DateTime.Now,
+                                    Estatus = false,
+                                    Address = Antenas.First().address,
+                                    Comment = Servicio,
+                                    IsAntena = true,
+                                    IdMikrotik = mikro.Id
+                                };
+                                await obj.SaveHistorialMovimientos(hm);
+                                MessageBox.Show("El servicio " + Servicio +
+                            " se actualizo con la ip " + Antenas.First().address + " y la velocidad " + plan.Velocidad +
+                            " en el mikrotik " + mikro.Nombre + " y se"
+                            , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
 
-                //        }
-                //        else
-                //        {
-                //            if(primeravuelta)
-                //            {
-                //                DialogResult resultado = MessageBox.Show("No se encontro al servicio " + Servicio + " se procedera ha agregarlo con una ip nueva en antena ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
-                //                if (resultado == DialogResult.No)
-                //                {
-                //                    return;
-                //                }
-                //                //No existe en el mikrotik hay que agregarlo
-                //                string IPDisponible = string.Empty;
-                //                var listwiriless = obj.GetWirelessbyIdMikrotik(IdMikrotik, true).Result;
-                //                if (listwiriless.Count() == 0)
-                //                {
-                //                    MessageBox.Show("Se han acompletado todos los addresslist disponibles para antena, crear más para confirmar el cambio en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //                    return;
-                //                }
-                //            buscaotraipAntena:
-                //                IPDisponible = obj.GetIPDisponible(IdMikrotik, true, IPDisponible).Result;
-                //                if (IPDisponible != string.Empty)
-                //                {
-                //                    ExisteEnQueue = mikrotik.VerIdQueuebyAddress(IPDisponible);//Se extrae el id del queues
-                //                    var ExisteEnAntenas = mikrotik.VerAntenasbyAddress(IPDisponible);
-                //                    if (ExisteEnAntenas.Count() > 0 || ExisteEnQueue != string.Empty)
-                //                    {
-                //                        HistorialMovimientosModel H = new HistorialMovimientosModel
-                //                        {
-                //                            Id = 0,
-                //                            Descripcion = "Ya se encuentra registrado el ip " + IPDisponible + " para antena, en el mikrotik " +
-                //                            mikro.Nombre + " y no esta informado el sistema favor de revisar",
-                //                            Pagina = "CambiosPlan",
-                //                            IdUsuario = IdResponsable,
-                //                            Estatus = true
-                //                        };
-                //                        await obj.SaveHistorialMovimientos(H);
-                //                        goto buscaotraipAntena;
-                //                    }
-                //                    //Insertamos en mikrotik
-                //                    bool re = mikrotik.CrearSimpleQueue(Servicio, IPDisponible, plan.Velocidad, comment);
-                //                    bool re2 = mikrotik.AgregarAntena(comment, IPDisponible, Servicio, true);
-                //                    ExisteEnAntenas = new List<Antenas>();
-                //                    ExisteEnAntenas = mikrotik.VerAntenasbyAddress(IPDisponible);
-                //                    mikrotik.CambiarEstatusAntena(ExisteEnAntenas.First().id, "Activo");
-                //                    mikrotik.CambiarEstatusQueues(Servicio, "Inactivo");
-                //                    UsuariosGeneralModel objuser = new UsuariosGeneralModel();
-                //                    objuser.IdMikrotik = IdMikrotik;
-                //                    objuser.Nombre = Servicio;
-                //                    objuser.Address = IPDisponible;
-                //                    objuser.IdInterno = ExisteEnAntenas.First().id;
-                //                    objuser.Estatus = "Activo";
-                //                    objuser.Id = IdUsuarioM;
-                //                    objuser.IdPlan = IdPlan;
-                //                    var result = obj.SaveUsuariosGeneral(objuser, IdResponsable).Result;
+                        }
+                        else
+                        {
+                            if (primeravuelta)
+                            {
+                                DialogResult resultado = MessageBox.Show("No se encontro al servicio " + Servicio + " se procedera ha agregarlo con una ip nueva en antena ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                                if (resultado == DialogResult.No)
+                                {
+                                    return;
+                                }
+                                //No existe en el mikrotik hay que agregarlo
+                                string IPDisponible = string.Empty;
+                                var listwiriless = obj.GetWirelessbyIdMikrotik(IdMikrotik, true).Result;
+                                if (listwiriless.Count() == 0)
+                                {
+                                    MessageBox.Show("Se han acompletado todos los addresslist disponibles para antena, crear más para confirmar el cambio en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
+                            buscaotraipAntena:
+                                IPDisponible = obj.GetIPDisponible(IdMikrotik, true, IPDisponible).Result;
+                                if (IPDisponible != string.Empty)
+                                {
+                                    ExisteEnQueue = mikrotik.VerIdQueuebyAddress(IPDisponible);//Se extrae el id del queues
+                                    var ExisteEnAntenas = mikrotik.VerAntenasbyAddress(IPDisponible);
+                                    if (ExisteEnAntenas.Count() > 0 || ExisteEnQueue != string.Empty)
+                                    {
+                                        HistorialMovimientosModel H = new HistorialMovimientosModel
+                                        {
+                                            Id = 0,
+                                            Descripcion = "Ya se encuentra registrado el ip " + IPDisponible + " para antena, en el mikrotik " +
+                                            mikro.Nombre + " y no esta informado el sistema favor de revisar",
+                                            Pagina = "CambiosPlan",
+                                            IdUsuario = IdResponsable,
+                                            Estatus = true
+                                        };
+                                        await obj.SaveHistorialMovimientos(H);
+                                        goto buscaotraipAntena;
+                                    }
+                                    //Insertamos en mikrotik
+                                    bool re = mikrotik.CrearSimpleQueue(Servicio, IPDisponible, plan.Velocidad, comment);
+                                    bool re2 = mikrotik.AgregarAntena(comment, IPDisponible, Servicio, true);
+                                    ExisteEnAntenas = new List<Antenas>();
+                                    ExisteEnAntenas = mikrotik.VerAntenasbyAddress(IPDisponible);
+                                    mikrotik.CambiarEstatusAntena(ExisteEnAntenas.First().id, "Activo");
+                                    mikrotik.CambiarEstatusQueues(Servicio, "Inactivo");
+                                    UsuariosGeneralModel objuser = new UsuariosGeneralModel();
+                                    objuser.IdMikrotik = IdMikrotik;
+                                    objuser.Nombre = Servicio;
+                                    objuser.Address = IPDisponible;
+                                    objuser.IdInterno = ExisteEnAntenas.First().id;
+                                    objuser.Estatus = "Activo";
+                                    objuser.Id = IdUsuarioM;
+                                    objuser.IdPlan = IdPlan;
+                                    var result = obj.SaveUsuariosGeneral(objuser, IdResponsable).Result;
 
-                //                }
-                //                else
-                //                {
-                //                    listwiriless = obj.GetWirelessbyIdMikrotik(IdMikrotik, true).Result;
-                //                    if (listwiriless.Count() == 0)
-                //                    {
-                //                        MessageBox.Show("Se han acompletado todos los addresslist disponibles para antena, crear más para confirmar el cambio en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //                        return;
-                //                    }
-                //                    else
-                //                    {
-                //                        MessageBox.Show("Se continuara con la serie " + listwiriless.First().Address + " en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //                        goto buscaotraipAntena;
-                //                    }
-                //                }
-                //            }
-                            
-                //        }
-                //    }
-                //    else
-                //    {
-                //        string IdPlanInterno = mikrotik.BuscarPerfil(plan.Nombre);
-                //        if (IdPlanInterno == string.Empty)
-                //        {
-                //            MessageBox.Show("No se logro extraer el perfil del plan " +
-                //                plan.Nombre +
-                //                "para la solicitud asignada en el mikrotik "
-                //                + mikro.Nombre +
-                //                ", es posible que lo hayan borrado fuera del sistema. Favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //            return;
-                //        }
-                //        List<Fibra> ExisteEnFibra = mikrotik.VerFibra(Servicio.Trim());
-                //        if (ExisteEnFibra.Count() > 0)
-                //        {
-                //            if (primeravuelta == false)
-                //            {
-                //                mikrotik.CambiarEstatusFibra(ExisteEnFibra.First().id, "Activo");
-                //            }
-                //            else
-                //            {
-                //                MessageBox.Show("Ya existe un servicio con el nombre " + Servicio + " en el mikrotik "
-                //           + mikro.Nombre + ", se procedera solo ha activarlo y otorgar el plan correspondiente", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //                var Result1 = mikrotik.ActualizarUsuarioPPP(ExisteEnFibra.First().id, plan.Nombre, plan.Velocidad);
-                //                var Result2 = mikrotik.DeleteInterfacebyName(Servicio);
-                //                UsuariosGeneralModel ug = new UsuariosGeneralModel()
-                //                {
-                //                    Id = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdUsuarioM"].Value),
-                //                    IdMikrotik = mikro.Id,
-                //                    IdPlan = plan.Id,
-                //                    Nombre = Servicio,
-                //                    Address = ExisteEnFibra.First().address,
-                //                    IdInterno = ExisteEnFibra.First().id,
-                //                    Estatus = "Activo"
-                //                };
-                //                var result = obj.SaveUsuariosGeneral(ug, IdResponsable).Result;
-                //                HistorialMovimientosModel hm = new HistorialMovimientosModel()
-                //                {
-                //                    Descripcion = "Se actualizo el servicio " + Servicio + " con la ip " + ExisteEnFibra.First().address + " y la velocidad " + plan.Velocidad + " en el mikrotik " + mikro.Nombre,
-                //                    Pagina = "CambiosPlan",
-                //                    IdUsuario = IdResponsable,
-                //                    Fecha = DateTime.Now,
-                //                    Estatus = false,
-                //                    Address = ExisteEnFibra.First().address,
-                //                    Comment = Servicio,
-                //                    IsAntena = false,
-                //                    IdMikrotik = mikro.Id
-                //                };
-                //                await obj.SaveHistorialMovimientos(hm);
-                //                MessageBox.Show("El servicio " + Servicio +
-                //            " se actualizo con la ip " + ExisteEnFibra.First().address + " y la velocidad " + plan.Velocidad +
-                //            " en el mikrotik " + mikro.Nombre + " y se"
-                //            , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //            }
-                             
-                //        }
-                //        else
-                //        {
-                //            if (primeravuelta == true)
-                //            {
-                //                DialogResult resultado = MessageBox.Show("No se encontro al servicio " + Servicio + " se procedera ha agregarlo con una ip nueva en fibra ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
-                //                if (resultado == DialogResult.No)
-                //                {
-                //                    return;
-                //                }
-                //                //No existe en el mikrotik hay que agregarlo
-                //                string IPDisponibleFibra = string.Empty;
-                //            buscaotraipFibra:
-                //                IPDisponibleFibra = obj.GetIPDisponible(IdMikrotik, false, IPDisponibleFibra).Result;
-                //                if (IPDisponibleFibra != string.Empty)
-                //                {
-                //                    ExisteEnFibra = mikrotik.VerFibrabyAddress(IPDisponibleFibra);
-                //                    if (ExisteEnFibra.Count() > 0) //Ya existe en secret
-                //                    {
-                //                        HistorialMovimientosModel H = new HistorialMovimientosModel
-                //                        {
-                //                            Id = 0,
-                //                            Descripcion = "Ya se encuentra registrado el ip " + IPDisponibleFibra + " para fibra, en el mikrotik " + mikro.Nombre + " y no esta informado el sistema favor de revisar",
-                //                            Pagina = "CambiosPlan",
-                //                            IdUsuario = IdResponsable,
-                //                            Estatus = true
-                //                        };
-                //                        await obj.SaveHistorialMovimientos(H);
-                //                        goto buscaotraipFibra;
-                //                    }
-                //                    var PasswordFibra = DGVCambios.Rows[e.RowIndex].Cells["PasswordFibra"].Value.ToString();
-                //                    string idCreado = mikrotik.CrearFibra(Servicio, IPDisponibleFibra, plan.Nombre, PasswordFibra);
-                //                    mikrotik.CambiarEstatusFibra(idCreado, "Inactivo");
-                //                    UsuariosGeneralModel objuser = new UsuariosGeneralModel();
-                //                    objuser.IdMikrotik = IdMikrotik;
-                //                    objuser.Nombre = Servicio;
-                //                    objuser.Address = IPDisponibleFibra;
-                //                    objuser.IdInterno = idCreado;
-                //                    objuser.Estatus = "Activo";
-                //                    objuser.Id = IdUsuarioM;
-                //                    objuser.IdPlan = IdPlan;
-                //                    var result = obj.SaveUsuariosGeneral(objuser, IdResponsable).Result;
-                //                }
-                //                else
-                //                {
-                //                    var listPools = obj.GetPoolsbyIdMikrotik(IdMikrotik, true).Result;
-                //                    if (listPools.Count() == 0)
-                //                    {
-                //                        MessageBox.Show("Se han acompletado todos los pools disponibles para fibra, crear más para confirmar el cambio en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //                        return;
-                //                    }
-                //                    else
-                //                    {
-                //                        MessageBox.Show("Se continuara con la serie " + listPools.First().IP + " en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //                        goto buscaotraipFibra;
-                //                    }
-                //                }
-                //            }
-                            
-                //        }
-                //    }
-                //    if (IdMikrotik != Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdMikrotikOriginal"].Value))
-                //    {
-                //        primeravuelta = false;
-                //        goto Vuelta2;
-                //    }
+                                }
+                                else
+                                {
+                                    listwiriless = obj.GetWirelessbyIdMikrotik(IdMikrotik, true).Result;
+                                    if (listwiriless.Count() == 0)
+                                    {
+                                        MessageBox.Show("Se han acompletado todos los addresslist disponibles para antena, crear más para confirmar el cambio en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Se continuara con la serie " + listwiriless.First().Address + " en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        goto buscaotraipAntena;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string IdPlanInterno = mikrotik.BuscarPerfil(plan.Nombre);
+                        if (IdPlanInterno == string.Empty)
+                        {
+                            MessageBox.Show("No se logro extraer el perfil del plan " +
+                                plan.Nombre +
+                                "para la solicitud asignada en el mikrotik "
+                                + mikro.Nombre +
+                                ", es posible que lo hayan borrado fuera del sistema. Favor de revisar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        List<Fibra> ExisteEnFibra = mikrotik.VerFibra(Servicio.Trim());
+                        if (ExisteEnFibra.Count() > 0)
+                        {
+                            if (primeravuelta == false)
+                            {
+                                mikrotik.CambiarEstatusFibra(ExisteEnFibra.First().id, "Activo");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Ya existe un servicio con el nombre " + Servicio + " en el mikrotik "
+                           + mikro.Nombre + ", se procedera solo ha activarlo y otorgar el plan correspondiente", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                var Result1 = mikrotik.ActualizarUsuarioPPP(ExisteEnFibra.First().id, plan.Nombre, plan.Velocidad);
+                                var Result2 = mikrotik.DeleteInterfacebyName(Servicio);
+                                UsuariosGeneralModel ug = new UsuariosGeneralModel()
+                                {
+                                    Id = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdUsuarioM"].Value),
+                                    IdMikrotik = mikro.Id,
+                                    IdPlan = plan.Id,
+                                    Nombre = Servicio,
+                                    Address = ExisteEnFibra.First().address,
+                                    IdInterno = ExisteEnFibra.First().id,
+                                    Estatus = "Activo"
+                                };
+                                var result = obj.SaveUsuariosGeneral(ug, IdResponsable).Result;
+                                HistorialMovimientosModel hm = new HistorialMovimientosModel()
+                                {
+                                    Descripcion = "Se actualizo el servicio " + Servicio + " con la ip " + ExisteEnFibra.First().address + " y la velocidad " + plan.Velocidad + " en el mikrotik " + mikro.Nombre,
+                                    Pagina = "CambiosPlan",
+                                    IdUsuario = IdResponsable,
+                                    Fecha = DateTime.Now,
+                                    Estatus = false,
+                                    Address = ExisteEnFibra.First().address,
+                                    Comment = Servicio,
+                                    IsAntena = false,
+                                    IdMikrotik = mikro.Id
+                                };
+                                await obj.SaveHistorialMovimientos(hm);
+                                MessageBox.Show("El servicio " + Servicio +
+                            " se actualizo con la ip " + ExisteEnFibra.First().address + " y la velocidad " + plan.Velocidad +
+                            " en el mikrotik " + mikro.Nombre + " y se"
+                            , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+                        }
+                        else
+                        {
+                            if (primeravuelta == true)
+                            {
+                                DialogResult resultado = MessageBox.Show("No se encontro al servicio " + Servicio + " se procedera ha agregarlo con una ip nueva en fibra ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                                if (resultado == DialogResult.No)
+                                {
+                                    return;
+                                }
+                                //No existe en el mikrotik hay que agregarlo
+                                string IPDisponibleFibra = string.Empty;
+                            buscaotraipFibra:
+                                IPDisponibleFibra = obj.GetIPDisponible(IdMikrotik, false, IPDisponibleFibra).Result;
+                                if (IPDisponibleFibra != string.Empty)
+                                {
+                                    ExisteEnFibra = mikrotik.VerFibrabyAddress(IPDisponibleFibra);
+                                    if (ExisteEnFibra.Count() > 0) //Ya existe en secret
+                                    {
+                                        HistorialMovimientosModel H = new HistorialMovimientosModel
+                                        {
+                                            Id = 0,
+                                            Descripcion = "Ya se encuentra registrado el ip " + IPDisponibleFibra + " para fibra, en el mikrotik " + mikro.Nombre + " y no esta informado el sistema favor de revisar",
+                                            Pagina = "CambiosPlan",
+                                            IdUsuario = IdResponsable,
+                                            Estatus = true
+                                        };
+                                        await obj.SaveHistorialMovimientos(H);
+                                        goto buscaotraipFibra;
+                                    }
+                                    string idCreado = mikrotik.CrearFibra(Servicio, IPDisponibleFibra, plan.Nombre, "1234");
+                                    mikrotik.CambiarEstatusFibra(idCreado, "Inactivo");
+                                    UsuariosGeneralModel objuser = new UsuariosGeneralModel();
+                                    objuser.IdMikrotik = IdMikrotik;
+                                    objuser.Nombre = Servicio;
+                                    objuser.Address = IPDisponibleFibra;
+                                    objuser.IdInterno = idCreado;
+                                    objuser.Estatus = "Activo";
+                                    objuser.Id = IdUsuarioM;
+                                    objuser.IdPlan = IdPlan;
+                                    var result = obj.SaveUsuariosGeneral(objuser, IdResponsable).Result;
+                                }
+                                else
+                                {
+                                    var listPools = obj.GetPoolsbyIdMikrotik(IdMikrotik, true).Result;
+                                    if (listPools.Count() == 0)
+                                    {
+                                        MessageBox.Show("Se han acompletado todos los pools disponibles para fibra, crear más para confirmar el cambio en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Se continuara con la serie " + listPools.First().IP + " en el mikrotik " + mikro.Nombre + " favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        goto buscaotraipFibra;
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    if (IdMikrotik != Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdMikrotikOriginal"].Value))
+                    {
+                        primeravuelta = false;
+                        goto Vuelta2;
+                    }
 
                 Fin:
                     // 1. Actualizamos primero el estatus del cambio (ej. a Cancelado)

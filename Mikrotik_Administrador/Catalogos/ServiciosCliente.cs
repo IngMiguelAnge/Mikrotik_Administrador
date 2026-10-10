@@ -308,31 +308,31 @@ namespace Mikrotik_Administrador
                 case "btnPlan":
                     MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
-                    int IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value);
-                    AppRepository obj = new AppRepository();
-                    var Mensualidades = await obj.GetMensualidades(IdUsuarioM);
-                    if( Mensualidades == null || Mensualidades.Count() <= 0 )
-                    {
-                        MessageBox.Show("Se requiere que el usuario tenga una mensualidad ya asignada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    if (Estatus == "Eliminado")
-                    {
-                        MessageBox.Show("Este servicio se encuentra ya eliminado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    bool checar = await ChecarUsuario(objUsuario);
-                    if (checar == false)
-                    {
-                        return;
-                    }
+                    //int IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value);
+                    //AppRepository obj = new AppRepository();
+                    //var Mensualidades = await obj.GetMensualidades(IdUsuarioM);
+                    //if( Mensualidades == null || Mensualidades.Count() <= 0 )
+                    //{
+                    //    MessageBox.Show("Se requiere que el usuario tenga una mensualidad ya asignada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //    return;
+                    //}
+                    //if (Estatus == "Eliminado")
+                    //{
+                    //    MessageBox.Show("Este servicio se encuentra ya eliminado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //    return;
+                    //}
+                    //bool checar = await ChecarUsuario(objUsuario);
+                    //if (checar == false)
+                    //{
+                    //    return;
+                    //}
                     //Programar pr = new Programar();
                     //if (pr.ShowDialog() != DialogResult.OK)
                     //    return;
-                    int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
-                    int IdPlanActual = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
-                    int IdPlanSeccionado = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
-                    string NombrePlan = string.Empty;
+                    //int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
+                    //int IdPlanActual = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
+                    //int IdPlanSeccionado = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
+                    //string NombrePlan = string.Empty;
                     //if (pr.SePrograma == "Cambio de plan")
                     //{
                     //    Planes p = new Planes();
@@ -346,43 +346,43 @@ namespace Mikrotik_Administrador
                     //    IdPlanSeccionado = p.IdSeleccionado;
                     //    NombrePlan = p.NombrePlan;
                     //}
-                    if (checar == false)
-                    {
-                        return;
-                    }
-                    TiempoDefinido td = new TiempoDefinido();
-                    td.FechaInicio = DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == null
-                        ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value);
-                    td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
-                        ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value);
-                    td.IdPlan = IdPlanSeccionado;
-                    //td.Programacion = pr.SePrograma;
-                    td.IdMikrotik = objUsuario.IdMikrotik;
-                    td.NombrePlan = NombrePlan;
+                    //if (checar == false)
+                    //{
+                    //    return;
+                    //}
+                    //TiempoDefinido td = new TiempoDefinido();
+                    //td.FechaInicio = DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == null
+                    //    ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value);
+                    //td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
+                    //    ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value);
+                    //td.IdPlan = IdPlanSeccionado;
+                    ////td.Programacion = pr.SePrograma;
+                    //td.IdMikrotik = objUsuario.IdMikrotik;
+                    //td.NombrePlan = NombrePlan;
                
-                    if (td.ShowDialog() == DialogResult.Cancel)
-                    {
-                        MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                    //if (td.ShowDialog() == DialogResult.Cancel)
+                    //{
+                    //    MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //    return;
+                    //}
                     //if (IdPlanActual == IdPlanSeccionado && td.IdMikrotik == objUsuario.IdMikrotik && pr.SePrograma == "Cambio de plan") //No tiene caso designar el mismo plan
                     //{
                     //    MessageBox.Show("Esta plan ya se encuentra funcionando actualmente en el mikrotik seleccionado, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     //    return;
                     //}
-                    TiempoDefinidosModel TD = new TiempoDefinidosModel
-                    {
-                        Dias = td.Dias,
-                        Horas = td.Horas,
-                        FechaInicio = td.FechaInicio ?? DateTime.Now,
-                        FechaFin = td.FechaFin ?? DateTime.Now.AddDays(td.Dias).AddHours(td.Horas),
-                        Modo = td.Modo,
-                        IdUsuarioM = IdUsuarioM,
-                        Estatus = "Pendiente",
-                        IdPlan = IdPlanSeccionado,
-                        IdMikrotikReceptor = td.IdMikrotik,
-                        Password = td.Password
-                    };
+                    //TiempoCambioModel TD = new TiempoCambioModel
+                    //{
+                    //    Dias = td.Dias,
+                    //    Horas = td.Horas,
+                    //    FechaInicio = td.FechaInicio ?? DateTime.Now,
+                    //    FechaFin = td.FechaFin ?? DateTime.Now.AddDays(td.Dias).AddHours(td.Horas),
+                    //    Modo = td.Modo,
+                    //    IdUsuarioM = IdUsuarioM,
+                    //    Estatus = "Pendiente",
+                    //    IdPlan = IdPlanSeccionado,
+                    //    IdMikrotikReceptor = td.IdMikrotik,
+                    //    Password = td.Password
+                    //};
                     //HistorialMovimientosModel H = new HistorialMovimientosModel
                     //{
                     //    Id = 0,
@@ -393,10 +393,10 @@ namespace Mikrotik_Administrador
                     //};
                     
                     //await obj.SaveHistorialMovimientos(H);
-                    var result = obj.SaveTiempoCambio(TD);
-                    MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    BuscarServicios();
-                    break;
+                    //var result = obj.SaveTiempoCambio(TD);
+                    //MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //BuscarServicios();
+                    //break;
             }
         }
         public async Task<bool> ChecarUsuario(ListUsuariosGeneralModel objUsuario)

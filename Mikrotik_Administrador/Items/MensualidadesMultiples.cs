@@ -14,7 +14,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class MensualidadesMultiples : Form
     {
-        private List<TiempoDefinidosModel> ListCambios = new List<TiempoDefinidosModel>();
+        private List<TiempoCambioModel> ListCambios = new List<TiempoCambioModel>();
         private List<MensualidadModel> ListMensualidades = new List<MensualidadModel>();
         private List<HistorialPagosModel> ListHistorialPagos = new List<HistorialPagosModel>();
         private List<UsuariosandPlanesModel> ListClientes = new List<UsuariosandPlanesModel>();
@@ -387,7 +387,7 @@ namespace Mikrotik_Administrador.Catalogos
         {
             try
             {
-                ListCambios = new List<TiempoDefinidosModel>();
+                ListCambios = new List<TiempoCambioModel>();
                 ListMensualidades = new List<MensualidadModel>();
                 ListHistorialPagos = new List<HistorialPagosModel>();
                 ListClientes = new List<UsuariosandPlanesModel>();
@@ -441,7 +441,7 @@ namespace Mikrotik_Administrador.Catalogos
 
                             var planB = await obj.GetPlanById(idPlanNuevo);
 
-                            ListCambios.Add(new TiempoDefinidosModel
+                            ListCambios.Add(new TiempoCambioModel
                             {
                                 Id = contadorIdCambio++,
                                 Dias = diasDuro,
@@ -457,8 +457,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 IdPlan = idPlanNuevo,
                                 Plan = planB != null ? planB.Nombre : "Plan Desconocido",
                                 IdMikrotikReceptor = idMikrotikReceptor,
-                                Nota = "Introducido por Excel",
-                                Password = "1234"
+                                Nota = "Introducido por Excel"
                             });
                         }
                     }
@@ -707,7 +706,7 @@ namespace Mikrotik_Administrador.Catalogos
         }
 
         // Función auxiliar para calcular el costo por tramos exactos dentro de un período de mensualidad
-        private async Task<decimal> CalcularCostoMensualidadPorTramosAsync(int idServicio, DateTime inicioPeriodo, DateTime finPeriodo, decimal precioBaseInicial, List<TiempoDefinidosModel> cambios, AppRepository obj)
+        private async Task<decimal> CalcularCostoMensualidadPorTramosAsync(int idServicio, DateTime inicioPeriodo, DateTime finPeriodo, decimal precioBaseInicial, List<TiempoCambioModel> cambios, AppRepository obj)
         {
             decimal costoTotal = 0;
             DateTime cursor = inicioPeriodo;

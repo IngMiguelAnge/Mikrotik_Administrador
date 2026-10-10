@@ -2,7 +2,7 @@
 
 namespace Mikrotik_Administrador.Model
 {
-    public class TiempoDefinidosModel
+    public class TiempoCambioModel
     {
         public int Id { get; set; }
         public int Dias { get; set; }
@@ -17,7 +17,6 @@ namespace Mikrotik_Administrador.Model
         public int IdPlan { get; set; }
         public string Plan { get; set; }
         public int IdMikrotikReceptor { get; set; }
-        public string Password { get; set; }
         public string Nota { get; set; }
     }
 }

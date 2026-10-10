@@ -22,6 +22,5 @@ namespace Mikrotik_Administrador.Model
         public string MikrotikNuevo { get; set; }
         public int IdMikrotikOriginal { get; set; }
         public string MikrotikOriginal { get; set; }
-        public string PasswordFibra { get; set; }
     }
 }

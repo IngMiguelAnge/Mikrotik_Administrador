@@ -51,7 +51,7 @@ namespace Mikrotik_Administrador.Catalogos
 
                 // Si hay un cambio previo que afecte el inicio, buscamos su plan original
                 var cambioAnterior = Detalles
-                    .Where(x => x.FechaFin < Desde && x.Estatus != "Cancelado")
+                    .Where(x => x.FechaFin < Desde && x.Estatus != "Cancelado" && x.Modo != "Test")
                     .OrderByDescending(x => x.FechaFin)
                     .FirstOrDefault();
 
@@ -67,7 +67,7 @@ namespace Mikrotik_Administrador.Catalogos
 
                 // Ordenar los eventos de cambio cronológicamente dentro del rango relevante
                 var cambiosOrdenados = Detalles
-                    .Where(x => x.FechaInicio <= Hasta && x.FechaFin >= Desde && x.Estatus != "Cancelado")
+                    .Where(x => x.FechaInicio <= Hasta && x.FechaFin >= Desde && x.Estatus != "Cancelado" && x.Modo != "Test")
                     .OrderBy(x => x.FechaInicio)
                     .ToList();
 

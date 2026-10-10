@@ -164,7 +164,7 @@ namespace Mikrotik_Administrador.Items
                     VelocidadElegida = Velocidad;
                     NombrePlanElegido = Plan;
                     AppRepository obj = new AppRepository();
-                    var listaMikrotiks = await obj.GetMikrotiksByIdPlan(Id);
+                    var listaMikrotiks = await obj.GetMikrotiksByIdPlan(Id, false);
                     // Insertamos un objeto "fantasma" al inicio para el placeholder
                     listaMikrotiks.Insert(0, new ListMikrotikModel { Id = 0, Nombre = "Selecciona un Mikrotik" });
 
