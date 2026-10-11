@@ -85,10 +85,10 @@
             this.lblHoras.Size = new System.Drawing.Size(72, 25);
             this.lblHoras.TabIndex = 7;
             this.lblHoras.Text = "HORAS";
+            this.lblHoras.Visible = false;
             // 
             // NUDDias
             // 
-            this.NUDDias.Enabled = false;
             this.NUDDias.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.NUDDias.Location = new System.Drawing.Point(286, 155);
             this.NUDDias.Maximum = new decimal(new int[] {
@@ -113,12 +113,12 @@
             // 
             // NUDHoras
             // 
-            this.NUDHoras.Enabled = false;
             this.NUDHoras.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.NUDHoras.Location = new System.Drawing.Point(453, 155);
             this.NUDHoras.Name = "NUDHoras";
             this.NUDHoras.Size = new System.Drawing.Size(68, 33);
             this.NUDHoras.TabIndex = 8;
+            this.NUDHoras.Visible = false;
             this.NUDHoras.ValueChanged += new System.EventHandler(this.NUDHoras_ValueChanged);
             // 
             // btnGuardar
@@ -149,7 +149,6 @@
             // dtpFechaInicio
             // 
             this.dtpFechaInicio.CustomFormat = "dd/MM/yyyy";
-            this.dtpFechaInicio.Enabled = false;
             this.dtpFechaInicio.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.dtpFechaInicio.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpFechaInicio.Location = new System.Drawing.Point(45, 151);

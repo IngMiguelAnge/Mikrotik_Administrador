@@ -324,7 +324,7 @@ namespace Mikrotik_Administrador.Catalogos
                     TD.ShowDialog();
                     if(TD.DialogResult == DialogResult.OK)
                     {
-                        var mensualidadAfectadas = await obj.GetMensualidadesAfectadas(IdUsuarioM, FechaInicioCambio, FechaFinCambio);
+                        var mensualidadAfectadas = await obj.GetMensualidadesAfectadas(IdUsuarioM, TD.FechaInicio, TD.FechaFin);
                         foreach (var mens in mensualidadAfectadas)
                         {
                             // Para CADA mensualidad afectada (ej. su propio FechaInicio y FechaLimite), 
@@ -338,8 +338,9 @@ namespace Mikrotik_Administrador.Catalogos
                             mens.Mensualidad = costoTotalMensualidad;
                             await obj.SaveMensualidad(mens);
                         }
-                    }
                         Buscar();
+                    }
+                       
                     break;
                 case "btnEstatus":
                     var EstatusActual = DGVCambios.Rows[e.RowIndex].Cells["Estatus"].Value.ToString();

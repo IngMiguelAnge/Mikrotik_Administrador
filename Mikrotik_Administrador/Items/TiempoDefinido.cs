@@ -14,6 +14,8 @@ namespace Mikrotik_Administrador.Items
     {
         public int Id { get; set; }
         public int IdUsuarioM { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
         MK mikrotik;
         public TiempoDefinido()
         {
@@ -29,11 +31,10 @@ namespace Mikrotik_Administrador.Items
             cbPlanNuevo.DisplayMember = "Nombre"; // Lo que el usuario VE
             cbPlanNuevo.ValueMember = "Id";      // El dato que procesas por DETRÁS
             cbPlanNuevo.DataSource = ListaPlanes.Where(x => x.Nombre != string.Empty).ToList();
-            cbPlanNuevo.SelectedIndex = 0;
             CBPlanOriginal.DisplayMember = "Nombre"; // Lo que el usuario VE
             CBPlanOriginal.ValueMember = "Id";      // El dato que procesas por DETRÁS
             CBPlanOriginal.DataSource = ListaPlanes.Where(x => x.Nombre != string.Empty).ToList();
-            CBPlanOriginal.SelectedIndex = 0;
+
             if (Id != 0)
             {
                 var Cambios = await obj.GetTiempoCambiobyId(Id);
@@ -50,7 +51,12 @@ namespace Mikrotik_Administrador.Items
                 if(CBMikrotiksOriginal.DataSource != null)
                     CBMikrotiksOriginal.SelectedValue = Cambios.IdMikrotikOriginal; 
             }
-         
+            else
+            {
+                CBModo.SelectedIndex = 0;
+                cbPlanNuevo.SelectedIndex = 0;
+                CBPlanOriginal.SelectedIndex = 0;
+            }
         }
 
         public void CambiarFinal()
@@ -151,6 +157,8 @@ namespace Mikrotik_Administrador.Items
             dtpFechaInicio.Value > DateTime.Now ? "Pendiente" :
             "Ejecutando"
             };
+            FechaInicio = td.FechaInicio;
+            FechaFin = td.FechaFin;
             AppRepository obj = new AppRepository();
             bool r = obj.SaveTiempoCambio(td).Result;
             if (r) {
@@ -160,6 +168,7 @@ namespace Mikrotik_Administrador.Items
             {
                 MessageBox.Show("Ocurrio un error al guardar el cambio de plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

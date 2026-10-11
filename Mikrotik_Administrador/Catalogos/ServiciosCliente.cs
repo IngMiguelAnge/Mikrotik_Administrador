@@ -195,6 +195,17 @@ namespace Mikrotik_Administrador
                 DefaultCellStyle = estiloBotones
             };
             DGVServicios.Columns.Add(btnPlan);
+            DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn
+            {
+                Name = "btnCambio",
+                HeaderText = "Acción",
+                Text = "Nuevo cambio",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVServicios.Columns.Add(btnCambio);
             DataGridViewButtonColumn btnUbicacion = new DataGridViewButtonColumn
             {
                 Name = "btnUbicacion",
@@ -276,6 +287,36 @@ namespace Mikrotik_Administrador
 
             switch (DGVServicios.Columns[e.ColumnIndex].Name)
             {
+                case "btnCambio":
+                    if (Estatus == "Eliminado")
+                    {
+                        MessageBox.Show("Este servicio se encuentra ya eliminado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    TiempoDefinido TD = new TiempoDefinido();
+                    TD.Id = 0;
+                    TD.IdUsuarioM = objUsuario.Id;
+                    TD.ShowDialog();
+                    if (TD.DialogResult == DialogResult.OK)
+                    {
+                        AppRepository obj = new AppRepository();
+                        var mensualidadAfectadas = await obj.GetMensualidadesAfectadas(objUsuario.Id, TD.FechaInicio, TD.FechaFin);
+                        foreach (var mens in mensualidadAfectadas)
+                        {
+                            // Para CADA mensualidad afectada (ej. su propio FechaInicio y FechaLimite), 
+                            // recalculamos sus tramos limpios
+                            var tramosCalculados = await CalcularTramosMensualidadAsync(objUsuario.Id, mens.FechaInicio, mens.FechaLimite);
+
+                            // Sumamos el costo total de los tramos que cayeron dentro de esta mensualidad
+                            decimal costoTotalMensualidad = tramosCalculados.Sum(t => t.Costo);
+
+                            // Actualizamos el costo final de ESTA mensualidad en la base de datos
+                            mens.Mensualidad = costoTotalMensualidad;
+                            await obj.SaveMensualidad(mens);
+                        }
+                        BuscarServicios();
+                    }
+                    break;
                 case "btnUbicacion":
                     var IdMikrotik = DGVServicios.Rows[e.RowIndex].Cells["IdMikrotik"].Value;
 
@@ -308,95 +349,7 @@ namespace Mikrotik_Administrador
                 case "btnPlan":
                     MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
-                    //int IdUsuarioM = Convert.ToInt32(DGVServicios.Rows[e.RowIndex].Cells["Id"].Value);
-                    //AppRepository obj = new AppRepository();
-                    //var Mensualidades = await obj.GetMensualidades(IdUsuarioM);
-                    //if( Mensualidades == null || Mensualidades.Count() <= 0 )
-                    //{
-                    //    MessageBox.Show("Se requiere que el usuario tenga una mensualidad ya asignada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //    return;
-                    //}
-                    //if (Estatus == "Eliminado")
-                    //{
-                    //    MessageBox.Show("Este servicio se encuentra ya eliminado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //    return;
-                    //}
-                    //bool checar = await ChecarUsuario(objUsuario);
-                    //if (checar == false)
-                    //{
-                    //    return;
-                    //}
-                    //Programar pr = new Programar();
-                    //if (pr.ShowDialog() != DialogResult.OK)
-                    //    return;
-                    //int IdPlan = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlan"].Value;
-                    //int IdPlanActual = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
-                    //int IdPlanSeccionado = (int)DGVServicios.Rows[e.RowIndex].Cells["IdPlanOriginal"].Value;
-                    //string NombrePlan = string.Empty;
-                    //if (pr.SePrograma == "Cambio de plan")
-                    //{
-                    //    Planes p = new Planes();
-                    //    p.IdResponsable = IdResponsable;
-                    //    p.PorUsuarios = true;
-                    //    p.Tipo = string.Empty;
-                    //    if (p.ShowDialog()!= DialogResult.OK)
-                    //    {
-                    //        return;
-                    //    }
-                    //    IdPlanSeccionado = p.IdSeleccionado;
-                    //    NombrePlan = p.NombrePlan;
-                    //}
-                    //if (checar == false)
-                    //{
-                    //    return;
-                    //}
-                    //TiempoDefinido td = new TiempoDefinido();
-                    //td.FechaInicio = DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value == null
-                    //    ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MinFechaInicio"].Value);
-                    //td.FechaFin = DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == DBNull.Value || DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value == null
-                    //    ? (DateTime?)null : Convert.ToDateTime(DGVServicios.Rows[e.RowIndex].Cells["MaxFechaFin"].Value);
-                    //td.IdPlan = IdPlanSeccionado;
-                    ////td.Programacion = pr.SePrograma;
-                    //td.IdMikrotik = objUsuario.IdMikrotik;
-                    //td.NombrePlan = NombrePlan;
                
-                    //if (td.ShowDialog() == DialogResult.Cancel)
-                    //{
-                    //    MessageBox.Show("Se cancelo el cambio", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //    return;
-                    //}
-                    //if (IdPlanActual == IdPlanSeccionado && td.IdMikrotik == objUsuario.IdMikrotik && pr.SePrograma == "Cambio de plan") //No tiene caso designar el mismo plan
-                    //{
-                    //    MessageBox.Show("Esta plan ya se encuentra funcionando actualmente en el mikrotik seleccionado, por favor seleccione otro plan.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //    return;
-                    //}
-                    //TiempoCambioModel TD = new TiempoCambioModel
-                    //{
-                    //    Dias = td.Dias,
-                    //    Horas = td.Horas,
-                    //    FechaInicio = td.FechaInicio ?? DateTime.Now,
-                    //    FechaFin = td.FechaFin ?? DateTime.Now.AddDays(td.Dias).AddHours(td.Horas),
-                    //    Modo = td.Modo,
-                    //    IdUsuarioM = IdUsuarioM,
-                    //    Estatus = "Pendiente",
-                    //    IdPlan = IdPlanSeccionado,
-                    //    IdMikrotikReceptor = td.IdMikrotik,
-                    //    Password = td.Password
-                    //};
-                    //HistorialMovimientosModel H = new HistorialMovimientosModel
-                    //{
-                    //    Id = 0,
-                    //    Descripcion = "Se a solicitado " + pr.SePrograma + " para el usuario " + objUsuario.Usuario + " plan seleccionado: " + NombrePlan,
-                    //    Pagina = "Servicio cliente",
-                    //    IdUsuario = IdResponsable,
-                    //    Estatus = false
-                    //};
-                    
-                    //await obj.SaveHistorialMovimientos(H);
-                    //var result = obj.SaveTiempoCambio(TD);
-                    //MessageBox.Show("Se ha enviado la solicitud de cambio de plan satisfactoriamente.", "Resultado de cambio de plan", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    //BuscarServicios();
-                    //break;
             }
         }
         public async Task<bool> ChecarUsuario(ListUsuariosGeneralModel objUsuario)
@@ -566,7 +519,6 @@ namespace Mikrotik_Administrador
                 progressBar1.Value = 0;
             }
         }
-
         private void btnNuevo_Click(object sender, EventArgs e)
         {
             PreregistroCliente m = new PreregistroCliente();
@@ -574,6 +526,136 @@ namespace Mikrotik_Administrador
             m.IdResponsable = IdResponsable;
             m.ShowDialog();
             BuscarServicios();          
+        }
+        public async Task<List<ListDetallesMensualidadModel>> CalcularTramosMensualidadAsync(int idUsuarioM, DateTime desde, DateTime hasta)
+        {
+            AppRepository obj = new AppRepository();
+            var Detalles = await obj.GetTiempoCambioforDetalles(idUsuarioM, desde, hasta);
+            if (Detalles == null || !Detalles.Any())
+            {
+                return new List<ListDetallesMensualidadModel>();
+            }
+
+            List<ListDetallesMensualidadModel> ListDestalles = new List<ListDetallesMensualidadModel>();
+
+            var usuarioMikrotik = await obj.GetUsuariosMikrotiksById(idUsuarioM);
+            var planBasePeriodo = await obj.GetPlanById(usuarioMikrotik.IdPlanOriginal);
+            string nombrePlanActual = planBasePeriodo != null ? planBasePeriodo.Nombre : "Plan Base";
+            decimal precioPlanActual = planBasePeriodo != null ? planBasePeriodo.Precio : 0m;
+
+            var cambioAnterior = Detalles
+                .Where(x => x.FechaFin < desde && x.Estatus != "Cancelado")
+                .OrderByDescending(x => x.FechaFin)
+                .FirstOrDefault();
+
+            if (cambioAnterior != null)
+            {
+                var planAnt = await obj.GetPlanById(cambioAnterior.IdPlanOriginal);
+                if (planAnt != null)
+                {
+                    nombrePlanActual = planAnt.Nombre;
+                    precioPlanActual = planAnt.Precio;
+                }
+            }
+
+            var cambiosOrdenados = Detalles
+                .Where(x => x.FechaInicio <= hasta && x.FechaFin >= desde && x.Estatus != "Cancelado")
+                .OrderBy(x => x.FechaInicio)
+                .ToList();
+
+            DateTime cursor = desde;
+
+            foreach (var cambio in cambiosOrdenados)
+            {
+                if (cursor < cambio.FechaInicio)
+                {
+                    DateTime finTramoBase = cambio.FechaInicio.AddDays(-1);
+                    if (finTramoBase > hasta) finTramoBase = hasta;
+
+                    if (cursor <= finTramoBase)
+                    {
+                        int diasBase = (int)(finTramoBase - cursor).TotalDays + 1;
+                        decimal costoBase = RedondearMontoFinanciero(diasBase * (precioPlanActual / 30.0m));
+
+                        ListDestalles.Add(new ListDetallesMensualidadModel
+                        {
+                            Id = 0, // O el Id de la mensualidad base correspondiente si lo manejas
+                            FechaInicio = cursor,
+                            FechaFin = finTramoBase,
+                            Estatus = "Activo",
+                            Plan = nombrePlanActual,
+                            Costo = costoBase
+                        });
+                    }
+                    cursor = cambio.FechaInicio;
+                }
+
+                DateTime inicioCambioEfectivo = cursor > cambio.FechaInicio ? cursor : cambio.FechaInicio;
+                DateTime finCambioEfectivo = hasta < cambio.FechaFin ? hasta : cambio.FechaFin;
+
+                if (inicioCambioEfectivo <= finCambioEfectivo)
+                {
+                    int diasCambio = (int)(finCambioEfectivo - inicioCambioEfectivo).TotalDays + 1;
+                    var planNuevo = await obj.GetPlanById(cambio.IdPlan);
+                    decimal precioPlanNuevo = planNuevo != null ? planNuevo.Precio : 0m;
+                    decimal costoCambio = RedondearMontoFinanciero(diasCambio * (precioPlanNuevo / 30.0m));
+
+                    ListDestalles.Add(new ListDetallesMensualidadModel
+                    {
+                        Id = cambio.Id, // ID del cambio / mensualidad a afectar
+                        FechaInicio = inicioCambioEfectivo,
+                        FechaFin = finCambioEfectivo,
+                        Estatus = cambio.Estatus,
+                        Plan = cambio.Plan,
+                        Costo = costoCambio
+                    });
+
+                    cursor = finCambioEfectivo.AddDays(1);
+                }
+
+                var planOrigCambio = await obj.GetPlanById(cambio.IdPlanOriginal);
+                if (planOrigCambio != null)
+                {
+                    nombrePlanActual = planOrigCambio.Nombre;
+                    precioPlanActual = planOrigCambio.Precio;
+                }
+            }
+
+            if (cursor <= hasta)
+            {
+                DateTime fechaFinTramoFinal = hasta;
+                if (cursor <= fechaFinTramoFinal)
+                {
+                    int diasFinales = (int)(fechaFinTramoFinal - cursor).TotalDays + 1;
+                    decimal costoFinal = RedondearMontoFinanciero(diasFinales * (precioPlanActual / 30.0m));
+
+                    ListDestalles.Add(new ListDetallesMensualidadModel
+                    {
+                        Id = 0,
+                        FechaInicio = cursor,
+                        FechaFin = fechaFinTramoFinal,
+                        Estatus = "Activo",
+                        Plan = nombrePlanActual,
+                        Costo = costoFinal
+                    });
+                }
+            }
+
+            return ListDestalles;
+        }
+        private decimal RedondearMontoFinanciero(decimal monto)
+        {
+            decimal parteEntera = Math.Floor(monto);
+            decimal parteDecimal = monto - parteEntera;
+
+            if (parteDecimal > 0.00m && parteDecimal < 0.30m)
+                return parteEntera;
+            else if (parteDecimal >= 0.30m && parteDecimal <= 0.50m)
+                return parteEntera + 0.50m;
+            else if (parteDecimal > 0.50m)
+                return parteEntera + 1.00m;
+
+            return parteEntera;
         }
     }
 }
