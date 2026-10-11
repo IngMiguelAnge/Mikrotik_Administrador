@@ -152,7 +152,7 @@ namespace Mikrotik_Administrador.Items
             IdPlanOriginal=(int)CBPlanOriginal.SelectedValue,
             IdMikrotikReceptor=(int)CBMikrotiksNuevo.SelectedValue,
             IdMikrotikOriginal=(int)CBMikrotiksOriginal.SelectedValue,
-            Nota = "Modificado por la página de cambios",
+            Nota = Id == 0 ? "Creado desde servicios cliente" : "Modificado por la página de cambios",
             Estatus = Convert.ToDateTime(lblFechaFin.Text) < DateTime.Now ? "Completado" :
             dtpFechaInicio.Value > DateTime.Now ? "Pendiente" :
             "Ejecutando"
