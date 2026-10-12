@@ -161,6 +161,31 @@ namespace Mikrotik_Administrador.Catalogos
                     FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
                 }
             });
+            dgvMensualidades.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Estatus",
+                HeaderText = "Estatus",
+                DataPropertyName = "Estatus",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2", // Aplica formato de moneda local (ej: $120.00 o $120.50)
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
+                }
+            });
+            DataGridViewButtonColumn btnStatus = new DataGridViewButtonColumn
+            {
+                Name = "btnStatus",
+                HeaderText = "Acción",
+                Text = "Cambiar Estatus",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            dgvMensualidades.Columns.Add(btnStatus);
             DataGridViewButtonColumn btnModificar = new DataGridViewButtonColumn
             {
                 Name = "btnModificar",
@@ -220,11 +245,14 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 dgvMensualidades.Enabled = false;
                 AppRepository r = new AppRepository();
+                var IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
                 switch (dgvMensualidades.Columns[e.ColumnIndex].Name)
                 {
+                    case "btnStatus":                        
+                        var result = r.UpdateEstatusMensualidad(IdMensualidad).Result;
+                        Buscar();
+                        break;
                     case "btnModificar":
-                        MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
                         IniciarPagos ini = new IniciarPagos();
                         ini.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
                         ini.IdUsuarioM = IdUsuarioM;
@@ -250,10 +278,8 @@ namespace Mikrotik_Administrador.Catalogos
                         Hi.UsuarioM = UsuarioM;                     
                         Hi.ShowDialog();
                         break;
-                     case "btnPagar":
-                        MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                        if ((decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value == 0)
+                    case "btnPagar":
+                        if ((decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value <= 0)
                         {
                             MessageBox.Show("Esta mensualidad se encuentra completamente pagada", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;

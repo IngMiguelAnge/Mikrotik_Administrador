@@ -12,5 +12,6 @@ namespace Mikrotik_Administrador.Model
         public decimal Mensualidad { get; set; }
         public decimal Recibido { get; set; }
         public decimal Faltante { get; set; }
+        public string Estatus { get; set; }
     }
 }

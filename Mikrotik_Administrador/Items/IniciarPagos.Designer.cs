@@ -32,10 +32,15 @@
             this.dtpFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
+            this.lblCostoFinal = new System.Windows.Forms.Label();
+            this.lblMensualidadOriginal = new System.Windows.Forms.Label();
+            this.lblCostoCambios = new System.Windows.Forms.Label();
+            this.lblMensualidadActual = new System.Windows.Forms.Label();
             this.lblFechaCorte = new System.Windows.Forms.Label();
             this.lblDiaCorte = new System.Windows.Forms.Label();
             this.NUDCorte = new System.Windows.Forms.NumericUpDown();
             this.lblDias = new System.Windows.Forms.Label();
+            this.lblSincambios = new System.Windows.Forms.Label();
             this.panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUDCorte)).BeginInit();
             this.SuspendLayout();
@@ -47,9 +52,9 @@
             this.lblFechaInicio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.lblFechaInicio.Location = new System.Drawing.Point(26, 20);
             this.lblFechaInicio.Name = "lblFechaInicio";
-            this.lblFechaInicio.Size = new System.Drawing.Size(260, 25);
+            this.lblFechaInicio.Size = new System.Drawing.Size(301, 25);
             this.lblFechaInicio.TabIndex = 0;
-            this.lblFechaInicio.Text = "Fecha en que inicio el servicio";
+            this.lblFechaInicio.Text = "Fecha en que inicio la mensualidad";
             // 
             // dtpFechaInicio
             // 
@@ -66,16 +71,21 @@
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(306, 269);
+            this.btnGuardar.Location = new System.Drawing.Point(347, 429);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(120, 38);
-            this.btnGuardar.TabIndex = 2;
+            this.btnGuardar.TabIndex = 10;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = false;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
             // panelContenedor
             // 
+            this.panelContenedor.Controls.Add(this.lblSincambios);
+            this.panelContenedor.Controls.Add(this.lblCostoFinal);
+            this.panelContenedor.Controls.Add(this.lblMensualidadOriginal);
+            this.panelContenedor.Controls.Add(this.lblCostoCambios);
+            this.panelContenedor.Controls.Add(this.lblMensualidadActual);
             this.panelContenedor.Controls.Add(this.lblFechaCorte);
             this.panelContenedor.Controls.Add(this.lblDiaCorte);
             this.panelContenedor.Controls.Add(this.NUDCorte);
@@ -87,15 +97,59 @@
             this.panelContenedor.Location = new System.Drawing.Point(0, 0);
             this.panelContenedor.Name = "panelContenedor";
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenedor.Size = new System.Drawing.Size(464, 330);
+            this.panelContenedor.Size = new System.Drawing.Size(503, 490);
             this.panelContenedor.TabIndex = 4;
+            // 
+            // lblCostoFinal
+            // 
+            this.lblCostoFinal.AutoSize = true;
+            this.lblCostoFinal.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblCostoFinal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblCostoFinal.Location = new System.Drawing.Point(26, 381);
+            this.lblCostoFinal.Name = "lblCostoFinal";
+            this.lblCostoFinal.Size = new System.Drawing.Size(272, 25);
+            this.lblCostoFinal.TabIndex = 11;
+            this.lblCostoFinal.Text = "Costo total por la mensualidad:";
+            // 
+            // lblMensualidadOriginal
+            // 
+            this.lblMensualidadOriginal.AutoSize = true;
+            this.lblMensualidadOriginal.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblMensualidadOriginal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMensualidadOriginal.Location = new System.Drawing.Point(26, 227);
+            this.lblMensualidadOriginal.Name = "lblMensualidadOriginal";
+            this.lblMensualidadOriginal.Size = new System.Drawing.Size(389, 25);
+            this.lblMensualidadOriginal.TabIndex = 7;
+            this.lblMensualidadOriginal.Text = "Costo de la mensualidad original del servicio:";
+            // 
+            // lblCostoCambios
+            // 
+            this.lblCostoCambios.AutoSize = true;
+            this.lblCostoCambios.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblCostoCambios.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblCostoCambios.Location = new System.Drawing.Point(26, 310);
+            this.lblCostoCambios.Name = "lblCostoCambios";
+            this.lblCostoCambios.Size = new System.Drawing.Size(266, 25);
+            this.lblCostoCambios.TabIndex = 9;
+            this.lblCostoCambios.Text = "Costo a pagar por los cambios:";
+            // 
+            // lblMensualidadActual
+            // 
+            this.lblMensualidadActual.AutoSize = true;
+            this.lblMensualidadActual.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblMensualidadActual.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMensualidadActual.Location = new System.Drawing.Point(26, 269);
+            this.lblMensualidadActual.Name = "lblMensualidadActual";
+            this.lblMensualidadActual.Size = new System.Drawing.Size(374, 25);
+            this.lblMensualidadActual.TabIndex = 8;
+            this.lblMensualidadActual.Text = "Costo de la mensualidad actual del servicio:";
             // 
             // lblFechaCorte
             // 
             this.lblFechaCorte.AutoSize = true;
             this.lblFechaCorte.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblFechaCorte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFechaCorte.Location = new System.Drawing.Point(26, 260);
+            this.lblFechaCorte.Location = new System.Drawing.Point(194, 167);
             this.lblFechaCorte.Name = "lblFechaCorte";
             this.lblFechaCorte.Size = new System.Drawing.Size(55, 25);
             this.lblFechaCorte.TabIndex = 6;
@@ -106,11 +160,11 @@
             this.lblDiaCorte.AutoSize = true;
             this.lblDiaCorte.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblDiaCorte.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblDiaCorte.Location = new System.Drawing.Point(26, 213);
+            this.lblDiaCorte.Location = new System.Drawing.Point(194, 128);
             this.lblDiaCorte.Name = "lblDiaCorte";
-            this.lblDiaCorte.Size = new System.Drawing.Size(194, 25);
+            this.lblDiaCorte.Size = new System.Drawing.Size(273, 25);
             this.lblDiaCorte.TabIndex = 5;
-            this.lblDiaCorte.Text = "Proximo corte sera el:";
+            this.lblDiaCorte.Text = "La mensualidad se pagara hasta";
             // 
             // NUDCorte
             // 
@@ -142,16 +196,27 @@
             this.lblDias.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.lblDias.Location = new System.Drawing.Point(26, 128);
             this.lblDias.Name = "lblDias";
-            this.lblDias.Size = new System.Drawing.Size(211, 25);
+            this.lblDias.Size = new System.Drawing.Size(118, 25);
             this.lblDias.TabIndex = 3;
-            this.lblDias.Text = "En que dia sera el corte:";
+            this.lblDias.Text = "Día de corte:";
+            // 
+            // lblSincambios
+            // 
+            this.lblSincambios.AutoSize = true;
+            this.lblSincambios.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblSincambios.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblSincambios.Location = new System.Drawing.Point(26, 344);
+            this.lblSincambios.Name = "lblSincambios";
+            this.lblSincambios.Size = new System.Drawing.Size(304, 25);
+            this.lblSincambios.TabIndex = 12;
+            this.lblSincambios.Text = "Costo a pagar por días sin cambios:";
             // 
             // IniciarPagos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(464, 330);
+            this.ClientSize = new System.Drawing.Size(503, 490);
             this.Controls.Add(this.panelContenedor);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -178,5 +243,10 @@
         private System.Windows.Forms.Label lblDias;
         private System.Windows.Forms.Label lblDiaCorte;
         private System.Windows.Forms.Label lblFechaCorte;
+        private System.Windows.Forms.Label lblMensualidadActual;
+        private System.Windows.Forms.Label lblCostoCambios;
+        private System.Windows.Forms.Label lblMensualidadOriginal;
+        private System.Windows.Forms.Label lblCostoFinal;
+        private System.Windows.Forms.Label lblSincambios;
     }
 }

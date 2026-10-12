@@ -894,7 +894,7 @@ namespace Mikrotik_Administrador.Data
                 IdUsuario = (int)reader["IdUsuario"],
             };
         }
-        public async Task<bool> UpdateEstatusMensualidad(int Id, bool Pagado)
+        public async Task<bool> UpdateEstatusMensualidad(int Id)
         {
             try
             {
@@ -904,7 +904,6 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
-                        cmd.Parameters.Add(new SqlParameter("@Pagado", Pagado));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -982,6 +981,36 @@ namespace Mikrotik_Administrador.Data
 
             }
             return list;
+        }
+        public async Task<MensualidadModel> GetMensualidadbyId(int Id)
+        {
+            MensualidadModel mensualidad = new MensualidadModel();
+            List<MensualidadModel> list = new List<MensualidadModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetMensualidadbyId", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToMensualidades(reader));
+                            }
+                            mensualidad = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return mensualidad;
         }
         public async Task<List<ListMensualidadesModel>> GetMensualidades(int IdUsuarioM)
         {
@@ -1109,6 +1138,7 @@ namespace Mikrotik_Administrador.Data
                 Mensualidad = (decimal)reader["Mensualidad"],
                 Recibido = (decimal)reader["Recibido"],
                 Faltante = (decimal)reader["Faltante"],
+                Estatus = (string)reader["Estatus"],
             };
         }
         private MensualidadModel MapToMensualidades(SqlDataReader reader)
@@ -1123,6 +1153,7 @@ namespace Mikrotik_Administrador.Data
                 FechaLimite = (DateTime)reader["FechaLimite"],
                 IdUsuario = (int)reader["IdUsuario"],
                 Mensualidad = (decimal)reader["Mensualidad"],
+                Estatus = (bool)reader["Estatus"],
             };
         }
         public async Task<int> SaveMensualidad(MensualidadModel obj)

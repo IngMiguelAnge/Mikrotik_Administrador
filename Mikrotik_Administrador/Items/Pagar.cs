@@ -148,7 +148,7 @@ namespace Mikrotik_Administrador.Items
                 };
                 if(Faltante <= confirmacion.Recibido)
                 {
-                    var resulpago = obj.UpdateEstatusMensualidad(IdMensualidad,true);
+                    //var resulpago = obj.UpdateEstatusMensualidad(IdMensualidad,true);
                     MessageBox.Show("Pago completo, ya puede crear una nueva mensualidad", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
