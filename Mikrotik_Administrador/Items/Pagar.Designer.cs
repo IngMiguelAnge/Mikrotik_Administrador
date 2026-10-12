@@ -177,9 +177,9 @@
             this.lblMensaje2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.lblMensaje2.Location = new System.Drawing.Point(301, 20);
             this.lblMensaje2.Name = "lblMensaje2";
-            this.lblMensaje2.Size = new System.Drawing.Size(234, 25);
+            this.lblMensaje2.Size = new System.Drawing.Size(226, 25);
             this.lblMensaje2.TabIndex = 8;
-            this.lblMensaje2.Text = "*Imagen del comprobante:";
+            this.lblMensaje2.Text = "Imagen del comprobante:";
             // 
             // panelTop
             // 

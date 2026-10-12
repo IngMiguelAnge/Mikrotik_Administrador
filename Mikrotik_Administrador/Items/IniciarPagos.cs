@@ -14,6 +14,7 @@ namespace Mikrotik_Administrador.Items
         public int IdMensualidad { get; set; }
         public int IdUsuarioM { get; set; }
         public int IdResponsable { get; set; }
+
         private decimal MensualidadFinal;
         public IniciarPagos()
         {
@@ -71,11 +72,7 @@ namespace Mikrotik_Administrador.Items
             }
         }
         private void IniciarPagos_Load(object sender, EventArgs e)
-        {
-            dtpFechaInicio.Value = DateTime.Now;
-            DateTime fechaCorte = new DateTime(DateTime.Now.AddMonths(1).Year,
-                DateTime.Now.AddMonths(1).Month, 1);
-            lblFechaCorte.Text = fechaCorte.ToString("dd/MM/yyyy");
+        {    
             AppRepository obj = new AppRepository();
             if (IdMensualidad != 0)
             {
@@ -85,6 +82,18 @@ namespace Mikrotik_Administrador.Items
                     dtpFechaInicio.Value = mensualidad.FechaInicio;
                     NUDCorte.Value = mensualidad.DiaCorte;
                 }
+                else
+                {
+                    MessageBox.Show("No se encontró la mensualidad especificada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
+                }
+            }
+            else
+            {
+                dtpFechaInicio.Value = DateTime.Now;
+                DateTime fechaCorte = new DateTime(DateTime.Now.AddMonths(1).Year,
+                    DateTime.Now.AddMonths(1).Month, 1);
+                lblFechaCorte.Text = fechaCorte.ToString("dd/MM/yyyy");
             }
             var Servicio = obj.GetUsuariosMikrotiksById(IdUsuarioM).Result;
             var PlanOriginal = obj.GetPlanById(Servicio.IdPlanOriginal).Result;

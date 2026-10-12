@@ -200,6 +200,8 @@ namespace Mikrotik_Administrador.Catalogos
                         Buscar();
                         break;
                     case "btnEditar":
+                        MessageBox.Show("Se esta trabajando en mejoras", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                         Pagar iniP = new Pagar();
                         iniP.Id = Id;
                         iniP.IdMensualidad = IdMensualidad;

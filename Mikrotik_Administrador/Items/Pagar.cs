@@ -108,7 +108,7 @@ namespace Mikrotik_Administrador.Items
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             if(txtReferencia.Text.Trim() == string.Empty 
-                || CBBanco.SelectedIndex == 0 || PBImagen.Image == null)
+                || CBBanco.SelectedIndex == 0)
             {
                 MessageBox.Show("Datos incompletos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -117,6 +117,16 @@ namespace Mikrotik_Administrador.Items
             confirmacion.Total = Faltante;
             if (confirmacion.ShowDialog() != DialogResult.OK)
             { return; }
+            if(Faltante < confirmacion.Recibido)
+            {
+                DialogResult resultado = MessageBox.Show("Se esta recibiendo una cantidad mayor a la solicitada," +
+                    " si continua se repartira todo el sobrante entre las mensualidades faltantes a pagar o se crearan nuevos mensualidades. "+
+                    "¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                if (resultado == DialogResult.No)
+                {
+                    return;
+                }
+            }
             AppRepository obj = new AppRepository();
         
             HistorialPagosModel sv = new HistorialPagosModel
@@ -136,24 +146,24 @@ namespace Mikrotik_Administrador.Items
             if (result != 0)
             {
                 MessageBox.Show("Pago registrado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                VentaModel venta = new VentaModel
-                {
-                    Copias = 0,
-                    Imprimir = false,
-                    Recibido = confirmacion.Recibido,
-                    IdTicket = result,
-                    Cliente = Cliente,
-                    Total = Faltante,
-                    Title = string.Empty
-                };
-                if(Faltante <= confirmacion.Recibido)
-                {
-                    //var resulpago = obj.UpdateEstatusMensualidad(IdMensualidad,true);
-                    MessageBox.Show("Pago completo, ya puede crear una nueva mensualidad", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //VentaModel venta = new VentaModel
+                //{
+                //    Copias = 0,
+                //    Imprimir = false,
+                //    Recibido = confirmacion.Recibido,
+                //    IdTicket = result,
+                //    Cliente = Cliente,
+                //    Total = Faltante,
+                //    Title = string.Empty
+                //};
+                //if(Faltante <= confirmacion.Recibido)
+                //{
+                //    //var resulpago = obj.UpdateEstatusMensualidad(IdMensualidad,true);
+                //    MessageBox.Show("Pago completo, ya puede crear una nueva mensualidad", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                }
-                Impresiones im = new Impresiones();
-                im.GenerarTicket(venta);
+                //}
+                //Impresiones im = new Impresiones();
+                //im.GenerarTicket(venta);
                
                 this.Close();
             }

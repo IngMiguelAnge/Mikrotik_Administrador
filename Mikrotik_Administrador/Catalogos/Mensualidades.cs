@@ -279,6 +279,8 @@ namespace Mikrotik_Administrador.Catalogos
                         Hi.ShowDialog();
                         break;
                     case "btnPagar":
+                        MessageBox.Show("Se esta trabajando en mejoras", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                         if ((decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value <= 0)
                         {
                             MessageBox.Show("Esta mensualidad se encuentra completamente pagada", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -310,9 +312,7 @@ namespace Mikrotik_Administrador.Catalogos
         }
 
         private void btnNuevo_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return;
+        {            
             IniciarPagos ini = new IniciarPagos();
             ini.IdMensualidad = 0;
             ini.IdUsuarioM = IdUsuarioM;
