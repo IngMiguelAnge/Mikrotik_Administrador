@@ -385,6 +385,13 @@ namespace Mikrotik_Administrador.Catalogos
         }
         private async Task CargarDatosExcelAsync(string rutaArchivo)
         {
+            int FilaCambios = 0;
+            int FilaPagos = 0;
+            progressBar1.Style = ProgressBarStyle.Marquee; // La barra empieza a moverse sola
+            progressBar1.MarqueeAnimationSpeed = 30; // Velocidad de la animación
+            btnCargar.Enabled = false;
+            BtnBuscar.Enabled = false;
+            btnDescargar.Enabled = false;
             try
             {
                 ListCambios = new List<TiempoCambioModel>();
@@ -409,8 +416,9 @@ namespace Mikrotik_Administrador.Catalogos
 
                     foreach (var row in wsCambios.RowsUsed())
                     {
-                        if (primeraFila1) { primeraFila1 = false; continue; }
 
+                        if (primeraFila1) { primeraFila1 = false; continue; }
+                        FilaCambios += 1;
                         int idServicio = row.Cell(1).GetValue<int>();             // Col A: IdServicio
                         DateTime fechaInicio = row.Cell(3).GetValue<DateTime>(); // Col C: Cuando inicio
                         int diasDuro = row.Cell(4).GetValue<int>();               // Col D: Días que duró
@@ -451,7 +459,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 Modo = "Temporal",
                                 IdUsuarioM = idServicio,
                                 Estatus = fechaFin <= DateTime.Now ? "Completado" :
-                                fechaInicio <= DateTime.Now && fechaFin > DateTime.Now ? "Ejecutando":"Pendiente",
+                                fechaInicio <= DateTime.Now && fechaFin > DateTime.Now ? "Ejecutando" : "Pendiente",
                                 IdPlanOriginal = idPlanOriginal,
                                 IdMikrotikOriginal = idMikrotikOriginal,
                                 IdPlan = idPlanNuevo,
@@ -473,14 +481,36 @@ namespace Mikrotik_Administrador.Catalogos
 
                     foreach (var row in wsPagos.RowsUsed())
                     {
-                        if (primeraFila2) { primeraFila2 = false; continue; }
 
+                        if (primeraFila2) { primeraFila2 = false; continue; }
+                        FilaPagos += 1;
                         int idCliente = row.Cell(1).GetValue<int>();                  // Col A: IdCliente
                         int idServicio = row.Cell(3).GetValue<int>();                  // Col C: IdServicio
                         DateTime fechaInicioExcel = row.Cell(6).GetValue<DateTime>(); // Col F: Inicio la mensualidad
                         int diaCorte = row.Cell(7).GetValue<int>();                    // Col G: Día de corte
                         int idResponsable = row.Cell(8).GetValue<int>();               // Col H: IdResponsable
-                        DateTime fechaPago = row.Cell(10).GetValue<DateTime>();          // Col J: Cuando se recibio el pago
+                        string valorCelda = row.Cell(10).GetString().Trim();
+                        DateTime fechaPago = DateTime.Now;
+                        // Col J: Cuando se recibio el pago
+                        if (DateTime.TryParse(valorCelda, out DateTime rfechaPago))
+                        {
+                            fechaPago = rfechaPago;
+                        }
+                        else
+                        {
+                            // Opcional: Manejar el caso por si alguna celda viene vacía o con formato incorrecto
+                            // Por ejemplo, limpiar los puntos de A.M. / P.M. si es necesario:
+                            string fechaLimpiada = valorCelda.Replace(".", "").Replace("  ", " ");
+
+                            if (DateTime.TryParse(fechaLimpiada, out rfechaPago))
+                            {
+                                fechaPago = rfechaPago;
+                            }
+                            else
+                            {
+                                throw new FormatException($"Error de formato en pagos hay una fecha no válida.");
+                            }
+                        }
                         decimal saldoRestante = row.Cell(11).GetValue<decimal>();      // Col K: Cantidad recibida
 
                         string comentario = row.Cell(12).IsEmpty() ? "" : row.Cell(12).GetValue<string>();
@@ -563,15 +593,15 @@ namespace Mikrotik_Administrador.Catalogos
                         // =========================================================================
                         while (saldoRestante > 0)
                         {
-                            DateTime fechaLimiteActual;
-                            if (diaCorte <= fechaInicioActual.Day)
+                            int anio = fechaInicioActual.Year;
+                            int mes = fechaInicioActual.Month + 1;
+                            if (mes > 12)
                             {
-                                fechaLimiteActual = new DateTime(fechaInicioActual.Year, fechaInicioActual.Month, diaCorte).AddMonths(1);
+                                mes = 1;
+                                anio++;
                             }
-                            else
-                            {
-                                fechaLimiteActual = new DateTime(fechaInicioActual.Year, fechaInicioActual.Month, diaCorte);
-                            }
+                            int diaValido = Math.Min(diaCorte, DateTime.DaysInMonth(anio, mes));
+                            DateTime fechaLimiteActual = new DateTime(anio, mes, diaValido);
 
                             var mensualidadExistente = ListMensualidades.FirstOrDefault(m =>
                                 m.IdUsuarioM == idServicio &&
@@ -701,9 +731,22 @@ namespace Mikrotik_Administrador.Catalogos
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (FilaCambios > 0)
+                    MessageBox.Show("Error en cambios fila: " + (FilaCambios + 1).ToString() + " " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    MessageBox.Show("Error en pagos fila: " + (FilaPagos + 1).ToString() + " " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            finally
+            {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 100;
+                BtnBuscar.Enabled = true;
+                btnDescargar.Enabled = true;
+                btnCargar.Enabled = true;
             }
         }
+
 
         // Función auxiliar para calcular el costo por tramos exactos dentro de un período de mensualidad
         private async Task<decimal> CalcularCostoMensualidadPorTramosAsync(int idServicio, DateTime inicioPeriodo, DateTime finPeriodo, decimal precioBaseInicial, List<TiempoCambioModel> cambios, AppRepository obj)
@@ -1024,11 +1067,11 @@ namespace Mikrotik_Administrador.Catalogos
 
                             // 1. Filtrar eventos (cambios temporales o suspensiones) que se cruzan con este período
                             var detalles = ListCambios.Where(x => x.IdUsuarioM == IdUsuarioMRevision
-                                                               && x.FechaInicio <= hasta
-                                                               && x.FechaFin >= desde
-                                                               && x.Modo == "Temporal")
-                                                      .OrderBy(x => x.FechaInicio)
-                                                      .ToList();
+                                                                && x.FechaInicio <= hasta
+                                                                && x.FechaFin >= desde
+                                                                && x.Modo == "Temporal")
+                                                     .OrderBy(x => x.FechaInicio)
+                                                     .ToList();
 
                             ListDestalles = new List<ListDetallesMensualidadModel>();
                             AppRepository objRepo = new AppRepository();
@@ -1120,23 +1163,25 @@ namespace Mikrotik_Administrador.Catalogos
                             // 3. Si queda tiempo después del último cambio hasta llegar a la fecha límite ('hasta')
                             if (cursor <= hasta)
                             {
-                                int diasRestantes = (int)(hasta - cursor).TotalDays + 1;
-
-                                // Evitar pasarse del estándar comercial de 30 días si la fecha límite incluye el día de corte exacto
-                                if (cursor == hasta && ListDestalles.Count > 0)
-                                {
-                                    // Si el cursor coincide exactamente con la fecha límite por un desfase de un día, ajustamos
-                                    // O si prefieres cerrar un día antes de la fecha límite (ej. termina el 30/06 para iniciar el 01/07):
-                                }
-
                                 DateTime fechaFinTramoFinal = hasta;
-                                // Opcional: si 'hasta' es el día de corte del mes siguiente y deseas mostrar el último día del mes corriente:
-                                // if (fechaFinTramoFinal.Day == 1) fechaFinTramoFinal = fechaFinTramoFinal.AddDays(-1);
 
                                 if (cursor <= fechaFinTramoFinal)
                                 {
-                                    int diasFinales = (int)(fechaFinTramoFinal - cursor).TotalDays + 1;
-                                    decimal costoFinal = RedondearMontoFinanciero(diasFinales * (precioPlanActual / 30.0m));
+                                    // Validamos si abarca el mes completo sin interrupciones para aplicar el precio fijo exacto
+                                    bool esMesCompleto = (cursor == desde && fechaFinTramoFinal == hasta && ListDestalles.Count == 0);
+
+                                    decimal costoFinal;
+                                    if (esMesCompleto)
+                                    {
+                                        // Respeta los 300 cerrados de la mensualidad sin alterarse por meses de 31 días
+                                        costoFinal = precioPlanActual;
+                                    }
+                                    else
+                                    {
+                                        int diasFinales = (int)(fechaFinTramoFinal - cursor).TotalDays;
+                                        if (diasFinales <= 0) diasFinales = 1;
+                                        costoFinal = RedondearMontoFinanciero(diasFinales * (precioPlanActual / 30.0m));
+                                    }
 
                                     ListDestalles.Add(new ListDetallesMensualidadModel
                                     {
@@ -1323,7 +1368,8 @@ namespace Mikrotik_Administrador.Catalogos
                 DataPropertyName = "FechaRecibido",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = { Format = "dd/MM/yyyy hh:mm:ss tt" }
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -1426,7 +1472,8 @@ namespace Mikrotik_Administrador.Catalogos
                 DataPropertyName = "FechaInicio",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                 DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -1435,7 +1482,8 @@ namespace Mikrotik_Administrador.Catalogos
                 DataPropertyName = "FechaLimite",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {

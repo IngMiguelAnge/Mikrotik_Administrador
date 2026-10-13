@@ -113,7 +113,8 @@ namespace Mikrotik_Administrador.Items
             decimal CostoTotalSinCambios = tramossincambios.Sum(t => t.Costo);
             lblSincambios.Text = "Costo total sin cambios: $" + CostoTotalSinCambios.ToString();
             var tramostotales = await CalcularTramosMensualidadAsync(IdUsuarioM, dtpFechaInicio.Value, Convert.ToDateTime(lblFechaCorte.Text));
-            MensualidadFinal = tramostotales.Sum(t => t.Costo);
+            MensualidadFinal = tramostotales.Sum(t => t.Costo) == 0 ? tramossincambios.Sum(t => t.Costo) :
+            tramostotales.Sum(t => t.Costo);
 
             lblCostoFinal.Text = "Costo total por la mensualidad: $" + MensualidadFinal.ToString();
 
@@ -270,7 +271,6 @@ namespace Mikrotik_Administrador.Items
 
             foreach (var cambio in cambiosOrdenados)
             {
-                // Si hay un espacio libre antes del cambio, pertenece al plan base
                 if (cursor < cambio.FechaInicio)
                 {
                     DateTime finTramoBase = cambio.FechaInicio.AddDays(-1);
@@ -279,7 +279,19 @@ namespace Mikrotik_Administrador.Items
                     if (cursor <= finTramoBase)
                     {
                         int diasBase = (int)(finTramoBase - cursor).TotalDays + 1;
-                        decimal costoBase = RedondearMontoFinanciero(diasBase * (precioPlanActual / 30.0m));
+                        decimal costoBase = 0m;
+
+                        bool esMesCompletoExacto = (cursor.Day == finTramoBase.AddDays(1).Day) &&
+                                                   (cursor.AddMonths(1).Date == finTramoBase.AddDays(1).Date);
+
+                        if (esMesCompletoExacto || diasBase >= 28 && diasBase <= 31 && cursor.Month != finTramoBase.Month)
+                        {
+                            costoBase = precioPlanActual;
+                        }
+                        else
+                        {
+                            costoBase = RedondearMontoFinanciero(diasBase * (precioPlanActual / 30.0m));
+                        }
 
                         ListDestalles.Add(new ListDetallesMensualidadModel
                         {
@@ -292,7 +304,7 @@ namespace Mikrotik_Administrador.Items
                         });
                     }
                 }
-                // Saltamos el cursor más allá del cambio para no procesarlo ni agregarlo
+
                 cursor = cambio.FechaFin >= hasta ? hasta.AddDays(1) : cambio.FechaFin.AddDays(1);
 
                 var planOrigCambio = await obj.GetPlanById(cambio.IdPlanOriginal);
@@ -303,14 +315,26 @@ namespace Mikrotik_Administrador.Items
                 }
             }
 
-            // Si queda tiempo después del último cambio hasta llegar a 'Hasta'
             if (cursor <= hasta)
             {
                 DateTime fechaFinTramoFinal = hasta;
                 if (cursor <= fechaFinTramoFinal)
                 {
                     int diasFinales = (int)(fechaFinTramoFinal - cursor).TotalDays + 1;
-                    decimal costoFinal = RedondearMontoFinanciero(diasFinales * (precioPlanActual / 30.0m));
+                    decimal costoFinal = 0m;
+
+                    // Validación robusta para el tramo final de un mes completo (ej. 14 de enero al 14 de febrero)
+                    bool esMesCompletoFinal = (cursor.Date == desde.Date && fechaFinTramoFinal.Date == desde.AddMonths(1).Date);
+
+                    // Si es un mes completo exacto, ignoramos si trajo 31 días y cobramos la tarifa plana
+                    if (esMesCompletoFinal)
+                    {
+                        costoFinal = precioPlanActual; // Forzará los $300 cerrados
+                    }
+                    else
+                    {
+                        costoFinal = RedondearMontoFinanciero(diasFinales * (precioPlanActual / 30.0m));
+                    }
 
                     ListDestalles.Add(new ListDetallesMensualidadModel
                     {
@@ -438,5 +462,9 @@ namespace Mikrotik_Administrador.Items
             CalcularCostos();
         }
 
+        private void NUDCorte_KeyUp(object sender, KeyEventArgs e)
+        {
+            CambiarFecha();
+        }
     }
 }

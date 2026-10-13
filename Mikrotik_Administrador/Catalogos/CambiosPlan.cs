@@ -347,7 +347,10 @@ namespace Mikrotik_Administrador.Catalogos
                     var PlanRetorno = DGVCambios.Rows[e.RowIndex].Cells["PlanRetorno"].Value.ToString();
                     var Servicio = DGVCambios.Rows[e.RowIndex].Cells["Usuario"].Value.ToString().Trim();
                     Programar pr = new Programar();
-                    pr.ShowDialog();
+                    if (pr.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
                     if (EstatusActual == pr.SePrograma)
                     {
                         MessageBox.Show("Este estatus ya esta aplicado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -484,7 +487,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 await obj.SaveHistorialMovimientos(hm);
                                 MessageBox.Show("El servicio " + Servicio +
                             " se actualizo con la ip " + Antenas.First().address + " y la velocidad " + plan.Velocidad +
-                            " en el mikrotik " + mikro.Nombre + " y se"
+                            " en el mikrotik " + mikro.Nombre
                             , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
 
@@ -612,7 +615,7 @@ namespace Mikrotik_Administrador.Catalogos
                                 await obj.SaveHistorialMovimientos(hm);
                                 MessageBox.Show("El servicio " + Servicio +
                             " se actualizo con la ip " + ExisteEnFibra.First().address + " y la velocidad " + plan.Velocidad +
-                            " en el mikrotik " + mikro.Nombre + " y se"
+                            " en el mikrotik " + mikro.Nombre
                             , "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
 

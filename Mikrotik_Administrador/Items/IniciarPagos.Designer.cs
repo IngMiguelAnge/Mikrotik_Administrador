@@ -32,6 +32,7 @@
             this.dtpFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
+            this.lblSincambios = new System.Windows.Forms.Label();
             this.lblCostoFinal = new System.Windows.Forms.Label();
             this.lblMensualidadOriginal = new System.Windows.Forms.Label();
             this.lblCostoCambios = new System.Windows.Forms.Label();
@@ -40,7 +41,6 @@
             this.lblDiaCorte = new System.Windows.Forms.Label();
             this.NUDCorte = new System.Windows.Forms.NumericUpDown();
             this.lblDias = new System.Windows.Forms.Label();
-            this.lblSincambios = new System.Windows.Forms.Label();
             this.panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUDCorte)).BeginInit();
             this.SuspendLayout();
@@ -99,6 +99,17 @@
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
             this.panelContenedor.Size = new System.Drawing.Size(503, 490);
             this.panelContenedor.TabIndex = 4;
+            // 
+            // lblSincambios
+            // 
+            this.lblSincambios.AutoSize = true;
+            this.lblSincambios.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblSincambios.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblSincambios.Location = new System.Drawing.Point(26, 344);
+            this.lblSincambios.Name = "lblSincambios";
+            this.lblSincambios.Size = new System.Drawing.Size(304, 25);
+            this.lblSincambios.TabIndex = 12;
+            this.lblSincambios.Text = "Costo a pagar por días sin cambios:";
             // 
             // lblCostoFinal
             // 
@@ -188,6 +199,7 @@
             0,
             0});
             this.NUDCorte.ValueChanged += new System.EventHandler(this.NUDCorte_ValueChanged);
+            this.NUDCorte.KeyUp += new System.Windows.Forms.KeyEventHandler(this.NUDCorte_KeyUp);
             // 
             // lblDias
             // 
@@ -199,17 +211,6 @@
             this.lblDias.Size = new System.Drawing.Size(118, 25);
             this.lblDias.TabIndex = 3;
             this.lblDias.Text = "Día de corte:";
-            // 
-            // lblSincambios
-            // 
-            this.lblSincambios.AutoSize = true;
-            this.lblSincambios.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblSincambios.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblSincambios.Location = new System.Drawing.Point(26, 344);
-            this.lblSincambios.Name = "lblSincambios";
-            this.lblSincambios.Size = new System.Drawing.Size(304, 25);
-            this.lblSincambios.TabIndex = 12;
-            this.lblSincambios.Text = "Costo a pagar por días sin cambios:";
             // 
             // IniciarPagos
             // 
