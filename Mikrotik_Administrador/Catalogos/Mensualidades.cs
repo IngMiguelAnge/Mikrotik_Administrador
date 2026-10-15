@@ -267,6 +267,7 @@ namespace Mikrotik_Administrador.Catalogos
                         Hi.IdUsuarioM = IdUsuarioM;
                         Hi.UsuarioM = UsuarioM;                     
                         Hi.ShowDialog();
+                        Buscar();
                         break;
                     default:
                         break;

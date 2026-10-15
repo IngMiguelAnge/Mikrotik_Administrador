@@ -101,7 +101,7 @@ namespace Mikrotik_Administrador.Items
             lblMensualidadOriginal.Text = "Costo de la mensualidad original del servicio: $" + PlanOriginal.Precio;
             lblMensualidadActual.Text = "Costo de la mensualidad actual del servicio: $" + PlanActual.Precio;
         }
-        public async void CalcularCostos()
+        public async Task CalcularCostos()
         {
             var tramosCalculados = await CalcularTramosMensualidadSolocambiosAsync(IdUsuarioM, dtpFechaInicio.Value, Convert.ToDateTime(lblFechaCorte.Text));
 
@@ -422,15 +422,15 @@ namespace Mikrotik_Administrador.Items
 
             return parteEntera;
         }
-        private void NUDCorte_ValueChanged(object sender, EventArgs e)
+        private async void NUDCorte_ValueChanged(object sender, EventArgs e)
         {
-            CambiarFecha();
+           await CambiarFecha();
         }
-        private void dtpFechaInicio_ValueChanged(object sender, EventArgs e)
+        private async void dtpFechaInicio_ValueChanged(object sender, EventArgs e)
         {
-            CambiarFecha();
+            await CambiarFecha();
         }
-        public void CambiarFecha()
+        public async Task CambiarFecha()
         {
             int diaDeseado = (int)NUDCorte.Value;
             DateTime fechaInicio = dtpFechaInicio.Value;
@@ -459,12 +459,12 @@ namespace Mikrotik_Administrador.Items
             // 5. Creamos la fecha final de corte y la asignamos al Label
             DateTime fechaCorte = new DateTime(anioCorte, mesCorte, diaFinal);
             lblFechaCorte.Text = fechaCorte.ToString("dd/MM/yyyy");
-            CalcularCostos();
+            await CalcularCostos();
         }
 
-        private void NUDCorte_KeyUp(object sender, KeyEventArgs e)
+        private async void NUDCorte_KeyUp(object sender, KeyEventArgs e)
         {
-            CambiarFecha();
+          await CambiarFecha();
         }
     }
 }

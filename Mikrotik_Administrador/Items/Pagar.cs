@@ -100,9 +100,11 @@ namespace Mikrotik_Administrador.Items
                     {
                         var Pagos = obj.GetHistorialPagos(item.Id, string.Empty, 0, 0);
                         decimal TotalHistorial = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
-                        TotalMensualidad = item.Mensualidad ?? 0m;                  
+                        TotalMensualidad += item.Mensualidad ?? 0m;
                         TotalPagado += TotalHistorial;
-                        TotalFaltante += item.Mensualidad ?? 0m - TotalHistorial;
+                        TotalFaltante +=
+                        (item.Mensualidad ?? 0m) - TotalHistorial < 0 ? 0 :
+                        (item.Mensualidad ?? 0m) - TotalHistorial;
                         ListaPagos.Add(new ListMensualidadesModel
                         {
                             Id = item.Id,
@@ -112,7 +114,8 @@ namespace Mikrotik_Administrador.Items
                             Responsable = string.Empty,
                             Mensualidad = item.Mensualidad ?? 0m,
                             Recibido = TotalHistorial,
-                            Faltante = item.Mensualidad ?? 0m - TotalHistorial,
+                            Faltante = (item.Mensualidad ?? 0m) - TotalHistorial < 0 ? 0 :
+                           (item.Mensualidad ?? 0m) - TotalHistorial,
                             Estatus = item.Estatus ? "Activo" : "Inactivo"
                         });
                     }
@@ -137,7 +140,8 @@ namespace Mikrotik_Administrador.Items
                 lblTotalPagado.Text = $"Total pagado: {TotalPagado:C}";
                 var Mensualidad = obj.GetMensualidadbyId(Pago.IdMensualidad).Result;
                 lblTotalMensualidades.Text = $"Total mensualidades: {Mensualidad.Mensualidad:C}";
-                TotalFaltante = Mensualidad.Mensualidad ?? 0m - TotalPagado;
+                TotalFaltante = (Mensualidad.Mensualidad ?? 0m) - TotalPagado < 0 ? 0 :
+                    (Mensualidad.Mensualidad ?? 0m) - TotalPagado;
                 lblFaltante.Text = $"Total a pagar: {TotalFaltante:C}";
                 CBBanco.SelectedValue = Pago.IdBanco;
                 txtReferencia.Text = Pago.Referencia;
@@ -169,7 +173,7 @@ namespace Mikrotik_Administrador.Items
             }
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private async void btnGuardar_Click(object sender, EventArgs e)
         {
             if (txtReferencia.Text.Trim() == string.Empty
                 || CBBanco.SelectedIndex == 0)
@@ -178,7 +182,7 @@ namespace Mikrotik_Administrador.Items
                 return;
             }
             decimal Recibido = 0;
-            if(IdHistorial == 0)
+            if (IdHistorial == 0)
             {
                 ConfirmarPago confirmacion = new ConfirmarPago();
                 confirmacion.Total = TotalFaltante;
@@ -191,7 +195,7 @@ namespace Mikrotik_Administrador.Items
                 Recibido = NUDCantidad.Value;
             }
 
-                AppRepository obj = new AppRepository();
+            AppRepository obj = new AppRepository();
             if (IdHistorial == 0)
             {
                 foreach (var item in ListaPagos)
@@ -212,12 +216,17 @@ namespace Mikrotik_Administrador.Items
                     var result = obj.SaveHistorialPagos(sv).Result;
                     Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;
                 }
-                if(Recibido > 0)
+                if (Recibido > 0)
                 {
-                   var UltimaMensualidad = obj.GetUltimaMensualidadbyIdUsuarioM(IdUsuarioM).Result;
-                   while(Recibido > 0)
-                   {
-                        CambiarFecha(UltimaMensualidad.DiaCorte, UltimaMensualidad.FechaLimite);
+                    var UltimaMensualidad = obj.GetUltimaMensualidadbyIdUsuarioM(IdUsuarioM).Result;
+                    while (Recibido > 0)
+                    {
+                        await CambiarFecha(UltimaMensualidad.DiaCorte, UltimaMensualidad.FechaLimite);
+                        if(MensualidadFinal == 0)
+                        {
+                            MessageBox.Show("No se logro calcular la mensualidad para el siguiente mes", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            break;
+                        }
                         MensualidadModel mensualidad = new MensualidadModel
                         {
                             Id = 0,
@@ -250,13 +259,14 @@ namespace Mikrotik_Administrador.Items
             }
             else
             {
-                if(PagoOriginal != Recibido)
-                {             
-                    if(PagoOriginal < Recibido)
+                if (PagoOriginal != Recibido)
+                {
+                    if (PagoOriginal < Recibido)
                     {
                         bool Revasototal = ListaPagos.First().Recibido + (Recibido - PagoOriginal) >
                               ListaPagos.First().Faltante ? true : false;
-                        if (Revasototal) {
+                        if (Revasototal)
+                        {
                             MessageBox.Show("No se puede agregar una cantidad mayor a lo que falta por pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
@@ -275,18 +285,20 @@ namespace Mikrotik_Administrador.Items
                     };
                     var result = obj.SaveHistorialPagos(sv).Result;
                 }
-             
+
             }
             MessageBox.Show("Pago guardada");
             DialogResult = DialogResult.OK;
         }
-        public async void CalcularCostos(DateTime FechaInicio, DateTime FechaCorte)
+        public async Task CalcularCostos(DateTime FechaInicio, DateTime FechaCorte)
         {
             var tramossincambios = await ObtenerSoloTramosBaseAsync(IdUsuarioM, FechaInicio, FechaCorte);
-
             var tramostotales = await CalcularTramosMensualidadAsync(IdUsuarioM, FechaInicio, FechaCorte);
-            MensualidadFinal = tramostotales.Sum(t => t.Costo) == 0 ? tramossincambios.Sum(t => t.Costo) :
-            tramostotales.Sum(t => t.Costo);
+
+            decimal sumaCambios = tramostotales.Sum(t => t.Costo);
+            decimal sumaBase = tramossincambios.Sum(t => t.Costo);
+
+            MensualidadFinal = sumaCambios == 0 ? sumaBase : sumaCambios;
         }
         public async Task<List<ListDetallesMensualidadModel>> ObtenerSoloTramosBaseAsync(int idUsuarioM, DateTime desde, DateTime hasta)
         {
@@ -535,7 +547,7 @@ namespace Mikrotik_Administrador.Items
             return ListDestalles;
         }
 
-        public void CambiarFecha(int DiaCorte, DateTime FechaInicio)
+        public async Task CambiarFecha(int DiaCorte, DateTime FechaInicio)
         {
             // 1. Determinamos el año y mes base del inicio
             int anioCorte = FechaInicio.Year;
@@ -560,7 +572,7 @@ namespace Mikrotik_Administrador.Items
 
             // 5. Creamos la fecha final de corte y la asignamos al Label
             FechaCorte = new DateTime(anioCorte, mesCorte, diaFinal);
-            CalcularCostos(FechaInicio, FechaCorte);
+            await CalcularCostos(FechaInicio, FechaCorte);
         }
         public byte[] ImageToByteArray()
         {
