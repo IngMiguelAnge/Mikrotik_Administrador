@@ -236,14 +236,12 @@ namespace Mikrotik_Administrador.Catalogos
                         string Mensualidad = (string)dgvClientes.Rows[e.RowIndex].Cells["Mensualidad"].Value;
                         if (Mensualidad == "Falta Crear")
                         {
-                            MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                            //IniciarPagos ini = new IniciarPagos();
-                            //ini.IdMensualidad = 0;
-                            //ini.IdUsuarioM = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
-                            //ini.IdResponsable = IdResponsable;
-                            //if (ini.ShowDialog() != DialogResult.OK)
-                            //{ return; }                        
+                            IniciarPagos ini = new IniciarPagos();
+                            ini.IdMensualidad = 0;
+                            ini.IdUsuarioM = (int)dgvClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
+                            ini.IdResponsable = IdResponsable;
+                            if (ini.ShowDialog() != DialogResult.OK)
+                            { return; }
                         }
                         Mensualidades M = new Mensualidades();
                         M.IdResponsable = IdResponsable;
@@ -251,7 +249,7 @@ namespace Mikrotik_Administrador.Catalogos
                         M.Cliente = (string)dgvClientes.Rows[e.RowIndex].Cells["Cliente"].Value;
                         M.UsuarioM = (string)dgvClientes.Rows[e.RowIndex].Cells["Usuario"].Value;
                         M.ShowDialog();
-                        break;              
+                        break;
 
                     default:
                         break;

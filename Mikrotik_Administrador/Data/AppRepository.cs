@@ -698,6 +698,87 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region HistorialPagos
+        public async Task<HistorialPagosModel> GetHistorialPagosById(int Id)
+        {
+            HistorialPagosModel obj = new HistorialPagosModel();
+            List<HistorialPagosModel> list = new List<HistorialPagosModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetHistorialPagosById", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToHistorialPagos(reader));
+                            }
+                            obj = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return obj;
+        }
+        private HistorialPagosModel MapToHistorialPagos(SqlDataReader reader)
+        {
+            return new HistorialPagosModel()
+            {
+                Id = (int)reader["Id"],
+                FechaRecibido = (DateTime)reader["FechaRecibido"],
+                Cantidad = (decimal)reader["Cantidad"],
+                Comentario = (string)reader["Comentario"],
+                IdBanco = (int)reader["IdBanco"],
+                Referencia = (string)reader["Referencia"],
+                Imagen = Convert.IsDBNull(reader["Imagen"]) ? null : (byte[])reader["Imagen"],
+                IdMensualidad = (int)reader["IdMensualidad"],
+                IdUsuario = (int)reader["IdUsuario"],
+            };
+        }
+        public async Task<int> SaveHistorialPagos(HistorialPagosModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveHistorialPagos", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@FechaRecibido", obj.FechaRecibido));
+                        cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
+                        cmd.Parameters.Add(new SqlParameter("@IdMensualidad", obj.IdMensualidad));
+                        cmd.Parameters.Add(new SqlParameter("@Comentario", obj.Comentario));
+                        cmd.Parameters.Add(new SqlParameter("@IdBanco", obj.IdBanco));
+                        cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
+                        cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
         public async Task<bool> UpdateEstatusHistorialPagos(int Id)
         {
             try
@@ -848,52 +929,7 @@ namespace Mikrotik_Administrador.Data
             };
         }
         #endregion
-        #region Pagos
-        public async Task<HistorialPagosModel> GetHistorialPagosById(int Id)
-        {
-            HistorialPagosModel obj = new HistorialPagosModel();
-            List<HistorialPagosModel> list = new List<HistorialPagosModel>();
-            try
-            {
-                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
-                {
-                    using (SqlCommand cmd = new SqlCommand("GetHistorialPagosById", sql))
-                    {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
-                        await sql.OpenAsync().ConfigureAwait(false);
-                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
-                        {
-                            while (await reader.ReadAsync().ConfigureAwait(false))
-                            {
-                                list.Add(MapToHistorialPagos(reader));
-                            }
-                            obj = list.Count() > 0 ? list[0] : null;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return obj;
-        }
-        private HistorialPagosModel MapToHistorialPagos(SqlDataReader reader)
-        {
-            return new HistorialPagosModel()
-            {
-                Id = (int)reader["Id"],
-                FechaRecibido = (DateTime)reader["FechaRecibido"],
-                Cantidad = (decimal)reader["Cantidad"],
-                Comentario = (string)reader["Comentario"],
-                IdBanco = (int)reader["IdBanco"],
-                Referencia = (string)reader["Referencia"],
-                Imagen = Convert.IsDBNull(reader["Imagen"]) ? null : (byte[])reader["Imagen"],
-                IdMensualidad = (int)reader["IdMensualidad"],
-                IdUsuario = (int)reader["IdUsuario"],
-            };
-        }
+        #region Mensualidades
         public async Task<bool> UpdateEstatusMensualidad(int Id)
         {
             try
@@ -915,42 +951,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<int> SaveHistorialPagos(HistorialPagosModel obj)
-        {
-            try
-            {
-                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
-                {
-                    using (SqlCommand cmd = new SqlCommand("SaveHistorialPagos", sql))
-                    {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
-                        cmd.Parameters.Add(new SqlParameter("@FechaRecibido", obj.FechaRecibido));
-                        cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
-                        cmd.Parameters.Add(new SqlParameter("@IdMensualidad", obj.IdMensualidad));
-                        cmd.Parameters.Add(new SqlParameter("@Comentario", obj.Comentario));
-                        cmd.Parameters.Add(new SqlParameter("@IdBanco", obj.IdBanco));
-                        cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
-                        cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
-                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
-                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
-                        {
-                            Direction = System.Data.ParameterDirection.Output
-                        };
-                        cmd.Parameters.Add(outputParam);
-                        await sql.OpenAsync().ConfigureAwait(false);
-                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
-                        return idGenerado;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
-        }
-       
+
         public async Task<List<ListMensualidadesModel>> GetExistMensualidadProxima(int IdUsuarioM, int IdMensualidad, DateTime FechaInicio, DateTime FechaFin)
         {
             List<ListMensualidadesModel> list = new List<ListMensualidadesModel>();
@@ -981,6 +982,92 @@ namespace Mikrotik_Administrador.Data
 
             }
             return list;
+        }
+        public async Task<List<MensualidadModel>> GetFaltantesPagarbyIdUsuarioM(int IdUsuarioM)
+        {
+            List<MensualidadModel> list = new List<MensualidadModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetFaltantesPagarbyIdUsuarioM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToMensualidades(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+        public async Task<List<MensualidadModel>> GetRevisionMensualidades(int IdUsuarioM)
+        {
+            List<MensualidadModel> list = new List<MensualidadModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetRevisionMensualidades", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToMensualidades(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+        public async Task<MensualidadModel> GetUltimaMensualidadbyIdUsuarioM(int IdUsuarioM)
+        {
+            MensualidadModel mensualidad = new MensualidadModel();
+            List<MensualidadModel> list = new List<MensualidadModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUltimaMensualidadbyIdUsuarioM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToMensualidades(reader));
+                            }
+                            mensualidad = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return mensualidad;
         }
         public async Task<MensualidadModel> GetMensualidadbyId(int Id)
         {
@@ -1239,6 +1326,7 @@ namespace Mikrotik_Administrador.Data
             };
         }
         #endregion
+
         #region Bancos
         public async Task<List<ListBancosModel>> GetBancosActivos()
         {

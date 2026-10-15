@@ -21,6 +21,7 @@ namespace Mikrotik_Administrador.Catalogos
         public decimal Mensualidad { get; set; }
         public int IdResponsable {  get; set; }
         public string Cliente { get; set; }
+        public int IdUsuarioM {  get; set; }
         public string UsuarioM {  get; set; }
         public HistorialPagos()
         {
@@ -186,9 +187,7 @@ namespace Mikrotik_Administrador.Catalogos
                 switch (dgvHistorialPagos.Columns[e.ColumnIndex].Name)
                 {
                     case "btnCambiarStatus":
-                        MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                        if ((string)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value == "Inactivo"
+                       if ((string)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value == "Inactivo"
                             && (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Cantidad"].Value > Faltante)
                         {
                             MessageBox.Show("No se puede reactivar este pago, sobre pasa el faltante a pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -200,16 +199,12 @@ namespace Mikrotik_Administrador.Catalogos
                         Buscar();
                         break;
                     case "btnEditar":
-                        MessageBox.Show("Se esta trabajando en mejoras", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
                         Pagar iniP = new Pagar();
-                        iniP.Id = Id;
-                        iniP.IdMensualidad = IdMensualidad;
-                        iniP.Mensualidad = Mensualidad;
+                        iniP.IdHistorial = Id;
                         iniP.IdResponsable = IdResponsable;
                         iniP.Cliente = Cliente;
+                        iniP.IdUsuarioM = IdUsuarioM;
                         iniP.UsuarioM = UsuarioM;
-                        iniP.Faltante = Faltante + (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Cantidad"].Value;
                         iniP.ShowDialog();
                         Buscar();
                         break;

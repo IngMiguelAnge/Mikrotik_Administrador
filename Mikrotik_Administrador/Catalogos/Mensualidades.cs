@@ -197,17 +197,6 @@ namespace Mikrotik_Administrador.Catalogos
                 DefaultCellStyle = estiloBotones
             };
             dgvMensualidades.Columns.Add(btnModificar);
-            DataGridViewButtonColumn btnPagar = new DataGridViewButtonColumn
-            {
-                Name = "btnPagar",
-                HeaderText = "Acción",
-                Text = "Pagar",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
-            dgvMensualidades.Columns.Add(btnPagar);
             DataGridViewButtonColumn btnHistorial = new DataGridViewButtonColumn
             {
                 Name = "btnHistorial",
@@ -275,27 +264,9 @@ namespace Mikrotik_Administrador.Catalogos
                         Hi.Mensualidad = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Mensualidad"].Value;
                         Hi.IdResponsable = IdResponsable;
                         Hi.Cliente = Cliente;
+                        Hi.IdUsuarioM = IdUsuarioM;
                         Hi.UsuarioM = UsuarioM;                     
                         Hi.ShowDialog();
-                        break;
-                    case "btnPagar":
-                        MessageBox.Show("Se esta trabajando en mejoras", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                        if ((decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value <= 0)
-                        {
-                            MessageBox.Show("Esta mensualidad se encuentra completamente pagada", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-                        Pagar iniP = new Pagar();
-                        iniP.Id = 0;
-                        iniP.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
-                        iniP.Mensualidad = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Mensualidad"].Value;
-                        iniP.IdResponsable = IdResponsable;
-                        iniP.Cliente = Cliente;
-                        iniP.UsuarioM = UsuarioM;
-                        iniP.Faltante = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value;
-                        iniP.ShowDialog();
-                        Buscar();
                         break;
                     default:
                         break;
@@ -312,13 +283,32 @@ namespace Mikrotik_Administrador.Catalogos
         }
 
         private void btnNuevo_Click(object sender, EventArgs e)
-        {            
+        {
             IniciarPagos ini = new IniciarPagos();
             ini.IdMensualidad = 0;
             ini.IdUsuarioM = IdUsuarioM;
             ini.IdResponsable = IdResponsable;
             if (ini.ShowDialog() != DialogResult.OK)
             { return; }
+            Buscar();
+        }
+
+        private void btnPagar_Click(object sender, EventArgs e)
+        {
+            AppRepository obj = new AppRepository();
+            var RevisarMensualidades = obj.GetRevisionMensualidades(IdUsuarioM).Result.ToList();
+            if(RevisarMensualidades.Count > 0)
+            {
+                MessageBox.Show("No se puede realizar el pago, ya que existen mensualidades pendientes de revisión. Por favor, revisa el historial de pagos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Pagar iniP = new Pagar();
+            iniP.IdHistorial = 0;
+            iniP.IdResponsable = IdResponsable;
+            iniP.Cliente = Cliente;
+            iniP.IdUsuarioM = IdUsuarioM;
+            iniP.UsuarioM = UsuarioM;
+            iniP.ShowDialog();
             Buscar();
         }
     }

@@ -29,7 +29,7 @@ namespace Mikrotik_Administrador.Items
            IdMensualidad,
            dtpFechaInicio.Value,
            Convert.ToDateTime(lblFechaCorte.Text)
-       );
+           );
 
             // 2. Si existen registros, mostramos el error y el return AHORA SÍ cancela el guardado
             if (existencia != null && existencia.Count > 0)
@@ -49,7 +49,7 @@ namespace Mikrotik_Administrador.Items
             MensualidadModel mensualidad = new MensualidadModel
             {
                 Id = IdMensualidad,
-                Pagado = true,//No importa si pones true internamente se calculara
+                Pagado = false,//No importa si pones true internamente se calculara
                 IdUsuarioM = IdUsuarioM,
                 DiaCorte = (int)NUDCorte.Value,
                 FechaInicio = dtpFechaInicio.Value,

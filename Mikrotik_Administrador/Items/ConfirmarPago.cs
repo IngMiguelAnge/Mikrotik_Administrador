@@ -106,15 +106,14 @@ namespace Mikrotik_Administrador.Items
         public void Confirmacion()
         {
             Recibido = nudRecibido.Value;
-            if (Recibido < Total)
+            if (Recibido > Total)
             {
-                DialogResult resultado = MessageBox.Show("El monto escrito es menor a la cantidad a pagar. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult resultado = MessageBox.Show("El monto escrito es mayor que la cantidad a pagar, si procede se repartira el excedente entre nuevas mensualidades. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (resultado == DialogResult.No)
                 {
                     return;
                 }
             }
-
             DialogResult = DialogResult.OK;
             this.Close();
         }

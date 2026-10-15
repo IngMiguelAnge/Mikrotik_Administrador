@@ -42,8 +42,13 @@
             this.lblMensaje2 = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
             this.lblFaltante = new System.Windows.Forms.Label();
+            this.lblTotalPagado = new System.Windows.Forms.Label();
+            this.lblCantidadRecibida = new System.Windows.Forms.Label();
+            this.NUDCantidad = new System.Windows.Forms.NumericUpDown();
+            this.lblTotalMensualidades = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PBImagen)).BeginInit();
             this.panelTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUDCantidad)).BeginInit();
             this.SuspendLayout();
             // 
             // lblBanco
@@ -115,7 +120,7 @@
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(525, 463);
+            this.btnGuardar.Location = new System.Drawing.Point(616, 491);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(120, 38);
             this.btnGuardar.TabIndex = 11;
@@ -133,7 +138,7 @@
             this.btnSubir.Location = new System.Drawing.Point(305, 285);
             this.btnSubir.Name = "btnSubir";
             this.btnSubir.Size = new System.Drawing.Size(130, 35);
-            this.btnSubir.TabIndex = 10;
+            this.btnSubir.TabIndex = 11;
             this.btnSubir.Text = "Subir imagen";
             this.btnSubir.UseVisualStyleBackColor = false;
             this.btnSubir.Click += new System.EventHandler(this.btnSubir_Click);
@@ -178,12 +183,16 @@
             this.lblMensaje2.Location = new System.Drawing.Point(301, 20);
             this.lblMensaje2.Name = "lblMensaje2";
             this.lblMensaje2.Size = new System.Drawing.Size(226, 25);
-            this.lblMensaje2.TabIndex = 8;
+            this.lblMensaje2.TabIndex = 10;
             this.lblMensaje2.Text = "Imagen del comprobante:";
             // 
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.Color.White;
+            this.panelTop.Controls.Add(this.lblTotalMensualidades);
+            this.panelTop.Controls.Add(this.NUDCantidad);
+            this.panelTop.Controls.Add(this.lblCantidadRecibida);
+            this.panelTop.Controls.Add(this.lblTotalPagado);
             this.panelTop.Controls.Add(this.lblFaltante);
             this.panelTop.Controls.Add(this.btnGuardar);
             this.panelTop.Controls.Add(this.btnSubir);
@@ -200,7 +209,7 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(684, 532);
+            this.panelTop.Size = new System.Drawing.Size(775, 532);
             this.panelTop.TabIndex = 0;
             // 
             // lblFaltante
@@ -208,18 +217,67 @@
             this.lblFaltante.AutoSize = true;
             this.lblFaltante.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblFaltante.ForeColor = System.Drawing.Color.Red;
-            this.lblFaltante.Location = new System.Drawing.Point(299, 391);
+            this.lblFaltante.Location = new System.Drawing.Point(299, 428);
             this.lblFaltante.Name = "lblFaltante";
             this.lblFaltante.Size = new System.Drawing.Size(241, 32);
-            this.lblFaltante.TabIndex = 12;
+            this.lblFaltante.TabIndex = 13;
             this.lblFaltante.Text = "Total a pagar: $0.00";
+            // 
+            // lblTotalPagado
+            // 
+            this.lblTotalPagado.AutoSize = true;
+            this.lblTotalPagado.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTotalPagado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.lblTotalPagado.Location = new System.Drawing.Point(300, 391);
+            this.lblTotalPagado.Name = "lblTotalPagado";
+            this.lblTotalPagado.Size = new System.Drawing.Size(240, 32);
+            this.lblTotalPagado.TabIndex = 12;
+            this.lblTotalPagado.Text = "Total pagado: $0.00";
+            // 
+            // lblCantidadRecibida
+            // 
+            this.lblCantidadRecibida.AutoSize = true;
+            this.lblCantidadRecibida.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblCantidadRecibida.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblCantidadRecibida.Location = new System.Drawing.Point(26, 438);
+            this.lblCantidadRecibida.Name = "lblCantidadRecibida";
+            this.lblCantidadRecibida.Size = new System.Drawing.Size(161, 25);
+            this.lblCantidadRecibida.TabIndex = 8;
+            this.lblCantidadRecibida.Text = "Cantidad recibida:";
+            this.lblCantidadRecibida.Visible = false;
+            // 
+            // NUDCantidad
+            // 
+            this.NUDCantidad.DecimalPlaces = 2;
+            this.NUDCantidad.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.NUDCantidad.Location = new System.Drawing.Point(31, 468);
+            this.NUDCantidad.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.NUDCantidad.Name = "NUDCantidad";
+            this.NUDCantidad.Size = new System.Drawing.Size(140, 33);
+            this.NUDCantidad.TabIndex = 9;
+            this.NUDCantidad.Visible = false;
+            // 
+            // lblTotalMensualidades
+            // 
+            this.lblTotalMensualidades.AutoSize = true;
+            this.lblTotalMensualidades.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTotalMensualidades.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.lblTotalMensualidades.Location = new System.Drawing.Point(300, 342);
+            this.lblTotalMensualidades.Name = "lblTotalMensualidades";
+            this.lblTotalMensualidades.Size = new System.Drawing.Size(324, 32);
+            this.lblTotalMensualidades.TabIndex = 14;
+            this.lblTotalMensualidades.Text = "Total mensualidades: $0.00";
             // 
             // Pagar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(684, 544);
+            this.ClientSize = new System.Drawing.Size(775, 544);
             this.Controls.Add(this.panelTop);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -233,6 +291,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PBImagen)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUDCantidad)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -252,5 +311,9 @@
         private System.Windows.Forms.Label lblMensaje2;
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Label lblFaltante;
+        private System.Windows.Forms.Label lblTotalPagado;
+        private System.Windows.Forms.Label lblCantidadRecibida;
+        private System.Windows.Forms.NumericUpDown NUDCantidad;
+        private System.Windows.Forms.Label lblTotalMensualidades;
     }
 }
