@@ -211,8 +211,8 @@ namespace Mikrotik_Administrador.Catalogos
                         lblPassword.Visible = false;
                         txtPassword.Visible = false;
                         AppRepository obj = new AppRepository();
-                        var listacomments = await Task.Run(() => obj.GetCommentsActivos(m.IdMikrotik));
-                        if (listacomments.Count == 0)
+                        var listacomments = await Task.Run(() => obj.GetCommentsbyIdMikrotik(m.IdMikrotik));
+                        if (listacomments.Where(x => x.Estatus == "Activo").ToList().Count == 0)
                         {
                             MessageBox.Show("No se encontraron commments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
@@ -555,14 +555,14 @@ namespace Mikrotik_Administrador.Catalogos
                 string comment = string.Empty;
                 if (txtPassword.Visible == false)//es antena si sale false
                 {
-                    var listacomments = await Task.Run(() => obj.GetCommentsActivos(IdMikrotik));
-                    if (listacomments.Count == 0)
+                    var listacomments = await Task.Run(() => obj.GetCommentsbyIdMikrotik(IdMikrotik));
+                    if (listacomments.Where(x => x.Estatus == "Activo").ToList().Count == 0)
                     {
                         MessageBox.Show("No se encontraron commments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     Programar pr = new Programar();
-                    pr.listComments = listacomments.ToList();
+                    pr.listComments = listacomments.Where(x => x.Estatus == "Activo").ToList();
                     pr.ShowDialog();
                     if(pr.SePrograma == string.Empty)
                     {

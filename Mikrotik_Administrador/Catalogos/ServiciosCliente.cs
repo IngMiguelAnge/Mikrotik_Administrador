@@ -8,6 +8,7 @@ using Mikrotik_Administrador.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Security;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -184,17 +185,6 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DataGridViewButtonColumn btnPlan = new DataGridViewButtonColumn
-            {
-                Name = "btnPlan",
-                HeaderText = "Acción",
-                Text = "Cambiar plan",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
-            DGVServicios.Columns.Add(btnPlan);
             DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn
             {
                 Name = "btnCambio",
@@ -346,11 +336,7 @@ namespace Mikrotik_Administrador
                     await CambiarEstatus(objUsuario);
                     break;
 
-                case "btnPlan":
-                    MessageBox.Show("Se estan trabajando mejoras.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-               
-            }
+              }
         }
         public async Task<bool> ChecarUsuario(ListUsuariosGeneralModel objUsuario)
         {

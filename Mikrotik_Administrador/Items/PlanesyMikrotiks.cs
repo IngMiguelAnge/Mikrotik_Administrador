@@ -19,6 +19,7 @@ namespace Mikrotik_Administrador.Items
         public int IdPlan { get; set; } = 0;
         public string VelocidadElegida { get; set; } = string.Empty;
         public string NombrePlanElegido { get; set; } = string.Empty;
+        public bool IsAntenaElegido { get; set; } = false;
         public PlanesyMikrotiks()
         {
             InitializeComponent();
@@ -163,6 +164,7 @@ namespace Mikrotik_Administrador.Items
                     IdPlan = Id;
                     VelocidadElegida = Velocidad;
                     NombrePlanElegido = Plan;
+                    IsAntenaElegido = IsAntena;
                     AppRepository obj = new AppRepository();
                     var listaMikrotiks = await obj.GetMikrotiksByIdPlan(Id, false);
                     // Insertamos un objeto "fantasma" al inicio para el placeholder

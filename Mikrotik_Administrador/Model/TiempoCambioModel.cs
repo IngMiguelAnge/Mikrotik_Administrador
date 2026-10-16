@@ -18,5 +18,7 @@ namespace Mikrotik_Administrador.Model
         public string Plan { get; set; }
         public int IdMikrotikReceptor { get; set; }
         public string Nota { get; set; }
+        public string CommentPassNuevo {  get; set; }
+        public string CommentPassOriginal { get; set; }
     }
 }

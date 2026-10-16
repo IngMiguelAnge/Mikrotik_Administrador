@@ -1109,7 +1109,7 @@ namespace Mikrotik_Administrador.Class
                 bool objetoValido = true;
                 AppRepository obj = new AppRepository();
                 List<ListCommentsModel> listComments = new List<ListCommentsModel>();
-                listComments = obj.GetCommentsActivos(IdMikrotik).Result;
+                listComments = obj.GetCommentsbyIdMikrotik(IdMikrotik).Result.Where(x => x.Estatus == "Activo").ToList();
                 foreach (string row in respuesta)
                 {
                     if (row.StartsWith("!re"))

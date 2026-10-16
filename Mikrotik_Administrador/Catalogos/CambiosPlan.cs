@@ -210,6 +210,22 @@ namespace Mikrotik_Administrador.Catalogos
             });
             DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
             {
+                Name = "CommentPassOriginal",
+                HeaderText = "CommentPassOriginal",
+                DataPropertyName = "CommentPassOriginal",
+                ReadOnly = true,
+                Visible = false,
+            });
+            DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "CommentPassNuevo",
+                HeaderText = "CommentPassNuevo",
+                DataPropertyName = "CommentPassNuevo",
+                ReadOnly = true,
+                Visible = false,
+            });
+            DGVCambios.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 Name = "Estatus",
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
@@ -290,6 +306,14 @@ namespace Mikrotik_Administrador.Catalogos
                 if (DGVCambios.Columns["IdUsuarioM"] != null)
                 {
                     DGVCambios.Columns["IdUsuarioM"].Visible = false;
+                }
+                if (DGVCambios.Columns["CommentPassOriginal"] != null)
+                {
+                    DGVCambios.Columns["CommentPassOriginal"].Visible = false;
+                }
+                if (DGVCambios.Columns["CommentPassNuevo"] != null)
+                {
+                    DGVCambios.Columns["CommentPassNuevo"].Visible = false;
                 }
             }
             catch (Exception ex)
@@ -380,31 +404,20 @@ namespace Mikrotik_Administrador.Catalogos
                 Vuelta2:
                     int IdMikrotik = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdMikrotikReceptor"].Value);
                     int IdPlan = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdPlanNuevo"].Value);
+                    string IdComment = DGVCambios.Rows[e.RowIndex].Cells["CommentPassNuevo"].Value.ToString();
                     if (pr.SePrograma != "Ejecutando" && primeravuelta)
                     {
                         IdMikrotik = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdMikrotikOriginal"].Value);
                         IdPlan = Convert.ToInt32(DGVCambios.Rows[e.RowIndex].Cells["IdPlanRetorno"].Value);
+                        IdComment = DGVCambios.Rows[e.RowIndex].Cells["CommentPassOriginal"].Value.ToString();
                     }
 
                     var plan = obj.GetPlanById(IdPlan).Result;
                     string comment = string.Empty;
-                    if (plan.IsAntena == true)//es antena si sale false
+                    if (plan.IsAntena == true)
                     {
-                        var listacomments = await Task.Run(() => obj.GetCommentsActivos(IdMikrotik));
-                        if (listacomments.Count == 0)
-                        {
-                            MessageBox.Show("No se encontraron comments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        Programar pro = new Programar();
-                        pro.listComments = listacomments.ToList();
-                        pro.ShowDialog();
-                        if (pro.SePrograma == string.Empty)
-                        {
-                            MessageBox.Show("No se selecciono un comment para el servicio a crear, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        comment = pro.SePrograma;
+                        var Comments = obj.GetCommentbyId(Convert.ToInt32(IdComment)).Result;
+                        comment = Comments.Nombre;
                     }
                     if (mikrotik != null)
                     {

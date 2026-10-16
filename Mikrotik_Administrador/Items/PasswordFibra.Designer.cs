@@ -76,7 +76,7 @@
             // 
             this.txtContraseña.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.txtContraseña.Location = new System.Drawing.Point(31, 62);
-            this.txtContraseña.MaxLength = 250;
+            this.txtContraseña.MaxLength = 50;
             this.txtContraseña.Name = "txtContraseña";
             this.txtContraseña.Size = new System.Drawing.Size(320, 33);
             this.txtContraseña.TabIndex = 3;

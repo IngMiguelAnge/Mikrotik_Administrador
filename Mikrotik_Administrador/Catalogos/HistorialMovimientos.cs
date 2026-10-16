@@ -304,14 +304,14 @@ namespace Mikrotik_Administrador.Catalogos
                                  "Ya se encuentra registrado el ip " + Address + " para antena, en el mikrotik " + mikro.Nombre + " y no esta informado el sistema favor de revisar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-                        var listacomments = await Task.Run(() => obj.GetCommentsActivos(IdMikrotik));
-                        if (listacomments.Count == 0)
+                        var listacomments = await Task.Run(() => obj.GetCommentsbyIdMikrotik(IdMikrotik));
+                        if (listacomments.Where(x => x.Estatus == "Activo").ToList().Count == 0)
                         {
                             MessageBox.Show("No se encontraron commments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                         Programar pr = new Programar();
-                        pr.listComments = listacomments.ToList();
+                        pr.listComments = listacomments.Where(x=> x.Estatus == "Activo").ToList();
                         pr.ShowDialog();
                         if (pr.SePrograma == string.Empty)
                         {

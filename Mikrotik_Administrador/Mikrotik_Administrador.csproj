@@ -443,6 +443,7 @@
     </Compile>
     <Compile Include="Model\AddressModel.cs" />
     <Compile Include="Model\BancoModel.cs" />
+    <Compile Include="Model\CommentModel.cs" />
     <Compile Include="Model\ConfigPageModel.cs" />
     <Compile Include="Model\HistorialMovimientosModel.cs" />
     <Compile Include="Model\ListClientesDescargaModel.cs" />

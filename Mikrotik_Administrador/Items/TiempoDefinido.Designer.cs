@@ -46,9 +46,13 @@
             this.cbPlanNuevo = new System.Windows.Forms.ComboBox();
             this.lblPlanNuevo = new System.Windows.Forms.Label();
             this.CBPlanOriginal = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblPlanOriginal = new System.Windows.Forms.Label();
             this.CBMikrotiksOriginal = new System.Windows.Forms.ComboBox();
             this.lblMikrotikOrigen = new System.Windows.Forms.Label();
+            this.CBCommentsNuevo = new System.Windows.Forms.ComboBox();
+            this.lblCommentNuevo = new System.Windows.Forms.Label();
+            this.CBCommentsOriginal = new System.Windows.Forms.ComboBox();
+            this.lblComenOriginal = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.NUDDias)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDHoras)).BeginInit();
             this.SuspendLayout();
@@ -61,7 +65,7 @@
             this.lblTiempo.Location = new System.Drawing.Point(228, 108);
             this.lblTiempo.Name = "lblTiempo";
             this.lblTiempo.Size = new System.Drawing.Size(275, 28);
-            this.lblTiempo.TabIndex = 4;
+            this.lblTiempo.TabIndex = 5;
             this.lblTiempo.Text = "Tiempo que desea que dure:";
             // 
             // lblDias
@@ -72,7 +76,7 @@
             this.lblDias.Location = new System.Drawing.Point(228, 163);
             this.lblDias.Name = "lblDias";
             this.lblDias.Size = new System.Drawing.Size(52, 25);
-            this.lblDias.TabIndex = 5;
+            this.lblDias.TabIndex = 6;
             this.lblDias.Text = "DÍAS";
             // 
             // lblHoras
@@ -83,7 +87,7 @@
             this.lblHoras.Location = new System.Drawing.Point(375, 163);
             this.lblHoras.Name = "lblHoras";
             this.lblHoras.Size = new System.Drawing.Size(72, 25);
-            this.lblHoras.TabIndex = 7;
+            this.lblHoras.TabIndex = 8;
             this.lblHoras.Text = "HORAS";
             this.lblHoras.Visible = false;
             // 
@@ -103,7 +107,7 @@
             0});
             this.NUDDias.Name = "NUDDias";
             this.NUDDias.Size = new System.Drawing.Size(67, 33);
-            this.NUDDias.TabIndex = 6;
+            this.NUDDias.TabIndex = 7;
             this.NUDDias.Value = new decimal(new int[] {
             8,
             0,
@@ -117,7 +121,7 @@
             this.NUDHoras.Location = new System.Drawing.Point(453, 155);
             this.NUDHoras.Name = "NUDHoras";
             this.NUDHoras.Size = new System.Drawing.Size(68, 33);
-            this.NUDHoras.TabIndex = 8;
+            this.NUDHoras.TabIndex = 9;
             this.NUDHoras.Visible = false;
             this.NUDHoras.ValueChanged += new System.EventHandler(this.NUDHoras_ValueChanged);
             // 
@@ -127,7 +131,7 @@
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(680, 495);
+            this.btnGuardar.Location = new System.Drawing.Point(680, 549);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(120, 38);
             this.btnGuardar.TabIndex = 6;
@@ -143,7 +147,7 @@
             this.lblFechaInicio.Location = new System.Drawing.Point(40, 108);
             this.lblFechaInicio.Name = "lblFechaInicio";
             this.lblFechaInicio.Size = new System.Drawing.Size(156, 28);
-            this.lblFechaInicio.TabIndex = 2;
+            this.lblFechaInicio.TabIndex = 3;
             this.lblFechaInicio.Text = "Cuando iniciara:";
             // 
             // dtpFechaInicio
@@ -154,7 +158,7 @@
             this.dtpFechaInicio.Location = new System.Drawing.Point(45, 151);
             this.dtpFechaInicio.Name = "dtpFechaInicio";
             this.dtpFechaInicio.Size = new System.Drawing.Size(152, 33);
-            this.dtpFechaInicio.TabIndex = 3;
+            this.dtpFechaInicio.TabIndex = 4;
             this.dtpFechaInicio.ValueChanged += new System.EventHandler(this.dtpFechaInicio_ValueChanged);
             // 
             // lblFechaFinal
@@ -165,7 +169,7 @@
             this.lblFechaFinal.Location = new System.Drawing.Point(40, 211);
             this.lblFechaFinal.Name = "lblFechaFinal";
             this.lblFechaFinal.Size = new System.Drawing.Size(244, 28);
-            this.lblFechaFinal.TabIndex = 9;
+            this.lblFechaFinal.TabIndex = 10;
             this.lblFechaFinal.Text = "Este cambio durara hasta:";
             // 
             // CBModo
@@ -199,10 +203,10 @@
             this.lblMikrotikNuevo.AutoSize = true;
             this.lblMikrotikNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.lblMikrotikNuevo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblMikrotikNuevo.Location = new System.Drawing.Point(40, 367);
+            this.lblMikrotikNuevo.Location = new System.Drawing.Point(39, 367);
             this.lblMikrotikNuevo.Name = "lblMikrotikNuevo";
             this.lblMikrotikNuevo.Size = new System.Drawing.Size(303, 28);
-            this.lblMikrotikNuevo.TabIndex = 13;
+            this.lblMikrotikNuevo.TabIndex = 14;
             this.lblMikrotikNuevo.Text = "En que mikrotik aplicara el plan:";
             // 
             // CBMikrotiksNuevo
@@ -213,14 +217,15 @@
             this.CBMikrotiksNuevo.Location = new System.Drawing.Point(44, 415);
             this.CBMikrotiksNuevo.Name = "CBMikrotiksNuevo";
             this.CBMikrotiksNuevo.Size = new System.Drawing.Size(285, 33);
-            this.CBMikrotiksNuevo.TabIndex = 14;
+            this.CBMikrotiksNuevo.TabIndex = 15;
+            this.CBMikrotiksNuevo.SelectedIndexChanged += new System.EventHandler(this.CBMikrotiksNuevo_SelectedIndexChanged);
             // 
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(251, 86);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(235, 12);
-            this.progressBar1.TabIndex = 15;
+            this.progressBar1.TabIndex = 2;
             // 
             // lblFechaFin
             // 
@@ -230,7 +235,7 @@
             this.lblFechaFin.Location = new System.Drawing.Point(290, 211);
             this.lblFechaFin.Name = "lblFechaFin";
             this.lblFechaFin.Size = new System.Drawing.Size(186, 28);
-            this.lblFechaFin.TabIndex = 10;
+            this.lblFechaFin.TabIndex = 11;
             this.lblFechaFin.Text = "Fecha que termina:";
             // 
             // cbPlanNuevo
@@ -241,7 +246,7 @@
             this.cbPlanNuevo.Location = new System.Drawing.Point(44, 315);
             this.cbPlanNuevo.Name = "cbPlanNuevo";
             this.cbPlanNuevo.Size = new System.Drawing.Size(285, 33);
-            this.cbPlanNuevo.TabIndex = 17;
+            this.cbPlanNuevo.TabIndex = 13;
             this.cbPlanNuevo.SelectedIndexChanged += new System.EventHandler(this.cbPlanNuevo_SelectedIndexChanged);
             // 
             // lblPlanNuevo
@@ -252,7 +257,7 @@
             this.lblPlanNuevo.Location = new System.Drawing.Point(39, 274);
             this.lblPlanNuevo.Name = "lblPlanNuevo";
             this.lblPlanNuevo.Size = new System.Drawing.Size(353, 28);
-            this.lblPlanNuevo.TabIndex = 16;
+            this.lblPlanNuevo.TabIndex = 12;
             this.lblPlanNuevo.Text = "Plan que se usara durante el periodo:";
             // 
             // CBPlanOriginal
@@ -263,19 +268,19 @@
             this.CBPlanOriginal.Location = new System.Drawing.Point(435, 315);
             this.CBPlanOriginal.Name = "CBPlanOriginal";
             this.CBPlanOriginal.Size = new System.Drawing.Size(285, 33);
-            this.CBPlanOriginal.TabIndex = 21;
+            this.CBPlanOriginal.TabIndex = 19;
             this.CBPlanOriginal.SelectedIndexChanged += new System.EventHandler(this.CBPlanOriginal_SelectedIndexChanged);
             // 
-            // label1
+            // lblPlanOriginal
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.label1.Location = new System.Drawing.Point(430, 274);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(370, 28);
-            this.label1.TabIndex = 20;
-            this.label1.Text = "Plan que se usara despues del periodo:";
+            this.lblPlanOriginal.AutoSize = true;
+            this.lblPlanOriginal.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lblPlanOriginal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblPlanOriginal.Location = new System.Drawing.Point(430, 274);
+            this.lblPlanOriginal.Name = "lblPlanOriginal";
+            this.lblPlanOriginal.Size = new System.Drawing.Size(370, 28);
+            this.lblPlanOriginal.TabIndex = 18;
+            this.lblPlanOriginal.Text = "Plan que se usara despues del periodo:";
             // 
             // CBMikrotiksOriginal
             // 
@@ -285,7 +290,8 @@
             this.CBMikrotiksOriginal.Location = new System.Drawing.Point(435, 410);
             this.CBMikrotiksOriginal.Name = "CBMikrotiksOriginal";
             this.CBMikrotiksOriginal.Size = new System.Drawing.Size(285, 33);
-            this.CBMikrotiksOriginal.TabIndex = 19;
+            this.CBMikrotiksOriginal.TabIndex = 21;
+            this.CBMikrotiksOriginal.SelectedIndexChanged += new System.EventHandler(this.CBMikrotiksOriginal_SelectedIndexChanged);
             // 
             // lblMikrotikOrigen
             // 
@@ -295,17 +301,67 @@
             this.lblMikrotikOrigen.Location = new System.Drawing.Point(430, 367);
             this.lblMikrotikOrigen.Name = "lblMikrotikOrigen";
             this.lblMikrotikOrigen.Size = new System.Drawing.Size(303, 28);
-            this.lblMikrotikOrigen.TabIndex = 18;
+            this.lblMikrotikOrigen.TabIndex = 20;
             this.lblMikrotikOrigen.Text = "En que mikrotik aplicara el plan:";
+            // 
+            // CBCommentsNuevo
+            // 
+            this.CBCommentsNuevo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBCommentsNuevo.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBCommentsNuevo.FormattingEnabled = true;
+            this.CBCommentsNuevo.Location = new System.Drawing.Point(44, 500);
+            this.CBCommentsNuevo.Name = "CBCommentsNuevo";
+            this.CBCommentsNuevo.Size = new System.Drawing.Size(285, 33);
+            this.CBCommentsNuevo.TabIndex = 17;
+            this.CBCommentsNuevo.Visible = false;
+            // 
+            // lblCommentNuevo
+            // 
+            this.lblCommentNuevo.AutoSize = true;
+            this.lblCommentNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lblCommentNuevo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblCommentNuevo.Location = new System.Drawing.Point(39, 469);
+            this.lblCommentNuevo.Name = "lblCommentNuevo";
+            this.lblCommentNuevo.Size = new System.Drawing.Size(239, 28);
+            this.lblCommentNuevo.TabIndex = 16;
+            this.lblCommentNuevo.Text = "Seleccione un Comment:";
+            this.lblCommentNuevo.Visible = false;
+            // 
+            // CBCommentsOriginal
+            // 
+            this.CBCommentsOriginal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBCommentsOriginal.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBCommentsOriginal.FormattingEnabled = true;
+            this.CBCommentsOriginal.Location = new System.Drawing.Point(435, 500);
+            this.CBCommentsOriginal.Name = "CBCommentsOriginal";
+            this.CBCommentsOriginal.Size = new System.Drawing.Size(285, 33);
+            this.CBCommentsOriginal.TabIndex = 23;
+            this.CBCommentsOriginal.Visible = false;
+            // 
+            // lblComenOriginal
+            // 
+            this.lblComenOriginal.AutoSize = true;
+            this.lblComenOriginal.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lblComenOriginal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblComenOriginal.Location = new System.Drawing.Point(430, 469);
+            this.lblComenOriginal.Name = "lblComenOriginal";
+            this.lblComenOriginal.Size = new System.Drawing.Size(239, 28);
+            this.lblComenOriginal.TabIndex = 22;
+            this.lblComenOriginal.Text = "Seleccione un Comment:";
+            this.lblComenOriginal.Visible = false;
             // 
             // TiempoDefinido
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(830, 547);
+            this.ClientSize = new System.Drawing.Size(830, 599);
+            this.Controls.Add(this.CBCommentsOriginal);
+            this.Controls.Add(this.lblComenOriginal);
+            this.Controls.Add(this.CBCommentsNuevo);
+            this.Controls.Add(this.lblCommentNuevo);
             this.Controls.Add(this.CBPlanOriginal);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblPlanOriginal);
             this.Controls.Add(this.CBMikrotiksOriginal);
             this.Controls.Add(this.lblMikrotikOrigen);
             this.Controls.Add(this.cbPlanNuevo);
@@ -360,8 +416,12 @@
         private System.Windows.Forms.ComboBox cbPlanNuevo;
         private System.Windows.Forms.Label lblPlanNuevo;
         private System.Windows.Forms.ComboBox CBPlanOriginal;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblPlanOriginal;
         private System.Windows.Forms.ComboBox CBMikrotiksOriginal;
         private System.Windows.Forms.Label lblMikrotikOrigen;
+        private System.Windows.Forms.ComboBox CBCommentsNuevo;
+        private System.Windows.Forms.Label lblCommentNuevo;
+        private System.Windows.Forms.ComboBox CBCommentsOriginal;
+        private System.Windows.Forms.Label lblComenOriginal;
     }
 }

@@ -64,7 +64,6 @@ namespace Mikrotik_Administrador
                 Name = "Id",
                 HeaderText = "Id",
                 DataPropertyName = "Id",
-                Visible = false,
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
@@ -143,8 +142,6 @@ namespace Mikrotik_Administrador
                 var lista = await Task.Run(() => obj.GetComments(txtNombre.Text));
                 var listaFinal = lista?.ToList() ?? new List<ListCommentsModel>();
                 dgvComments.DataSource = new SortableBindingList<ListCommentsModel>(listaFinal);
-                if (dgvComments.Columns["Id"] != null)
-                    dgvComments.Columns["Id"].Visible = false;             
                 if(dgvComments.Columns["IdMikrotik"] != null)
                     dgvComments.Columns["IdMikrotik"].Visible = false;
             }

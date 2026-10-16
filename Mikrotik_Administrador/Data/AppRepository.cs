@@ -505,7 +505,7 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-        public async Task<List<ListTiempoCambioModel>> GetTiempoCambioByIdUsuarioM(int IdUSuarioM)
+        public async Task<List<ListTiempoCambioModel>> GetTiempoCambioByIdUsuarioM(int IdUsuarioM)
         {
             List<ListTiempoCambioModel> list = new List<ListTiempoCambioModel>();
             try
@@ -515,7 +515,7 @@ namespace Mikrotik_Administrador.Data
                     using (SqlCommand cmd = new SqlCommand("GetTiempoCambioByIdUsuarioM", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@IdUSuarioM", IdUSuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -636,7 +636,9 @@ namespace Mikrotik_Administrador.Data
                 Plan = (string)reader["Plan"],
                 IdMikrotikReceptor = (int)reader["IdMikrotikReceptor"],
                 IdMikrotikOriginal = (int)reader["IdMikrotikOriginal"],
-                IdPlanOriginal = (int)reader["IdPlanOriginal"]
+                IdPlanOriginal = (int)reader["IdPlanOriginal"],
+                CommentPassNuevo = (string)reader["CommentPassNuevo"],
+                CommentPassOriginal = (string)reader["CommentPassOriginal"]
             };
         }
         private ListTiempoCambioModel MapToListTiempoCambio(SqlDataReader reader)
@@ -661,6 +663,8 @@ namespace Mikrotik_Administrador.Data
                 PlanRetorno = (string)reader["PlanRetorno"],
                 IdMikrotikOriginal = (int)reader["IdMikrotikOriginal"],
                 MikrotikOriginal = (string)reader["MikrotikOriginal"],
+                CommentPassOriginal = (string)reader["CommentPassOriginal"],
+                CommentPassNuevo = (string)reader["CommentPassNuevo"],
             };
         }
         public async Task<bool> SaveTiempoCambio(TiempoCambioModel obj)
@@ -685,6 +689,8 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@IdPlanOriginal", obj.IdPlanOriginal));
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotikOriginal", obj.IdMikrotikOriginal));
                         cmd.Parameters.Add(new SqlParameter("@Nota", obj.Nota));
+                        cmd.Parameters.Add(new SqlParameter("@CommentPassNuevo", obj.CommentPassNuevo));
+                        cmd.Parameters.Add(new SqlParameter("@CommentPassOriginal", obj.CommentPassOriginal));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -1480,6 +1486,46 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region Comments
+        public async Task<CommentModel> GetCommentbyId(int Id)
+        {
+            CommentModel obj = new CommentModel();
+            List<CommentModel> list = new List<CommentModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetCommentbyId", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToComment(reader));
+                            }
+                            obj = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return obj;
+        }
+        private CommentModel MapToComment(SqlDataReader reader)
+        {
+            return new CommentModel()
+            {
+                Id = (int)reader["Id"],
+                Nombre = (string)reader["Nombre"],
+                IdMikrotik = (int)reader["IdMikrotik"],
+                Estatus = (bool)reader["Estatus"],
+            };
+        }
+
         public async Task<bool> UpdateEstatusComment(int Id)
         {
             try
@@ -1531,14 +1577,14 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
-        public async Task<List<ListCommentsModel>> GetCommentsActivos(int IdMikrotik)
+        public async Task<List<ListCommentsModel>> GetCommentsbyIdMikrotik(int IdMikrotik)
         {
             List<ListCommentsModel> list = new List<ListCommentsModel>();
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("GetCommentsActivos", sql))
+                    using (SqlCommand cmd = new SqlCommand("GetCommentsbyIdMikrotik", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdMikrotik", IdMikrotik));

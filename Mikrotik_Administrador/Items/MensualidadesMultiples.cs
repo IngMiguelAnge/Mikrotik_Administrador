@@ -248,9 +248,10 @@ namespace Mikrotik_Administrador.Catalogos
                             wsCambios.Cell(1, 10).Value = "Nombre del plan nuevo";   // J
                             wsCambios.Cell(1, 11).Value = "IdMikrotik receptor";        // K
                             wsCambios.Cell(1, 12).Value = "Nombre mikrotik receptor";    // L
-
-                            // Formato a los encabezados (A1 a L1)
-                            var headerCambios = wsCambios.Range("A1:L1");
+                            wsCambios.Cell(1, 13).Value = "IdComment o Password Original";
+                            wsCambios.Cell(1, 14).Value = "IdComment o Password Nuevo";
+                            // Formato a los encabezados (A1 a N1)
+                            var headerCambios = wsCambios.Range("A1:N1");
                             headerCambios.Style.Font.Bold = true;
                             headerCambios.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
                             headerCambios.Style.Font.FontColor = XLColor.White;
@@ -271,6 +272,8 @@ namespace Mikrotik_Administrador.Catalogos
                                 wsCambios.Cell(filaCambios, 10).Value = "Plan Basico";
                                 wsCambios.Cell(filaCambios, 11).Value = 1;
                                 wsCambios.Cell(filaCambios, 12).Value = "Santa Maria";
+                                wsCambios.Cell(filaCambios, 13).Value = "1";
+                                wsCambios.Cell(filaCambios, 14).Value = "1";
                                 filaCambios++;
                             }
 
@@ -441,7 +444,8 @@ namespace Mikrotik_Administrador.Catalogos
                             int idMikrotikOriginal = row.Cell(7).GetValue<int>();  // Col G: IdMikrotik original
                             int idPlanNuevo = row.Cell(9).GetValue<int>();         // Col I: IdPlan nuevo
                             int idMikrotikReceptor = row.Cell(11).GetValue<int>(); // Col K: IdMikrotik receptor
-
+                            string IdoPassO = row.Cell(13).GetValue<string>();
+                            string IdoPassN= row.Cell(14).GetValue<string>();
                             if (IdPlanPrincipal == 0)
                             {
                                 IdPlanPrincipal = idPlanOriginal;
@@ -465,7 +469,9 @@ namespace Mikrotik_Administrador.Catalogos
                                 IdPlan = idPlanNuevo,
                                 Plan = planB != null ? planB.Nombre : "Plan Desconocido",
                                 IdMikrotikReceptor = idMikrotikReceptor,
-                                Nota = "Introducido por Excel"
+                                Nota = "Introducido por Excel",
+                                CommentPassOriginal = IdoPassO,
+                                CommentPassNuevo = IdoPassN
                             });
                         }
                     }
