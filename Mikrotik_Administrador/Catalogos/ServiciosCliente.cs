@@ -185,6 +185,17 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            DataGridViewButtonColumn btnCommentPass = new DataGridViewButtonColumn
+            {
+                Name = "btnCommentPass",
+                HeaderText = "Acción",
+                Text = "Comment/Password",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVServicios.Columns.Add(btnCommentPass);
             DataGridViewButtonColumn btnCambio = new DataGridViewButtonColumn
             {
                 Name = "btnCambio",
@@ -232,7 +243,7 @@ namespace Mikrotik_Administrador
                 var lista = obj.GetUsuariosMikrotiksByIdCliente(IdCliente).Result;
                 var listaFinal = lista?.ToList() ?? new List<ListUsuariosGeneralModel>();
                 DGVServicios.DataSource = new SortableBindingList<ListUsuariosGeneralModel>(listaFinal);
- 
+
                 if (DGVServicios.Columns["IdPlan"] != null)
                 {
                     DGVServicios.Columns["IdPlan"].Visible = false;
@@ -277,6 +288,57 @@ namespace Mikrotik_Administrador
 
             switch (DGVServicios.Columns[e.ColumnIndex].Name)
             {
+                case "btnCommentPass":
+                    AppRepository objcp = new AppRepository();
+                    if (mikrotik != null)
+                    {
+                        await Task.Run(() => mikrotik.Close());
+                        mikrotik = null;
+                    }
+                    MikrotikModel mikro = new MikrotikModel();
+                    mikro = objcp.GetMikrotikById(objUsuario.IdMikrotik).Result;
+                    if (mikro.Estatus == false)
+                    {
+                        MessageBox.Show("El Mikrotik " + mikro.Nombre + " está desactivado, por favor activelo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    mikrotik = new MK(mikro.IP, Convert.ToInt32(mikro.Port));
+
+                    bool login = await Task.Run(() =>
+                    {
+                        return mikrotik.ConectarYLogin(mikro.Usuario, mikro.Password);
+                    });
+                    if (login == false)
+                    {
+                        MessageBox.Show("Error en conexión, revisar que el firewall y nat no esten bloqueando los puertos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (objUsuario.Tipo == "Antena")
+                    {
+                        var listacomments = await Task.Run(() => objcp.GetCommentsbyIdMikrotik(objUsuario.IdMikrotik));
+                        if (listacomments.Where(x => x.Estatus == "Activo").ToList().Count == 0)
+                        {
+                            MessageBox.Show("No se encontraron commments activos en el mikrotik seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        Programar pr = new Programar();
+                        pr.listComments = listacomments.Where(x => x.Estatus == "Activo").ToList();
+                        pr.ShowDialog();
+                        if (pr.SePrograma == string.Empty)
+                        {
+                            MessageBox.Show("No se selecciono un comment para el servicio a restaurar, favor de seleccionar uno.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        var Result1 = mikrotik.ActualizalistdeQueue(objUsuario.IdInterno, pr.SePrograma);
+                    }
+                    else
+                    {
+                        PasswordFibra pf = new PasswordFibra();
+                        pf.ShowDialog();
+                        var Result1 = mikrotik.CambiarPasswordFibra(objUsuario.IdInterno, pf.Password);
+                    }
+                    MessageBox.Show("Cambio realizado.", "Cambio", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
                 case "btnCambio":
                     if (Estatus == "Eliminado")
                     {
@@ -323,7 +385,7 @@ namespace Mikrotik_Administrador
                     }
                     AppRepository objM = new AppRepository();
                     var list = objM.GetExistMensualidadesbyUserM(Id).Result;
-                    if(list == null || list.Count() <= 0)
+                    if (list == null || list.Count() <= 0)
                     {
                         IniciarPagos ini = new IniciarPagos();
                         ini.IdMensualidad = 0;
@@ -332,11 +394,11 @@ namespace Mikrotik_Administrador
                         if (ini.ShowDialog() != DialogResult.OK)
                         { return; }
                     }
-                  
+
                     await CambiarEstatus(objUsuario);
                     break;
 
-              }
+            }
         }
         public async Task<bool> ChecarUsuario(ListUsuariosGeneralModel objUsuario)
         {
@@ -511,7 +573,7 @@ namespace Mikrotik_Administrador
             m.IdCliente = IdCliente;
             m.IdResponsable = IdResponsable;
             m.ShowDialog();
-            BuscarServicios();          
+            BuscarServicios();
         }
         public async Task<List<ListDetallesMensualidadModel>> CalcularTramosMensualidadAsync(int idUsuarioM, DateTime desde, DateTime hasta)
         {

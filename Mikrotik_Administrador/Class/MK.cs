@@ -1892,6 +1892,24 @@ namespace Mikrotik_Administrador.Class
                 return false;
             }
         }
+        public bool CambiarPasswordFibra(string Id, string PasswordFibra)
+        {
+            try
+            {
+                Send("/ppp/secret/set");
+                Send("=.id=" + Id);
+                Send("=password=" + PasswordFibra, true);
+
+                List<string> respuesta = Read();
+
+                // Si el router responde con !trap es que hubo un error (ej: el usuario no existe)
+                return !respuesta.Any(r => r.Contains("!trap"));
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public string VerIdQueue(string name)
         {
             string Id = string.Empty;
