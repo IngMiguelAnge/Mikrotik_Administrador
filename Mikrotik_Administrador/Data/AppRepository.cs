@@ -704,6 +704,28 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region HistorialPagos
+        public async Task<bool> UpdateNotaExtra(int Id, string NotaExtra)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateNotaExtra", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@NotaExtra", NotaExtra));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<HistorialPagosModel> GetHistorialPagosById(int Id)
         {
             HistorialPagosModel obj = new HistorialPagosModel();

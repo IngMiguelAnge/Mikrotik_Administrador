@@ -1,5 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Office2010.PowerPoint;
+using GMap.NET.MapProviders;
 using ImageMagick;
+using Microsoft.IdentityModel.Logging;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
@@ -94,9 +96,9 @@ namespace Mikrotik_Administrador.Items
                 //Saca el total por todas las mensualidades
                 List<MensualidadModel> ListaMensualidades = new List<MensualidadModel>();
                 ListaMensualidades = obj.GetFaltantesPagarbyIdUsuarioM(IdUsuarioM).Result.ToList();
-                if(IdMensualidadRecibida != 0)
+                if (IdMensualidadRecibida != 0)
                 {
-                    ListaMensualidades = ListaMensualidades.Where(x=> x.Id == IdMensualidadRecibida).ToList();
+                    ListaMensualidades = ListaMensualidades.Where(x => x.Id == IdMensualidadRecibida).ToList();
                 }
                 if (ListaMensualidades.Count() > 0)
                 {
@@ -202,6 +204,10 @@ namespace Mikrotik_Administrador.Items
             }
 
             AppRepository obj = new AppRepository();
+            List<int> ListIdHistorial = new List<int>();
+            string ExtraNota = string.Empty;
+            ExtraNota += Environment.NewLine + "Nota: Se recibio un total de $" + Recibido +
+                " y se repartio de la siguiente forma:" + Environment.NewLine;
             if (IdHistorial == 0)
             {
                 foreach (var item in ListaPagos)
@@ -220,6 +226,9 @@ namespace Mikrotik_Administrador.Items
                         IdUsuario = IdResponsable
                     };
                     var result = obj.SaveHistorialPagos(sv).Result;
+                    ListIdHistorial.Add(result);
+                    ExtraNota += "Mensualidad con fecha limite: " + item.FechaLimite.ToShortDateString()
+                        + " $" + sv.Cantidad.ToString() + Environment.NewLine;
                     Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;
                 }
                 if (Recibido > 0)
@@ -228,7 +237,7 @@ namespace Mikrotik_Administrador.Items
                     while (Recibido > 0)
                     {
                         await CambiarFecha(UltimaMensualidad.DiaCorte, UltimaMensualidad.FechaLimite);
-                        if(MensualidadFinal == 0)
+                        if (MensualidadFinal == 0)
                         {
                             MessageBox.Show("No se logro calcular la mensualidad para el siguiente mes", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             break;
@@ -259,6 +268,9 @@ namespace Mikrotik_Administrador.Items
                             IdUsuario = IdResponsable
                         };
                         var result2 = obj.SaveHistorialPagos(sv).Result;
+                        ListIdHistorial.Add(result2);
+                        ExtraNota += "Mensualidad con fecha limite: " + mensualidad.FechaLimite.ToShortDateString()
+                        + " $" + sv.Cantidad.ToString() + Environment.NewLine;
                         Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;
                     }
                 }
@@ -290,8 +302,34 @@ namespace Mikrotik_Administrador.Items
                         IdUsuario = IdResponsable
                     };
                     var result = obj.SaveHistorialPagos(sv).Result;
+                    ExtraNota = string.Empty;
                 }
+                else
+                {
+                    ListIdHistorial.Add(IdHistorial);
+                    HistorialPagosModel sv = new HistorialPagosModel
+                    {
+                        Id = IdHistorial,
+                        FechaRecibido = dtpFechaPago.Value,
+                        Cantidad = NUDCantidad.Value,
+                        IdMensualidad = IdMensualidadRecibida,
+                        Comentario = txtComentario.Text.Trim(),
+                        IdBanco = (int)CBBanco.SelectedValue,
+                        Referencia = txtReferencia.Text.Trim(),
+                        Imagen = ImageToByteArray(),
+                        IdUsuario = IdResponsable
+                    };
+                    int res = obj.SaveHistorialPagos(sv).Result;
+                    ExtraNota = string.Empty;
+                }
+            }
 
+            ExtraNota = txtComentario.Text.ToString().Trim() != string.Empty ?
+                ExtraNota.TrimEnd() : ExtraNota.TrimEnd().TrimStart();
+            bool r = false;
+            foreach (var result in ListIdHistorial)
+            {
+                r = obj.UpdateNotaExtra(result, ExtraNota).Result;
             }
             MessageBox.Show("Pago guardada");
             DialogResult = DialogResult.OK;
