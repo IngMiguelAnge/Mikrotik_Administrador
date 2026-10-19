@@ -305,6 +305,7 @@ namespace Mikrotik_Administrador.Catalogos
             }
             Pagar iniP = new Pagar();
             iniP.IdHistorial = 0;
+            iniP.IdMensualidadRecibida = 0;
             iniP.IdResponsable = IdResponsable;
             iniP.Cliente = Cliente;
             iniP.IdUsuarioM = IdUsuarioM;

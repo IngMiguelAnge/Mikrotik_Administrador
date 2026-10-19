@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Data;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
@@ -19,10 +20,10 @@ namespace Mikrotik_Administrador.Catalogos
         public int IdMensualidad { get; set; }
         public decimal Faltante { get; set; }
         public decimal Mensualidad { get; set; }
-        public int IdResponsable {  get; set; }
+        public int IdResponsable { get; set; }
         public string Cliente { get; set; }
-        public int IdUsuarioM {  get; set; }
-        public string UsuarioM {  get; set; }
+        public int IdUsuarioM { get; set; }
+        public string UsuarioM { get; set; }
         public HistorialPagos()
         {
             InitializeComponent();
@@ -187,25 +188,28 @@ namespace Mikrotik_Administrador.Catalogos
                 switch (dgvHistorialPagos.Columns[e.ColumnIndex].Name)
                 {
                     case "btnCambiarStatus":
-                       if ((string)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value == "Inactivo"
-                            && (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Cantidad"].Value > Faltante)
+                        if ((string)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value == "Inactivo"
+                             && (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Cantidad"].Value > Faltante)
                         {
                             MessageBox.Show("No se puede reactivar este pago, sobre pasa el faltante a pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-                      
+
                         AppRepository obj = new AppRepository();
                         await obj.UpdateEstatusHistorialPagos(Id);
+                        CalcularFaltante();
                         Buscar();
                         break;
                     case "btnEditar":
                         Pagar iniP = new Pagar();
                         iniP.IdHistorial = Id;
+                        iniP.IdMensualidadRecibida = IdMensualidad;
                         iniP.IdResponsable = IdResponsable;
                         iniP.Cliente = Cliente;
                         iniP.IdUsuarioM = IdUsuarioM;
                         iniP.UsuarioM = UsuarioM;
                         iniP.ShowDialog();
+                        CalcularFaltante();
                         Buscar();
                         break;
                     default:
@@ -221,5 +225,45 @@ namespace Mikrotik_Administrador.Catalogos
                 dgvHistorialPagos.Enabled = true;
             }
         }
+
+        private void btnNuevo_Click(object sender, EventArgs e)
+        {
+            if (Faltante <= 0)
+            {
+                MessageBox.Show("No se pueden introducir mas pagos, la mensualidad esta completa", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Pagar iniP = new Pagar();
+            iniP.IdHistorial = 0;
+            iniP.IdMensualidadRecibida = IdMensualidad;
+            iniP.IdResponsable = IdResponsable;
+            iniP.Cliente = Cliente;
+            iniP.IdUsuarioM = IdUsuarioM;
+            iniP.UsuarioM = UsuarioM;
+            iniP.ShowDialog();
+            CalcularFaltante();
+            Buscar();
+        }
+        public void CalcularFaltante()
+        {
+            AppRepository obj = new AppRepository();
+            var Mensualidadfaltantes = obj.GetFaltantesPagarbyIdUsuarioM(IdUsuarioM).Result.ToList();
+            if (IdMensualidad != 0)
+            {
+                Mensualidadfaltantes = Mensualidadfaltantes.Where(x => x.Id == IdMensualidad).ToList();
+            }
+            if (Mensualidadfaltantes.ToList().Count > 0)
+            {
+                var Pagos = obj.GetHistorialPagos(Mensualidadfaltantes.First().Id, string.Empty, 0, 0);
+                decimal TotalHistorial = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
+                Faltante = Mensualidadfaltantes.Count() <= 0 ? 0 :
+                 (Mensualidadfaltantes.First().Mensualidad ?? 0m) - TotalHistorial;
+            }
+            else
+            {
+                Faltante = 0;
+            }
+        }
+
     }
 }

@@ -21,6 +21,7 @@ namespace Mikrotik_Administrador.Items
         public string UsuarioM { get; set; }
         public int IdUsuarioM { get; set; }
         public decimal TotalFaltante { get; set; }
+        public int IdMensualidadRecibida { get; set; }
         private DateTime FechaCorte;
         private decimal MensualidadFinal;
         private decimal PagoOriginal;
@@ -93,6 +94,10 @@ namespace Mikrotik_Administrador.Items
                 //Saca el total por todas las mensualidades
                 List<MensualidadModel> ListaMensualidades = new List<MensualidadModel>();
                 ListaMensualidades = obj.GetFaltantesPagarbyIdUsuarioM(IdUsuarioM).Result.ToList();
+                if(IdMensualidadRecibida != 0)
+                {
+                    ListaMensualidades = ListaMensualidades.Where(x=> x.Id == IdMensualidadRecibida).ToList();
+                }
                 if (ListaMensualidades.Count() > 0)
                 {
 
@@ -186,6 +191,7 @@ namespace Mikrotik_Administrador.Items
             {
                 ConfirmarPago confirmacion = new ConfirmarPago();
                 confirmacion.Total = TotalFaltante;
+                confirmacion.IdMensualidadRecibido = IdMensualidadRecibida;
                 if (confirmacion.ShowDialog() != DialogResult.OK)
                 { return; }
                 Recibido = confirmacion.Recibido;
