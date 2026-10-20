@@ -128,5 +128,41 @@ namespace Mikrotik_Administrador.Catalogos
             pr.ShowDialog();
             Buscar();
         }
+
+        private void DGVProrrogas_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            try
+            {
+                DGVProrrogas.Enabled = false;
+                AppRepository r = new AppRepository();
+                var Id = (int)DGVProrrogas.Rows[e.RowIndex].Cells["Id"].Value;
+
+                switch (DGVProrrogas.Columns[e.ColumnIndex].Name)
+                {
+                    case "btnStatus":
+                        var result = r.UpdateEstatusProrroga(Id).Result;
+                        Buscar();
+                        break;
+                    case "btnModificar":
+                        Prorroga ini = new Prorroga();
+                        ini.Id = Id;
+                        ini.IdUsuarioM = IdUsuarioM;
+                        ini.ShowDialog();
+                        Buscar();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}");
+            }
+            finally
+            {
+                DGVProrrogas.Enabled = true;
+            }
+        }
     }
 }
