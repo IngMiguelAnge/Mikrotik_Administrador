@@ -286,6 +286,18 @@
     <Compile Include="Catalogos\DetallesMensualidad.Designer.cs">
       <DependentUpon>DetallesMensualidad.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\Extra.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\Extra.Designer.cs">
+      <DependentUpon>Extra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Catalogos\Extras.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\Extras.Designer.cs">
+      <DependentUpon>Extras.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\HistorialMovimientos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -381,11 +393,11 @@
     <Compile Include="Items\IniciarPagos.Designer.cs">
       <DependentUpon>IniciarPagos.cs</DependentUpon>
     </Compile>
-    <Compile Include="Items\MikrotiksDisponibles.cs">
+    <Compile Include="Items\VentanaCombo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Items\MikrotiksDisponibles.Designer.cs">
-      <DependentUpon>MikrotiksDisponibles.cs</DependentUpon>
+    <Compile Include="Items\VentanaCombo.Designer.cs">
+      <DependentUpon>VentanaCombo.cs</DependentUpon>
     </Compile>
     <Compile Include="Items\Pagar.cs">
       <SubType>Form</SubType>
@@ -453,6 +465,7 @@
     <Compile Include="Model\ConfigPageModel.cs" />
     <Compile Include="Model\HistorialMovimientosModel.cs" />
     <Compile Include="Model\ListClientesDescargaModel.cs" />
+    <Compile Include="Model\ExtrasModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />
     <Compile Include="Model\ListProrrogasModel.cs" />
     <Compile Include="Model\ListTiposUsuarioModel.cs" />
@@ -580,6 +593,12 @@
     <EmbeddedResource Include="Catalogos\DetallesMensualidad.resx">
       <DependentUpon>DetallesMensualidad.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\Extra.resx">
+      <DependentUpon>Extra.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\Extras.resx">
+      <DependentUpon>Extras.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\HistorialMovimientos.resx">
       <DependentUpon>HistorialMovimientos.cs</DependentUpon>
     </EmbeddedResource>
@@ -625,8 +644,8 @@
     <EmbeddedResource Include="Items\MensualidadesMultiples.resx">
       <DependentUpon>MensualidadesMultiples.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Items\MikrotiksDisponibles.resx">
-      <DependentUpon>MikrotiksDisponibles.cs</DependentUpon>
+    <EmbeddedResource Include="Items\VentanaCombo.resx">
+      <DependentUpon>VentanaCombo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\Pagar.resx">
       <DependentUpon>Pagar.cs</DependentUpon>

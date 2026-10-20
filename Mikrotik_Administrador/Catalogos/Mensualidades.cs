@@ -176,12 +176,7 @@ namespace Mikrotik_Administrador.Catalogos
                 DataPropertyName = "Estatus",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic,
-                DefaultCellStyle = new DataGridViewCellStyle
-                {
-                    Format = "C2", // Aplica formato de moneda local (ej: $120.00 o $120.50)
-                    FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
-                }
+                SortMode = DataGridViewColumnSortMode.Automatic
             });
             DataGridViewButtonColumn btnStatus = new DataGridViewButtonColumn
             {

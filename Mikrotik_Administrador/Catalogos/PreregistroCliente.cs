@@ -197,7 +197,7 @@ namespace Mikrotik_Administrador.Catalogos
                         return;
                     }
 
-                    MikrotiksDisponibles m = new MikrotiksDisponibles();
+                    VentanaCombo m = new VentanaCombo();
                     m.IdPlan = Id;
                     if (m.ShowDialog() != DialogResult.OK)
                     {

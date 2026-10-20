@@ -185,6 +185,17 @@ namespace Mikrotik_Administrador
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            DataGridViewButtonColumn btnExtras = new DataGridViewButtonColumn
+            {
+                Name = "btnExtras",
+                HeaderText = "Acción",
+                Text = "Extras",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVServicios.Columns.Add(btnExtras);
             DataGridViewButtonColumn btnCommentPass = new DataGridViewButtonColumn
             {
                 Name = "btnCommentPass",
@@ -288,6 +299,10 @@ namespace Mikrotik_Administrador
 
             switch (DGVServicios.Columns[e.ColumnIndex].Name)
             {
+                case "btnExtras":
+                    Extras ext = new Extras();
+                    ext.ShowDialog();
+                    break;
                 case "btnCommentPass":
                     AppRepository objcp = new AppRepository();
                     if (mikrotik != null)
