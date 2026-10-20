@@ -310,6 +310,12 @@
     <Compile Include="Catalogos\PreregistroCliente.Designer.cs">
       <DependentUpon>PreregistroCliente.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\Prorrogas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\Prorrogas.Designer.cs">
+      <DependentUpon>Prorrogas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Items\Mapa.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -448,7 +454,9 @@
     <Compile Include="Model\HistorialMovimientosModel.cs" />
     <Compile Include="Model\ListClientesDescargaModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />
+    <Compile Include="Model\ListProrrogasModel.cs" />
     <Compile Include="Model\ListTiposUsuarioModel.cs" />
+    <Compile Include="Model\ProrrogaModel.cs" />
     <Compile Include="Model\UbicacionesCercanas.cs" />
     <Compile Include="Model\ListUsuariosModel.cs" />
     <Compile Include="Model\PoolsModel.cs" />
@@ -595,6 +603,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\PreregistroCliente.resx">
       <DependentUpon>PreregistroCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\Prorrogas.resx">
+      <DependentUpon>Prorrogas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\UsuarioSistema.resx">
       <DependentUpon>UsuarioSistema.cs</DependentUpon>

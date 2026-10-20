@@ -27,6 +27,10 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void Mensualidades_Load(object sender, EventArgs e)
         {
+            AppRepository obj = new AppRepository();
+            var Prorroga = obj.GetUltimaProrroga(IdUsuarioM).Result;
+            lblFechaProrroga.Text = Prorroga != null ? Prorroga.Fecha.ToShortDateString() :
+                "Sin prorrogas activas";
             Buscar();
         }
         public async void Buscar()
@@ -312,6 +316,13 @@ namespace Mikrotik_Administrador.Catalogos
             iniP.UsuarioM = UsuarioM;
             iniP.ShowDialog();
             Buscar();
+        }
+
+        private void btnVerProrroga_Click(object sender, EventArgs e)
+        {
+            Prorrogas pr = new Prorrogas();
+            pr.IdUsuarioM = IdUsuarioM;
+            pr.ShowDialog();
         }
     }
 }

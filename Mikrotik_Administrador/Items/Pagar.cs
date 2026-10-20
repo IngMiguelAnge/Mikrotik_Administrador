@@ -333,6 +333,7 @@ namespace Mikrotik_Administrador.Items
             }
             MessageBox.Show("Pago guardada");
             DialogResult = DialogResult.OK;
+            this.Close();
         }
         public async Task CalcularCostos(DateTime FechaInicio, DateTime FechaCorte)
         {

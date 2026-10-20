@@ -33,9 +33,12 @@
             this.dgvMensualidades = new System.Windows.Forms.DataGridView();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.btnVerProrroga = new System.Windows.Forms.Button();
+            this.lblFechaProrroga = new System.Windows.Forms.Label();
+            this.lblProrroga = new System.Windows.Forms.Label();
+            this.btnPagar = new System.Windows.Forms.Button();
             this.btnNuevo = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
-            this.btnPagar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMensualidades)).BeginInit();
             this.panelTop.SuspendLayout();
             this.panelContenedor.SuspendLayout();
@@ -75,7 +78,7 @@
             this.dgvMensualidades.RowHeadersWidth = 51;
             this.dgvMensualidades.RowTemplate.Height = 30;
             this.dgvMensualidades.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMensualidades.Size = new System.Drawing.Size(900, 300);
+            this.dgvMensualidades.Size = new System.Drawing.Size(989, 300);
             this.dgvMensualidades.TabIndex = 0;
             this.dgvMensualidades.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMensualidades_CellContentClick);
             // 
@@ -96,14 +99,67 @@
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.Color.White;
+            this.panelTop.Controls.Add(this.btnVerProrroga);
+            this.panelTop.Controls.Add(this.lblFechaProrroga);
+            this.panelTop.Controls.Add(this.lblProrroga);
             this.panelTop.Controls.Add(this.btnPagar);
             this.panelTop.Controls.Add(this.btnNuevo);
             this.panelTop.Controls.Add(this.btnBuscar);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(940, 89);
+            this.panelTop.Size = new System.Drawing.Size(1029, 89);
             this.panelTop.TabIndex = 1;
+            // 
+            // btnVerProrroga
+            // 
+            this.btnVerProrroga.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnVerProrroga.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVerProrroga.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnVerProrroga.ForeColor = System.Drawing.Color.White;
+            this.btnVerProrroga.Location = new System.Drawing.Point(686, 33);
+            this.btnVerProrroga.Name = "btnVerProrroga";
+            this.btnVerProrroga.Size = new System.Drawing.Size(145, 38);
+            this.btnVerProrroga.TabIndex = 12;
+            this.btnVerProrroga.Text = "Ver prorrogas";
+            this.btnVerProrroga.UseVisualStyleBackColor = false;
+            this.btnVerProrroga.Click += new System.EventHandler(this.btnVerProrroga_Click);
+            // 
+            // lblFechaProrroga
+            // 
+            this.lblFechaProrroga.AutoSize = true;
+            this.lblFechaProrroga.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblFechaProrroga.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblFechaProrroga.Location = new System.Drawing.Point(478, 45);
+            this.lblFechaProrroga.Name = "lblFechaProrroga";
+            this.lblFechaProrroga.Size = new System.Drawing.Size(190, 25);
+            this.lblFechaProrroga.TabIndex = 11;
+            this.lblFechaProrroga.Text = "Prorroga activa hasta:";
+            // 
+            // lblProrroga
+            // 
+            this.lblProrroga.AutoSize = true;
+            this.lblProrroga.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblProrroga.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblProrroga.Location = new System.Drawing.Point(478, 20);
+            this.lblProrroga.Name = "lblProrroga";
+            this.lblProrroga.Size = new System.Drawing.Size(190, 25);
+            this.lblProrroga.TabIndex = 10;
+            this.lblProrroga.Text = "Prorroga activa hasta:";
+            // 
+            // btnPagar
+            // 
+            this.btnPagar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnPagar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPagar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnPagar.ForeColor = System.Drawing.Color.White;
+            this.btnPagar.Location = new System.Drawing.Point(322, 33);
+            this.btnPagar.Name = "btnPagar";
+            this.btnPagar.Size = new System.Drawing.Size(120, 38);
+            this.btnPagar.TabIndex = 8;
+            this.btnPagar.Text = "Pagar";
+            this.btnPagar.UseVisualStyleBackColor = false;
+            this.btnPagar.Click += new System.EventHandler(this.btnPagar_Click);
             // 
             // btnNuevo
             // 
@@ -126,29 +182,15 @@
             this.panelContenedor.Location = new System.Drawing.Point(0, 89);
             this.panelContenedor.Name = "panelContenedor";
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenedor.Size = new System.Drawing.Size(940, 340);
+            this.panelContenedor.Size = new System.Drawing.Size(1029, 340);
             this.panelContenedor.TabIndex = 2;
-            // 
-            // btnPagar
-            // 
-            this.btnPagar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
-            this.btnPagar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPagar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnPagar.ForeColor = System.Drawing.Color.White;
-            this.btnPagar.Location = new System.Drawing.Point(322, 33);
-            this.btnPagar.Name = "btnPagar";
-            this.btnPagar.Size = new System.Drawing.Size(120, 38);
-            this.btnPagar.TabIndex = 8;
-            this.btnPagar.Text = "Pagar";
-            this.btnPagar.UseVisualStyleBackColor = false;
-            this.btnPagar.Click += new System.EventHandler(this.btnPagar_Click);
             // 
             // Mensualidades
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(940, 429);
+            this.ClientSize = new System.Drawing.Size(1029, 429);
             this.Controls.Add(this.panelContenedor);
             this.Controls.Add(this.panelTop);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -161,6 +203,7 @@
             this.Load += new System.EventHandler(this.Mensualidades_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMensualidades)).EndInit();
             this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
             this.panelContenedor.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -174,5 +217,8 @@
         private System.Windows.Forms.Panel panelContenedor;
         private System.Windows.Forms.Button btnNuevo;
         private System.Windows.Forms.Button btnPagar;
+        private System.Windows.Forms.Label lblProrroga;
+        private System.Windows.Forms.Button btnVerProrroga;
+        private System.Windows.Forms.Label lblFechaProrroga;
     }
 }

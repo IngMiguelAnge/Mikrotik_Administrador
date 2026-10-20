@@ -20,6 +20,142 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region 
+        public async Task<int> SaveProrroga(ProrrogaModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveProrroga", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Fecha", obj.Fecha));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        public async Task<List<ListProrrogasModel>> GetProrrogasbyIdUsuarioM(int IdUsuarioM)
+        {
+            List<ListProrrogasModel> list = new List<ListProrrogasModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetProrrogasbyIdUsuarioM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListProrrogas(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListProrrogasModel MapToListProrrogas(SqlDataReader reader)
+        {
+            return new ListProrrogasModel()
+            {
+                Id = (int)reader["Id"],
+                Estatus = (string)reader["Estatus"],
+                Fecha = (DateTime)reader["Fecha"]
+            };
+        }
+        public async Task<ProrrogaModel> GetUltimaProrroga(int IdUsuarioM)
+        {
+            ProrrogaModel pro = new ProrrogaModel();
+            List<ProrrogaModel> list = new List<ProrrogaModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUltimaProrroga", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToProrroga(reader));
+                            }
+                            pro = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return pro;
+        }
+        public async Task<ProrrogaModel> GetProrrogasbyId(int Id)
+        {
+            ProrrogaModel pro = new ProrrogaModel();
+            List<ProrrogaModel> list = new List<ProrrogaModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetProrrogasbyId", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToProrroga(reader));
+                            }
+                            pro = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return pro;
+        }
+        private ProrrogaModel MapToProrroga(SqlDataReader reader)
+        {
+            return new ProrrogaModel()
+            {
+                Id = (int)reader["Id"],
+                IdUsuarioM = (int)reader["IdUsuarioM"],
+                Estatus = (bool)reader["Estatus"],
+                Fecha = (DateTime)reader["Fecha"]
+            };
+        }
+        #endregion
         #region TipoUsuarios
         public async Task<List<ListTiposUsuarioModel>> GetTipos()
         {
