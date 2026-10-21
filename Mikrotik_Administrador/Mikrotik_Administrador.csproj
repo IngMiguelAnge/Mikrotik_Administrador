@@ -464,6 +464,7 @@
     <Compile Include="Model\CommentModel.cs" />
     <Compile Include="Model\ConfigPageModel.cs" />
     <Compile Include="Model\HistorialMovimientosModel.cs" />
+    <Compile Include="Model\HistorialPagosExtrasModel.cs" />
     <Compile Include="Model\ListClientesDescargaModel.cs" />
     <Compile Include="Model\ExtrasModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />

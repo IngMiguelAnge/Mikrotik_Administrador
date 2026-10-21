@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvMensualidades = new System.Windows.Forms.DataGridView();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.btnExtras = new System.Windows.Forms.Button();
+            this.lblCostoExtra = new System.Windows.Forms.Label();
             this.btnVerProrroga = new System.Windows.Forms.Button();
             this.lblFechaProrroga = new System.Windows.Forms.Label();
             this.lblProrroga = new System.Windows.Forms.Label();
             this.btnPagar = new System.Windows.Forms.Button();
             this.btnNuevo = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
-            this.lblCostoExtra = new System.Windows.Forms.Label();
-            this.btnExtras = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMensualidades)).BeginInit();
             this.panelTop.SuspendLayout();
             this.panelContenedor.SuspendLayout();
@@ -53,24 +53,24 @@
             this.dgvMensualidades.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvMensualidades.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvMensualidades.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvMensualidades.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvMensualidades.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvMensualidades.ColumnHeadersHeight = 35;
             this.dgvMensualidades.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvMensualidades.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvMensualidades.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvMensualidades.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvMensualidades.EnableHeadersVisualStyles = false;
             this.dgvMensualidades.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -115,13 +115,38 @@
             this.panelTop.Size = new System.Drawing.Size(1029, 109);
             this.panelTop.TabIndex = 1;
             // 
+            // btnExtras
+            // 
+            this.btnExtras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnExtras.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExtras.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnExtras.ForeColor = System.Drawing.Color.White;
+            this.btnExtras.Location = new System.Drawing.Point(625, 33);
+            this.btnExtras.Name = "btnExtras";
+            this.btnExtras.Size = new System.Drawing.Size(113, 38);
+            this.btnExtras.TabIndex = 14;
+            this.btnExtras.Text = "Extras";
+            this.btnExtras.UseVisualStyleBackColor = false;
+            this.btnExtras.Click += new System.EventHandler(this.btnExtras_Click);
+            // 
+            // lblCostoExtra
+            // 
+            this.lblCostoExtra.AutoSize = true;
+            this.lblCostoExtra.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblCostoExtra.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblCostoExtra.Location = new System.Drawing.Point(767, 75);
+            this.lblCostoExtra.Name = "lblCostoExtra";
+            this.lblCostoExtra.Size = new System.Drawing.Size(106, 25);
+            this.lblCostoExtra.TabIndex = 13;
+            this.lblCostoExtra.Text = "Costoextra:";
+            // 
             // btnVerProrroga
             // 
             this.btnVerProrroga.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
             this.btnVerProrroga.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnVerProrroga.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnVerProrroga.ForeColor = System.Drawing.Color.White;
-            this.btnVerProrroga.Location = new System.Drawing.Point(723, 33);
+            this.btnVerProrroga.Location = new System.Drawing.Point(465, 33);
             this.btnVerProrroga.Name = "btnVerProrroga";
             this.btnVerProrroga.Size = new System.Drawing.Size(145, 38);
             this.btnVerProrroga.TabIndex = 12;
@@ -134,7 +159,7 @@
             this.lblFechaProrroga.AutoSize = true;
             this.lblFechaProrroga.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblFechaProrroga.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblFechaProrroga.Location = new System.Drawing.Point(478, 45);
+            this.lblFechaProrroga.Location = new System.Drawing.Point(767, 46);
             this.lblFechaProrroga.Name = "lblFechaProrroga";
             this.lblFechaProrroga.Size = new System.Drawing.Size(190, 25);
             this.lblFechaProrroga.TabIndex = 11;
@@ -145,7 +170,7 @@
             this.lblProrroga.AutoSize = true;
             this.lblProrroga.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblProrroga.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblProrroga.Location = new System.Drawing.Point(478, 20);
+            this.lblProrroga.Location = new System.Drawing.Point(767, 21);
             this.lblProrroga.Name = "lblProrroga";
             this.lblProrroga.Size = new System.Drawing.Size(190, 25);
             this.lblProrroga.TabIndex = 10;
@@ -188,31 +213,6 @@
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
             this.panelContenedor.Size = new System.Drawing.Size(1029, 320);
             this.panelContenedor.TabIndex = 2;
-            // 
-            // lblCostoExtra
-            // 
-            this.lblCostoExtra.AutoSize = true;
-            this.lblCostoExtra.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblCostoExtra.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblCostoExtra.Location = new System.Drawing.Point(478, 74);
-            this.lblCostoExtra.Name = "lblCostoExtra";
-            this.lblCostoExtra.Size = new System.Drawing.Size(190, 25);
-            this.lblCostoExtra.TabIndex = 13;
-            this.lblCostoExtra.Text = "Prorroga activa hasta:";
-            // 
-            // btnExtras
-            // 
-            this.btnExtras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
-            this.btnExtras.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExtras.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnExtras.ForeColor = System.Drawing.Color.White;
-            this.btnExtras.Location = new System.Drawing.Point(886, 33);
-            this.btnExtras.Name = "btnExtras";
-            this.btnExtras.Size = new System.Drawing.Size(113, 38);
-            this.btnExtras.TabIndex = 14;
-            this.btnExtras.Text = "Extras";
-            this.btnExtras.UseVisualStyleBackColor = false;
-            this.btnExtras.Click += new System.EventHandler(this.btnExtras_Click);
             // 
             // Mensualidades
             // 

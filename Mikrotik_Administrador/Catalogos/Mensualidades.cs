@@ -324,6 +324,7 @@ namespace Mikrotik_Administrador.Catalogos
             iniP.IdUsuarioM = IdUsuarioM;
             iniP.UsuarioM = UsuarioM;
             iniP.ShowDialog();
+            BuscarExtras();
             Buscar();
         }
 

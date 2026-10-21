@@ -1016,7 +1016,7 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region HistorialPagos
-        public async Task<bool> UpdateNotaExtra(int Id, string NotaExtra)
+        public async Task<bool> UpdateNotaExtra(int Id, string NotaExtra, bool Extra)
         {
             try
             {
@@ -1027,6 +1027,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
                         cmd.Parameters.Add(new SqlParameter("@NotaExtra", NotaExtra));
+                        cmd.Parameters.Add(new SqlParameter("@HistorialExtra", Extra));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
@@ -1096,6 +1097,41 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@FechaRecibido", obj.FechaRecibido));
                         cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
                         cmd.Parameters.Add(new SqlParameter("@IdMensualidad", obj.IdMensualidad));
+                        cmd.Parameters.Add(new SqlParameter("@Comentario", obj.Comentario));
+                        cmd.Parameters.Add(new SqlParameter("@IdBanco", obj.IdBanco));
+                        cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
+                        cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+        public async Task<int> SaveHistorialPagosExtras(HistorialPagosExtrasModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveHistorialPagosExtras", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@FechaRecibido", obj.FechaRecibido));
+                        cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
+                        cmd.Parameters.Add(new SqlParameter("@IdExtra", obj.IdExtra));
                         cmd.Parameters.Add(new SqlParameter("@Comentario", obj.Comentario));
                         cmd.Parameters.Add(new SqlParameter("@IdBanco", obj.IdBanco));
                         cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));

@@ -174,6 +174,7 @@
             this.Controls.Add(this.lblCosto);
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.lblNombre);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "Extra";
             this.ShowIcon = false;

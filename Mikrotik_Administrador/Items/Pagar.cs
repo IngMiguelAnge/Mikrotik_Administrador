@@ -2,6 +2,7 @@
 using GMap.NET.MapProviders;
 using ImageMagick;
 using Microsoft.IdentityModel.Logging;
+using Mikrotik_Administrador.Catalogos;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using System;
@@ -22,11 +23,12 @@ namespace Mikrotik_Administrador.Items
         public string Cliente { get; set; }
         public string UsuarioM { get; set; }
         public int IdUsuarioM { get; set; }
-        public decimal TotalFaltante { get; set; }
+        public decimal TotalFaltante { get; set; }        
         public int IdMensualidadRecibida { get; set; }
         private DateTime FechaCorte;
         private decimal MensualidadFinal;
         private decimal PagoOriginal;
+        private decimal TotalExtra;
         List<ListMensualidadesModel> ListaPagos = new List<ListMensualidadesModel>();
         public Pagar()
         {
@@ -79,6 +81,7 @@ namespace Mikrotik_Administrador.Items
 
         private void Pagar_Load(object sender, EventArgs e)
         {
+            BuscarExtras();
             AppRepository obj = new AppRepository();
             var ListBancos = obj.GetBancosActivos().Result.OrderBy(x => x.Nombre).ToList();
             // Insertamos un objeto "fantasma" al inicio para el placeholder
@@ -128,7 +131,7 @@ namespace Mikrotik_Administrador.Items
                     }
                     lblTotalMensualidades.Text = $"Total mensualidades: {TotalMensualidad:C}";
                     lblTotalPagado.Text = $"Total pagado: {TotalPagado:C}";
-                    lblFaltante.Text = $"Total a pagar: {TotalFaltante:C}";
+                    lblFaltante.Text = $"Total a pagar: {TotalFaltante + TotalExtra :C}";
                 }
                 else
                 {
@@ -149,7 +152,7 @@ namespace Mikrotik_Administrador.Items
                 lblTotalMensualidades.Text = $"Total mensualidades: {Mensualidad.Mensualidad:C}";
                 TotalFaltante = (Mensualidad.Mensualidad ?? 0m) - TotalPagado < 0 ? 0 :
                     (Mensualidad.Mensualidad ?? 0m) - TotalPagado;
-                lblFaltante.Text = $"Total a pagar: {TotalFaltante:C}";
+                lblFaltante.Text = $"Total a pagar: {TotalFaltante + TotalExtra:C}";
                 CBBanco.SelectedValue = Pago.IdBanco;
                 txtReferencia.Text = Pago.Referencia;
                 txtComentario.Text = Pago.Comentario;
@@ -189,10 +192,23 @@ namespace Mikrotik_Administrador.Items
                 return;
             }
             decimal Recibido = 0;
+            bool CubrirExtra = false;
             if (IdHistorial == 0)
-            {
+            {            
                 ConfirmarPago confirmacion = new ConfirmarPago();
-                confirmacion.Total = TotalFaltante;
+                if (TotalExtra > 0)
+                {
+                    DialogResult resultado = MessageBox.Show("Se a detectado que tiene un cobro extra pendiente, ¿Quiere que primero, se cubra ese cobro?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (resultado == DialogResult.No)
+                    {
+                        confirmacion.Total = TotalFaltante;
+                    }
+                    else
+                    {
+                        confirmacion.Total = TotalFaltante + TotalExtra;
+                        CubrirExtra = true;
+                    }
+                }
                 confirmacion.IdMensualidadRecibido = IdMensualidadRecibida;
                 if (confirmacion.ShowDialog() != DialogResult.OK)
                 { return; }
@@ -202,16 +218,46 @@ namespace Mikrotik_Administrador.Items
             {
                 Recibido = NUDCantidad.Value;
             }
-
+          
             AppRepository obj = new AppRepository();
             List<int> ListIdHistorial = new List<int>();
+            List<int> ListIdHistorialExtra = new List<int>();
             string ExtraNota = string.Empty;
             ExtraNota += Environment.NewLine + "Nota: Se recibio un total de $" + Recibido +
                 " y se repartio de la siguiente forma:" + Environment.NewLine;
             if (IdHistorial == 0)
             {
+                if(CubrirExtra)
+                {
+                    var ListExtras = obj.GetCostoExtra(IdUsuarioM).Result;
+                    foreach (var Extra in ListExtras) 
+                    {
+                        if (Recibido == 0)
+                            break;
+                        HistorialPagosExtrasModel sv = new HistorialPagosExtrasModel
+                        {
+                            Id = 0,
+                            FechaRecibido = dtpFechaPago.Value,
+                            Cantidad = Recibido - Extra.Costo < 0 ? Recibido
+                            : Extra.Costo,
+                            IdExtra = Extra.Id,
+                            Comentario = txtComentario.Text.Trim(),
+                            IdBanco = (int)CBBanco.SelectedValue,
+                            Referencia = txtReferencia.Text.Trim(),
+                            Imagen = ImageToByteArray(),
+                            IdUsuario = IdResponsable
+                        };
+                        var result = obj.SaveHistorialPagosExtras(sv).Result;
+                        ListIdHistorialExtra.Add(result);
+                        ExtraNota += "Cobro extra " + Extra.Nombre +" con faltante a pagar: " + 
+                             " $" + sv.Cantidad.ToString() + Environment.NewLine;
+                        Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;                    
+                    }
+                }
                 foreach (var item in ListaPagos)
                 {
+                    if (Recibido == 0)
+                        break;
                     HistorialPagosModel sv = new HistorialPagosModel
                     {
                         Id = 0,
@@ -230,6 +276,7 @@ namespace Mikrotik_Administrador.Items
                     ExtraNota += "Mensualidad con fecha limite: " + item.FechaLimite.ToShortDateString()
                         + " $" + sv.Cantidad.ToString() + Environment.NewLine;
                     Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;
+               
                 }
                 if (Recibido > 0)
                 {
@@ -327,11 +374,15 @@ namespace Mikrotik_Administrador.Items
             ExtraNota = txtComentario.Text.ToString().Trim() != string.Empty ?
                 ExtraNota.TrimEnd() : ExtraNota.TrimEnd().TrimStart();
             bool r = false;
+            foreach (var resultextra in ListIdHistorialExtra)
+            {
+                r = obj.UpdateNotaExtra(resultextra, ExtraNota,true).Result;
+            }
             foreach (var result in ListIdHistorial)
             {
-                r = obj.UpdateNotaExtra(result, ExtraNota).Result;
+                r = obj.UpdateNotaExtra(result, ExtraNota,false).Result;
             }
-            MessageBox.Show("Pago guardada");
+            MessageBox.Show("Pago guardado correctamente");
             DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -635,6 +686,26 @@ namespace Mikrotik_Administrador.Items
                     return ms.ToArray();
                 }
             }
+        }
+
+        private void btnExtras_Click(object sender, EventArgs e)
+        {
+            Extras ext = new Extras();
+            ext.IdUsuarioM = IdUsuarioM;
+            ext.ShowDialog();
+            BuscarExtras();
+        }
+        public void BuscarExtras()
+        {
+            AppRepository obj = new AppRepository();
+            var ListExtras = obj.GetCostoExtra(IdUsuarioM).Result;
+            lblTotalExtra.Text = ListExtras != null ?
+                "Total extra a pagar: $" + ListExtras.Sum(x => x.Costo) :
+               "Total extra a pagar: $0.00";
+            TotalExtra = ListExtras != null ?
+            ListExtras.Sum(x => x.Costo) : 0;
+            lblFaltante.Text = $"Total a pagar: {TotalFaltante + TotalExtra:C}";
+
         }
     }
 }
