@@ -21,6 +21,33 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region Extras
+        public async Task<List<ExtrasModel>> GetCostoExtra(int IdUsuarioM)
+        {
+            List<ExtrasModel> list = new List<ExtrasModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetCostoExtra", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToExtras(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
         public async Task<bool> UpdateEstatusExtra(int Id, string Estatus)
         {
             try

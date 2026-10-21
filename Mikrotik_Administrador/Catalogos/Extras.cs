@@ -180,6 +180,7 @@ namespace Mikrotik_Administrador.Catalogos
                         Extra ini = new Extra();
                         ini.Id = Id;
                         ini.IdUsuarioM = IdUsuarioM;
+                        ini.ShowDialog();
                         Buscar();
                         break;
                    

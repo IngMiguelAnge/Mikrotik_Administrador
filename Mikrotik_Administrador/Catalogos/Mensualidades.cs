@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Data;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
@@ -27,8 +28,17 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void Mensualidades_Load(object sender, EventArgs e)
         {
+            BuscarExtras();
             BuscarProrrogas();
             Buscar();
+        }
+        public void BuscarExtras()
+        {
+            AppRepository obj = new AppRepository();
+            var ListExtras = obj.GetCostoExtra(IdUsuarioM).Result;
+            lblCostoExtra.Text = ListExtras != null ?
+                "Se tiene un costo extra de $" + ListExtras.Sum(x => x.Costo) :
+               "Se tiene un costo extra de $0.00";
         }
         public void BuscarProrrogas()
         {
@@ -323,6 +333,14 @@ namespace Mikrotik_Administrador.Catalogos
             pr.IdUsuarioM = IdUsuarioM;
             pr.ShowDialog();
             BuscarProrrogas();
+        }
+
+        private void btnExtras_Click(object sender, EventArgs e)
+        {
+            Extras ext = new Extras();
+            ext.IdUsuarioM = IdUsuarioM;
+            ext.ShowDialog();
+            BuscarExtras();
         }
     }
 }
