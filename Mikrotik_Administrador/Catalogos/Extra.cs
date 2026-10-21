@@ -53,6 +53,20 @@ namespace Mikrotik_Administrador.Catalogos
                 MessageBox.Show("Informacón incompleta", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            AppRepository obj = new AppRepository();
+            if(Id != 0)
+            {
+                var Historial = obj.GetHistorialPagosExtras(Id, string.Empty, 0, 0).Result;
+                decimal suma = Historial?.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad) ?? 0m;
+                if(suma > NUDCosto.Value)
+                {
+                    MessageBox.Show("Este articulo ya tiene historicos guardados y dan una cantidad de $"+suma.ToString() +
+                        ", no se permite modificar con un costo menor al historico activo", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+         
+            
             ExtrasModel extra = new ExtrasModel()
             {
                 Id = Id,
@@ -62,7 +76,7 @@ namespace Mikrotik_Administrador.Catalogos
                 Fecha_Entregado = cbSinEntregar.Checked ? (DateTime?)null : dtpFechaEntrega.Value,
                 IdUsuarioM = IdUsuarioM                
             };
-            AppRepository obj = new AppRepository();
+   
             var r = obj.SaveExtras(extra).Result;
             if(r> 0)
             {

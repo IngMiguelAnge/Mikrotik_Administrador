@@ -467,6 +467,7 @@
     <Compile Include="Model\HistorialPagosExtrasModel.cs" />
     <Compile Include="Model\ListClientesDescargaModel.cs" />
     <Compile Include="Model\ExtrasModel.cs" />
+    <Compile Include="Model\ListHistorialPagosExtrasModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />
     <Compile Include="Model\ListProrrogasModel.cs" />
     <Compile Include="Model\ListTiposUsuarioModel.cs" />

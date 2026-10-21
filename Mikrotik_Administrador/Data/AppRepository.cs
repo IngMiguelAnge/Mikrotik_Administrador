@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Microsoft.Data.SqlClient;
+using Mikrotik_Administrador.Catalogos;
 using Mikrotik_Administrador.Model;
 using System;
 using System.Collections.Generic;
@@ -1119,6 +1120,51 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
+        public async Task<List<ListHistorialPagosExtrasModel>> GetHistorialPagosExtras(int IdExtra, string Referencia, int Id, int IdBanco)
+        {
+            List<ListHistorialPagosExtrasModel> list = new List<ListHistorialPagosExtrasModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetHistorialPagosExtras", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdExtra", IdExtra));
+                        cmd.Parameters.Add(new SqlParameter("@Referencia", Referencia));
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@IdBanco", IdBanco));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListHistorialPagosExtras(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+        private ListHistorialPagosExtrasModel MapToListHistorialPagosExtras(SqlDataReader reader)
+        {
+            return new ListHistorialPagosExtrasModel()
+            {
+                Id = (int)reader["Id"],
+                FechaRecibido = (DateTime)reader["FechaRecibido"],
+                Cantidad = (decimal)reader["Cantidad"],
+                Estatus = (string)reader["Estatus"],
+                Banco = (string)reader["Banco"],
+                Referencia = (string)reader["Referencia"],
+                Responsable = (string)reader["Responsable"],
+            };
+        }
+
         public async Task<int> SaveHistorialPagosExtras(HistorialPagosExtrasModel obj)
         {
             try

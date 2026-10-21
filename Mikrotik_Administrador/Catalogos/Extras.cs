@@ -18,6 +18,7 @@ namespace Mikrotik_Administrador.Catalogos
     public partial class Extras : Form
     {
         public int IdUsuarioM { get; set; }
+        
         public Extras()
         {
             InitializeComponent();
