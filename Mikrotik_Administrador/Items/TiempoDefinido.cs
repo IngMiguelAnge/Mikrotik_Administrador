@@ -60,7 +60,7 @@ namespace Mikrotik_Administrador.Items
                     cbPlanNuevo.SelectedValue = Convert.ToInt32(Cambios.CommentPassNuevo);
                 }
                 else PassNuevo = Cambios.CommentPassNuevo;
-                    plan = obj.GetPlanById(Cambios.IdPlanOriginal).Result;
+                plan = obj.GetPlanById(Cambios.IdPlanOriginal).Result;
                 if (plan.IsAntena)
                 {
                     CBPlanOriginal.SelectedValue = Convert.ToInt32(Cambios.CommentPassOriginal);
@@ -155,6 +155,16 @@ namespace Mikrotik_Administrador.Items
                 MessageBox.Show("Debe seleccionar un mikrotik a utilizar despues del periodo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            if (IsAntenaNuevo && (int)CBCommentsNuevo.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar un comment a utilizar durante el periodo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (IsAntenaOriginal && (int)CBCommentsOriginal.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar un comment a utilizar despues del periodo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             TiempoCambioModel td = new TiempoCambioModel
             {
                 Id = Id,
@@ -173,9 +183,9 @@ namespace Mikrotik_Administrador.Items
             dtpFechaInicio.Value > DateTime.Now ? "Pendiente" :
             "Ejecutando",
                 CommentPassNuevo = IsAntenaNuevo == true ?
-            (string)CBCommentsNuevo.SelectedValue : PassNuevo,
+             Convert.ToString(CBCommentsNuevo.SelectedValue) : PassNuevo,
                 CommentPassOriginal = IsAntenaOriginal == true ?
-            (string)CBCommentsOriginal.SelectedValue : PassOriginal
+             Convert.ToString(CBCommentsOriginal.SelectedValue) : PassOriginal
             };
             FechaInicio = td.FechaInicio;
             FechaFin = td.FechaFin;
@@ -236,26 +246,30 @@ namespace Mikrotik_Administrador.Items
 
         private async void CBMikrotiksNuevo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cbPlanNuevo.Items.Clear();
+            CBCommentsNuevo.Visible = false;
+            lblCommentNuevo.Visible = false;
+            CBCommentsNuevo.DataSource = null;
+            if ((int)CBMikrotiksNuevo.SelectedValue == 0)
+                return;
+
             if ((int)CBMikrotiksNuevo.SelectedValue != 0 && IsAntenaNuevo)
             {
-                cbPlanNuevo.Visible = true;
-                lblPlanNuevo.Visible = true;
+                CBCommentsNuevo.Visible = true;
+                lblCommentNuevo.Visible = true;
                 AppRepository obj = new AppRepository();
-                var listacomments = await Task.Run(() => obj.GetCommentsbyIdMikrotik((int)CBMikrotiksNuevo.SelectedValue));
+                int IdMikrotik = (int)CBMikrotiksNuevo.SelectedValue;
+                var listacomments = await Task.Run(() => obj.GetCommentsbyIdMikrotik(IdMikrotik));
 
                 listacomments.Insert(0, new ListCommentsModel { Id = 0, Nombre = "Selecciona un comment", Estatus = "Activo" });
 
                 // Configuramos el ComboBox
-                cbPlanNuevo.DisplayMember = "Nombre"; // Lo que el usuario VE
-                cbPlanNuevo.ValueMember = "Id";      // El dato que procesas por DETRÁS
-                cbPlanNuevo.DataSource = listacomments.ToList();
-                cbPlanNuevo.SelectedIndex = 0;
+                CBCommentsNuevo.DisplayMember = "Nombre"; // Lo que el usuario VE
+                CBCommentsNuevo.ValueMember = "Id";      // El dato que procesas por DETRÁS
+                CBCommentsNuevo.DataSource = listacomments.ToList();
+                CBCommentsNuevo.SelectedIndex = 0;
             }
             else
             {
-                cbPlanNuevo.Visible = false;
-                lblPlanNuevo.Visible = false;
                 PasswordFibra ps = new PasswordFibra();
                 ps.ShowDialog();
                 PassNuevo = ps.Password;
@@ -264,26 +278,31 @@ namespace Mikrotik_Administrador.Items
 
         private async void CBMikrotiksOriginal_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CBPlanOriginal.Items.Clear();
+            CBCommentsOriginal.Visible = false;
+            lblComenOriginal.Visible = false;
+            CBCommentsOriginal.DataSource = null;
+            if ((int)CBMikrotiksOriginal.SelectedValue == 0)
+                return;
+
             if ((int)CBMikrotiksNuevo.SelectedValue != 0 && IsAntenaOriginal)
             {
-                CBPlanOriginal.Visible = true;
-                lblPlanOriginal.Visible = true;
+                CBCommentsOriginal.Visible = true;
+                lblComenOriginal.Visible = true;
                 AppRepository obj = new AppRepository();
-                var listacomments = await Task.Run(() => obj.GetCommentsbyIdMikrotik((int)CBMikrotiksOriginal.SelectedValue));
+                int IdMikrotik = (int)CBMikrotiksOriginal.SelectedValue;
+                var listacomments = await Task.Run(() => obj.GetCommentsbyIdMikrotik(IdMikrotik));
 
                 listacomments.Insert(0, new ListCommentsModel { Id = 0, Nombre = "Selecciona un comment", Estatus = "Activo" });
 
                 // Configuramos el ComboBox
-                CBPlanOriginal.DisplayMember = "Nombre"; // Lo que el usuario VE
-                CBPlanOriginal.ValueMember = "Id";      // El dato que procesas por DETRÁS
-                CBPlanOriginal.DataSource = listacomments.ToList();
-                CBPlanOriginal.SelectedIndex = 0;
+                CBCommentsOriginal.DisplayMember = "Nombre"; // Lo que el usuario VE
+                CBCommentsOriginal.ValueMember = "Id";      // El dato que procesas por DETRÁS
+                CBCommentsOriginal.DataSource = listacomments.ToList();
+                CBCommentsOriginal.SelectedIndex = 0;
             }
             else
             {
-                CBPlanOriginal.Visible = false;
-                lblPlanOriginal.Visible = false;
+
                 PasswordFibra ps = new PasswordFibra();
                 ps.ShowDialog();
                 PassOriginal = ps.Password;
