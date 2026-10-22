@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,7 +19,8 @@ namespace Mikrotik_Administrador.Catalogos
     public partial class Extras : Form
     {
         public int IdUsuarioM { get; set; }
-        
+        public int IdResponsable {  get; set; }
+        public bool Ocultar { get; set; }
         public Extras()
         {
             InitializeComponent();
@@ -133,28 +135,43 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
-            DataGridViewButtonColumn btnStatus = new DataGridViewButtonColumn
+            if (Ocultar == false)
             {
-                Name = "btnStatus",
-                HeaderText = "Acción",
-                Text = "Cambiar Estatus",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
-            DGVExtras.Columns.Add(btnStatus);
-            DataGridViewButtonColumn btnModificar = new DataGridViewButtonColumn
-            {
-                Name = "btnModificar",
-                HeaderText = "Acción",
-                Text = "Modificar",
-                UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                FlatStyle = FlatStyle.Flat,
-                DefaultCellStyle = estiloBotones
-            };
-            DGVExtras.Columns.Add(btnModificar);
+
+                DataGridViewButtonColumn btnStatus = new DataGridViewButtonColumn
+                {
+                    Name = "btnStatus",
+                    HeaderText = "Acción",
+                    Text = "Cambiar Estatus",
+                    UseColumnTextForButtonValue = true,
+                    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = estiloBotones
+                };
+                DGVExtras.Columns.Add(btnStatus);
+                DataGridViewButtonColumn btnModificar = new DataGridViewButtonColumn
+                {
+                    Name = "btnModificar",
+                    HeaderText = "Acción",
+                    Text = "Modificar",
+                    UseColumnTextForButtonValue = true,
+                    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = estiloBotones
+                };
+                DGVExtras.Columns.Add(btnModificar);
+                DataGridViewButtonColumn btnHistorial = new DataGridViewButtonColumn
+                {
+                    Name = "btnHistorial",
+                    HeaderText = "Acción",
+                    Text = "Historial de pagos",
+                    UseColumnTextForButtonValue = true,
+                    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                    FlatStyle = FlatStyle.Flat,
+                    DefaultCellStyle = estiloBotones
+                };
+                DGVExtras.Columns.Add(btnHistorial);
+            }
             DGVExtras.AllowUserToAddRows = false;
         }
 
@@ -184,7 +201,24 @@ namespace Mikrotik_Administrador.Catalogos
                         ini.ShowDialog();
                         Buscar();
                         break;
-                   
+                    case "btnHistorial":
+                        AppRepository obj = new AppRepository();
+                        var Historial = obj.GetHistorialPagosExtras(Id, string.Empty, 0, 0).Result;
+                        decimal suma = Historial?.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad) ?? 0m;
+                        decimal Costo = (decimal)DGVExtras.Rows[e.RowIndex].Cells["Costo"].Value;
+                        HistorialPagos Hi = new HistorialPagos();
+                        Hi.IdExtra = Id;
+                        Hi.IdMensualidad = 0;
+                        Hi.Faltante = Costo - suma < 0 ? 0 : Costo - suma;
+                        Hi.Mensualidad = Costo;
+                        Hi.IdResponsable = IdResponsable;
+                        Hi.Cliente = "";
+                        Hi.IdUsuarioM = IdUsuarioM;
+                        Hi.UsuarioM = "";
+                        Hi.ShowDialog();
+                        Buscar();
+                        break;
+
                     default:
                         break;
                 }

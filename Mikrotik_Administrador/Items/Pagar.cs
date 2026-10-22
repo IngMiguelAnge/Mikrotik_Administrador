@@ -23,13 +23,14 @@ namespace Mikrotik_Administrador.Items
         public string Cliente { get; set; }
         public string UsuarioM { get; set; }
         public int IdUsuarioM { get; set; }
-        public decimal TotalFaltante { get; set; }        
+        public decimal TotalFaltante { get; set; }
         public int IdMensualidadRecibida { get; set; }
         private DateTime FechaCorte;
         private decimal MensualidadFinal;
         private decimal PagoOriginal;
         private decimal TotalExtra;
         List<ListMensualidadesModel> ListaPagos = new List<ListMensualidadesModel>();
+        public int IdExtra {  get; set; }
         public Pagar()
         {
             InitializeComponent();
@@ -80,8 +81,7 @@ namespace Mikrotik_Administrador.Items
         }
 
         private void Pagar_Load(object sender, EventArgs e)
-        {
-            BuscarExtras();
+        {           
             AppRepository obj = new AppRepository();
             var ListBancos = obj.GetBancosActivos().Result.OrderBy(x => x.Nombre).ToList();
             // Insertamos un objeto "fantasma" al inicio para el placeholder
@@ -93,93 +93,134 @@ namespace Mikrotik_Administrador.Items
             decimal TotalPagado = 0m;
             decimal TotalMensualidad = 0m;
             ListaPagos = new List<ListMensualidadesModel>();
+            BuscarExtras();
             if (IdHistorial == 0)
-            {
+            {               
                 CBBanco.SelectedIndex = 0;
-                //Saca el total por todas las mensualidades
-                List<MensualidadModel> ListaMensualidades = new List<MensualidadModel>();
-                ListaMensualidades = obj.GetFaltantesPagarbyIdUsuarioM(IdUsuarioM).Result.ToList();
-                if (IdMensualidadRecibida != 0)
+               if(IdExtra==0)
                 {
-                    ListaMensualidades = ListaMensualidades.Where(x => x.Id == IdMensualidadRecibida).ToList();
-                }
-                if (ListaMensualidades.Count() > 0)
-                {
-
-                    foreach (var item in ListaMensualidades)
+                    //Saca el total por todas las mensualidades
+                    List<MensualidadModel> ListaMensualidades = new List<MensualidadModel>();
+                    ListaMensualidades = obj.GetFaltantesPagarbyIdUsuarioM(IdUsuarioM).Result.ToList();
+                    if (IdMensualidadRecibida != 0)
                     {
-                        var Pagos = obj.GetHistorialPagos(item.Id, string.Empty, 0, 0);
-                        decimal TotalHistorial = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
-                        TotalMensualidad += item.Mensualidad ?? 0m;
-                        TotalPagado += TotalHistorial;
-                        TotalFaltante +=
-                        (item.Mensualidad ?? 0m) - TotalHistorial < 0 ? 0 :
-                        (item.Mensualidad ?? 0m) - TotalHistorial;
-                        ListaPagos.Add(new ListMensualidadesModel
-                        {
-                            Id = item.Id,
-                            DiaCorte = item.DiaCorte,
-                            FechaInicio = item.FechaInicio,
-                            FechaLimite = item.FechaLimite,
-                            Responsable = string.Empty,
-                            Mensualidad = item.Mensualidad ?? 0m,
-                            Recibido = TotalHistorial,
-                            Faltante = (item.Mensualidad ?? 0m) - TotalHistorial < 0 ? 0 :
-                           (item.Mensualidad ?? 0m) - TotalHistorial,
-                            Estatus = item.Estatus ? "Activo" : "Inactivo"
-                        });
+                        ListaMensualidades = ListaMensualidades.Where(x => x.Id == IdMensualidadRecibida).ToList();
                     }
-                    lblTotalMensualidades.Text = $"Total mensualidades: {TotalMensualidad:C}";
-                    lblTotalPagado.Text = $"Total pagado: {TotalPagado:C}";
-                    lblFaltante.Text = $"Total a pagar: {TotalFaltante + TotalExtra :C}";
+                    if (ListaMensualidades.Count() > 0)
+                    {
+
+                        foreach (var item in ListaMensualidades)
+                        {
+                            var Pagos = obj.GetHistorialPagos(item.Id, string.Empty, 0, 0);
+                            decimal TotalHistorial = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
+                            TotalMensualidad += item.Mensualidad ?? 0m;
+                            TotalPagado += TotalHistorial;
+                            TotalFaltante +=
+                            (item.Mensualidad ?? 0m) - TotalHistorial < 0 ? 0 :
+                            (item.Mensualidad ?? 0m) - TotalHistorial;
+                            ListaPagos.Add(new ListMensualidadesModel
+                            {
+                                Id = item.Id,
+                                DiaCorte = item.DiaCorte,
+                                FechaInicio = item.FechaInicio,
+                                FechaLimite = item.FechaLimite,
+                                Responsable = string.Empty,
+                                Mensualidad = item.Mensualidad ?? 0m,
+                                Recibido = TotalHistorial,
+                                Faltante = (item.Mensualidad ?? 0m) - TotalHistorial < 0 ? 0 :
+                               (item.Mensualidad ?? 0m) - TotalHistorial,
+                                Estatus = item.Estatus ? "Activo" : "Inactivo"
+                            });
+                        }
+                        lblTotalMensualidades.Text = $"Total mensualidades: {TotalMensualidad:C}";
+                        lblTotalPagado.Text = $"Total pagado: {TotalPagado:C}";
+                        lblFaltante.Text = $"Total a pagar: {TotalFaltante + TotalExtra:C}";
+                    }
+                    else
+                    {
+                        MessageBox.Show("No hay mensualidades pendientes de pago.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.Close();
+                        return;
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("No hay mensualidades pendientes de pago.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
-                    return;
+                    lblTotalMensualidades.Visible = false;
+                    lblTotalPagado.Visible = false;
+                    lblFaltante.Visible = false;
+                    if(TotalExtra <= 0)
+                    {
+                        MessageBox.Show("No hay costos extras pendientes de pago.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.Close();
+                        return;
+                    }
                 }
             }
             else
             {
-                //Solo nos interesa la mensualidad de ese pago
-                var Pago = obj.GetHistorialPagosById(IdHistorial).Result;
-                PagoOriginal = Pago.Cantidad;
-                var Pagos = obj.GetHistorialPagos(Pago.IdMensualidad, string.Empty, 0, 0);
-                TotalPagado = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
-                lblTotalPagado.Text = $"Total pagado: {TotalPagado:C}";
-                var Mensualidad = obj.GetMensualidadbyId(Pago.IdMensualidad).Result;
-                lblTotalMensualidades.Text = $"Total mensualidades: {Mensualidad.Mensualidad:C}";
-                TotalFaltante = (Mensualidad.Mensualidad ?? 0m) - TotalPagado < 0 ? 0 :
-                    (Mensualidad.Mensualidad ?? 0m) - TotalPagado;
-                lblFaltante.Text = $"Total a pagar: {TotalFaltante + TotalExtra:C}";
-                CBBanco.SelectedValue = Pago.IdBanco;
-                txtReferencia.Text = Pago.Referencia;
-                txtComentario.Text = Pago.Comentario;
-                if (Pago.Imagen != null && Pago.Imagen.Length > 0)
+                if(IdExtra == 0)
                 {
-                    using (MemoryStream ms = new MemoryStream(Pago.Imagen))
+                    var Pago = obj.GetHistorialPagosById(IdHistorial).Result;
+                    PagoOriginal = Pago.Cantidad;
+                    var Pagos = obj.GetHistorialPagos(Pago.IdMensualidad, string.Empty, 0, 0);
+                    TotalPagado = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
+                    lblTotalPagado.Text = $"Total pagado: {TotalPagado:C}";
+                    var Mensualidad = obj.GetMensualidadbyId(Pago.IdMensualidad).Result;
+                    lblTotalMensualidades.Text = $"Total mensualidades: {Mensualidad.Mensualidad:C}";
+                    TotalFaltante = (Mensualidad.Mensualidad ?? 0m) - TotalPagado < 0 ? 0 :
+                        (Mensualidad.Mensualidad ?? 0m) - TotalPagado;
+                    lblFaltante.Text = $"Total a pagar: {TotalFaltante + TotalExtra:C}";
+                    CBBanco.SelectedValue = Pago.IdBanco;
+                    txtReferencia.Text = Pago.Referencia;
+                    txtComentario.Text = Pago.Comentario;
+                    if (Pago.Imagen != null && Pago.Imagen.Length > 0)
                     {
-                        PBImagen.Image = new Bitmap(ms);
-                        PBImagen.SizeMode = PictureBoxSizeMode.Zoom;
+                        using (MemoryStream ms = new MemoryStream(Pago.Imagen))
+                        {
+                            PBImagen.Image = new Bitmap(ms);
+                            PBImagen.SizeMode = PictureBoxSizeMode.Zoom;
+                        }
                     }
+                    dtpFechaPago.Value = Pago.FechaRecibido;
+                    NUDCantidad.Value = Pago.Cantidad;
+                    NUDCantidad.Visible = true;
+                    lblCantidadRecibida.Visible = true;
+                    ListaPagos.Add(new ListMensualidadesModel
+                    {
+                        Id = Pago.IdMensualidad,
+                        DiaCorte = Mensualidad.DiaCorte,
+                        FechaInicio = Mensualidad.FechaInicio,
+                        FechaLimite = Mensualidad.FechaLimite,
+                        Responsable = string.Empty,
+                        Mensualidad = Mensualidad.Mensualidad ?? 0m,
+                        Recibido = TotalPagado,
+                        Faltante = TotalFaltante,
+                        Estatus = Mensualidad.Estatus ? "Activo" : "Inactivo"
+                    });
                 }
-                dtpFechaPago.Value = Pago.FechaRecibido;
-                NUDCantidad.Value = Pago.Cantidad;
-                NUDCantidad.Visible = true;
-                lblCantidadRecibida.Visible = true;
-                ListaPagos.Add(new ListMensualidadesModel
+                else
                 {
-                    Id = Pago.IdMensualidad,
-                    DiaCorte = Mensualidad.DiaCorte,
-                    FechaInicio = Mensualidad.FechaInicio,
-                    FechaLimite = Mensualidad.FechaLimite,
-                    Responsable = string.Empty,
-                    Mensualidad = Mensualidad.Mensualidad ?? 0m,
-                    Recibido = TotalPagado,
-                    Faltante = TotalFaltante,
-                    Estatus = Mensualidad.Estatus ? "Activo" : "Inactivo"
-                });
+                    lblTotalMensualidades.Visible = false;
+                    lblTotalPagado.Visible = false;
+                    lblFaltante.Visible = false;
+                    var Pago = obj.GetHistorialPagosExtrasById(IdHistorial).Result;
+                    PagoOriginal = Pago.Cantidad;
+                    CBBanco.SelectedValue = Pago.IdBanco;
+                    txtReferencia.Text = Pago.Referencia;
+                    txtComentario.Text = Pago.Comentario;
+                    if (Pago.Imagen != null && Pago.Imagen.Length > 0)
+                    {
+                        using (MemoryStream ms = new MemoryStream(Pago.Imagen))
+                        {
+                            PBImagen.Image = new Bitmap(ms);
+                            PBImagen.SizeMode = PictureBoxSizeMode.Zoom;
+                        }
+                    }
+                    dtpFechaPago.Value = Pago.FechaRecibido;
+                    NUDCantidad.Value = Pago.Cantidad;
+                    NUDCantidad.Visible = true;
+                    lblCantidadRecibida.Visible = true;
+                }
             }
         }
 
@@ -194,14 +235,23 @@ namespace Mikrotik_Administrador.Items
             decimal Recibido = 0;
             bool CubrirExtra = false;
             if (IdHistorial == 0)
-            {            
+            {    
                 ConfirmarPago confirmacion = new ConfirmarPago();
+                confirmacion.IsExtra = IdExtra ==0 ?false:true;
                 if (TotalExtra > 0)
                 {
-                    DialogResult resultado = MessageBox.Show("Se a detectado que tiene un cobro extra pendiente, ¿Quiere que primero, se cubra ese cobro?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (resultado == DialogResult.No)
+                    if(IdExtra == 0)
                     {
-                        confirmacion.Total = TotalFaltante;
+                        DialogResult resultado = MessageBox.Show("Se ha detectado que tiene un cobro extra pendiente, ¿Quiere que primero, se cubra ese cobro?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (resultado == DialogResult.No)
+                        {
+                            confirmacion.Total = TotalFaltante;
+                        }
+                        else
+                        {
+                            confirmacion.Total = TotalFaltante + TotalExtra;
+                            CubrirExtra = true;
+                        }
                     }
                     else
                     {
@@ -229,7 +279,7 @@ namespace Mikrotik_Administrador.Items
             {
                 if(CubrirExtra)
                 {
-                    var ListExtras = obj.GetCostoExtra(IdUsuarioM).Result;
+                    var ListExtras = obj.GetCostoExtra(IdUsuarioM,IdExtra).Result;
                     foreach (var Extra in ListExtras) 
                     {
                         if (Recibido == 0)
@@ -254,73 +304,77 @@ namespace Mikrotik_Administrador.Items
                         Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;                    
                     }
                 }
-                foreach (var item in ListaPagos)
+                if(IdExtra==0)
                 {
-                    if (Recibido == 0)
-                        break;
-                    HistorialPagosModel sv = new HistorialPagosModel
+                    foreach (var item in ListaPagos)
                     {
-                        Id = 0,
-                        FechaRecibido = dtpFechaPago.Value,
-                        Cantidad = Recibido - item.Faltante < 0 ? Recibido
-                        : item.Faltante,
-                        IdMensualidad = item.Id,
-                        Comentario = txtComentario.Text.Trim(),
-                        IdBanco = (int)CBBanco.SelectedValue,
-                        Referencia = txtReferencia.Text.Trim(),
-                        Imagen = ImageToByteArray(),
-                        IdUsuario = IdResponsable
-                    };
-                    var result = obj.SaveHistorialPagos(sv).Result;
-                    ListIdHistorial.Add(result);
-                    ExtraNota += "Mensualidad con fecha limite: " + item.FechaLimite.ToShortDateString()
-                        + " $" + sv.Cantidad.ToString() + Environment.NewLine;
-                    Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;
-               
-                }
-                if (Recibido > 0)
-                {
-                    var UltimaMensualidad = obj.GetUltimaMensualidadbyIdUsuarioM(IdUsuarioM).Result;
-                    while (Recibido > 0)
-                    {
-                        await CambiarFecha(UltimaMensualidad.DiaCorte, UltimaMensualidad.FechaLimite);
-                        if (MensualidadFinal == 0)
-                        {
-                            MessageBox.Show("No se logro calcular la mensualidad para el siguiente mes", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (Recibido == 0)
                             break;
-                        }
-                        MensualidadModel mensualidad = new MensualidadModel
-                        {
-                            Id = 0,
-                            Pagado = false,//No importa si pones true internamente se calculara
-                            IdUsuarioM = IdUsuarioM,
-                            DiaCorte = UltimaMensualidad.DiaCorte,
-                            FechaInicio = UltimaMensualidad.FechaLimite,
-                            FechaLimite = FechaCorte,
-                            IdUsuario = IdResponsable,
-                            Mensualidad = MensualidadFinal,
-                        };
-                        var result = obj.SaveMensualidad(mensualidad).Result;
                         HistorialPagosModel sv = new HistorialPagosModel
                         {
                             Id = 0,
                             FechaRecibido = dtpFechaPago.Value,
-                            Cantidad = Recibido - MensualidadFinal < 0 ? Recibido
-                            : MensualidadFinal,
-                            IdMensualidad = result,
+                            Cantidad = Recibido - item.Faltante < 0 ? Recibido
+                            : item.Faltante,
+                            IdMensualidad = item.Id,
                             Comentario = txtComentario.Text.Trim(),
                             IdBanco = (int)CBBanco.SelectedValue,
                             Referencia = txtReferencia.Text.Trim(),
                             Imagen = ImageToByteArray(),
                             IdUsuario = IdResponsable
                         };
-                        var result2 = obj.SaveHistorialPagos(sv).Result;
-                        ListIdHistorial.Add(result2);
-                        ExtraNota += "Mensualidad con fecha limite: " + mensualidad.FechaLimite.ToShortDateString()
-                        + " $" + sv.Cantidad.ToString() + Environment.NewLine;
+                        var result = obj.SaveHistorialPagos(sv).Result;
+                        ListIdHistorial.Add(result);
+                        ExtraNota += "Mensualidad con fecha limite: " + item.FechaLimite.ToShortDateString()
+                            + " $" + sv.Cantidad.ToString() + Environment.NewLine;
                         Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;
+
+                    }
+                    if (Recibido > 0)
+                    {
+                        var UltimaMensualidad = obj.GetUltimaMensualidadbyIdUsuarioM(IdUsuarioM).Result;
+                        while (Recibido > 0)
+                        {
+                            await CambiarFecha(UltimaMensualidad.DiaCorte, UltimaMensualidad.FechaLimite);
+                            if (MensualidadFinal == 0)
+                            {
+                                MessageBox.Show("No se logro calcular la mensualidad para el siguiente mes", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                break;
+                            }
+                            MensualidadModel mensualidad = new MensualidadModel
+                            {
+                                Id = 0,
+                                Pagado = false,//No importa si pones true internamente se calculara
+                                IdUsuarioM = IdUsuarioM,
+                                DiaCorte = UltimaMensualidad.DiaCorte,
+                                FechaInicio = UltimaMensualidad.FechaLimite,
+                                FechaLimite = FechaCorte,
+                                IdUsuario = IdResponsable,
+                                Mensualidad = MensualidadFinal,
+                            };
+                            var result = obj.SaveMensualidad(mensualidad).Result;
+                            HistorialPagosModel sv = new HistorialPagosModel
+                            {
+                                Id = 0,
+                                FechaRecibido = dtpFechaPago.Value,
+                                Cantidad = Recibido - MensualidadFinal < 0 ? Recibido
+                                : MensualidadFinal,
+                                IdMensualidad = result,
+                                Comentario = txtComentario.Text.Trim(),
+                                IdBanco = (int)CBBanco.SelectedValue,
+                                Referencia = txtReferencia.Text.Trim(),
+                                Imagen = ImageToByteArray(),
+                                IdUsuario = IdResponsable
+                            };
+                            var result2 = obj.SaveHistorialPagos(sv).Result;
+                            ListIdHistorial.Add(result2);
+                            ExtraNota += "Mensualidad con fecha limite: " + mensualidad.FechaLimite.ToShortDateString()
+                            + " $" + sv.Cantidad.ToString() + Environment.NewLine;
+                            Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;
+                        }
                     }
                 }
+               
             }
             else
             {
@@ -328,46 +382,96 @@ namespace Mikrotik_Administrador.Items
                 {
                     if (PagoOriginal < Recibido)
                     {
-                        bool Revasototal = ListaPagos.First().Recibido + (Recibido - PagoOriginal) >
-                              ListaPagos.First().Faltante ? true : false;
-                        if (Revasototal)
+                        if(IdExtra  == 0)
                         {
-                            MessageBox.Show("No se puede agregar una cantidad mayor a lo que falta por pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
+                            bool Revasototal = ListaPagos.First().Recibido + (Recibido - PagoOriginal) >
+                              ListaPagos.First().Faltante ? true : false;
+                            if (Revasototal)
+                            {
+                                MessageBox.Show("No se puede agregar una cantidad mayor a lo que falta por pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            bool Revasototal = TotalExtra - (Recibido - PagoOriginal) <
+                             0 ? true : false;
+                            if (Revasototal)
+                            {
+                                MessageBox.Show("No se puede agregar una cantidad mayor a lo que falta por pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
                         }
                     }
-                    HistorialPagosModel sv = new HistorialPagosModel
+                    if (IdExtra == 0)
                     {
-                        Id = IdHistorial,
-                        FechaRecibido = dtpFechaPago.Value,
-                        Cantidad = NUDCantidad.Value,
-                        IdMensualidad = ListaPagos.FirstOrDefault().Id,
-                        Comentario = txtComentario.Text.Trim(),
-                        IdBanco = (int)CBBanco.SelectedValue,
-                        Referencia = txtReferencia.Text.Trim(),
-                        Imagen = ImageToByteArray(),
-                        IdUsuario = IdResponsable
-                    };
-                    var result = obj.SaveHistorialPagos(sv).Result;
+                        HistorialPagosModel sv = new HistorialPagosModel
+                        {
+                            Id = IdHistorial,
+                            FechaRecibido = dtpFechaPago.Value,
+                            Cantidad = NUDCantidad.Value,
+                            IdMensualidad = ListaPagos.FirstOrDefault().Id,
+                            Comentario = txtComentario.Text.Trim(),
+                            IdBanco = (int)CBBanco.SelectedValue,
+                            Referencia = txtReferencia.Text.Trim(),
+                            Imagen = ImageToByteArray(),
+                            IdUsuario = IdResponsable
+                        };
+                        var result = obj.SaveHistorialPagos(sv).Result;
+                    }
+                    else
+                    {
+                        HistorialPagosExtrasModel sv = new HistorialPagosExtrasModel
+                        {
+                            Id = IdHistorial,
+                            FechaRecibido = dtpFechaPago.Value,
+                            Cantidad = NUDCantidad.Value,
+                            IdExtra = IdExtra,
+                            Comentario = txtComentario.Text.Trim(),
+                            IdBanco = (int)CBBanco.SelectedValue,
+                            Referencia = txtReferencia.Text.Trim(),
+                            Imagen = ImageToByteArray(),
+                            IdUsuario = IdResponsable
+                        };
+                        var result = obj.SaveHistorialPagosExtras(sv).Result;
+                    }
                     ExtraNota = string.Empty;
                 }
                 else
                 {
-                    ListIdHistorial.Add(IdHistorial);
-                    HistorialPagosModel sv = new HistorialPagosModel
+                    if(IdExtra== 0)
                     {
-                        Id = IdHistorial,
-                        FechaRecibido = dtpFechaPago.Value,
-                        Cantidad = NUDCantidad.Value,
-                        IdMensualidad = IdMensualidadRecibida,
-                        Comentario = txtComentario.Text.Trim(),
-                        IdBanco = (int)CBBanco.SelectedValue,
-                        Referencia = txtReferencia.Text.Trim(),
-                        Imagen = ImageToByteArray(),
-                        IdUsuario = IdResponsable
-                    };
-                    int res = obj.SaveHistorialPagos(sv).Result;
-                    ExtraNota = string.Empty;
+                        HistorialPagosModel sv = new HistorialPagosModel
+                        {
+                            Id = IdHistorial,
+                            FechaRecibido = dtpFechaPago.Value,
+                            Cantidad = NUDCantidad.Value,
+                            IdMensualidad = IdMensualidadRecibida,
+                            Comentario = txtComentario.Text.Trim(),
+                            IdBanco = (int)CBBanco.SelectedValue,
+                            Referencia = txtReferencia.Text.Trim(),
+                            Imagen = ImageToByteArray(),
+                            IdUsuario = IdResponsable
+                        };
+                        int res = obj.SaveHistorialPagos(sv).Result;
+                    }
+                    else
+                    {
+                        HistorialPagosExtrasModel sv = new HistorialPagosExtrasModel
+                        {
+                            Id = IdHistorial,
+                            FechaRecibido = dtpFechaPago.Value,
+                            Cantidad = NUDCantidad.Value,
+                            IdExtra = IdExtra,
+                            Comentario = txtComentario.Text.Trim(),
+                            IdBanco = (int)CBBanco.SelectedValue,
+                            Referencia = txtReferencia.Text.Trim(),
+                            Imagen = ImageToByteArray(),
+                            IdUsuario = IdResponsable
+                        };
+                        int res = obj.SaveHistorialPagosExtras(sv).Result;
+                    }
+                        ExtraNota = string.Empty;
                 }
             }
 
@@ -692,13 +796,15 @@ namespace Mikrotik_Administrador.Items
         {
             Extras ext = new Extras();
             ext.IdUsuarioM = IdUsuarioM;
+            ext.IdResponsable = IdResponsable;
+            ext.Ocultar = true;
             ext.ShowDialog();
             BuscarExtras();
         }
         public void BuscarExtras()
         {
             AppRepository obj = new AppRepository();
-            var ListExtras = obj.GetCostoExtra(IdUsuarioM).Result;
+            var ListExtras = obj.GetCostoExtra(IdUsuarioM, IdExtra).Result;
             lblTotalExtra.Text = ListExtras != null ?
                 "Total extra a pagar: $" + ListExtras.Sum(x => x.Costo) :
                "Total extra a pagar: $0.00";

@@ -35,7 +35,7 @@
             this.panelTop = new System.Windows.Forms.Panel();
             this.btnExtras = new System.Windows.Forms.Button();
             this.lblCostoExtra = new System.Windows.Forms.Label();
-            this.btnVerProrroga = new System.Windows.Forms.Button();
+            this.btnVerProrrogas = new System.Windows.Forms.Button();
             this.lblFechaProrroga = new System.Windows.Forms.Label();
             this.lblProrroga = new System.Windows.Forms.Label();
             this.btnPagar = new System.Windows.Forms.Button();
@@ -103,7 +103,7 @@
             this.panelTop.BackColor = System.Drawing.Color.White;
             this.panelTop.Controls.Add(this.btnExtras);
             this.panelTop.Controls.Add(this.lblCostoExtra);
-            this.panelTop.Controls.Add(this.btnVerProrroga);
+            this.panelTop.Controls.Add(this.btnVerProrrogas);
             this.panelTop.Controls.Add(this.lblFechaProrroga);
             this.panelTop.Controls.Add(this.lblProrroga);
             this.panelTop.Controls.Add(this.btnPagar);
@@ -140,19 +140,19 @@
             this.lblCostoExtra.TabIndex = 13;
             this.lblCostoExtra.Text = "Costoextra:";
             // 
-            // btnVerProrroga
+            // btnVerProrrogas
             // 
-            this.btnVerProrroga.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
-            this.btnVerProrroga.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVerProrroga.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.btnVerProrroga.ForeColor = System.Drawing.Color.White;
-            this.btnVerProrroga.Location = new System.Drawing.Point(465, 33);
-            this.btnVerProrroga.Name = "btnVerProrroga";
-            this.btnVerProrroga.Size = new System.Drawing.Size(145, 38);
-            this.btnVerProrroga.TabIndex = 12;
-            this.btnVerProrroga.Text = "Ver prorrogas";
-            this.btnVerProrroga.UseVisualStyleBackColor = false;
-            this.btnVerProrroga.Click += new System.EventHandler(this.btnVerProrroga_Click);
+            this.btnVerProrrogas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnVerProrrogas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVerProrrogas.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnVerProrrogas.ForeColor = System.Drawing.Color.White;
+            this.btnVerProrrogas.Location = new System.Drawing.Point(465, 33);
+            this.btnVerProrrogas.Name = "btnVerProrrogas";
+            this.btnVerProrrogas.Size = new System.Drawing.Size(145, 38);
+            this.btnVerProrrogas.TabIndex = 12;
+            this.btnVerProrrogas.Text = "Ver prorrogas";
+            this.btnVerProrrogas.UseVisualStyleBackColor = false;
+            this.btnVerProrrogas.Click += new System.EventHandler(this.btnVerProrrogas_Click);
             // 
             // lblFechaProrroga
             // 
@@ -247,7 +247,7 @@
         private System.Windows.Forms.Button btnNuevo;
         private System.Windows.Forms.Button btnPagar;
         private System.Windows.Forms.Label lblProrroga;
-        private System.Windows.Forms.Button btnVerProrroga;
+        private System.Windows.Forms.Button btnVerProrrogas;
         private System.Windows.Forms.Label lblFechaProrroga;
         private System.Windows.Forms.Button btnExtras;
         private System.Windows.Forms.Label lblCostoExtra;

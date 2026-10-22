@@ -17,6 +17,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class HistorialPagos : Form
     {
+        public int IdExtra { get; set; }
         public int IdMensualidad { get; set; }
         public decimal Faltante { get; set; }
         public decimal Mensualidad { get; set; }
@@ -55,9 +56,18 @@ namespace Mikrotik_Administrador.Catalogos
             AppRepository obj = new AppRepository();
             try
             {
-                var Pagos = await obj.GetHistorialPagos(IdMensualidad, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
-                var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosModel>();
-                dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
+                if(IdExtra == 0)
+                {
+                    var Pagos = await obj.GetHistorialPagos(IdMensualidad, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
+                    var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosModel>();
+                    dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
+                }
+                else
+                {
+                    var Pagos = await obj.GetHistorialPagosExtras(IdExtra, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
+                    var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosExtrasModel>();
+                    dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosExtrasModel>(listaFinal);
+                }
             }
             catch (Exception ex)
             {
@@ -196,12 +206,15 @@ namespace Mikrotik_Administrador.Catalogos
                         }
 
                         AppRepository obj = new AppRepository();
-                        await obj.UpdateEstatusHistorialPagos(Id);
+                        bool IsExtra = IdExtra == 0 ? false : true;
+                        await obj.UpdateEstatusHistorialPagos(Id, IsExtra);
+                        
                         CalcularFaltante();
                         Buscar();
                         break;
                     case "btnEditar":
                         Pagar iniP = new Pagar();
+                        iniP.IdExtra = IdExtra;
                         iniP.IdHistorial = Id;
                         iniP.IdMensualidadRecibida = IdMensualidad;
                         iniP.IdResponsable = IdResponsable;
@@ -234,6 +247,7 @@ namespace Mikrotik_Administrador.Catalogos
                 return;
             }
             Pagar iniP = new Pagar();
+            iniP.IdExtra = IdExtra;
             iniP.IdHistorial = 0;
             iniP.IdMensualidadRecibida = IdMensualidad;
             iniP.IdResponsable = IdResponsable;
@@ -247,21 +261,35 @@ namespace Mikrotik_Administrador.Catalogos
         public void CalcularFaltante()
         {
             AppRepository obj = new AppRepository();
-            var Mensualidadfaltantes = obj.GetFaltantesPagarbyIdUsuarioM(IdUsuarioM).Result.ToList();
-            if (IdMensualidad != 0)
+            if (IdExtra == 0)
             {
-                Mensualidadfaltantes = Mensualidadfaltantes.Where(x => x.Id == IdMensualidad).ToList();
-            }
-            if (Mensualidadfaltantes.ToList().Count > 0)
-            {
-                var Pagos = obj.GetHistorialPagos(Mensualidadfaltantes.First().Id, string.Empty, 0, 0);
-                decimal TotalHistorial = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
-                Faltante = Mensualidadfaltantes.Count() <= 0 ? 0 :
-                 (Mensualidadfaltantes.First().Mensualidad ?? 0m) - TotalHistorial;
+                var Mensualidadfaltantes = obj.GetFaltantesPagarbyIdUsuarioM(IdUsuarioM).Result.ToList();
+                if (IdMensualidad != 0)
+                {
+                    Mensualidadfaltantes = Mensualidadfaltantes.Where(x => x.Id == IdMensualidad).ToList();
+                }
+                Faltante = 0;
+                foreach (var item in Mensualidadfaltantes)
+                {
+                    var Pagos = obj.GetHistorialPagos(item.Id, string.Empty, 0, 0);
+                    decimal TotalHistorial = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
+                    Faltante += (item.Mensualidad ?? 0m) - TotalHistorial;
+                }
             }
             else
             {
+                var Extrasfaltantes = obj.GetExtrasbyIdUsuarioM(IdUsuarioM).Result.ToList();
+                if (IdMensualidad != 0)
+                {
+                    Extrasfaltantes = Extrasfaltantes.Where(x => x.Id == IdMensualidad).ToList();
+                }
                 Faltante = 0;
+                foreach (var item in Extrasfaltantes)
+                {
+                    var Pagos = obj.GetHistorialPagosExtras(item.Id, string.Empty, 0, 0);
+                    decimal TotalHistorial = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
+                    Faltante += item.Costo - TotalHistorial;
+                }
             }
         }
 

@@ -35,7 +35,7 @@ namespace Mikrotik_Administrador.Catalogos
         public void BuscarExtras()
         {
             AppRepository obj = new AppRepository();
-            var ListExtras = obj.GetCostoExtra(IdUsuarioM).Result;
+            var ListExtras = obj.GetCostoExtra(IdUsuarioM,0).Result;
             lblCostoExtra.Text = ListExtras != null ?
                 "Se tiene un costo extra de $" + ListExtras.Sum(x => x.Costo) :
                "Se tiene un costo extra de $0.00";
@@ -272,6 +272,7 @@ namespace Mikrotik_Administrador.Catalogos
                         break;
                     case "btnHistorial":
                         HistorialPagos Hi = new HistorialPagos();
+                        Hi.IdExtra = 0;
                         Hi.IdMensualidad = (int)dgvMensualidades.Rows[e.RowIndex].Cells["Id"].Value;
                         Hi.Faltante = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Faltante"].Value;
                         Hi.Mensualidad = (decimal)dgvMensualidades.Rows[e.RowIndex].Cells["Mensualidad"].Value;
@@ -317,6 +318,7 @@ namespace Mikrotik_Administrador.Catalogos
                 return;
             }
             Pagar iniP = new Pagar();
+            iniP.IdExtra = 0;
             iniP.IdHistorial = 0;
             iniP.IdMensualidadRecibida = 0;
             iniP.IdResponsable = IdResponsable;
@@ -328,7 +330,7 @@ namespace Mikrotik_Administrador.Catalogos
             Buscar();
         }
 
-        private void btnVerProrroga_Click(object sender, EventArgs e)
+        private void btnVerProrrogas_Click(object sender, EventArgs e)
         {
             Prorrogas pr = new Prorrogas();
             pr.IdUsuarioM = IdUsuarioM;
@@ -339,7 +341,9 @@ namespace Mikrotik_Administrador.Catalogos
         private void btnExtras_Click(object sender, EventArgs e)
         {
             Extras ext = new Extras();
+            ext.IdResponsable = IdResponsable;
             ext.IdUsuarioM = IdUsuarioM;
+            ext.Ocultar = false;
             ext.ShowDialog();
             BuscarExtras();
         }

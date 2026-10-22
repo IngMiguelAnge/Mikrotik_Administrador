@@ -302,6 +302,8 @@ namespace Mikrotik_Administrador
                 case "btnExtras":
                     Extras ext = new Extras();
                     ext.IdUsuarioM = Id;
+                    ext.IdResponsable = IdResponsable;
+                    ext.Ocultar = false;
                     ext.ShowDialog();
                     break;
                 case "btnCommentPass":

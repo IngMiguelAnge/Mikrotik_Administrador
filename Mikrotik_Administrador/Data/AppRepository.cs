@@ -22,7 +22,7 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region Extras
-        public async Task<List<ExtrasModel>> GetCostoExtra(int IdUsuarioM)
+        public async Task<List<ExtrasModel>> GetCostoExtra(int IdUsuarioM, int IdExtra)
         {
             List<ExtrasModel> list = new List<ExtrasModel>();
             try
@@ -33,6 +33,8 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@IdExtra", IdExtra));
+
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -1040,6 +1042,52 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
+        public async Task<HistorialPagosExtrasModel> GetHistorialPagosExtrasById(int Id)
+        {
+            HistorialPagosExtrasModel obj = new HistorialPagosExtrasModel();
+            List<HistorialPagosExtrasModel> list = new List<HistorialPagosExtrasModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetHistorialPagosExtrasById", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToHistorialPagosExtras(reader));
+                            }
+                            obj = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return obj;
+        }
+        private HistorialPagosExtrasModel MapToHistorialPagosExtras(SqlDataReader reader)
+        {
+            return new HistorialPagosExtrasModel()
+            {
+                Id = (int)reader["Id"],
+                FechaRecibido = (DateTime)reader["FechaRecibido"],
+                Cantidad = (decimal)reader["Cantidad"],
+                Comentario = (string)reader["Comentario"],
+                IdBanco = (int)reader["IdBanco"],
+                Referencia = (string)reader["Referencia"],
+                Imagen = Convert.IsDBNull(reader["Imagen"]) ? null : (byte[])reader["Imagen"],
+                IdExtra = (int)reader["IdExtra"],
+                IdUsuario = (int)reader["IdUsuario"],
+            };
+        }
+
         public async Task<HistorialPagosModel> GetHistorialPagosById(int Id)
         {
             HistorialPagosModel obj = new HistorialPagosModel();
@@ -1201,7 +1249,7 @@ namespace Mikrotik_Administrador.Data
             }
         }
 
-        public async Task<bool> UpdateEstatusHistorialPagos(int Id)
+        public async Task<bool> UpdateEstatusHistorialPagos(int Id, bool IsExtra)
         {
             try
             {
@@ -1211,6 +1259,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@IsExtra", IsExtra));
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         return true;
