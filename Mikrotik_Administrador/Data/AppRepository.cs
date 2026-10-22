@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Microsoft.Data.SqlClient;
 using Mikrotik_Administrador.Catalogos;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,86 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region Instalacion
+        public async Task<int> SaveInstalacion(InstalacionModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveInstalacion", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
+                        cmd.Parameters.Add(new SqlParameter("@Caja", obj.Caja));
+                        cmd.Parameters.Add(new SqlParameter("@Spliter", obj.Spliter));
+                        cmd.Parameters.Add(new SqlParameter("@Puerto", obj.Puerto));
+                        cmd.Parameters.Add(new SqlParameter("@Puerto_Interno", obj.Puerto_Interno));
+                        cmd.Parameters.Add(new SqlParameter("@Fecha_Instalacion", obj.Fecha_Instalacion));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        public async Task<InstalacionModel> GetInstalacionbyIdUsuarioM(int IdUsuarioM)
+        {
+            InstalacionModel Result = new InstalacionModel();
+            List<InstalacionModel> list = new List<InstalacionModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetInstalacionbyIdUsuarioM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToInstalacion(reader));
+                            }
+                            Result = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return Result;
+        }
+        private InstalacionModel MapToInstalacion(SqlDataReader reader)
+        {
+            return new InstalacionModel()
+            {
+                Id = (int)reader["Id"],
+                IdUsuarioM = (int)reader["IdUsuarioM"],
+                Puerto = (int)reader["Puerto"],
+                Caja = (string)reader["Caja"],
+                Spliter = (string)reader["Spliter"],
+                Puerto_Interno = (int)reader["Puerto_Interno"],
+                IdUsuario = (int)reader["IdUsuario"],
+                Fecha_Instalacion = (DateTime)reader["Fecha_Instalacion"],
+            };
+        }
+        #endregion
         #region Extras
         public async Task<List<ExtrasModel>> GetCostoExtra(int IdUsuarioM, int IdExtra)
         {
@@ -73,7 +154,6 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-
         public async Task<int> SaveExtras(ExtrasModel obj)
         {
             try
