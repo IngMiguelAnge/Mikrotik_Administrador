@@ -480,6 +480,8 @@
     <Compile Include="Model\HistorialPagosExtrasModel.cs" />
     <Compile Include="Model\ListClientesDescargaModel.cs" />
     <Compile Include="Model\ExtrasModel.cs" />
+    <Compile Include="Model\DeudoresModel.cs" />
+    <Compile Include="Model\DeudaModel.cs" />
     <Compile Include="Model\ListHistorialPagosExtrasModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />
     <Compile Include="Model\ListProrrogasModel.cs" />
