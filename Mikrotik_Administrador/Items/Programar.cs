@@ -15,6 +15,7 @@ namespace Mikrotik_Administrador.Items
     {
         public List<ListCommentsModel> listComments { get; set; }
         public string SePrograma {  get; set; }
+        public string Excel { get; set; } = string.Empty;
         public Programar()
         {
             InitializeComponent();
@@ -30,10 +31,15 @@ namespace Mikrotik_Administrador.Items
                 CBAccion.DisplayMember = "Nombre"; // Lo que el usuario VE
                 CBAccion.ValueMember = "Id";      // El dato que procesas por DETRÁS
                 CBAccion.DataSource = listComments.ToList();
-                CBAccion.SelectedIndex = 0;
             }
-            else
-                CBAccion.SelectedIndex = 0;
+            if (Excel != string.Empty)
+            {
+                CBAccion.Items.Clear();
+                CBAccion.Items.Add("Seleccione");
+                CBAccion.Items.Add("Mensualidades");
+                CBAccion.Items.Add("Deudores");
+            }
+            CBAccion.SelectedIndex = 0;
         }
 
         private void btnContinuar_Click(object sender, EventArgs e)

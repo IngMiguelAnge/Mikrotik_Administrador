@@ -10,5 +10,9 @@ namespace Mikrotik_Administrador.Model
         public DateTime? Fecha_Entregado {  get; set; }
         public string Estatus { get; set; }
         public int IdUsuarioM { get; set; }
+        public int IdUsuarioRecibe { get; set; }
+        public int? IdUsuarioRepara { get; set; }
+        public int? IdUsuarioEntrega { get; set; }
+        public string Nota { get; set; }
     }
 }

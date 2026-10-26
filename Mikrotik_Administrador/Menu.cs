@@ -1,5 +1,6 @@
 ﻿using Mikrotik_Administrador.Catalogos;
 using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace Mikrotik_Administrador
             UsuariosSistema us = new UsuariosSistema();
             us.Show();
         }
-        
+
         private void btnSubMikrotiks_Click(object sender, EventArgs e)
         {
             OcultarSubMenuConfiguracion();
@@ -201,7 +202,7 @@ namespace Mikrotik_Administrador
         {
             Application.Exit();
         }
-      
+
         private void btnMikrotiks_Click(object sender, EventArgs e)
         {
             Mikrotiks m = new Mikrotiks();
@@ -274,18 +275,18 @@ namespace Mikrotik_Administrador
             if (IdTipoUsuario != 1) //1:Administrador
             {
                 grpConfiguracion.Visible = false;
-                grpSistemaOut.Visible= false;
+                grpSistemaOut.Visible = false;
                 grpHistoriales.Visible = false;
                 btnSideConfiguracion.Visible = false;
                 btnSideOut.Visible = false;
                 btnSideHistoriales.Visible = false;
                 return;
             }
-               
+
             AppRepository obj = new AppRepository();
             var lista = await Task.Run(() => obj.GetHistorialMovimientosUrgentes());
             var listaFinal = lista?.ToList() ?? new List<ListHistorialMovimientosModel>();
-            if(listaFinal.Count() > 0)
+            if (listaFinal.Count() > 0)
             {
                 MessageBox.Show("Se encontraron situaciónes urgentes a revisar, favor de ir a historial y pulsar en el boton de urgentes.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -297,15 +298,23 @@ namespace Mikrotik_Administrador
             us.Show();
         }
 
-        private void btncerrar_Click(object sender, EventArgs e)
-        {
-          
-        }
-
         private void btnExcel_Click(object sender, EventArgs e)
         {
-            MensualidadesMultiples mm = new MensualidadesMultiples();
-            mm.Show();
+            Programar pr = new Programar();
+            pr.Excel = "Buscar";
+            if (pr.ShowDialog() == DialogResult.OK)
+            {
+                if (pr.SePrograma == "Mensualidades")
+                {
+                    MensualidadesMultiples mm = new MensualidadesMultiples();
+                    mm.Show();
+                }
+                else
+                {
+                    DeudoresMultiples dm = new DeudoresMultiples();
+                    dm.Show();
+                }
+            }
         }
 
         private void btnSideSalir_Click(object sender, EventArgs e)

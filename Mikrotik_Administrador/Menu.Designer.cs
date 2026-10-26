@@ -796,7 +796,7 @@ namespace Mikrotik_Administrador
             this.grpHistoriales.Location = new System.Drawing.Point(23, 431);
             this.grpHistoriales.Margin = new System.Windows.Forms.Padding(3, 3, 3, 15);
             this.grpHistoriales.Name = "grpHistoriales";
-            this.grpHistoriales.Size = new System.Drawing.Size(430, 119);
+            this.grpHistoriales.Size = new System.Drawing.Size(416, 119);
             this.grpHistoriales.TabIndex = 3;
             this.grpHistoriales.TabStop = false;
             this.grpHistoriales.Text = "Historiales";
@@ -810,7 +810,7 @@ namespace Mikrotik_Administrador
             this.flowHistoriales.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowHistoriales.Location = new System.Drawing.Point(3, 33);
             this.flowHistoriales.Name = "flowHistoriales";
-            this.flowHistoriales.Size = new System.Drawing.Size(424, 83);
+            this.flowHistoriales.Size = new System.Drawing.Size(410, 83);
             this.flowHistoriales.TabIndex = 0;
             // 
             // btnCambios
@@ -868,7 +868,7 @@ namespace Mikrotik_Administrador
             this.btnExcel.Location = new System.Drawing.Point(309, 8);
             this.btnExcel.Margin = new System.Windows.Forms.Padding(8);
             this.btnExcel.Name = "btnExcel";
-            this.btnExcel.Size = new System.Drawing.Size(107, 62);
+            this.btnExcel.Size = new System.Drawing.Size(93, 62);
             this.btnExcel.TabIndex = 2;
             this.btnExcel.Text = "Excel";
             this.btnExcel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;

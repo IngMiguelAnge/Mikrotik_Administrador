@@ -334,7 +334,13 @@
     <Compile Include="Catalogos\Prorrogas.Designer.cs">
       <DependentUpon>Prorrogas.cs</DependentUpon>
     </Compile>
-    <Compile Include="Items\InstalacionModel.cs" />
+    <Compile Include="Items\DeudoresMultiples.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\DeudoresMultiples.Designer.cs">
+      <DependentUpon>DeudoresMultiples.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\InstalacionModel.cs" />
     <Compile Include="Items\Mapa.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -646,6 +652,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Items\ConfirmarPago.resx">
       <DependentUpon>ConfirmarPago.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\DeudoresMultiples.resx">
+      <DependentUpon>DeudoresMultiples.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\IniciarPagos.resx">
       <DependentUpon>IniciarPagos.cs</DependentUpon>
