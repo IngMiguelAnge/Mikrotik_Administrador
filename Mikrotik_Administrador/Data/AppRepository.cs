@@ -1,4 +1,5 @@
 ﻿using Azure;
+using GMap.NET.MapProviders;
 using Microsoft.Data.SqlClient;
 using Mikrotik_Administrador.Catalogos;
 using Mikrotik_Administrador.Items;
@@ -537,6 +538,35 @@ namespace Mikrotik_Administrador.Data
             {
             }
             return list;
+        }
+        public async Task<ListUsuariosModel> GetUsuariosbyId(int Id)
+        {
+            ListUsuariosModel result = new ListUsuariosModel();
+            List<ListUsuariosModel> list = new List<ListUsuariosModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUsuariosbyId", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListUsuarios(reader));
+                            }
+                            result = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return result;
         }
         private ListUsuariosModel MapToListUsuarios(SqlDataReader reader)
         {

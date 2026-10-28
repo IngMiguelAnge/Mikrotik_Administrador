@@ -38,6 +38,7 @@ namespace Mikrotik_Administrador.Items
                 CBAccion.Items.Add("Seleccione");
                 CBAccion.Items.Add("Mensualidades");
                 CBAccion.Items.Add("Deudores");
+                CBAccion.Items.Add("Cajas");
             }
             CBAccion.SelectedIndex = 0;
         }

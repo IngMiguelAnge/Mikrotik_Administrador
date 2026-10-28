@@ -334,6 +334,12 @@
     <Compile Include="Catalogos\Prorrogas.Designer.cs">
       <DependentUpon>Prorrogas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Items\Cajas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\Cajas.Designer.cs">
+      <DependentUpon>Cajas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Items\DeudoresMultiples.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -483,6 +489,7 @@
     <Compile Include="Model\DeudoresModel.cs" />
     <Compile Include="Model\DeudaModel.cs" />
     <Compile Include="Model\ListHistorialPagosExtrasModel.cs" />
+    <Compile Include="Model\ListInstalacionesModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />
     <Compile Include="Model\ListProrrogasModel.cs" />
     <Compile Include="Model\ListTiposUsuarioModel.cs" />
@@ -651,6 +658,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\UsuariosSistema.resx">
       <DependentUpon>UsuariosSistema.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\Cajas.resx">
+      <DependentUpon>Cajas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\ConfirmarPago.resx">
       <DependentUpon>ConfirmarPago.cs</DependentUpon>

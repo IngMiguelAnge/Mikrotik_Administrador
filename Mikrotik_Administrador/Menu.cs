@@ -304,15 +304,20 @@ namespace Mikrotik_Administrador
             pr.Excel = "Buscar";
             if (pr.ShowDialog() == DialogResult.OK)
             {
-                if (pr.SePrograma == "Mensualidades")
+                switch (pr.SePrograma)
                 {
-                    MensualidadesMultiples mm = new MensualidadesMultiples();
-                    mm.Show();
-                }
-                else
-                {
-                    DeudoresMultiples dm = new DeudoresMultiples();
-                    dm.Show();
+                    case "Mensualidades":
+                        MensualidadesMultiples mm = new MensualidadesMultiples();
+                        mm.Show();
+                        break;
+                    case "Deudores":
+                        DeudoresMultiples dm = new DeudoresMultiples();
+                        dm.Show();
+                        break;
+                    case "Cajas":
+                        Cajas cj = new Cajas();
+                        cj.Show();
+                        break;
                 }
             }
         }

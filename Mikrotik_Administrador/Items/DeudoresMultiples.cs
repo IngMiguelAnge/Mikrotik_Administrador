@@ -382,7 +382,7 @@ namespace Mikrotik_Administrador.Items
                             // ==============================================================
                             // HOJA 1: CAMBIOS Y SUSPENSIONES (Aparecerá primero)
                             // ==============================================================
-                            var wsCambios = workbook.Worksheets.Add("Cambios");
+                            var wsCambios = workbook.Worksheets.Add("DEUDORES");
 
                             // Encabezados
                             wsCambios.Cell(1, 1).Value = "CLIENTE";                  // A

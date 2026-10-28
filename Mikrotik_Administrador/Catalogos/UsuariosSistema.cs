@@ -61,7 +61,6 @@ namespace Mikrotik_Administrador.Catalogos
                 Name = "Id",
                 HeaderText = "Id",
                 DataPropertyName = "Id",
-                Visible = false,
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
@@ -158,8 +157,6 @@ namespace Mikrotik_Administrador.Catalogos
                 var lista = await Task.Run(() => obj.GetUsuarios(txtNombre.Text,txtUsuario.Text));
                 var listaFinal = lista?.ToList() ?? new List<ListUsuariosModel>();
                 dgvUsuarios.DataSource = new SortableBindingList<ListUsuariosModel>(listaFinal);
-                if (dgvUsuarios.Columns["Id"] != null)
-                    dgvUsuarios.Columns["Id"].Visible = false;
                 if (dgvUsuarios.Columns["Password"] != null)
                     dgvUsuarios.Columns["Password"].Visible = false;
                 if (dgvUsuarios.Columns["IdTipo"] != null)
@@ -199,7 +196,7 @@ namespace Mikrotik_Administrador.Catalogos
                     BuscarUsuarios();
                     break;
                 case "btnCambiar":
-                    if (Id == 0)
+                    if (Id == 1)
                     {
                         MessageBox.Show("No se esta permitido desactivar al primer usuario", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

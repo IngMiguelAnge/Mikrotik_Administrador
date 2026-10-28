@@ -514,7 +514,7 @@ namespace Mikrotik_Administrador.Catalogos
                             }
                             else
                             {
-                                throw new FormatException($"Error de formato en pagos hay una fecha no válida.");
+                                throw new FormatException($"Error de formato en pagos hay una fecha no válida. Fila " + FilaPagos.ToString());
                             }
                         }
                         decimal saldoRestante = row.Cell(11).GetValue<decimal>();      // Col K: Cantidad recibida
