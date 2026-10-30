@@ -165,14 +165,20 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Tipo", obj.Tipo));
                         cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
                         cmd.Parameters.Add(new SqlParameter("@Costo", obj.Costo));
+                        cmd.Parameters.Add(new SqlParameter("@Descuento", obj.Descuento));
+                        cmd.Parameters.Add(new SqlParameter("@Total", obj.Total));
                         cmd.Parameters.Add(new SqlParameter("@Fecha_Recibido", obj.Fecha_Recibido));
+                        cmd.Parameters.Add(new SqlParameter("@Fecha_Reparacion", obj.Fecha_Reparacion));
                         cmd.Parameters.Add(new SqlParameter("@Fecha_Entregado", obj.Fecha_Entregado));
+                        cmd.Parameters.Add(new SqlParameter("@Fecha_Recogido", obj.Fecha_Recogido));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioRecibe", obj.IdUsuarioRecibe));
-                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioEntrega", obj.IdUsuarioEntrega));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioRepara", obj.IdUsuarioRepara));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioEntrega", obj.IdUsuarioEntrega));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioRecoge", obj.IdUsuarioRecoge));
                         cmd.Parameters.Add(new SqlParameter("@Nota", obj.Nota));
                         SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
                         {
@@ -252,21 +258,37 @@ namespace Mikrotik_Administrador.Data
             return new ExtrasModel()
             {
                 Id = Convert.ToInt32(reader["Id"]),
+                Tipo = reader["Tipo"]?.ToString() ?? string.Empty,
                 Nombre = reader["Nombre"]?.ToString() ?? string.Empty,
                 Costo = Convert.ToDecimal(reader["Costo"]),
-                Fecha_Recibido = Convert.ToDateTime(reader["Fecha_Recibido"]),
+                Descuento = Convert.ToDecimal(reader["Descuento"]),
+                Total = Convert.ToDecimal(reader["Total"]),
+                Fecha_Recibido = reader["Fecha_Recibido"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(reader["Fecha_Recibido"]),
+                Fecha_Reparacion = reader["Fecha_Reparacion"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(reader["Fecha_Reparacion"]),
                 Fecha_Entregado = reader["Fecha_Entregado"] == DBNull.Value
-    ? (DateTime?)null
-    : Convert.ToDateTime(reader["Fecha_Entregado"]),
+                ? (DateTime?)null
+                : Convert.ToDateTime(reader["Fecha_Entregado"]),
+                Fecha_Recogido = reader["Fecha_Recogido"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(reader["Fecha_Recogido"]),
                 Estatus = reader["Estatus"]?.ToString() ?? string.Empty,
                 IdUsuarioM = Convert.ToInt32(reader["IdUsuarioM"]),
-                IdUsuarioRecibe = Convert.ToInt32(reader["IdUsuarioRecibe"]),
+                IdUsuarioRecibe = reader["IdUsuarioRecibe"] == DBNull.Value
+                ? (int?)null
+                : Convert.ToInt32(reader["IdUsuarioRecibe"]),
                 IdUsuarioRepara = reader["IdUsuarioRepara"] == DBNull.Value
-    ? (int?)null
-    : Convert.ToInt32(reader["IdUsuarioRepara"]),
+                ? (int?)null
+                : Convert.ToInt32(reader["IdUsuarioRepara"]),
                 IdUsuarioEntrega = reader["IdUsuarioEntrega"] == DBNull.Value
-    ? (int?)null
-    : Convert.ToInt32(reader["IdUsuarioEntrega"]),
+                ? (int?)null
+                : Convert.ToInt32(reader["IdUsuarioEntrega"]),
+                IdUsuarioRecoge = reader["IdUsuarioRecoge"] == DBNull.Value
+                ? (int?)null
+                : Convert.ToInt32(reader["IdUsuarioRecoge"]),
                 Nota = reader["Nota"]?.ToString() ?? string.Empty
             };
         }

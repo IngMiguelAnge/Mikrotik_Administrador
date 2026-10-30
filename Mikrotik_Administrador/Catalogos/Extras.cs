@@ -96,9 +96,9 @@ namespace Mikrotik_Administrador.Catalogos
             });
             DGVExtras.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Costo",
+                Name = "Total",
                 HeaderText = "Costo",
-                DataPropertyName = "Costo",
+                DataPropertyName = "Total",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic,
@@ -108,20 +108,11 @@ namespace Mikrotik_Administrador.Catalogos
                     FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
                 }
             });            
-            DGVExtras.Columns.Add(new DataGridViewTextBoxColumn
+           DGVExtras.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Fecha_Recibido",
-                HeaderText = "Fecha que se recibio",
-                DataPropertyName = "Fecha_Recibido",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            DGVExtras.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Fecha_Entregado",
-                HeaderText = "Fecha en que se entrego",
-                DataPropertyName = "Fecha_Entregado",
+                Name = "Tipo",
+                HeaderText = "Tipo",
+                DataPropertyName = "Tipo",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
