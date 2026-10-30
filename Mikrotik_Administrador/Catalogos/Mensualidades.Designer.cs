@@ -33,8 +33,10 @@
             this.dgvMensualidades = new System.Windows.Forms.DataGridView();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.lblPrestamoExtra = new System.Windows.Forms.Label();
+            this.lblVentaExtra = new System.Windows.Forms.Label();
             this.btnExtras = new System.Windows.Forms.Button();
-            this.lblCostoExtra = new System.Windows.Forms.Label();
+            this.lblServicioExtra = new System.Windows.Forms.Label();
             this.btnVerProrrogas = new System.Windows.Forms.Button();
             this.lblFechaProrroga = new System.Windows.Forms.Label();
             this.lblProrroga = new System.Windows.Forms.Label();
@@ -80,7 +82,7 @@
             this.dgvMensualidades.RowHeadersWidth = 51;
             this.dgvMensualidades.RowTemplate.Height = 30;
             this.dgvMensualidades.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMensualidades.Size = new System.Drawing.Size(989, 280);
+            this.dgvMensualidades.Size = new System.Drawing.Size(989, 225);
             this.dgvMensualidades.TabIndex = 0;
             this.dgvMensualidades.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMensualidades_CellContentClick);
             // 
@@ -101,8 +103,10 @@
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.Color.White;
+            this.panelTop.Controls.Add(this.lblPrestamoExtra);
+            this.panelTop.Controls.Add(this.lblVentaExtra);
             this.panelTop.Controls.Add(this.btnExtras);
-            this.panelTop.Controls.Add(this.lblCostoExtra);
+            this.panelTop.Controls.Add(this.lblServicioExtra);
             this.panelTop.Controls.Add(this.btnVerProrrogas);
             this.panelTop.Controls.Add(this.lblFechaProrroga);
             this.panelTop.Controls.Add(this.lblProrroga);
@@ -112,8 +116,30 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1029, 109);
+            this.panelTop.Size = new System.Drawing.Size(1029, 164);
             this.panelTop.TabIndex = 1;
+            // 
+            // lblPrestamoExtra
+            // 
+            this.lblPrestamoExtra.AutoSize = true;
+            this.lblPrestamoExtra.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblPrestamoExtra.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblPrestamoExtra.Location = new System.Drawing.Point(520, 88);
+            this.lblPrestamoExtra.Name = "lblPrestamoExtra";
+            this.lblPrestamoExtra.Size = new System.Drawing.Size(106, 25);
+            this.lblPrestamoExtra.TabIndex = 16;
+            this.lblPrestamoExtra.Text = "Costoextra:";
+            // 
+            // lblVentaExtra
+            // 
+            this.lblVentaExtra.AutoSize = true;
+            this.lblVentaExtra.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblVentaExtra.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblVentaExtra.Location = new System.Drawing.Point(15, 136);
+            this.lblVentaExtra.Name = "lblVentaExtra";
+            this.lblVentaExtra.Size = new System.Drawing.Size(106, 25);
+            this.lblVentaExtra.TabIndex = 15;
+            this.lblVentaExtra.Text = "Costoextra:";
             // 
             // btnExtras
             // 
@@ -129,16 +155,16 @@
             this.btnExtras.UseVisualStyleBackColor = false;
             this.btnExtras.Click += new System.EventHandler(this.btnExtras_Click);
             // 
-            // lblCostoExtra
+            // lblServicioExtra
             // 
-            this.lblCostoExtra.AutoSize = true;
-            this.lblCostoExtra.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblCostoExtra.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblCostoExtra.Location = new System.Drawing.Point(767, 75);
-            this.lblCostoExtra.Name = "lblCostoExtra";
-            this.lblCostoExtra.Size = new System.Drawing.Size(106, 25);
-            this.lblCostoExtra.TabIndex = 13;
-            this.lblCostoExtra.Text = "Costoextra:";
+            this.lblServicioExtra.AutoSize = true;
+            this.lblServicioExtra.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblServicioExtra.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblServicioExtra.Location = new System.Drawing.Point(15, 88);
+            this.lblServicioExtra.Name = "lblServicioExtra";
+            this.lblServicioExtra.Size = new System.Drawing.Size(106, 25);
+            this.lblServicioExtra.TabIndex = 13;
+            this.lblServicioExtra.Text = "Costoextra:";
             // 
             // btnVerProrrogas
             // 
@@ -208,10 +234,10 @@
             // 
             this.panelContenedor.Controls.Add(this.dgvMensualidades);
             this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContenedor.Location = new System.Drawing.Point(0, 109);
+            this.panelContenedor.Location = new System.Drawing.Point(0, 164);
             this.panelContenedor.Name = "panelContenedor";
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenedor.Size = new System.Drawing.Size(1029, 320);
+            this.panelContenedor.Size = new System.Drawing.Size(1029, 265);
             this.panelContenedor.TabIndex = 2;
             // 
             // Mensualidades
@@ -250,6 +276,8 @@
         private System.Windows.Forms.Button btnVerProrrogas;
         private System.Windows.Forms.Label lblFechaProrroga;
         private System.Windows.Forms.Button btnExtras;
-        private System.Windows.Forms.Label lblCostoExtra;
+        private System.Windows.Forms.Label lblServicioExtra;
+        private System.Windows.Forms.Label lblPrestamoExtra;
+        private System.Windows.Forms.Label lblVentaExtra;
     }
 }

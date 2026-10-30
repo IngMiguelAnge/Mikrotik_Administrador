@@ -196,7 +196,7 @@ namespace Mikrotik_Administrador.Catalogos
                         AppRepository obj = new AppRepository();
                         var Historial = obj.GetHistorialPagosExtras(Id, string.Empty, 0, 0).Result;
                         decimal suma = Historial?.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad) ?? 0m;
-                        decimal Costo = (decimal)DGVExtras.Rows[e.RowIndex].Cells["Costo"].Value;
+                        decimal Costo = (decimal)DGVExtras.Rows[e.RowIndex].Cells["Total"].Value;
                         HistorialPagos Hi = new HistorialPagos();
                         Hi.IdExtra = Id;
                         Hi.IdMensualidad = 0;

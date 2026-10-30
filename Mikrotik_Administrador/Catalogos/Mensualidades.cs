@@ -36,9 +36,15 @@ namespace Mikrotik_Administrador.Catalogos
         {
             AppRepository obj = new AppRepository();
             var ListExtras = obj.GetCostoExtra(IdUsuarioM,0).Result;
-            lblCostoExtra.Text = ListExtras != null ?
-                "Se tiene un costo extra de $" + ListExtras.Sum(x => x.Costo) :
-               "Se tiene un costo extra de $0.00";
+            lblServicioExtra.Text = ListExtras != null ?
+                "Pago pendiente de los servicios $" + ListExtras.Where(x=> x.Tipo == "Servicio").Sum(x => x.TotalPendiente) :
+               "Pago pendiente de los servicios $0.00";
+            lblVentaExtra.Text = ListExtras != null ?
+                "Pago pendiente de las ventas $" + ListExtras.Where(x => x.Tipo == "Venta").Sum(x => x.TotalPendiente) :
+               "Pago pendiente de las ventas $0.00";
+            lblPrestamoExtra.Text = ListExtras != null ?
+                "Pago pendiente de los prestamos $" + ListExtras.Where(x => x.Tipo == "Prestamo").Sum(x => x.TotalPendiente) :
+               "Pago pendiente de los prestamos $0.00";
         }
         public void BuscarProrrogas()
         {

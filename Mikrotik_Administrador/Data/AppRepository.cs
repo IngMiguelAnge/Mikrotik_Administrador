@@ -104,9 +104,9 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region Extras
-        public async Task<List<ExtrasModel>> GetCostoExtra(int IdUsuarioM, int IdExtra)
+        public async Task<List<ListCostosExtrasModel>> GetCostoExtra(int IdUsuarioM, int IdExtra)
         {
-            List<ExtrasModel> list = new List<ExtrasModel>();
+            List<ListCostosExtrasModel> list = new List<ListCostosExtrasModel>();
             try
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
@@ -116,13 +116,12 @@ namespace Mikrotik_Administrador.Data
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
                         cmd.Parameters.Add(new SqlParameter("@IdExtra", IdExtra));
-
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
                             while (await reader.ReadAsync().ConfigureAwait(false))
                             {
-                                list.Add(MapToExtras(reader));
+                                list.Add(MapToCostosExtras(reader));
                             }
                         }
                     }
@@ -132,6 +131,16 @@ namespace Mikrotik_Administrador.Data
             {
             }
             return list;
+        }
+        private ListCostosExtrasModel MapToCostosExtras(SqlDataReader reader)
+        {
+            return new ListCostosExtrasModel()
+            {
+                Id = Convert.ToInt32(reader["Id"]),
+                Nombre = reader["Nombre"]?.ToString() ?? string.Empty,
+                TotalPendiente = Convert.ToDecimal(reader["TotalPendiente"]),
+                Tipo = reader["Tipo"]?.ToString() ?? string.Empty,
+            };
         }
         public async Task<bool> UpdateEstatusExtra(int Id, string Estatus)
         {

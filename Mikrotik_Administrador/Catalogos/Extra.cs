@@ -54,24 +54,34 @@ namespace Mikrotik_Administrador.Catalogos
             if (Id != 0)
             {   
                 var Extra = obj.GetExtrabyId(Id).Result;
+                int index = CBTipo.FindStringExact(Extra.Tipo);
+                if (index != -1)
+                {
+                    CBTipo.SelectedIndex = index;
+                }
                 txtNombre.Text = Extra.Nombre;
                 NUDCosto.Value = Extra.Costo;
                 NudDescuento.Value = Extra.Descuento;
                 CostoTotal = Extra.Total;
+                Calcular();
+                if (Extra.IdUsuarioRecibe != null)
                 CBRecibe.SelectedValue = Extra.IdUsuarioRecibe;
                 dtpFechaRecibido.Value = Extra.Fecha_Recibido ??
                     DateTime.Now;
-                CBRepara.SelectedValue = Extra.IdUsuarioRepara;
+                if (Extra.IdUsuarioRepara != null)
+                    CBRepara.SelectedValue = Extra.IdUsuarioRepara;
                 dtpFechaReparacion.Value = Extra.Fecha_Reparacion ??
                     DateTime.Now;
-                CBRepara.SelectedValue = Extra.IdUsuarioEntrega;
+                if (Extra.IdUsuarioEntrega != null)
+                    CBEntrega.SelectedValue = Extra.IdUsuarioEntrega;
                 dtpFechaEntrega.Value = Extra.Fecha_Entregado ??
                     DateTime.Now;
-                CBRecoge.SelectedValue = Extra.IdUsuarioRecoge;
+                if (Extra.IdUsuarioRecoge != null)
+                    CBRecoge.SelectedValue = Extra.IdUsuarioRecoge;
                 dtpFechaEntrega.Value = Extra.Fecha_Recogido ??
                     DateTime.Now;
                 txtNota.Text = Extra.Nota;
-                CBTipo.SelectedValue = Extra.Tipo;
+               
             }
             else
             {

@@ -279,30 +279,32 @@ namespace Mikrotik_Administrador.Items
             {
                 if(CubrirExtra)
                 {
-                    var ListExtras = obj.GetCostoExtra(IdUsuarioM,IdExtra).Result;
-                    foreach (var Extra in ListExtras) 
-                    {
-                        if (Recibido == 0)
-                            break;
-                        HistorialPagosExtrasModel sv = new HistorialPagosExtrasModel
+                    var ListExtras = obj.GetCostoExtra(IdUsuarioM, IdExtra).Result;
+                    if (IdExtra == 0)
+                        ListExtras = ListExtras.Where(x => x.Tipo != "Prestamo").ToList();
+                        foreach (var Extra in ListExtras)
                         {
-                            Id = 0,
-                            FechaRecibido = dtpFechaPago.Value,
-                            Cantidad = Recibido - Extra.Costo < 0 ? Recibido
-                            : Extra.Costo,
-                            IdExtra = Extra.Id,
-                            Comentario = txtComentario.Text.Trim(),
-                            IdBanco = (int)CBBanco.SelectedValue,
-                            Referencia = txtReferencia.Text.Trim(),
-                            Imagen = ImageToByteArray(),
-                            IdUsuario = IdResponsable
-                        };
-                        var result = obj.SaveHistorialPagosExtras(sv).Result;
-                        ListIdHistorialExtra.Add(result);
-                        ExtraNota += "Cobro extra " + Extra.Nombre +" con faltante a pagar: " + 
-                             " $" + sv.Cantidad.ToString() + Environment.NewLine;
-                        Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;                    
-                    }
+                            if (Recibido == 0)
+                                break;
+                            HistorialPagosExtrasModel sv = new HistorialPagosExtrasModel
+                            {
+                                Id = 0,
+                                FechaRecibido = dtpFechaPago.Value,
+                                Cantidad = Recibido - Extra.TotalPendiente < 0 ? Recibido
+                                : Extra.TotalPendiente,
+                                IdExtra = Extra.Id,
+                                Comentario = txtComentario.Text.Trim(),
+                                IdBanco = (int)CBBanco.SelectedValue,
+                                Referencia = txtReferencia.Text.Trim(),
+                                Imagen = ImageToByteArray(),
+                                IdUsuario = IdResponsable
+                            };
+                            var result = obj.SaveHistorialPagosExtras(sv).Result;
+                            ListIdHistorialExtra.Add(result);
+                            ExtraNota += "Cobro extra " + Extra.Nombre + " con faltante a pagar: " +
+                                 " $" + sv.Cantidad.ToString() + Environment.NewLine;
+                            Recibido = Recibido - sv.Cantidad < 0 ? 0 : Recibido - sv.Cantidad;
+                        }
                 }
                 if(IdExtra==0)
                 {
@@ -805,11 +807,23 @@ namespace Mikrotik_Administrador.Items
         {
             AppRepository obj = new AppRepository();
             var ListExtras = obj.GetCostoExtra(IdUsuarioM, IdExtra).Result;
-            lblTotalExtra.Text = ListExtras != null ?
-                "Total extra a pagar: $" + ListExtras.Sum(x => x.Costo) :
-               "Total extra a pagar: $0.00";
-            TotalExtra = ListExtras != null ?
-            ListExtras.Sum(x => x.Costo) : 0;
+            decimal Ventas = ListExtras != null ?
+                ListExtras.Where(x => x.Tipo == "Venta").Sum(x => x.TotalPendiente) : 0;
+            decimal Servicios = ListExtras != null ?
+                ListExtras.Where(x => x.Tipo == "Servicio").Sum(x => x.TotalPendiente) : 0;
+            if(IdExtra != 0 && ListExtras.First().Tipo == "Prestamo")
+            {
+                Ventas = ListExtras != null ?
+                ListExtras.Where(x => x.Tipo == "Prestamo").Sum(x => x.TotalPendiente) : 0;
+                lblTotalVenta.Text = $"Total prestamo a pagar: {Ventas:C}";
+                lblTotalServicio.Visible = false;
+            }
+            else
+            {
+                lblTotalVenta.Text = $"Total venta a pagar: {Ventas:C}";
+                lblTotalServicio.Text = $"Total servicio a pagar: {Servicios:C}";
+            }
+            TotalExtra = Ventas + Servicios;
             lblFaltante.Text = $"Total a pagar: {TotalFaltante + TotalExtra:C}";
 
         }
