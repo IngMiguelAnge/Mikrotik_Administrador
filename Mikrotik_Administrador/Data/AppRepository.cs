@@ -23,6 +23,73 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region Deudores
+        public async Task<int> SaveDeudoresbyName(DeudoresModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveDeudoresbyName", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Latitud", obj.Latitud));
+                        cmd.Parameters.Add(new SqlParameter("@Longitud", obj.Longitud));
+                        cmd.Parameters.Add(new SqlParameter("@Recogido", obj.Recogido));
+                        cmd.Parameters.Add(new SqlParameter("@Nota", obj.Nota));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+        public async Task<int> SaveDeudabyFecha(DeudaModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveDeudabyFecha", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
+                        cmd.Parameters.Add(new SqlParameter("@Year", obj.Year));
+                        cmd.Parameters.Add(new SqlParameter("@Mes", obj.Mes));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
+                        cmd.Parameters.Add(new SqlParameter("@IdDeudor", obj.IdDeudor));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+        #endregion
         #region Instalacion
         public async Task<int> SaveInstalacion(InstalacionModel obj)
         {

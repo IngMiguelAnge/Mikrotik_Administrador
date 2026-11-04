@@ -489,6 +489,7 @@
     <Compile Include="Model\DeudoresModel.cs" />
     <Compile Include="Model\DeudaModel.cs" />
     <Compile Include="Model\ListCostosExtrasModel.cs" />
+    <Compile Include="Model\ListDeudoresModel.cs" />
     <Compile Include="Model\ListHistorialPagosExtrasModel.cs" />
     <Compile Include="Model\ListInstalacionesModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />

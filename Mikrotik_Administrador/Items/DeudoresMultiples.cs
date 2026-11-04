@@ -16,7 +16,7 @@ namespace Mikrotik_Administrador.Items
 {
     public partial class DeudoresMultiples : Form
     {
-        private List<DeudoresModel> ListDeudores = new List<DeudoresModel>();
+        private List<ListDeudoresModel> ListDeudores = new List<ListDeudoresModel>();
         private List<DeudaModel> ListDeuda = new List<DeudaModel>();
         private int Opcion = 0;
         public DeudoresMultiples()
@@ -42,7 +42,54 @@ namespace Mikrotik_Administrador.Items
 
         private async void btnConfirmar_Click(object sender, EventArgs e)
         {
-           
+            await Confirmado();
+        }
+        private async Task Confirmado()
+        {
+            progressBar1.Style = ProgressBarStyle.Marquee;
+            progressBar1.MarqueeAnimationSpeed = 30;
+            btnCargar.Enabled = false;
+            btnConfirmar.Enabled = false;
+            try
+            {
+                foreach (var deudor in ListDeudores)
+                {
+                    AppRepository obj = new AppRepository();
+                    DeudoresModel Deudores = new DeudoresModel()
+                    {
+                        Id = deudor.Id,
+                        Nombre = deudor.Nombre,
+                        Latitud = deudor.Latitud,
+                        Longitud = deudor.Longitud,
+                        Recogido = deudor.Recogido.ToUpper() == "SI" ? true : false,
+                        Nota = deudor.Nota,
+                        Estatus = deudor.Estatus == "Activo" ? true : false
+                    };
+                    int resultado = await obj.SaveDeudoresbyName(Deudores);
+                    if (resultado <= 0)
+                    {
+                        MessageBox.Show($"Ocurrió un error al guardar el deudor: {deudor.Nombre}.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return; // Salir del método si hay un error
+                    }
+                    var deudasDelDeudor = ListDeuda.Where(d => d.IdDeudor == deudor.Id).ToList();
+                    foreach (var item in deudasDelDeudor)
+                    {
+                        await obj.SaveDeudabyFecha(item);
+                    }
+                }
+                MessageBox.Show("Datos guardados correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al insertar los datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                progressBar1.Style = ProgressBarStyle.Blocks;
+                progressBar1.Value = 100;
+                btnConfirmar.Enabled = true;
+                btnCargar.Enabled = true;
+            }
         }
         private async Task CargarDatosExcelDeudoresAsync(string rutaArchivo)
         {
@@ -50,7 +97,7 @@ namespace Mikrotik_Administrador.Items
             progressBar1.MarqueeAnimationSpeed = 30;
             btnCargar.Enabled = false;
             btnConfirmar.Enabled = false;
-            ListDeudores = new List<DeudoresModel>();
+            ListDeudores = new List<ListDeudoresModel>();
             ListDeuda = new List<DeudaModel>();
             Opcion = 0;
             try
@@ -89,39 +136,42 @@ namespace Mikrotik_Administrador.Items
                         }
 
                         if (string.IsNullOrEmpty(nombreCliente)) continue;
-                        DeudoresModel Deudor = new DeudoresModel();
+                        ListDeudoresModel Deudor = new ListDeudoresModel();
                         Deudor.Id = IdDeudor;
                         Deudor.Nombre = nombreCliente;
-                        Deudor.Coordenadas = coordenadas;
+                        Deudor.Latitud = coordenadas.Trim() != string.Empty?
+                            coordenadas.Split(',')[0].Trim(): string.Empty;
+                        Deudor.Longitud = coordenadas.Trim() != string.Empty ?
+                            coordenadas.Split(',')[1].Trim() : string.Empty;
                         Deudor.Recogido = recogido.ToUpper() != "SI" ? "NO" : "SI";
                         Deudor.Nota = nota;
-                        Deudor.Estatus = true;
+                        Deudor.Estatus = "Activo";
                         ListDeudores.Add(Deudor);
 
                         // 2. Iterar sobre las columnas de los meses (Enero a Diciembre empiezan a partir de la columna D / índice 4)
                         int IdDeuda = 1;
                         for (int i = 0; i < mesesAnio.Length; i++)
                         {
-                            int numeroColumna = 6 + i; 
+                            int numeroColumna = 6 + i;
                             var celdaMes = row.Cell(numeroColumna);
-                      
+
                             // Verificar si la celda tiene información (no está vacía)
                             if (!celdaMes.IsEmpty() && decimal.TryParse(celdaMes.GetString().Trim(), out decimal cantidad))
                             {
-                                if(cantidad > 0)
+                                if (cantidad > 0)
                                 {
                                     DeudaModel Deuda = new DeudaModel();
                                     Deuda.Id = IdDeuda;
-                                    Deuda.Año = anio;
+                                    Deuda.Year = anio;
                                     Deuda.Mes = mesesAnio[i];
                                     Deuda.Cantidad = cantidad;
                                     Deuda.IdDeudor = IdDeudor;
                                     Deuda.Estatus = true;
                                     ListDeuda.Add(Deuda);
                                     IdDeuda += 1;
-                                }                                
-                            }                     
-                        }                    
+                                }
+                            }
+                        }
                         IdDeudor += 1;
                     }
                 }
@@ -143,10 +193,10 @@ namespace Mikrotik_Administrador.Items
         public void CargarTablaDeudores()
         {
             CrearGridViewDeudores();
-            var listaFinal = ListDeudores?.ToList() ?? new List<DeudoresModel>();
-            DGVClientes.DataSource = new SortableBindingList<DeudoresModel>(listaFinal);
+            var listaFinal = ListDeudores?.ToList() ?? new List<ListDeudoresModel>();
+            DGVClientes.DataSource = new SortableBindingList<ListDeudoresModel>(listaFinal);
             if (DGVClientes.Columns["Id"] != null)
-                DGVClientes.Columns["Id"].Visible = false;         
+                DGVClientes.Columns["Id"].Visible = false;
         }
         public void CrearGridViewDeudores()
         {
@@ -193,9 +243,18 @@ namespace Mikrotik_Administrador.Items
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Coordenadas",
-                HeaderText = "Coordenadas",
-                DataPropertyName = "Coordenadas",
+                Name = "Latitud",
+                HeaderText = "Latitud",
+                DataPropertyName = "Latitud",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Longitud",
+                HeaderText = "Longitud",
+                DataPropertyName = "Longitud",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
@@ -210,17 +269,17 @@ namespace Mikrotik_Administrador.Items
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
 
-            //DataGridViewButtonColumn btnVerMapa = new DataGridViewButtonColumn
-            //{
-            //    Name = "btnVerMapa",
-            //    HeaderText = "Acción",
-            //    Text = "Mapa",
-            //    UseColumnTextForButtonValue = true,
-            //    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-            //    FlatStyle = FlatStyle.Flat,
-            //    DefaultCellStyle = estiloBotones
-            //};
-            //DGVClientes.Columns.Add(btnVerMapa);
+            DataGridViewButtonColumn btnVerMapa = new DataGridViewButtonColumn
+            {
+                Name = "btnVerMapa",
+                HeaderText = "Acción",
+                Text = "Mapa",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVClientes.Columns.Add(btnVerMapa);
             DataGridViewButtonColumn btnVerDeuda = new DataGridViewButtonColumn
             {
                 Name = "btnVerDeuda",
@@ -251,6 +310,21 @@ namespace Mikrotik_Administrador.Items
                         Opcion = 1;
                         CrearTablaDeudas(IdDeudor);
                         break;
+                    case "btnVerMapa":
+                        if (string.IsNullOrEmpty(DGVClientes.Rows[e.RowIndex].Cells["Latitud"].Value?.ToString()))
+                        {
+                            MessageBox.Show("No hay coordenadas disponibles para este cliente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                        Mapa mp = new Mapa();
+                        mp.Latitud = DGVClientes.Rows[e.RowIndex].Cells["Latitud"].Value.ToString();
+                        mp.Longitud = DGVClientes.Rows[e.RowIndex].Cells["Longitud"].Value.ToString();
+                        mp.ShowDialog();
+                        DGVClientes.Rows[e.RowIndex].Cells["Latitud"].Value = mp.Latitud;
+                        DGVClientes.Rows[e.RowIndex].Cells["Longitud"].Value = mp.Longitud;
+                        ListDeudores.Where(x => x.Id == (int)DGVClientes.Rows[e.RowIndex].Cells["Id"].Value).FirstOrDefault().Latitud = mp.Latitud;
+                        ListDeudores.Where(x => x.Id == (int)DGVClientes.Rows[e.RowIndex].Cells["Id"].Value).FirstOrDefault().Longitud = mp.Longitud;
+                        break;
                     default:
                         break;
                 }
@@ -267,7 +341,7 @@ namespace Mikrotik_Administrador.Items
         public void CrearTablaDeudas(int IdDeudor)
         {
             CrearGridViewDeudas();
-            var listaFinal = ListDeuda.Where(x=> x.IdDeudor == IdDeudor)?.ToList() ?? new List<DeudaModel>();
+            var listaFinal = ListDeuda.Where(x => x.IdDeudor == IdDeudor)?.ToList() ?? new List<DeudaModel>();
             DGVClientes.DataSource = new SortableBindingList<DeudaModel>(listaFinal);
         }
         public void CrearGridViewDeudas()
@@ -315,9 +389,9 @@ namespace Mikrotik_Administrador.Items
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Año",
+                Name = "Year",
                 HeaderText = "Año",
-                DataPropertyName = "Año",
+                DataPropertyName = "Year",
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
@@ -332,18 +406,6 @@ namespace Mikrotik_Administrador.Items
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
 
-            //DataGridViewButtonColumn btnVerDeuda = new DataGridViewButtonColumn
-            //{
-            //    Name = "btnVerDeuda",
-            //    HeaderText = "Acción",
-            //    Text = "Deuda",
-            //    UseColumnTextForButtonValue = true,
-            //    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-            //    FlatStyle = FlatStyle.Flat,
-            //    DefaultCellStyle = estiloBotones
-            //};
-            //DGVClientes.Columns.Add(btnVerDeuda);
-
             DGVClientes.AllowUserToAddRows = false;
         }
 
@@ -355,7 +417,7 @@ namespace Mikrotik_Administrador.Items
                     CargarTablaDeudores();
                     Opcion = 0;
                     btnAtras.Visible = false;
-                    break;               
+                    break;
             }
         }
 
@@ -368,7 +430,7 @@ namespace Mikrotik_Administrador.Items
             btnDescargar.Enabled = false;
             try
             {
-                 // 1.Configurar cuadro de diálogo para guardar el archivo
+                // 1.Configurar cuadro de diálogo para guardar el archivo
                 using (SaveFileDialog saveFileDialog = new SaveFileDialog())
                 {
                     saveFileDialog.Filter = "Archivo de Excel (*.xlsx)|*.xlsx";
@@ -424,8 +486,6 @@ namespace Mikrotik_Administrador.Items
                             wsCambios.Cell(filaCambios, 15).Value = 0;
                             wsCambios.Cell(filaCambios, 16).Value = 0;
                             filaCambios++;
-
-
                             // Autoajuste de columnas para Hoja 1
                             wsCambios.Columns().AdjustToContents();
 
