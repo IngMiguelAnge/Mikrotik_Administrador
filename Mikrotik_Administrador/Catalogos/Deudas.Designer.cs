@@ -51,6 +51,7 @@
             this.btnNuevo.TabIndex = 0;
             this.btnNuevo.Text = "+ Nuevo";
             this.btnNuevo.UseVisualStyleBackColor = false;
+            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
             // 
             // btnPagar
             // 
@@ -113,6 +114,7 @@
             this.DGVDeudas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DGVDeudas.Size = new System.Drawing.Size(715, 291);
             this.DGVDeudas.TabIndex = 9;
+            this.DGVDeudas.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVDeudas_CellContentClick);
             // 
             // progressBar1
             // 

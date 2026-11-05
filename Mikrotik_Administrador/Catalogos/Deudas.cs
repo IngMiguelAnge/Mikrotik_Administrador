@@ -1,4 +1,5 @@
 ﻿using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
@@ -178,5 +179,80 @@ namespace Mikrotik_Administrador.Catalogos
             DGVDeudas.AllowUserToAddRows = false;
         }
 
+        private void btnNuevo_Click(object sender, EventArgs e)
+        {
+            Deuda d = new Deuda();
+            d.Id = 0;
+            d.IdDeudor = IdDeudor;
+            if (d.ShowDialog() == DialogResult.OK)
+            {
+                Buscar();
+            }
+        }
+
+        private void DGVDeudas_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            int Id = (int)DGVDeudas.Rows[e.RowIndex].Cells["Id"].Value;
+            try
+            {
+                DGVDeudas.Enabled = false;
+                switch (DGVDeudas.Columns[e.ColumnIndex].Name)
+                {
+                    case "btnEditar":
+                        Deuda d = new Deuda();
+                        d.Id = Id;
+                        d.IdDeudor = IdDeudor;
+                        if (d.ShowDialog() == DialogResult.OK)
+                        {
+                            Buscar();
+                        }
+                        break;
+                    //case "btnCambiarEstatus":
+                    //    AppRepository r = new AppRepository();
+                    //    var resultD = r.UpdateEstatusDeudor(IdDeudor).Result;
+                    //    CargarClientes();
+                    //    break;
+                    //case "btnVerNota":
+                    //    VerComentario verComentario = new VerComentario();
+                    //    verComentario.Comentario = DGVClientes.Rows[e.RowIndex].Cells["Nota"].Value.ToString();
+                    //    verComentario.ShowDialog();
+                    //    break;
+                    //case "btnVerMapa":
+                    //    if (string.IsNullOrEmpty(DGVClientes.Rows[e.RowIndex].Cells["Latitud"].Value?.ToString()))
+                    //    {
+                    //        DialogResult resultado = MessageBox.Show("No hay coordenadas registradas en este cliente, se va a registrar coordenadas si continua. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    //        if (resultado == DialogResult.No)
+                    //        {
+                    //            return;
+                    //        }
+                    //    }
+                    //    string Latitud = DGVClientes.Rows[e.RowIndex].Cells["Latitud"].Value.ToString();
+                    //    string Longitud = DGVClientes.Rows[e.RowIndex].Cells["Longitud"].Value.ToString();
+                    //    Mapa mp = new Mapa();
+                    //    mp.Latitud = DGVClientes.Rows[e.RowIndex].Cells["Latitud"].Value.ToString();
+                    //    mp.Longitud = DGVClientes.Rows[e.RowIndex].Cells["Longitud"].Value.ToString();
+                    //    if (mp.ShowDialog() == DialogResult.OK)
+                    //    {
+                    //        AppRepository obj = new AppRepository();
+                    //        var result = obj.SaveDeudoresCoordenadas(IdDeudor, mp.Latitud, mp.Longitud);
+                    //        DGVClientes.Rows[e.RowIndex].Cells["Latitud"].Value = mp.Latitud;
+                    //        DGVClientes.Rows[e.RowIndex].Cells["Longitud"].Value = mp.Longitud;
+                    //    }
+
+                    //    break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}");
+            }
+            finally
+            {
+                DGVDeudas.Enabled = true;
+            }
+        }
     }
 }

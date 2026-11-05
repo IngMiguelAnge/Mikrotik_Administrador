@@ -286,6 +286,12 @@
     <Compile Include="Catalogos\DetallesMensualidad.Designer.cs">
       <DependentUpon>DetallesMensualidad.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\Deuda.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\Deuda.Designer.cs">
+      <DependentUpon>Deuda.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\Deudas.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -637,6 +643,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\DetallesMensualidad.resx">
       <DependentUpon>DetallesMensualidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\Deuda.resx">
+      <DependentUpon>Deuda.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Deudas.resx">
       <DependentUpon>Deudas.cs</DependentUpon>
