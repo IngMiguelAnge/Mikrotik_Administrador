@@ -188,7 +188,6 @@ namespace Mikrotik_Administrador
             }
             CargarClientes();
         }
-
      
         private void CBTodosMikrotiks_CheckedChanged(object sender, EventArgs e)
         {

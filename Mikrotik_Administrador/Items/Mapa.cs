@@ -20,6 +20,15 @@ namespace Mikrotik_Administrador.Items
 
         private void Mapa_Load(object sender, EventArgs e)
         {
+            if(Latitud == null || Longitud == null ||
+                Latitud == string.Empty || Longitud == string.Empty)
+            {
+                Latitud = "19.432608";
+                Longitud = "-99.133209";
+            }
+            BuscarMapa();
+        }
+        public void BuscarMapa() {
             double latitude = double.Parse(Latitud, System.Globalization.CultureInfo.InvariantCulture);
             double longitude = double.Parse(Longitud, System.Globalization.CultureInfo.InvariantCulture);
             txtLatitud.Text = latitude.ToString();
@@ -139,10 +148,27 @@ namespace Mikrotik_Administrador.Items
 
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
+            if(txtLatitud.Text.Trim() == "" || txtLongitud.Text.Trim() == "")
+            {
+                MessageBox.Show("Por favor, asegúrese de que las coordenadas sean válidas antes de confirmar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             Latitud = txtLatitud.Text;
             Longitud = txtLongitud.Text;
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            if(txtLatitud.Text.Trim() == "" || txtLongitud.Text.Trim() == "")
+            {
+                MessageBox.Show("Por favor, ingrese coordenadas válidas antes de buscar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Latitud = txtLatitud.Text;
+            Longitud = txtLongitud.Text;
+            BuscarMapa();
         }
     }
 }

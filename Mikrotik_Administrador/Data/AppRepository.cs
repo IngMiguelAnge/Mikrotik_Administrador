@@ -24,6 +24,139 @@ namespace Mikrotik_Administrador.Data
             GC.Collect();
         }
         #region Deudores
+        public async Task<bool> UpdateEstatusDeudor(int Id)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateEstatusDeudor", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<DeudoresModel> GetDeudoresbyId(int Id)
+        {
+            DeudoresModel result = new DeudoresModel();
+            List<DeudoresModel> list = new List<DeudoresModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetDeudoresbyId", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToDeudor(reader));
+                            }
+                            result = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return result;
+        }
+        private DeudoresModel MapToDeudor(SqlDataReader reader)
+        {
+            return new DeudoresModel()
+            {
+                Id = Convert.ToInt32(reader["Id"]),
+                Nombre = reader["Nombre"]?.ToString() ?? string.Empty,
+                Latitud = reader["Latitud"]?.ToString() ?? string.Empty,
+                Longitud = reader["Longitud"]?.ToString() ?? string.Empty,
+                Recogido = (bool)reader["Recogido"],
+                Nota = reader["Nota"]?.ToString() ?? string.Empty,
+                Estatus = (bool)reader["Estatus"],
+            };
+        }
+
+        public async Task<List<ListDeudoresModel>> GetDeudores(string Nombre)
+        {
+            List<ListDeudoresModel> list = new List<ListDeudoresModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetDeudores", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", Nombre));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListDeudores(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListDeudoresModel MapToListDeudores(SqlDataReader reader)
+        {
+            return new ListDeudoresModel()
+            {
+                Id = Convert.ToInt32(reader["Id"]),
+                Nombre = reader["Nombre"]?.ToString() ?? string.Empty,
+                Latitud = reader["Latitud"]?.ToString() ?? string.Empty,
+                Longitud = reader["Longitud"]?.ToString() ?? string.Empty,
+                Recogido = reader["Recogido"]?.ToString() ?? string.Empty,
+                Nota = reader["Nota"]?.ToString() ?? string.Empty,
+                Estatus = reader["Estatus"]?.ToString() ?? string.Empty,
+            };
+        }
+        public async Task<int> SaveDeudoresCoordenadas(int Id, string Latitud, string Longitud)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveDeudoresCoordenadas", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@Latitud", Latitud));
+                        cmd.Parameters.Add(new SqlParameter("@Longitud", Longitud));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
         public async Task<int> SaveDeudoresbyName(DeudoresModel obj)
         {
             try
@@ -31,6 +164,39 @@ namespace Mikrotik_Administrador.Data
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
                     using (SqlCommand cmd = new SqlCommand("SaveDeudoresbyName", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Latitud", obj.Latitud));
+                        cmd.Parameters.Add(new SqlParameter("@Longitud", obj.Longitud));
+                        cmd.Parameters.Add(new SqlParameter("@Recogido", obj.Recogido));
+                        cmd.Parameters.Add(new SqlParameter("@Nota", obj.Nota));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+        public async Task<int> SaveDeudores(DeudoresModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveDeudores", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
@@ -125,7 +291,6 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
-
         public async Task<InstalacionModel> GetInstalacionbyIdUsuarioM(int IdUsuarioM)
         {
             InstalacionModel Result = new InstalacionModel();

@@ -328,5 +328,10 @@ namespace Mikrotik_Administrador
             Environment.Exit(0);
         }
 
+        private void btnNoRegistrados_Click(object sender, EventArgs e)
+        {
+            NoRegistrados nr = new NoRegistrados();
+            nr.Show();
+        }
     }
 }

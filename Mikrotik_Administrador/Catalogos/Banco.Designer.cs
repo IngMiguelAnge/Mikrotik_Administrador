@@ -42,9 +42,9 @@
             this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.lblNombre.Location = new System.Drawing.Point(34, 33);
             this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(171, 25);
+            this.lblNombre.Size = new System.Drawing.Size(179, 25);
             this.lblNombre.TabIndex = 0;
-            this.lblNombre.Text = "Nombre del Banco:";
+            this.lblNombre.Text = "*Nombre del Banco:";
             // 
             // txtNombre
             // 
@@ -63,9 +63,9 @@
             this.lblTipo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.lblTipo.Location = new System.Drawing.Point(34, 109);
             this.lblTipo.Name = "lblTipo";
-            this.lblTipo.Size = new System.Drawing.Size(143, 25);
+            this.lblTipo.Size = new System.Drawing.Size(151, 25);
             this.lblTipo.TabIndex = 2;
-            this.lblTipo.Text = "Tipo de Cuenta:";
+            this.lblTipo.Text = "*Tipo de Cuenta:";
             // 
             // cbTipo
             // 

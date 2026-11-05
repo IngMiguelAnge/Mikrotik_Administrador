@@ -78,6 +78,7 @@ namespace Mikrotik_Administrador
             this.btnCambios = new System.Windows.Forms.Button();
             this.btnHistorial = new System.Windows.Forms.Button();
             this.btnExcel = new System.Windows.Forms.Button();
+            this.btnNoRegistrados = new System.Windows.Forms.Button();
             this.panelSideMenu.SuspendLayout();
             this.panelSubmenuHistoriales.SuspendLayout();
             this.panelSubmenuCliente.SuspendLayout();
@@ -729,7 +730,7 @@ namespace Mikrotik_Administrador
             this.grpClientes.Location = new System.Drawing.Point(23, 295);
             this.grpClientes.Margin = new System.Windows.Forms.Padding(3, 3, 3, 15);
             this.grpClientes.Name = "grpClientes";
-            this.grpClientes.Size = new System.Drawing.Size(346, 118);
+            this.grpClientes.Size = new System.Drawing.Size(533, 118);
             this.grpClientes.TabIndex = 2;
             this.grpClientes.TabStop = false;
             this.grpClientes.Text = "Clientes";
@@ -739,10 +740,11 @@ namespace Mikrotik_Administrador
             this.flowClientes.AutoSize = true;
             this.flowClientes.Controls.Add(this.btnInformacion);
             this.flowClientes.Controls.Add(this.btnMensualidades);
+            this.flowClientes.Controls.Add(this.btnNoRegistrados);
             this.flowClientes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowClientes.Location = new System.Drawing.Point(3, 33);
             this.flowClientes.Name = "flowClientes";
-            this.flowClientes.Size = new System.Drawing.Size(340, 82);
+            this.flowClientes.Size = new System.Drawing.Size(527, 82);
             this.flowClientes.TabIndex = 0;
             // 
             // btnInformacion
@@ -760,7 +762,7 @@ namespace Mikrotik_Administrador
             this.btnInformacion.Name = "btnInformacion";
             this.btnInformacion.Size = new System.Drawing.Size(137, 66);
             this.btnInformacion.TabIndex = 0;
-            this.btnInformacion.Text = "Información";
+            this.btnInformacion.Text = "Registrados";
             this.btnInformacion.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnInformacion.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnInformacion.UseVisualStyleBackColor = false;
@@ -876,6 +878,27 @@ namespace Mikrotik_Administrador
             this.btnExcel.UseVisualStyleBackColor = false;
             this.btnExcel.Click += new System.EventHandler(this.btnExcel_Click);
             // 
+            // btnNoRegistrados
+            // 
+            this.btnNoRegistrados.BackColor = System.Drawing.Color.White;
+            this.btnNoRegistrados.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNoRegistrados.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
+            this.btnNoRegistrados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNoRegistrados.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnNoRegistrados.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.btnNoRegistrados.Image = ((System.Drawing.Image)(resources.GetObject("btnNoRegistrados.Image")));
+            this.btnNoRegistrados.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnNoRegistrados.Location = new System.Drawing.Point(348, 8);
+            this.btnNoRegistrados.Margin = new System.Windows.Forms.Padding(8);
+            this.btnNoRegistrados.Name = "btnNoRegistrados";
+            this.btnNoRegistrados.Size = new System.Drawing.Size(171, 66);
+            this.btnNoRegistrados.TabIndex = 2;
+            this.btnNoRegistrados.Text = "No Registrados";
+            this.btnNoRegistrados.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnNoRegistrados.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnNoRegistrados.UseVisualStyleBackColor = false;
+            this.btnNoRegistrados.Click += new System.EventHandler(this.btnNoRegistrados_Click);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -972,5 +995,6 @@ namespace Mikrotik_Administrador
         private System.Windows.Forms.Button btnCambios;
         private System.Windows.Forms.Button btnHistorial;
         private System.Windows.Forms.Button btnExcel;
+        private Button btnNoRegistrados;
     }
 }

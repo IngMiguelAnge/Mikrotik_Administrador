@@ -179,10 +179,11 @@
             // cbAntenas
             // 
             this.cbAntenas.AutoSize = true;
-            this.cbAntenas.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cbAntenas.Font = new System.Drawing.Font("Segoe UI Semibold", 9F);
+            this.cbAntenas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.cbAntenas.Location = new System.Drawing.Point(340, 137);
             this.cbAntenas.Name = "cbAntenas";
-            this.cbAntenas.Size = new System.Drawing.Size(195, 29);
+            this.cbAntenas.Size = new System.Drawing.Size(204, 29);
             this.cbAntenas.TabIndex = 11;
             this.cbAntenas.Text = "¿Buscar en antenas?";
             this.cbAntenas.UseVisualStyleBackColor = true;

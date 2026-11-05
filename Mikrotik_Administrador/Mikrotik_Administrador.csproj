@@ -322,6 +322,18 @@
     <Compile Include="Catalogos\Mensualidades.Designer.cs">
       <DependentUpon>Mensualidades.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\NoRegistrado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\NoRegistrado.Designer.cs">
+      <DependentUpon>NoRegistrado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Catalogos\NoRegistrados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\NoRegistrados.Designer.cs">
+      <DependentUpon>NoRegistrados.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\PreregistroCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -640,6 +652,12 @@
     <EmbeddedResource Include="Catalogos\MikrotiksAnidados.resx">
       <DependentUpon>MikrotiksAnidados.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\NoRegistrado.resx">
+      <DependentUpon>NoRegistrado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\NoRegistrados.resx">
+      <DependentUpon>NoRegistrados.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Pagos.resx">
       <DependentUpon>Pagos.cs</DependentUpon>
     </EmbeddedResource>
@@ -794,6 +812,7 @@
     <Content Include="Imagenes\Lupa.png" />
     <Content Include="Imagenes\Mensualidad.png" />
     <Content Include="Imagenes\migration.png" />
+    <Content Include="Imagenes\not-approved.png" />
     <Content Include="Imagenes\plan.png" />
     <Content Include="Imagenes\server.png" />
     <Content Include="Imagenes\user.png" />

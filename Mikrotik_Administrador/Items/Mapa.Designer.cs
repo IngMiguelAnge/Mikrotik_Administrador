@@ -38,6 +38,7 @@
             this.txtLatitud = new System.Windows.Forms.TextBox();
             this.btnConfirmar = new System.Windows.Forms.Button();
             this.sqLiteCommand1 = new System.Data.SQLite.SQLiteCommand();
+            this.btnBuscar = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,10 +47,9 @@
             this.lblVista.AutoSize = true;
             this.lblVista.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblVista.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblVista.Location = new System.Drawing.Point(18, 20);
-            this.lblVista.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblVista.Location = new System.Drawing.Point(27, 31);
             this.lblVista.Name = "lblVista";
-            this.lblVista.Size = new System.Drawing.Size(88, 15);
+            this.lblVista.Size = new System.Drawing.Size(138, 25);
             this.lblVista.TabIndex = 0;
             this.lblVista.Text = "Vista del mapa:";
             // 
@@ -63,26 +63,23 @@
             "Satélite",
             "Híbrido",
             "OpenStreet"});
-            this.cmbMapas.Location = new System.Drawing.Point(21, 38);
-            this.cmbMapas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmbMapas.Location = new System.Drawing.Point(32, 58);
             this.cmbMapas.Name = "cmbMapas";
-            this.cmbMapas.Size = new System.Drawing.Size(139, 25);
+            this.cmbMapas.Size = new System.Drawing.Size(206, 33);
             this.cmbMapas.TabIndex = 1;
             this.cmbMapas.SelectedIndexChanged += new System.EventHandler(this.cmbMapas_SelectedIndexChanged);
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.gMap);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
-            this.groupBox1.Location = new System.Drawing.Point(21, 83);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Location = new System.Drawing.Point(32, 128);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox1.Size = new System.Drawing.Size(656, 342);
+            this.groupBox1.Size = new System.Drawing.Size(1111, 526);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "MAPA";
@@ -96,8 +93,7 @@
             this.gMap.GrayScaleMode = false;
             this.gMap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
             this.gMap.LevelsKeepInMemory = 5;
-            this.gMap.Location = new System.Drawing.Point(2, 17);
-            this.gMap.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gMap.Location = new System.Drawing.Point(3, 25);
             this.gMap.MarkersEnabled = true;
             this.gMap.MaxZoom = 2;
             this.gMap.MinZoom = 2;
@@ -111,7 +107,7 @@
             this.gMap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.gMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gMap.ShowTileGridLines = false;
-            this.gMap.Size = new System.Drawing.Size(652, 323);
+            this.gMap.Size = new System.Drawing.Size(1105, 498);
             this.gMap.TabIndex = 18;
             this.gMap.Zoom = 0D;
             this.gMap.OnMarkerEnter += new GMap.NET.WindowsForms.MarkerEnter(this.gMap_OnMarkerEnter);
@@ -123,10 +119,9 @@
             this.lblLongitud.AutoSize = true;
             this.lblLongitud.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblLongitud.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblLongitud.Location = new System.Drawing.Point(391, 18);
-            this.lblLongitud.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLongitud.Location = new System.Drawing.Point(586, 28);
             this.lblLongitud.Name = "lblLongitud";
-            this.lblLongitud.Size = new System.Drawing.Size(58, 15);
+            this.lblLongitud.Size = new System.Drawing.Size(87, 25);
             this.lblLongitud.TabIndex = 4;
             this.lblLongitud.Text = "Longitud:";
             // 
@@ -135,31 +130,26 @@
             this.lblLatitud.AutoSize = true;
             this.lblLatitud.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblLatitud.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblLatitud.Location = new System.Drawing.Point(177, 20);
-            this.lblLatitud.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLatitud.Location = new System.Drawing.Point(266, 31);
             this.lblLatitud.Name = "lblLatitud";
-            this.lblLatitud.Size = new System.Drawing.Size(47, 15);
+            this.lblLatitud.Size = new System.Drawing.Size(70, 25);
             this.lblLatitud.TabIndex = 2;
             this.lblLatitud.Text = "Latitud:";
             // 
             // txtLongitud
             // 
-            this.txtLongitud.Enabled = false;
             this.txtLongitud.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtLongitud.Location = new System.Drawing.Point(394, 36);
-            this.txtLongitud.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtLongitud.Location = new System.Drawing.Point(591, 55);
             this.txtLongitud.Name = "txtLongitud";
-            this.txtLongitud.Size = new System.Drawing.Size(195, 24);
+            this.txtLongitud.Size = new System.Drawing.Size(290, 33);
             this.txtLongitud.TabIndex = 5;
             // 
             // txtLatitud
             // 
-            this.txtLatitud.Enabled = false;
             this.txtLatitud.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.txtLatitud.Location = new System.Drawing.Point(180, 38);
-            this.txtLatitud.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtLatitud.Location = new System.Drawing.Point(270, 58);
             this.txtLatitud.Name = "txtLatitud";
-            this.txtLatitud.Size = new System.Drawing.Size(198, 24);
+            this.txtLatitud.Size = new System.Drawing.Size(295, 33);
             this.txtLatitud.TabIndex = 3;
             // 
             // btnConfirmar
@@ -168,11 +158,10 @@
             this.btnConfirmar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnConfirmar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnConfirmar.ForeColor = System.Drawing.Color.White;
-            this.btnConfirmar.Location = new System.Drawing.Point(604, 36);
-            this.btnConfirmar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnConfirmar.Location = new System.Drawing.Point(1041, 46);
             this.btnConfirmar.Name = "btnConfirmar";
-            this.btnConfirmar.Size = new System.Drawing.Size(73, 27);
-            this.btnConfirmar.TabIndex = 6;
+            this.btnConfirmar.Size = new System.Drawing.Size(110, 42);
+            this.btnConfirmar.TabIndex = 7;
             this.btnConfirmar.Text = "Confirmar";
             this.btnConfirmar.UseVisualStyleBackColor = false;
             this.btnConfirmar.Click += new System.EventHandler(this.btnConfirmar_Click);
@@ -181,12 +170,27 @@
             // 
             this.sqLiteCommand1.CommandText = null;
             // 
+            // btnBuscar
+            // 
+            this.btnBuscar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBuscar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnBuscar.ForeColor = System.Drawing.Color.White;
+            this.btnBuscar.Location = new System.Drawing.Point(925, 46);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(110, 42);
+            this.btnBuscar.TabIndex = 6;
+            this.btnBuscar.Text = "Buscar";
+            this.btnBuscar.UseVisualStyleBackColor = false;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            // 
             // Mapa
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(689, 431);
+            this.ClientSize = new System.Drawing.Size(1161, 663);
+            this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.btnConfirmar);
             this.Controls.Add(this.lblLongitud);
             this.Controls.Add(this.lblLatitud);
@@ -196,7 +200,6 @@
             this.Controls.Add(this.lblVista);
             this.Controls.Add(this.cmbMapas);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Mapa";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -219,5 +222,6 @@
         private System.Windows.Forms.TextBox txtLatitud;
         private System.Windows.Forms.Button btnConfirmar;
         private System.Data.SQLite.SQLiteCommand sqLiteCommand1;
+        private System.Windows.Forms.Button btnBuscar;
     }
 }
