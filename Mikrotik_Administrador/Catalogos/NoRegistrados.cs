@@ -30,6 +30,11 @@ namespace Mikrotik_Administrador.Catalogos
                 DGVClientes.Enabled = false;
                 switch (DGVClientes.Columns[e.ColumnIndex].Name)
                 {
+                    case "btnDeudas":
+                        Deudas deudas = new Deudas();
+                        deudas.IdDeudor = IdDeudor;
+                        deudas.ShowDialog();
+                        break;
                     case "btnEditar":
                         NoRegistrado noRegistrado = new NoRegistrado();
                         noRegistrado.Id = IdDeudor;
@@ -223,6 +228,7 @@ namespace Mikrotik_Administrador.Catalogos
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
+            DGVClientes.Columns.Add(btnEditar);
             DataGridViewButtonColumn btnVerNota = new DataGridViewButtonColumn
             {
                 Name = "btnVerNota",
@@ -233,7 +239,7 @@ namespace Mikrotik_Administrador.Catalogos
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
-            DGVClientes.Columns.Add(btnEditar);
+            DGVClientes.Columns.Add(btnVerNota);
             DataGridViewButtonColumn btnCambiarEstatus = new DataGridViewButtonColumn
             {
                 Name = "btnCambiarEstatus",
@@ -256,7 +262,28 @@ namespace Mikrotik_Administrador.Catalogos
                 DefaultCellStyle = estiloBotones
             };
             DGVClientes.Columns.Add(btnVerMapa);
+            DataGridViewButtonColumn btnDeudas = new DataGridViewButtonColumn
+            {
+                Name = "btnDeudas",
+                HeaderText = "Acción",
+                Text = "Ver deudas",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVClientes.Columns.Add(btnDeudas);
             DGVClientes.AllowUserToAddRows = false;
+        }
+
+        private void btnNuevo_Click(object sender, EventArgs e)
+        {
+            NoRegistrado nr = new NoRegistrado();
+            nr.Id = 0;
+            if (nr.ShowDialog() == DialogResult.OK)
+            {
+                CargarClientes();
+            }
         }
     }
 }

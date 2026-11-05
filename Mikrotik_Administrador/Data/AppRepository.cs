@@ -23,6 +23,47 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
+        #region Deudas
+        public async Task<List<ListDeudasModel>> GetDeudasbyIdDeudor(int IdDeudor)
+        {
+            List<ListDeudasModel> list = new List<ListDeudasModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetDeudasbyIdDeudor", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdDeudor", IdDeudor));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListDeudas(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListDeudasModel MapToListDeudas(SqlDataReader reader)
+        {
+            return new ListDeudasModel()
+            {
+                Id = Convert.ToInt32(reader["Id"]),
+                Year = Convert.ToInt32(reader["Year"]),
+                Mes = reader["Mes"]?.ToString() ?? string.Empty,
+                Cantidad = Convert.ToDecimal(reader["Cantidad"]),
+                Faltante = Convert.ToDecimal(reader["Faltante"]),
+                Estatus = reader["Estatus"]?.ToString() ?? string.Empty,
+            };
+        }
+        #endregion
         #region Deudores
         public async Task<bool> UpdateEstatusDeudor(int Id)
         {

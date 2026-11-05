@@ -286,6 +286,12 @@
     <Compile Include="Catalogos\DetallesMensualidad.Designer.cs">
       <DependentUpon>DetallesMensualidad.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\Deudas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\Deudas.Designer.cs">
+      <DependentUpon>Deudas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\Extra.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -501,6 +507,7 @@
     <Compile Include="Model\DeudoresModel.cs" />
     <Compile Include="Model\DeudaModel.cs" />
     <Compile Include="Model\ListCostosExtrasModel.cs" />
+    <Compile Include="Model\ListDeudasModel.cs" />
     <Compile Include="Model\ListDeudoresModel.cs" />
     <Compile Include="Model\ListHistorialPagosExtrasModel.cs" />
     <Compile Include="Model\ListInstalacionesModel.cs" />
@@ -630,6 +637,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\DetallesMensualidad.resx">
       <DependentUpon>DetallesMensualidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\Deudas.resx">
+      <DependentUpon>Deudas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Extra.resx">
       <DependentUpon>Extra.cs</DependentUpon>
