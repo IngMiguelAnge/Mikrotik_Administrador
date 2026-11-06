@@ -17,6 +17,8 @@ namespace Mikrotik_Administrador.Catalogos
     public partial class Deudas : Form
     {
         public int IdDeudor { get; set; }
+        public int IdResponsable { get; set; }
+        public string Cliente { get; set; }
         public Deudas()
         {
             InitializeComponent();
@@ -165,9 +167,9 @@ namespace Mikrotik_Administrador.Catalogos
                 DefaultCellStyle = estiloBotones
             };
             DGVDeudas.Columns.Add(btnCambiarEstatus);
-            DataGridViewButtonColumn btnVerHistorial = new DataGridViewButtonColumn
+            DataGridViewButtonColumn btnHistorial = new DataGridViewButtonColumn
             {
-                Name = "btnVerHistorial",
+                Name = "btnHistorial",
                 HeaderText = "Acción",
                 Text = "Historial",
                 UseColumnTextForButtonValue = true,
@@ -175,7 +177,7 @@ namespace Mikrotik_Administrador.Catalogos
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
-            DGVDeudas.Columns.Add(btnVerHistorial);
+            DGVDeudas.Columns.Add(btnHistorial);
             DGVDeudas.AllowUserToAddRows = false;
         }
 
@@ -199,6 +201,15 @@ namespace Mikrotik_Administrador.Catalogos
                 DGVDeudas.Enabled = false;
                 switch (DGVDeudas.Columns[e.ColumnIndex].Name)
                 {
+                    case "btnHistorial":
+                        HistorialPagosDeudores h = new HistorialPagosDeudores();
+                        h.IdResponsable = IdResponsable;
+                        h.IdDeudor = IdDeudor;
+                        h.IdDeuda = Id;
+                        h.Cliente = Cliente;
+                        h.Faltante = (decimal)DGVDeudas.Rows[e.RowIndex].Cells["Faltante"].Value;
+                        h.ShowDialog();
+                        break;
                     case "btnEditar":
                         Deuda d = new Deuda();
                         d.Id = Id;

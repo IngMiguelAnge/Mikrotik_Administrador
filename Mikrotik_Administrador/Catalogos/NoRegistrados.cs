@@ -16,6 +16,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class NoRegistrados : Form
     {
+        public int IdResponsable { get; set; }
         public NoRegistrados()
         {
             InitializeComponent();
@@ -33,6 +34,8 @@ namespace Mikrotik_Administrador.Catalogos
                     case "btnDeudas":
                         Deudas deudas = new Deudas();
                         deudas.IdDeudor = IdDeudor;
+                        deudas.Cliente = DGVClientes.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
+                        deudas.IdResponsable = IdResponsable;
                         deudas.ShowDialog();
                         break;
                     case "btnEditar":

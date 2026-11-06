@@ -331,6 +331,7 @@ namespace Mikrotik_Administrador
         private void btnNoRegistrados_Click(object sender, EventArgs e)
         {
             NoRegistrados nr = new NoRegistrados();
+            nr.IdResponsable = IdResponsable;
             nr.Show();
         }
     }

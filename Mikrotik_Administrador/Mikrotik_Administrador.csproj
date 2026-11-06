@@ -322,6 +322,12 @@
     <Compile Include="Catalogos\HistorialPagos.Designer.cs">
       <DependentUpon>HistorialPagos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\HistorialPagosDeudores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\HistorialPagosDeudores.Designer.cs">
+      <DependentUpon>HistorialPagosDeudores.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\Instalacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -369,6 +375,12 @@
     </Compile>
     <Compile Include="Items\DeudoresMultiples.Designer.cs">
       <DependentUpon>DeudoresMultiples.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Items\PagarDeudores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\PagarDeudores.Designer.cs">
+      <DependentUpon>PagarDeudores.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\InstalacionModel.cs" />
     <Compile Include="Items\Mapa.cs">
@@ -515,7 +527,6 @@
     <Compile Include="Model\ListCostosExtrasModel.cs" />
     <Compile Include="Model\ListDeudasModel.cs" />
     <Compile Include="Model\ListDeudoresModel.cs" />
-    <Compile Include="Model\ListHistorialPagosExtrasModel.cs" />
     <Compile Include="Model\ListInstalacionesModel.cs" />
     <Compile Include="Model\ListMensualidadesModel.cs" />
     <Compile Include="Model\ListProrrogasModel.cs" />
@@ -662,6 +673,9 @@
     <EmbeddedResource Include="Catalogos\HistorialPagos.resx">
       <DependentUpon>HistorialPagos.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\HistorialPagosDeudores.resx">
+      <DependentUpon>HistorialPagosDeudores.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Instalacion.resx">
       <DependentUpon>Instalacion.cs</DependentUpon>
     </EmbeddedResource>
@@ -715,6 +729,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Items\MensualidadesMultiples.resx">
       <DependentUpon>MensualidadesMultiples.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\PagarDeudores.resx">
+      <DependentUpon>PagarDeudores.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Items\VentanaCombo.resx">
       <DependentUpon>VentanaCombo.cs</DependentUpon>

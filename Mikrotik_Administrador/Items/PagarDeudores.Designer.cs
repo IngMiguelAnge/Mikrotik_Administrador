@@ -1,0 +1,361 @@
+﻿namespace Mikrotik_Administrador.Items
+{
+    partial class PagarDeudores
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.lblBanco = new System.Windows.Forms.Label();
+            this.CBBanco = new System.Windows.Forms.ComboBox();
+            this.lblReferencia = new System.Windows.Forms.Label();
+            this.txtReferencia = new System.Windows.Forms.TextBox();
+            this.lblFechaPago = new System.Windows.Forms.Label();
+            this.dtpFechaPago = new System.Windows.Forms.DateTimePicker();
+            this.btnGuardar = new System.Windows.Forms.Button();
+            this.btnSubir = new System.Windows.Forms.Button();
+            this.PBImagen = new System.Windows.Forms.PictureBox();
+            this.lblComentario = new System.Windows.Forms.Label();
+            this.txtComentario = new System.Windows.Forms.TextBox();
+            this.lblMensaje2 = new System.Windows.Forms.Label();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.lblTotalServicio = new System.Windows.Forms.Label();
+            this.lblTotalVenta = new System.Windows.Forms.Label();
+            this.btnExtras = new System.Windows.Forms.Button();
+            this.lblTotalMensualidades = new System.Windows.Forms.Label();
+            this.NUDCantidad = new System.Windows.Forms.NumericUpDown();
+            this.lblCantidadRecibida = new System.Windows.Forms.Label();
+            this.lblTotalPagado = new System.Windows.Forms.Label();
+            this.lblFaltante = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.PBImagen)).BeginInit();
+            this.panelTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUDCantidad)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // lblBanco
+            // 
+            this.lblBanco.AutoSize = true;
+            this.lblBanco.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblBanco.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblBanco.Location = new System.Drawing.Point(25, 20);
+            this.lblBanco.Name = "lblBanco";
+            this.lblBanco.Size = new System.Drawing.Size(234, 25);
+            this.lblBanco.TabIndex = 0;
+            this.lblBanco.Text = "*Banco que recibe el pago:";
+            // 
+            // CBBanco
+            // 
+            this.CBBanco.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CBBanco.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.CBBanco.FormattingEnabled = true;
+            this.CBBanco.Location = new System.Drawing.Point(29, 45);
+            this.CBBanco.Name = "CBBanco";
+            this.CBBanco.Size = new System.Drawing.Size(230, 33);
+            this.CBBanco.TabIndex = 1;
+            // 
+            // lblReferencia
+            // 
+            this.lblReferencia.AutoSize = true;
+            this.lblReferencia.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblReferencia.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblReferencia.Location = new System.Drawing.Point(25, 90);
+            this.lblReferencia.Name = "lblReferencia";
+            this.lblReferencia.Size = new System.Drawing.Size(111, 25);
+            this.lblReferencia.TabIndex = 2;
+            this.lblReferencia.Text = "*Referencia:";
+            // 
+            // txtReferencia
+            // 
+            this.txtReferencia.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtReferencia.Location = new System.Drawing.Point(29, 115);
+            this.txtReferencia.MaxLength = 250;
+            this.txtReferencia.Name = "txtReferencia";
+            this.txtReferencia.Size = new System.Drawing.Size(230, 33);
+            this.txtReferencia.TabIndex = 3;
+            // 
+            // lblFechaPago
+            // 
+            this.lblFechaPago.AutoSize = true;
+            this.lblFechaPago.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblFechaPago.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblFechaPago.Location = new System.Drawing.Point(25, 160);
+            this.lblFechaPago.Name = "lblFechaPago";
+            this.lblFechaPago.Size = new System.Drawing.Size(230, 25);
+            this.lblFechaPago.TabIndex = 4;
+            this.lblFechaPago.Text = "Cuando se realizó el pago:";
+            // 
+            // dtpFechaPago
+            // 
+            this.dtpFechaPago.CustomFormat = "dd/MM/yyyy HH:mm:ss";
+            this.dtpFechaPago.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.dtpFechaPago.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpFechaPago.Location = new System.Drawing.Point(29, 185);
+            this.dtpFechaPago.Name = "dtpFechaPago";
+            this.dtpFechaPago.Size = new System.Drawing.Size(230, 33);
+            this.dtpFechaPago.TabIndex = 5;
+            // 
+            // btnGuardar
+            // 
+            this.btnGuardar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnGuardar.ForeColor = System.Drawing.Color.White;
+            this.btnGuardar.Location = new System.Drawing.Point(609, 575);
+            this.btnGuardar.Name = "btnGuardar";
+            this.btnGuardar.Size = new System.Drawing.Size(120, 38);
+            this.btnGuardar.TabIndex = 11;
+            this.btnGuardar.Text = "Continuar";
+            this.btnGuardar.UseVisualStyleBackColor = false;
+            // 
+            // btnSubir
+            // 
+            this.btnSubir.BackColor = System.Drawing.Color.White;
+            this.btnSubir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.btnSubir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSubir.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.btnSubir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(117)))), ((int)(((byte)(125)))));
+            this.btnSubir.Location = new System.Drawing.Point(305, 285);
+            this.btnSubir.Name = "btnSubir";
+            this.btnSubir.Size = new System.Drawing.Size(130, 35);
+            this.btnSubir.TabIndex = 11;
+            this.btnSubir.Text = "Subir imagen";
+            this.btnSubir.UseVisualStyleBackColor = false;
+            // 
+            // PBImagen
+            // 
+            this.PBImagen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(249)))), ((int)(((byte)(250)))));
+            this.PBImagen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PBImagen.Location = new System.Drawing.Point(305, 45);
+            this.PBImagen.Name = "PBImagen";
+            this.PBImagen.Size = new System.Drawing.Size(417, 220);
+            this.PBImagen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PBImagen.TabIndex = 9;
+            this.PBImagen.TabStop = false;
+            // 
+            // lblComentario
+            // 
+            this.lblComentario.AutoSize = true;
+            this.lblComentario.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblComentario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblComentario.Location = new System.Drawing.Point(25, 229);
+            this.lblComentario.Name = "lblComentario";
+            this.lblComentario.Size = new System.Drawing.Size(114, 25);
+            this.lblComentario.TabIndex = 6;
+            this.lblComentario.Text = "Comentario:";
+            // 
+            // txtComentario
+            // 
+            this.txtComentario.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.txtComentario.Location = new System.Drawing.Point(29, 254);
+            this.txtComentario.Multiline = true;
+            this.txtComentario.Name = "txtComentario";
+            this.txtComentario.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtComentario.Size = new System.Drawing.Size(250, 169);
+            this.txtComentario.TabIndex = 7;
+            // 
+            // lblMensaje2
+            // 
+            this.lblMensaje2.AutoSize = true;
+            this.lblMensaje2.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblMensaje2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblMensaje2.Location = new System.Drawing.Point(301, 20);
+            this.lblMensaje2.Name = "lblMensaje2";
+            this.lblMensaje2.Size = new System.Drawing.Size(226, 25);
+            this.lblMensaje2.TabIndex = 10;
+            this.lblMensaje2.Text = "Imagen del comprobante:";
+            // 
+            // panelTop
+            // 
+            this.panelTop.BackColor = System.Drawing.Color.White;
+            this.panelTop.Controls.Add(this.lblTotalServicio);
+            this.panelTop.Controls.Add(this.lblTotalVenta);
+            this.panelTop.Controls.Add(this.btnExtras);
+            this.panelTop.Controls.Add(this.lblTotalMensualidades);
+            this.panelTop.Controls.Add(this.NUDCantidad);
+            this.panelTop.Controls.Add(this.lblCantidadRecibida);
+            this.panelTop.Controls.Add(this.lblTotalPagado);
+            this.panelTop.Controls.Add(this.lblFaltante);
+            this.panelTop.Controls.Add(this.btnGuardar);
+            this.panelTop.Controls.Add(this.btnSubir);
+            this.panelTop.Controls.Add(this.PBImagen);
+            this.panelTop.Controls.Add(this.lblMensaje2);
+            this.panelTop.Controls.Add(this.txtComentario);
+            this.panelTop.Controls.Add(this.lblComentario);
+            this.panelTop.Controls.Add(this.dtpFechaPago);
+            this.panelTop.Controls.Add(this.lblFechaPago);
+            this.panelTop.Controls.Add(this.txtReferencia);
+            this.panelTop.Controls.Add(this.lblReferencia);
+            this.panelTop.Controls.Add(this.CBBanco);
+            this.panelTop.Controls.Add(this.lblBanco);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(769, 627);
+            this.panelTop.TabIndex = 0;
+            // 
+            // lblTotalServicio
+            // 
+            this.lblTotalServicio.AutoSize = true;
+            this.lblTotalServicio.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTotalServicio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.lblTotalServicio.Location = new System.Drawing.Point(300, 480);
+            this.lblTotalServicio.Name = "lblTotalServicio";
+            this.lblTotalServicio.Size = new System.Drawing.Size(337, 32);
+            this.lblTotalServicio.TabIndex = 17;
+            this.lblTotalServicio.Text = "Total servicio a pagar: $0.00";
+            // 
+            // lblTotalVenta
+            // 
+            this.lblTotalVenta.AutoSize = true;
+            this.lblTotalVenta.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTotalVenta.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.lblTotalVenta.Location = new System.Drawing.Point(299, 432);
+            this.lblTotalVenta.Name = "lblTotalVenta";
+            this.lblTotalVenta.Size = new System.Drawing.Size(311, 32);
+            this.lblTotalVenta.TabIndex = 16;
+            this.lblTotalVenta.Text = "Total venta a pagar: $0.00";
+            // 
+            // btnExtras
+            // 
+            this.btnExtras.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnExtras.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExtras.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnExtras.ForeColor = System.Drawing.Color.White;
+            this.btnExtras.Location = new System.Drawing.Point(609, 283);
+            this.btnExtras.Name = "btnExtras";
+            this.btnExtras.Size = new System.Drawing.Size(113, 38);
+            this.btnExtras.TabIndex = 15;
+            this.btnExtras.Text = "Extras";
+            this.btnExtras.UseVisualStyleBackColor = false;
+            // 
+            // lblTotalMensualidades
+            // 
+            this.lblTotalMensualidades.AutoSize = true;
+            this.lblTotalMensualidades.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTotalMensualidades.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.lblTotalMensualidades.Location = new System.Drawing.Point(300, 342);
+            this.lblTotalMensualidades.Name = "lblTotalMensualidades";
+            this.lblTotalMensualidades.Size = new System.Drawing.Size(324, 32);
+            this.lblTotalMensualidades.TabIndex = 14;
+            this.lblTotalMensualidades.Text = "Total mensualidades: $0.00";
+            // 
+            // NUDCantidad
+            // 
+            this.NUDCantidad.DecimalPlaces = 2;
+            this.NUDCantidad.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            this.NUDCantidad.Location = new System.Drawing.Point(31, 468);
+            this.NUDCantidad.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.NUDCantidad.Name = "NUDCantidad";
+            this.NUDCantidad.Size = new System.Drawing.Size(140, 33);
+            this.NUDCantidad.TabIndex = 9;
+            this.NUDCantidad.Visible = false;
+            // 
+            // lblCantidadRecibida
+            // 
+            this.lblCantidadRecibida.AutoSize = true;
+            this.lblCantidadRecibida.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblCantidadRecibida.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblCantidadRecibida.Location = new System.Drawing.Point(26, 438);
+            this.lblCantidadRecibida.Name = "lblCantidadRecibida";
+            this.lblCantidadRecibida.Size = new System.Drawing.Size(161, 25);
+            this.lblCantidadRecibida.TabIndex = 8;
+            this.lblCantidadRecibida.Text = "Cantidad recibida:";
+            this.lblCantidadRecibida.Visible = false;
+            // 
+            // lblTotalPagado
+            // 
+            this.lblTotalPagado.AutoSize = true;
+            this.lblTotalPagado.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTotalPagado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.lblTotalPagado.Location = new System.Drawing.Point(300, 391);
+            this.lblTotalPagado.Name = "lblTotalPagado";
+            this.lblTotalPagado.Size = new System.Drawing.Size(391, 32);
+            this.lblTotalPagado.TabIndex = 12;
+            this.lblTotalPagado.Text = "Total mensualidad pagada: $0.00";
+            // 
+            // lblFaltante
+            // 
+            this.lblFaltante.AutoSize = true;
+            this.lblFaltante.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblFaltante.ForeColor = System.Drawing.Color.Red;
+            this.lblFaltante.Location = new System.Drawing.Point(300, 525);
+            this.lblFaltante.Name = "lblFaltante";
+            this.lblFaltante.Size = new System.Drawing.Size(241, 32);
+            this.lblFaltante.TabIndex = 13;
+            this.lblFaltante.Text = "Total a pagar: $0.00";
+            // 
+            // PagarDeudores
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(769, 625);
+            this.Controls.Add(this.panelTop);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "PagarDeudores";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.PagarDeudores_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.PBImagen)).EndInit();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUDCantidad)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+        #endregion
+
+        private System.Windows.Forms.Label lblBanco;
+        private System.Windows.Forms.ComboBox CBBanco;
+        private System.Windows.Forms.Label lblReferencia;
+        private System.Windows.Forms.TextBox txtReferencia;
+        private System.Windows.Forms.Label lblFechaPago;
+        private System.Windows.Forms.DateTimePicker dtpFechaPago;
+        private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.Button btnSubir;
+        private System.Windows.Forms.PictureBox PBImagen;
+        private System.Windows.Forms.Label lblComentario;
+        private System.Windows.Forms.TextBox txtComentario;
+        private System.Windows.Forms.Label lblMensaje2;
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Label lblFaltante;
+        private System.Windows.Forms.Label lblTotalPagado;
+        private System.Windows.Forms.Label lblCantidadRecibida;
+        private System.Windows.Forms.NumericUpDown NUDCantidad;
+        private System.Windows.Forms.Label lblTotalMensualidades;
+        private System.Windows.Forms.Button btnExtras;
+        private System.Windows.Forms.Label lblTotalVenta;
+        private System.Windows.Forms.Label lblTotalServicio;
+    }
+}

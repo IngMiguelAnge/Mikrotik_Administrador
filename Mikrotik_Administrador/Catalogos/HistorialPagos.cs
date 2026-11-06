@@ -65,8 +65,8 @@ namespace Mikrotik_Administrador.Catalogos
                 else
                 {
                     var Pagos = await obj.GetHistorialPagosExtras(IdExtra, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
-                    var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosExtrasModel>();
-                    dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosExtrasModel>(listaFinal);
+                    var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosModel>();
+                    dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
                 }
             }
             catch (Exception ex)
