@@ -3687,7 +3687,7 @@ namespace Mikrotik_Administrador.Data
                 Address = (string)reader["Address"],
                 IdInterno = (string)reader["IdInterno"],        
                 Estatus = (string)reader["Estatus"],
-                IdCliente = (int)reader["IdCliente"],
+                IdCliente = Convert.IsDBNull(reader["IdCliente"]) ? 0 : (int)reader["IdCliente"],
                 IdPlan = (int)reader["IdPlan"], 
                 IdPlanOriginal = (int)reader["IdPlanOriginal"],
                 IdMikrotikOriginal = (int)reader["IdMikrotikOriginal"],

@@ -152,7 +152,9 @@ namespace Mikrotik_Administrador.Items
                         RInstalacion.Cliente = cliente == null ? string.Empty : cliente.Nombre.ToString();
                         RInstalacion.IdUsuarioM = row.Cell(3).GetValue<int>();
                         var servicio = obj.GetUsuariosMikrotiksById(RInstalacion.IdUsuarioM).Result;
-                        RInstalacion.UsuarioM = servicio == null ? string.Empty : servicio.Nombre.ToString();
+                        RInstalacion.UsuarioM = servicio.Nombre == null ? string.Empty :
+                        servicio.IdCliente != RInstalacion.IdCliente ? "No coincide el cliente para el servicio" :
+                        servicio.Nombre.ToString();
                         RInstalacion.IdUsuario = row.Cell(5).GetValue<int>();
                         var Instalador = obj.GetUsuariosbyId(RInstalacion.IdUsuario).Result;
                         RInstalacion.Instalador = Instalador == null ? string.Empty : 
@@ -356,7 +358,8 @@ namespace Mikrotik_Administrador.Items
             {
                 if(item.Caja == string.Empty || item.Spliter == string.Empty
                     || item.UsuarioM == string.Empty || item.Cliente == string.Empty
-                    || item.Puerto == 0 || item.PuertoInterno == 0 || item.Instalador == string.Empty)
+                    || item.Puerto == 0 || item.PuertoInterno == 0 || item.Instalador == string.Empty
+                    || item.UsuarioM == "No coincide el cliente para el servicio")
                 {
                     MessageBox.Show("Revisar la fila " + item.Id + " los datos estan incompletos o no existen", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;

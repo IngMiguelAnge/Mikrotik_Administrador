@@ -100,6 +100,7 @@ namespace Mikrotik_Administrador.Items
             ListDeudores = new List<ListDeudoresModel>();
             ListDeuda = new List<DeudaModel>();
             Opcion = 0;
+            int IdDeudorNuevo = 0;
             try
             {
                 AppRepository obj = new AppRepository();
@@ -136,20 +137,31 @@ namespace Mikrotik_Administrador.Items
                         }
 
                         if (string.IsNullOrEmpty(nombreCliente)) continue;
-                        ListDeudoresModel Deudor = new ListDeudoresModel();
-                        Deudor.Id = IdDeudor;
-                        Deudor.Nombre = nombreCliente;
-                        Deudor.Latitud = coordenadas.Trim() != string.Empty?
-                            coordenadas.Split(',')[0].Trim(): string.Empty;
-                        Deudor.Longitud = coordenadas.Trim() != string.Empty ?
-                            coordenadas.Split(',')[1].Trim() : string.Empty;
-                        Deudor.Recogido = recogido.ToUpper() != "SI" ? "NO" : "SI";
-                        Deudor.Nota = nota;
-                        Deudor.Estatus = "Activo";
-                        ListDeudores.Add(Deudor);
-
-                        // 2. Iterar sobre las columnas de los meses (Enero a Diciembre empiezan a partir de la columna D / índice 4)
-                        int IdDeuda = 1;
+                        var Existe = ListDeudores.Where(x => x.Nombre.ToUpper() == nombreCliente.ToUpper()).FirstOrDefault();
+                        if (Existe == null)
+                        {
+                            ListDeudoresModel Deudor = new ListDeudoresModel();
+                            Deudor.Id = IdDeudor;
+                            Deudor.Nombre = nombreCliente;
+                            Deudor.Latitud = coordenadas.Trim() != string.Empty ?
+                                coordenadas.Split(',')[0].Trim() : string.Empty;
+                            Deudor.Longitud = coordenadas.Trim() != string.Empty ?
+                                coordenadas.Split(',')[1].Trim() : string.Empty;
+                            Deudor.Recogido = recogido.ToUpper() != "SI" ? "NO" : "SI";
+                            Deudor.Nota = nota;
+                            Deudor.Estatus = "Activo";
+                            ListDeudores.Add(Deudor);
+                            IdDeudorNuevo = IdDeudor;
+                            IdDeudor += 1;
+                        }
+                        else
+                        {
+                           ListDeudores.Where(x=> x.Id == Existe.Id).FirstOrDefault().Nota = nota.Trim() != string.Empty ?
+                                 ListDeudores.Where(x => x.Id == Existe.Id).FirstOrDefault().Nota + Environment.NewLine + nota: string.Empty;
+                            IdDeudorNuevo = Existe.Id;
+                        }
+                            // 2. Iterar sobre las columnas de los meses (Enero a Diciembre empiezan a partir de la columna D / índice 4)
+                            int IdDeuda = 1;
                         for (int i = 0; i < mesesAnio.Length; i++)
                         {
                             int numeroColumna = 6 + i;
@@ -165,14 +177,14 @@ namespace Mikrotik_Administrador.Items
                                     Deuda.Year = anio;
                                     Deuda.Mes = mesesAnio[i];
                                     Deuda.Cantidad = cantidad;
-                                    Deuda.IdDeudor = IdDeudor;
+                                    Deuda.IdDeudor = IdDeudorNuevo;
                                     Deuda.Estatus = true;
                                     ListDeuda.Add(Deuda);
                                     IdDeuda += 1;
                                 }
                             }
                         }
-                        IdDeudor += 1;
+               
                     }
                 }
                 CargarTablaDeudores();
@@ -197,6 +209,8 @@ namespace Mikrotik_Administrador.Items
             DGVClientes.DataSource = new SortableBindingList<ListDeudoresModel>(listaFinal);
             if (DGVClientes.Columns["Id"] != null)
                 DGVClientes.Columns["Id"].Visible = false;
+            if (DGVClientes.Columns["Nota"] != null)
+                DGVClientes.Columns["Nota"].Visible = false;
         }
         public void CrearGridViewDeudores()
         {
@@ -261,6 +275,16 @@ namespace Mikrotik_Administrador.Items
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
+                Name = "Nota",
+                HeaderText = "Nota",
+                DataPropertyName = "Nota",
+                ReadOnly = true,
+                Visible = false,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 Name = "Recogido",
                 HeaderText = "Equipos recogidos",
                 DataPropertyName = "Recogido",
@@ -291,6 +315,18 @@ namespace Mikrotik_Administrador.Items
                 DefaultCellStyle = estiloBotones
             };
             DGVClientes.Columns.Add(btnVerDeuda);
+            DataGridViewButtonColumn btnVerNota = new DataGridViewButtonColumn
+            {
+                Name = "btnVerNota",
+                HeaderText = "Acción",
+                Text = "Nota",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVClientes.Columns.Add(btnVerNota);
+
 
             DGVClientes.AllowUserToAddRows = false;
         }
@@ -303,6 +339,11 @@ namespace Mikrotik_Administrador.Items
                 DGVClientes.Enabled = false;
                 switch (DGVClientes.Columns[e.ColumnIndex].Name)
                 {
+                    case "btnVerNota":
+                        VerComentario verComentario = new VerComentario();
+                        verComentario.Comentario = DGVClientes.Rows[e.RowIndex].Cells["Nota"].Value.ToString();
+                        verComentario.ShowDialog();
+                        break;
                     case "btnVerDeuda":
                         int IdDeudor = (int)DGVClientes.Rows[e.RowIndex].Cells["Id"].Value;
 
@@ -456,14 +497,15 @@ namespace Mikrotik_Administrador.Items
                             wsCambios.Cell(1, 7).Value = "FEBRERO";        // G
                             wsCambios.Cell(1, 8).Value = "MARZO";    // H
                             wsCambios.Cell(1, 9).Value = "ABRIL";                // I
-                            wsCambios.Cell(1, 10).Value = "JUNIO";   // J
-                            wsCambios.Cell(1, 11).Value = "JULIO";        // K
-                            wsCambios.Cell(1, 12).Value = "AGOSTO";    // L
-                            wsCambios.Cell(1, 13).Value = "SEPTIEMBRE"; //M
-                            wsCambios.Cell(1, 14).Value = "OCTUBRE"; //N
-                            wsCambios.Cell(1, 15).Value = "NOVIEMBRE"; //O
-                            wsCambios.Cell(1, 16).Value = "DICIEMBRE"; //P
-                            var headerCambios = wsCambios.Range("A1:P1");
+                            wsCambios.Cell(1, 10).Value = "MAYO";                // J
+                            wsCambios.Cell(1, 11).Value = "JUNIO";   // K
+                            wsCambios.Cell(1, 12).Value = "JULIO";        // L
+                            wsCambios.Cell(1, 13).Value = "AGOSTO";    // M
+                            wsCambios.Cell(1, 14).Value = "SEPTIEMBRE"; //N
+                            wsCambios.Cell(1, 15).Value = "OCTUBRE"; //O
+                            wsCambios.Cell(1, 16).Value = "NOVIEMBRE"; //P
+                            wsCambios.Cell(1, 17).Value = "DICIEMBRE"; //Q
+                            var headerCambios = wsCambios.Range("A1:Q1");
                             headerCambios.Style.Font.Bold = true;
                             headerCambios.Style.Fill.BackgroundColor = XLColor.CornflowerBlue;
                             headerCambios.Style.Font.FontColor = XLColor.White;
@@ -485,6 +527,7 @@ namespace Mikrotik_Administrador.Items
                             wsCambios.Cell(filaCambios, 14).Value = 0;
                             wsCambios.Cell(filaCambios, 15).Value = 0;
                             wsCambios.Cell(filaCambios, 16).Value = 0;
+                            wsCambios.Cell(filaCambios, 17).Value = 0;
                             filaCambios++;
                             // Autoajuste de columnas para Hoja 1
                             wsCambios.Columns().AdjustToContents();

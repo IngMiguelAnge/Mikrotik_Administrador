@@ -237,5 +237,10 @@ namespace Mikrotik_Administrador.Catalogos
                 DGVDeudas.Enabled = true;
             }
         }
+
+        private void btnPagar_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

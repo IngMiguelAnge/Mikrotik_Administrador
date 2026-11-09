@@ -65,6 +65,7 @@
             this.btnPagar.TabIndex = 5;
             this.btnPagar.Text = "Pagar";
             this.btnPagar.UseVisualStyleBackColor = false;
+            this.btnPagar.Click += new System.EventHandler(this.btnPagar_Click);
             // 
             // panelContenedor
             // 
