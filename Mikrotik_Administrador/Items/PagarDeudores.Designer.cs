@@ -44,7 +44,7 @@
             this.lblTotalServicio = new System.Windows.Forms.Label();
             this.lblTotalVenta = new System.Windows.Forms.Label();
             this.btnExtras = new System.Windows.Forms.Button();
-            this.lblTotalMensualidades = new System.Windows.Forms.Label();
+            this.lblTotalDeudas = new System.Windows.Forms.Label();
             this.NUDCantidad = new System.Windows.Forms.NumericUpDown();
             this.lblCantidadRecibida = new System.Windows.Forms.Label();
             this.lblTotalPagado = new System.Windows.Forms.Label();
@@ -129,6 +129,7 @@
             this.btnGuardar.TabIndex = 11;
             this.btnGuardar.Text = "Continuar";
             this.btnGuardar.UseVisualStyleBackColor = false;
+            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
             // btnSubir
             // 
@@ -143,6 +144,7 @@
             this.btnSubir.TabIndex = 11;
             this.btnSubir.Text = "Subir imagen";
             this.btnSubir.UseVisualStyleBackColor = false;
+            this.btnSubir.Click += new System.EventHandler(this.btnSubir_Click);
             // 
             // PBImagen
             // 
@@ -193,7 +195,7 @@
             this.panelTop.Controls.Add(this.lblTotalServicio);
             this.panelTop.Controls.Add(this.lblTotalVenta);
             this.panelTop.Controls.Add(this.btnExtras);
-            this.panelTop.Controls.Add(this.lblTotalMensualidades);
+            this.panelTop.Controls.Add(this.lblTotalDeudas);
             this.panelTop.Controls.Add(this.NUDCantidad);
             this.panelTop.Controls.Add(this.lblCantidadRecibida);
             this.panelTop.Controls.Add(this.lblTotalPagado);
@@ -251,16 +253,16 @@
             this.btnExtras.Text = "Extras";
             this.btnExtras.UseVisualStyleBackColor = false;
             // 
-            // lblTotalMensualidades
+            // lblTotalDeudas
             // 
-            this.lblTotalMensualidades.AutoSize = true;
-            this.lblTotalMensualidades.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.lblTotalMensualidades.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
-            this.lblTotalMensualidades.Location = new System.Drawing.Point(300, 342);
-            this.lblTotalMensualidades.Name = "lblTotalMensualidades";
-            this.lblTotalMensualidades.Size = new System.Drawing.Size(324, 32);
-            this.lblTotalMensualidades.TabIndex = 14;
-            this.lblTotalMensualidades.Text = "Total mensualidades: $0.00";
+            this.lblTotalDeudas.AutoSize = true;
+            this.lblTotalDeudas.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblTotalDeudas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.lblTotalDeudas.Location = new System.Drawing.Point(300, 342);
+            this.lblTotalDeudas.Name = "lblTotalDeudas";
+            this.lblTotalDeudas.Size = new System.Drawing.Size(225, 32);
+            this.lblTotalDeudas.TabIndex = 14;
+            this.lblTotalDeudas.Text = "Total deuda: $0.00";
             // 
             // NUDCantidad
             // 
@@ -353,7 +355,7 @@
         private System.Windows.Forms.Label lblTotalPagado;
         private System.Windows.Forms.Label lblCantidadRecibida;
         private System.Windows.Forms.NumericUpDown NUDCantidad;
-        private System.Windows.Forms.Label lblTotalMensualidades;
+        private System.Windows.Forms.Label lblTotalDeudas;
         private System.Windows.Forms.Button btnExtras;
         private System.Windows.Forms.Label lblTotalVenta;
         private System.Windows.Forms.Label lblTotalServicio;

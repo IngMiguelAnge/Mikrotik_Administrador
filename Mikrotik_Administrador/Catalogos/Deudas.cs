@@ -123,6 +123,20 @@ namespace Mikrotik_Administrador.Catalogos
             });
             DGVDeudas.Columns.Add(new DataGridViewTextBoxColumn
             {
+                Name = "Recibido",
+                HeaderText = "Recibido",
+                DataPropertyName = "Recibido",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2", // Aplica formato de moneda local (ej: $120.00 o $120.50)
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
+                }
+            });
+            DGVDeudas.Columns.Add(new DataGridViewTextBoxColumn
+            {
                 Name = "Faltante",
                 HeaderText = "Faltante",
                 DataPropertyName = "Faltante",
@@ -209,6 +223,7 @@ namespace Mikrotik_Administrador.Catalogos
                         h.Cliente = Cliente;
                         h.Faltante = (decimal)DGVDeudas.Rows[e.RowIndex].Cells["Faltante"].Value;
                         h.ShowDialog();
+                        Buscar();
                         break;
                     case "btnEditar":
                         Deuda d = new Deuda();
@@ -220,6 +235,12 @@ namespace Mikrotik_Administrador.Catalogos
                         }
                         break;
                     case "btnCambiarEstatus":
+                        if (DGVDeudas.Rows[e.RowIndex].Cells["Estatus"].Value.ToString() == "Inactivo" &&
+                            Convert.ToDecimal(DGVDeudas.Rows[e.RowIndex].Cells["Faltante"].Value.ToString()) <= 0)
+                        {
+                            MessageBox.Show("La deuda ya está pagada, no se puede cambiar el estatus.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
                         AppRepository r = new AppRepository();
                         var resultD = r.UpdateEstatusDeuda(Id).Result;
                         Buscar();
@@ -240,7 +261,16 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void btnPagar_Click(object sender, EventArgs e)
         {
-
+            PagarDeudores pa = new PagarDeudores();
+            pa.IdHistorial = 0;
+            pa.IdResponsable = IdResponsable;
+            pa.IdDeudor = IdDeudor;
+            pa.Cliente = Cliente;
+            pa.IdDeuda = 0;
+            if (pa.ShowDialog() == DialogResult.OK)
+            {
+                Buscar();
+            }
         }
     }
 }

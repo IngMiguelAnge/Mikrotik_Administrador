@@ -23,7 +23,133 @@ namespace Mikrotik_Administrador.Data
         {
             GC.Collect();
         }
-        #region HistorialPagosDeudores
+        #region HistorialPagosDeudas
+        public async Task<bool> UpdateEstatusHistorialPagosDeudas(int Id, bool IsExtra)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateEstatusHistorialPagosDeudas", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@IsExtra", IsExtra));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateDeudasNotaExtra(int Id, string NotaExtra, bool Extra)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateDeudasNotaExtra", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@NotaExtra", NotaExtra));
+                        cmd.Parameters.Add(new SqlParameter("@HistorialExtra", Extra));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<int> SaveHistorialPagosDeudas(HistorialPagosDeudaModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveHistorialPagosDeudas", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@FechaRecibido", obj.FechaRecibido));
+                        cmd.Parameters.Add(new SqlParameter("@Cantidad", obj.Cantidad));
+                        cmd.Parameters.Add(new SqlParameter("@IdDeuda", obj.IdDeuda));
+                        cmd.Parameters.Add(new SqlParameter("@Comentario", obj.Comentario));
+                        cmd.Parameters.Add(new SqlParameter("@IdBanco", obj.IdBanco));
+                        cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
+                        cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+        public async Task<HistorialPagosDeudaModel> GetHistorialPagosDeudasById(int Id)
+        {
+            HistorialPagosDeudaModel obj = new HistorialPagosDeudaModel();
+            List<HistorialPagosDeudaModel> list = new List<HistorialPagosDeudaModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetHistorialPagosDeudasById", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToHistorialPagosDeuda(reader));
+                            }
+                            obj = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return obj;
+        }
+        private HistorialPagosDeudaModel MapToHistorialPagosDeuda(SqlDataReader reader)
+        {
+            return new HistorialPagosDeudaModel()
+            {
+                Id = (int)reader["Id"],
+                FechaRecibido = (DateTime)reader["FechaRecibido"],
+                Cantidad = (decimal)reader["Cantidad"],
+                Comentario = (string)reader["Comentario"],
+                IdBanco = (int)reader["IdBanco"],
+                Referencia = (string)reader["Referencia"],
+                Imagen = Convert.IsDBNull(reader["Imagen"]) ? null : (byte[])reader["Imagen"],
+                IdDeuda = (int)reader["IdDeuda"],
+                IdUsuario = (int)reader["IdUsuario"],
+            };
+        }
         public async Task<List<ListHistorialPagosModel>> GetHistorialPagosDeudas(int IdDeuda, string Referencia, int Id, int IdBanco)
         {
             List<ListHistorialPagosModel> list = new List<ListHistorialPagosModel>();
@@ -58,6 +184,7 @@ namespace Mikrotik_Administrador.Data
     
         #endregion
         #region Deudas
+
         public async Task<bool> UpdateEstatusDeuda(int Id)
         {
             try

@@ -12,6 +12,7 @@ namespace Mikrotik_Administrador.Items
 {
     public partial class ConfirmarPago : Form
     {
+        public bool IsPagoDeudor { get; set; }
         public decimal Total { get; set; }
         public decimal Recibido { get; set; }
         public decimal CambioDar { get; set; }
@@ -111,7 +112,7 @@ namespace Mikrotik_Administrador.Items
             Recibido = nudRecibido.Value;
             if (Recibido > Total )
             {
-                if(IdMensualidadRecibido == 0 && IsExtra == false)
+                if(IdMensualidadRecibido == 0 && IsExtra == false && IsPagoDeudor == false)
                 {
                     DialogResult resultado = MessageBox.Show("El monto escrito es mayor que la cantidad a pagar, si procede se repartira el excedente entre nuevas mensualidades. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (resultado == DialogResult.No)

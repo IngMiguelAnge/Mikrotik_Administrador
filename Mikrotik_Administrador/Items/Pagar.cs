@@ -23,7 +23,7 @@ namespace Mikrotik_Administrador.Items
         public string Cliente { get; set; }
         public string UsuarioM { get; set; }
         public int IdUsuarioM { get; set; }
-        public decimal TotalFaltante { get; set; }
+        private decimal TotalFaltante;
         public int IdMensualidadRecibida { get; set; }
         private DateTime FechaCorte;
         private decimal MensualidadFinal;
@@ -238,16 +238,14 @@ namespace Mikrotik_Administrador.Items
             {    
                 ConfirmarPago confirmacion = new ConfirmarPago();
                 confirmacion.IsExtra = IdExtra ==0 ?false:true;
+                confirmacion.IsPagoDeudor = false;
+                confirmacion.Total = TotalFaltante;
                 if (TotalExtra > 0)
                 {
                     if(IdExtra == 0)
                     {
                         DialogResult resultado = MessageBox.Show("Se ha detectado que tiene un cobro extra pendiente, ¿Quiere que primero, se cubra ese cobro?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (resultado == DialogResult.No)
-                        {
-                            confirmacion.Total = TotalFaltante;
-                        }
-                        else
+                        if (resultado == DialogResult.Yes)
                         {
                             confirmacion.Total = TotalFaltante + TotalExtra;
                             CubrirExtra = true;

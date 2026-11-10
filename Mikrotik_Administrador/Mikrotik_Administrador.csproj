@@ -382,6 +382,7 @@
     <Compile Include="Items\PagarDeudores.Designer.cs">
       <DependentUpon>PagarDeudores.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\HistorialPagosDeudaModel.cs" />
     <Compile Include="Model\InstalacionModel.cs" />
     <Compile Include="Items\Mapa.cs">
       <SubType>Form</SubType>

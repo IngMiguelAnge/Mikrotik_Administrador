@@ -220,5 +220,55 @@ namespace Mikrotik_Administrador.Catalogos
                 btnBuscar.Enabled = true;
             }
         }
+
+        private async void dgvHistorialPagos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            dgvHistorialPagos.Enabled = false;
+            try
+            {
+                int Id = (int)dgvHistorialPagos.Rows[e.RowIndex].Cells["Id"].Value;
+                switch (dgvHistorialPagos.Columns[e.ColumnIndex].Name)
+                {
+                    case "btnCambiarStatus":
+                        if ((string)dgvHistorialPagos.Rows[e.RowIndex].Cells["Estatus"].Value == "Inactivo"
+                             && (decimal)dgvHistorialPagos.Rows[e.RowIndex].Cells["Cantidad"].Value > Faltante)
+                        {
+                            MessageBox.Show("No se puede reactivar este pago, sobre pasa el faltante a pagar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        AppRepository obj = new AppRepository();
+                        bool IsExtra = false;// IdExtra == 0 ? false : true;
+                        await obj.UpdateEstatusHistorialPagosDeudas(Id, IsExtra);
+
+                        CalcularFaltante();
+                        Buscar();
+                        break;
+                    case "btnEditar":
+                        PagarDeudores iniP = new PagarDeudores();
+                        //iniP.IdExtra = IdExtra;
+                        iniP.IdHistorial = Id;
+                        iniP.IdDeuda = IdDeuda;
+                        iniP.IdResponsable = IdResponsable;
+                        iniP.Cliente = Cliente;
+                        iniP.IdDeudor = IdDeudor;
+                        iniP.ShowDialog();
+                        CalcularFaltante();
+                        Buscar();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}");
+            }
+            finally
+            {
+                dgvHistorialPagos.Enabled = true;
+            }
+        }
     }
 }
