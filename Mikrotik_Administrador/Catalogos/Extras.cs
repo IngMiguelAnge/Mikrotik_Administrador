@@ -18,6 +18,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class Extras : Form
     {
+        public int IdDeudor { get; set; }
         public int IdUsuarioM { get; set; }
         public int IdResponsable {  get; set; }
         public bool Ocultar { get; set; }
@@ -41,9 +42,18 @@ namespace Mikrotik_Administrador.Catalogos
             AppRepository obj = new AppRepository();
             try
             {
-                var ListExtras = await obj.GetExtrasbyIdUsuarioM(IdUsuarioM);
-                var listaFinal = ListExtras?.ToList() ?? new List<ExtrasModel>();
-                DGVExtras.DataSource = new SortableBindingList<ExtrasModel>(listaFinal);
+                if(IdDeudor == 0)
+                {
+                    var ListExtras = await obj.GetExtrasbyIdUsuarioM(IdUsuarioM);
+                    var listaFinal = ListExtras?.ToList() ?? new List<ExtrasModel>();
+                    DGVExtras.DataSource = new SortableBindingList<ExtrasModel>(listaFinal);
+                }
+                else
+                {
+                    var ListExtras = await obj.GetExtrasDeudorbyIdDeudor(IdDeudor);
+                    var listaFinal = ListExtras?.ToList() ?? new List<ExtrasDeudorModel>();
+                    DGVExtras.DataSource = new SortableBindingList<ExtrasDeudorModel>(listaFinal);
+                }
             }
             catch (Exception ex)
             {
@@ -181,32 +191,52 @@ namespace Mikrotik_Administrador.Catalogos
                         vc.IsExtra = true;
                         if (vc.ShowDialog() == DialogResult.OK)
                         {
-                            var result = r.UpdateEstatusExtra(Id, vc.Nombre).Result;
+                            var result = IdDeudor == 0?
+                                r.UpdateEstatusExtra(Id, vc.Nombre).Result:
+                                r.UpdateEstatusExtraDeudor(Id, vc.Nombre).Result;
                             Buscar();
                         }                      
                         break;
                     case "btnModificar":
                         Extra ini = new Extra();
                         ini.Id = Id;
+                        ini.IdDeudor = IdDeudor;
                         ini.IdUsuarioM = IdUsuarioM;
                         ini.ShowDialog();
                         Buscar();
                         break;
                     case "btnHistorial":
                         AppRepository obj = new AppRepository();
-                        var Historial = obj.GetHistorialPagosExtras(Id, string.Empty, 0, 0).Result;
-                        decimal suma = Historial?.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad) ?? 0m;
+                        var Historial = obj.GetHistorialPagosExtras(Id, string.Empty, 0, 0, IdDeudor== 0 ? false:true).Result;
+                        decimal suma = 0;
+                            suma =  Historial?.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad) ?? 0m;
                         decimal Costo = (decimal)DGVExtras.Rows[e.RowIndex].Cells["Total"].Value;
-                        HistorialPagos Hi = new HistorialPagos();
-                        Hi.IdExtra = Id;
-                        Hi.IdMensualidad = 0;
-                        Hi.Faltante = Costo - suma < 0 ? 0 : Costo - suma;
-                        Hi.Mensualidad = Costo;
-                        Hi.IdResponsable = IdResponsable;
-                        Hi.Cliente = "";
-                        Hi.IdUsuarioM = IdUsuarioM;
-                        Hi.UsuarioM = "";
-                        Hi.ShowDialog();
+                        if(IdDeudor == 0)
+                        {
+                            HistorialPagos Hi = new HistorialPagos();
+                            Hi.IdExtra = Id;
+                            Hi.IdMensualidad = 0;
+                            Hi.Faltante = Costo - suma < 0 ? 0 : Costo - suma;
+                            Hi.Mensualidad = Costo;
+                            Hi.IdResponsable = IdResponsable;
+                            Hi.Cliente = "";
+                            Hi.IdUsuarioM = IdUsuarioM;
+                            Hi.UsuarioM = "";
+                            Hi.ShowDialog();
+                        }
+                        else
+                        {
+                            HistorialPagosDeudores Hi = new HistorialPagosDeudores();
+                            Hi.IdExtra = Id;
+                            Hi.IdDeuda = 0;
+                            Hi.Faltante = Costo - suma < 0 ? 0 : Costo - suma;
+                            //Hi.CostoExtra = Costo;
+                            Hi.IdResponsable = IdResponsable;
+                            Hi.Cliente = "";
+                            Hi.IdDeudor = IdDeudor;
+                            Hi.ShowDialog();
+                        }
+                   
                         Buscar();
                         break;
 
@@ -228,7 +258,8 @@ namespace Mikrotik_Administrador.Catalogos
         {
             Extra extras = new Extra();
             extras.Id = 0;
-            extras.IdUsuarioM = IdUsuarioM;
+            extras.IdDeudor = IdDeudor;
+            extras.IdUsuarioM = 0;
             extras.ShowDialog();
             Buscar();
         }

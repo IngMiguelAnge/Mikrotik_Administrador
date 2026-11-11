@@ -35,7 +35,7 @@ namespace Mikrotik_Administrador.Catalogos
         public void BuscarExtras()
         {
             AppRepository obj = new AppRepository();
-            var ListExtras = obj.GetCostoExtra(IdUsuarioM,0).Result;
+            var ListExtras = obj.GetCostoExtra(IdUsuarioM,0,0).Result;
             lblServicioExtra.Text = ListExtras != null ?
                 "Pago pendiente de los servicios $" + ListExtras.Where(x=> x.Tipo == "Servicio").Sum(x => x.TotalPendiente) :
                "Pago pendiente de los servicios $0.00";
@@ -347,6 +347,7 @@ namespace Mikrotik_Administrador.Catalogos
         private void btnExtras_Click(object sender, EventArgs e)
         {
             Extras ext = new Extras();
+            ext.IdDeudor = 0;
             ext.IdResponsable = IdResponsable;
             ext.IdUsuarioM = IdUsuarioM;
             ext.Ocultar = false;

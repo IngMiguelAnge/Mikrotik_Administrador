@@ -341,6 +341,7 @@ namespace Mikrotik_Administrador.Data
                 Year = Convert.ToInt32(reader["Year"]),
                 Mes = reader["Mes"]?.ToString() ?? string.Empty,
                 Cantidad = Convert.ToDecimal(reader["Cantidad"]),
+                Recibido = Convert.ToDecimal(reader["Recibido"]),
                 Faltante = Convert.ToDecimal(reader["Faltante"]),
                 Estatus = reader["Estatus"]?.ToString() ?? string.Empty,
             };
@@ -494,7 +495,6 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Longitud", obj.Longitud));
                         cmd.Parameters.Add(new SqlParameter("@Recogido", obj.Recogido));
                         cmd.Parameters.Add(new SqlParameter("@Nota", obj.Nota));
-                        cmd.Parameters.Add(new SqlParameter("@Estatus", obj.Estatus));
                         SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
                         {
                             Direction = System.Data.ParameterDirection.Output
@@ -658,7 +658,7 @@ namespace Mikrotik_Administrador.Data
         }
         #endregion
         #region Extras
-        public async Task<List<ListCostosExtrasModel>> GetCostoExtra(int IdUsuarioM, int IdExtra)
+        public async Task<List<ListCostosExtrasModel>> GetCostoExtra(int IdUsuarioM, int IdDeudor, int IdExtra)
         {
             List<ListCostosExtrasModel> list = new List<ListCostosExtrasModel>();
             try
@@ -669,6 +669,7 @@ namespace Mikrotik_Administrador.Data
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@IdDeudor", IdDeudor));
                         cmd.Parameters.Add(new SqlParameter("@IdExtra", IdExtra));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
@@ -718,6 +719,71 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
+        public async Task<bool> UpdateEstatusExtraDeudor(int Id, string Estatus)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateEstatusExtraDeudor", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@Estatus", Estatus));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<int> SaveExtrasDeudor(ExtrasDeudorModel obj)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("SaveExtrasDeudor", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
+                        cmd.Parameters.Add(new SqlParameter("@Tipo", obj.Tipo));
+                        cmd.Parameters.Add(new SqlParameter("@Nombre", obj.Nombre));
+                        cmd.Parameters.Add(new SqlParameter("@Costo", obj.Costo));
+                        cmd.Parameters.Add(new SqlParameter("@Descuento", obj.Descuento));
+                        cmd.Parameters.Add(new SqlParameter("@Total", obj.Total));
+                        cmd.Parameters.Add(new SqlParameter("@Fecha_Recibido", obj.Fecha_Recibido));
+                        cmd.Parameters.Add(new SqlParameter("@Fecha_Reparacion", obj.Fecha_Reparacion));
+                        cmd.Parameters.Add(new SqlParameter("@Fecha_Entregado", obj.Fecha_Entregado));
+                        cmd.Parameters.Add(new SqlParameter("@Fecha_Recogido", obj.Fecha_Recogido));
+                        cmd.Parameters.Add(new SqlParameter("@IdDeudor", obj.IdDeudor));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioRecibe", obj.IdUsuarioRecibe));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioRepara", obj.IdUsuarioRepara));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioEntrega", obj.IdUsuarioEntrega));
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioRecoge", obj.IdUsuarioRecoge));
+                        cmd.Parameters.Add(new SqlParameter("@Nota", obj.Nota));
+                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return idGenerado;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
         public async Task<int> SaveExtras(ExtrasModel obj)
         {
             try
@@ -840,6 +906,72 @@ namespace Mikrotik_Administrador.Data
                 : Convert.ToDateTime(reader["Fecha_Recogido"]),
                 Estatus = reader["Estatus"]?.ToString() ?? string.Empty,
                 IdUsuarioM = Convert.ToInt32(reader["IdUsuarioM"]),
+                IdUsuarioRecibe = reader["IdUsuarioRecibe"] == DBNull.Value
+                ? (int?)null
+                : Convert.ToInt32(reader["IdUsuarioRecibe"]),
+                IdUsuarioRepara = reader["IdUsuarioRepara"] == DBNull.Value
+                ? (int?)null
+                : Convert.ToInt32(reader["IdUsuarioRepara"]),
+                IdUsuarioEntrega = reader["IdUsuarioEntrega"] == DBNull.Value
+                ? (int?)null
+                : Convert.ToInt32(reader["IdUsuarioEntrega"]),
+                IdUsuarioRecoge = reader["IdUsuarioRecoge"] == DBNull.Value
+                ? (int?)null
+                : Convert.ToInt32(reader["IdUsuarioRecoge"]),
+                Nota = reader["Nota"]?.ToString() ?? string.Empty
+            };
+        }
+        public async Task<List<ExtrasDeudorModel>> GetExtrasDeudorbyIdDeudor(int IdDeudor)
+        {
+            List<ExtrasDeudorModel> list = new List<ExtrasDeudorModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetExtrasDeudorbyIdDeudor", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdDeudor", IdDeudor));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToExtrasDeudor(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ExtrasDeudorModel MapToExtrasDeudor(SqlDataReader reader)
+        {
+            return new ExtrasDeudorModel()
+            {
+                Id = Convert.ToInt32(reader["Id"]),
+                Tipo = reader["Tipo"]?.ToString() ?? string.Empty,
+                Nombre = reader["Nombre"]?.ToString() ?? string.Empty,
+                Costo = Convert.ToDecimal(reader["Costo"]),
+                Descuento = Convert.ToDecimal(reader["Descuento"]),
+                Total = Convert.ToDecimal(reader["Total"]),
+                Fecha_Recibido = reader["Fecha_Recibido"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(reader["Fecha_Recibido"]),
+                Fecha_Reparacion = reader["Fecha_Reparacion"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(reader["Fecha_Reparacion"]),
+                Fecha_Entregado = reader["Fecha_Entregado"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(reader["Fecha_Entregado"]),
+                Fecha_Recogido = reader["Fecha_Recogido"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(reader["Fecha_Recogido"]),
+                Estatus = reader["Estatus"]?.ToString() ?? string.Empty,
+                IdDeudor = Convert.ToInt32(reader["IdDeudor"]),
                 IdUsuarioRecibe = reader["IdUsuarioRecibe"] == DBNull.Value
                 ? (int?)null
                 : Convert.ToInt32(reader["IdUsuarioRecibe"]),
@@ -1875,7 +2007,7 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
-        public async Task<List<ListHistorialPagosModel>> GetHistorialPagosExtras(int IdExtra, string Referencia, int Id, int IdBanco)
+        public async Task<List<ListHistorialPagosModel>> GetHistorialPagosExtras(int IdExtra, string Referencia, int Id, int IdBanco,bool Deudor)
         {
             List<ListHistorialPagosModel> list = new List<ListHistorialPagosModel>();
             try
@@ -1889,6 +2021,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Referencia", Referencia));
                         cmd.Parameters.Add(new SqlParameter("@Id", Id));
                         cmd.Parameters.Add(new SqlParameter("@IdBanco", IdBanco));
+                        cmd.Parameters.Add(new SqlParameter("@Deudor", Deudor));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -1908,7 +2041,7 @@ namespace Mikrotik_Administrador.Data
         }
      
 
-        public async Task<int> SaveHistorialPagosExtras(HistorialPagosExtrasModel obj)
+        public async Task<int> SaveHistorialPagosExtras(HistorialPagosExtrasModel obj, bool Deudor)
         {
             try
             {
@@ -1926,7 +2059,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Referencia", obj.Referencia));
                         cmd.Parameters.Add(new SqlParameter("@Imagen", obj.Imagen));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
-                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
+                        cmd.Parameters.Add(new SqlParameter("@Deudor", Deudor));                        SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
                         {
                             Direction = System.Data.ParameterDirection.Output
                         };

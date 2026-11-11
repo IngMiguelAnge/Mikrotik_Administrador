@@ -277,7 +277,7 @@ namespace Mikrotik_Administrador.Items
             {
                 if(CubrirExtra)
                 {
-                    var ListExtras = obj.GetCostoExtra(IdUsuarioM, IdExtra).Result;
+                    var ListExtras = obj.GetCostoExtra(IdUsuarioM,0, IdExtra).Result;
                     if (IdExtra == 0)
                         ListExtras = ListExtras.Where(x => x.Tipo != "Prestamo").ToList();
                         foreach (var Extra in ListExtras)
@@ -297,7 +297,7 @@ namespace Mikrotik_Administrador.Items
                                 Imagen = ImageToByteArray(),
                                 IdUsuario = IdResponsable
                             };
-                            var result = obj.SaveHistorialPagosExtras(sv).Result;
+                            var result = obj.SaveHistorialPagosExtras(sv,false).Result;
                             ListIdHistorialExtra.Add(result);
                             ExtraNota += "Cobro extra " + Extra.Nombre + " con faltante a pagar: " +
                                  " $" + sv.Cantidad.ToString() + Environment.NewLine;
@@ -433,7 +433,7 @@ namespace Mikrotik_Administrador.Items
                             Imagen = ImageToByteArray(),
                             IdUsuario = IdResponsable
                         };
-                        var result = obj.SaveHistorialPagosExtras(sv).Result;
+                        var result = obj.SaveHistorialPagosExtras(sv,false).Result;
                     }
                     ExtraNota = string.Empty;
                 }
@@ -469,7 +469,7 @@ namespace Mikrotik_Administrador.Items
                             Imagen = ImageToByteArray(),
                             IdUsuario = IdResponsable
                         };
-                        int res = obj.SaveHistorialPagosExtras(sv).Result;
+                        int res = obj.SaveHistorialPagosExtras(sv,false).Result;
                     }
                         ExtraNota = string.Empty;
                 }
@@ -795,6 +795,7 @@ namespace Mikrotik_Administrador.Items
         private void btnExtras_Click(object sender, EventArgs e)
         {
             Extras ext = new Extras();
+            ext.IdDeudor = 0;
             ext.IdUsuarioM = IdUsuarioM;
             ext.IdResponsable = IdResponsable;
             ext.Ocultar = true;
@@ -804,7 +805,7 @@ namespace Mikrotik_Administrador.Items
         public void BuscarExtras()
         {
             AppRepository obj = new AppRepository();
-            var ListExtras = obj.GetCostoExtra(IdUsuarioM, IdExtra).Result;
+            var ListExtras = obj.GetCostoExtra(IdUsuarioM,0, IdExtra).Result;
             decimal Ventas = ListExtras != null ?
                 ListExtras.Where(x => x.Tipo == "Venta").Sum(x => x.TotalPendiente) : 0;
             decimal Servicios = ListExtras != null ?

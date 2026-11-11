@@ -252,6 +252,7 @@
             this.btnExtras.TabIndex = 15;
             this.btnExtras.Text = "Extras";
             this.btnExtras.UseVisualStyleBackColor = false;
+            this.btnExtras.Click += new System.EventHandler(this.btnExtras_Click);
             // 
             // lblTotalDeudas
             // 

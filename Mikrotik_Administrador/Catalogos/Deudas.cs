@@ -26,6 +26,7 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void Deudas_Load(object sender, EventArgs e)
         {
+            BuscarExtras();
             Buscar();
         }
         public async void Buscar()
@@ -262,6 +263,7 @@ namespace Mikrotik_Administrador.Catalogos
         private void btnPagar_Click(object sender, EventArgs e)
         {
             PagarDeudores pa = new PagarDeudores();
+            pa.IdExtra = 0;
             pa.IdHistorial = 0;
             pa.IdResponsable = IdResponsable;
             pa.IdDeudor = IdDeudor;
@@ -270,7 +272,33 @@ namespace Mikrotik_Administrador.Catalogos
             if (pa.ShowDialog() == DialogResult.OK)
             {
                 Buscar();
+                BuscarExtras();
             }
+        }
+        public void BuscarExtras()
+        {
+            AppRepository obj = new AppRepository();
+            var ListExtras = obj.GetCostoExtra(0, IdDeudor, 0).Result;
+            lblServicioExtra.Text = ListExtras != null ?
+                "Pago pendiente de los servicios $" + ListExtras.Where(x => x.Tipo == "Servicio").Sum(x => x.TotalPendiente) :
+               "Pago pendiente de los servicios $0.00";
+            lblVentaExtra.Text = ListExtras != null ?
+                "Pago pendiente de las ventas $" + ListExtras.Where(x => x.Tipo == "Venta").Sum(x => x.TotalPendiente) :
+               "Pago pendiente de las ventas $0.00";
+            lblPrestamoExtra.Text = ListExtras != null ?
+                "Pago pendiente de los prestamos $" + ListExtras.Where(x => x.Tipo == "Prestamo").Sum(x => x.TotalPendiente) :
+               "Pago pendiente de los prestamos $0.00";
+        }
+
+        private void btnExtras_Click(object sender, EventArgs e)
+        {
+            Extras ext = new Extras();
+            ext.IdDeudor = IdDeudor;
+            ext.IdResponsable = IdResponsable;
+            ext.IdUsuarioM = 0;
+            ext.Ocultar = false;
+            ext.ShowDialog();
+            BuscarExtras();
         }
     }
 }

@@ -64,7 +64,7 @@ namespace Mikrotik_Administrador.Catalogos
                 }
                 else
                 {
-                    var Pagos = await obj.GetHistorialPagosExtras(IdExtra, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
+                    var Pagos = await obj.GetHistorialPagosExtras(IdExtra, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue, false);
                     var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosModel>();
                     dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
                 }
@@ -286,7 +286,7 @@ namespace Mikrotik_Administrador.Catalogos
                 Faltante = 0;
                 foreach (var item in Extrasfaltantes)
                 {
-                    var Pagos = obj.GetHistorialPagosExtras(item.Id, string.Empty, 0, 0);
+                    var Pagos = obj.GetHistorialPagosExtras(item.Id, string.Empty, 0, 0,false);
                     decimal TotalHistorial = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
                     Faltante += item.Costo - TotalHistorial;
                 }

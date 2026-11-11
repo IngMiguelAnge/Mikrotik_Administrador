@@ -51,6 +51,14 @@ namespace Mikrotik_Administrador.Catalogos
                         var resultD = r.UpdateEstatusDeudor(IdDeudor).Result;
                         CargarClientes();
                         break;
+                    case "btnExtras":
+                        Extras extras = new Extras();
+                        extras.IdDeudor = IdDeudor;
+                        extras.IdUsuarioM = 0;
+                        extras.IdResponsable = IdResponsable;
+                        extras.Ocultar = false;
+                        extras.ShowDialog();
+                        break;
                     case "btnVerNota":
                         VerComentario verComentario = new VerComentario();
                         verComentario.Comentario = DGVClientes.Rows[e.RowIndex].Cells["Nota"].Value.ToString();
@@ -232,6 +240,18 @@ namespace Mikrotik_Administrador.Catalogos
                 DefaultCellStyle = estiloBotones
             };
             DGVClientes.Columns.Add(btnEditar);
+            DataGridViewButtonColumn btnExtras = new DataGridViewButtonColumn
+            {
+                Name = "btnExtras",
+                HeaderText = "Acción",
+                Text = "Extras",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVClientes.Columns.Add(btnExtras);
+
             DataGridViewButtonColumn btnVerNota = new DataGridViewButtonColumn
             {
                 Name = "btnVerNota",

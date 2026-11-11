@@ -17,6 +17,7 @@ namespace Mikrotik_Administrador.Catalogos
     {
         public int Id { get; set; }
         public int IdUsuarioM { get; set; }
+        public int IdDeudor { get; set; }
         decimal CostoTotal = 0;
         bool primerIngreso = true;
         bool primerIngreso2 = true;
@@ -118,7 +119,7 @@ namespace Mikrotik_Administrador.Catalogos
             AppRepository obj = new AppRepository();
             if(Id != 0)
             {
-                var Historial = obj.GetHistorialPagosExtras(Id, string.Empty, 0, 0).Result;
+                var Historial = obj.GetHistorialPagosExtras(Id, string.Empty, 0, 0, IdDeudor == 0 ? false : true).Result;
                 decimal suma = Historial?.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad) ?? 0m;
                 if(suma > CostoTotal)
                 {
@@ -127,34 +128,62 @@ namespace Mikrotik_Administrador.Catalogos
                     return;
                 }
             }
-         
-            
-            ExtrasModel extra = new ExtrasModel()
+            int r = 0;
+            if (IdDeudor == 0)
             {
-                Id = Id,
-                Tipo = (string)CBTipo.SelectedItem,
-                Nombre = txtNombre.Text.Trim(),
-                Costo = NUDCosto.Value,
-                Descuento = NudDescuento.Value,
-                Total = CostoTotal,
-                Fecha_Recibido = CBRecibe.SelectedIndex == 0? (DateTime?)null
+                ExtrasModel extra = new ExtrasModel()
+                {
+                    Id = Id,
+                    Tipo = (string)CBTipo.SelectedItem,
+                    Nombre = txtNombre.Text.Trim(),
+                    Costo = NUDCosto.Value,
+                    Descuento = NudDescuento.Value,
+                    Total = CostoTotal,
+                    Fecha_Recibido = CBRecibe.SelectedIndex == 0 ? (DateTime?)null
                 : dtpFechaRecibido.Value,
-                Fecha_Reparacion = CBRepara.SelectedIndex == 0 ? (DateTime?)null
+                    Fecha_Reparacion = CBRepara.SelectedIndex == 0 ? (DateTime?)null
                 : dtpFechaReparacion.Value,
-                Fecha_Entregado = CBEntrega.SelectedIndex == 0 ? (DateTime?)null
+                    Fecha_Entregado = CBEntrega.SelectedIndex == 0 ? (DateTime?)null
                 : dtpFechaEntrega.Value,
-                Fecha_Recogido = CBRecoge.SelectedIndex == 0 ? (DateTime?)null
+                    Fecha_Recogido = CBRecoge.SelectedIndex == 0 ? (DateTime?)null
                 : dtpFechaRecogida.Value,
-                IdUsuarioM = IdUsuarioM,
-                IdUsuarioRecibe = (int)CBRecibe.SelectedValue == 0 ? (int?)null : (int)CBRecibe.SelectedValue,
-                IdUsuarioRepara = (int)CBRepara.SelectedValue == 0 ? (int?)null : (int)CBRepara.SelectedValue,
-                IdUsuarioEntrega = (int)CBEntrega.SelectedValue == 0 ? (int?)null : (int)CBEntrega.SelectedValue,
-                IdUsuarioRecoge = (int)CBRecoge.SelectedValue == 0 ? (int?)null : (int)CBRecoge.SelectedValue,
-                Nota = txtNombre.Text.ToString().Trim(),
-            };
-   
-            var r = obj.SaveExtras(extra).Result;
-            if(r> 0)
+                    IdUsuarioM = IdUsuarioM,
+                    IdUsuarioRecibe = (int)CBRecibe.SelectedValue == 0 ? (int?)null : (int)CBRecibe.SelectedValue,
+                    IdUsuarioRepara = (int)CBRepara.SelectedValue == 0 ? (int?)null : (int)CBRepara.SelectedValue,
+                    IdUsuarioEntrega = (int)CBEntrega.SelectedValue == 0 ? (int?)null : (int)CBEntrega.SelectedValue,
+                    IdUsuarioRecoge = (int)CBRecoge.SelectedValue == 0 ? (int?)null : (int)CBRecoge.SelectedValue,
+                    Nota = txtNombre.Text.ToString().Trim(),
+                };
+                r = obj.SaveExtras(extra).Result;
+            }
+            else
+            {
+                ExtrasDeudorModel extra = new ExtrasDeudorModel()
+                {
+                    Id = Id,
+                    Tipo = (string)CBTipo.SelectedItem,
+                    Nombre = txtNombre.Text.Trim(),
+                    Costo = NUDCosto.Value,
+                    Descuento = NudDescuento.Value,
+                    Total = CostoTotal,
+                    Fecha_Recibido = CBRecibe.SelectedIndex == 0 ? (DateTime?)null
+               : dtpFechaRecibido.Value,
+                    Fecha_Reparacion = CBRepara.SelectedIndex == 0 ? (DateTime?)null
+               : dtpFechaReparacion.Value,
+                    Fecha_Entregado = CBEntrega.SelectedIndex == 0 ? (DateTime?)null
+               : dtpFechaEntrega.Value,
+                    Fecha_Recogido = CBRecoge.SelectedIndex == 0 ? (DateTime?)null
+               : dtpFechaRecogida.Value,
+                    IdDeudor = IdDeudor,
+                    IdUsuarioRecibe = (int)CBRecibe.SelectedValue == 0 ? (int?)null : (int)CBRecibe.SelectedValue,
+                    IdUsuarioRepara = (int)CBRepara.SelectedValue == 0 ? (int?)null : (int)CBRepara.SelectedValue,
+                    IdUsuarioEntrega = (int)CBEntrega.SelectedValue == 0 ? (int?)null : (int)CBEntrega.SelectedValue,
+                    IdUsuarioRecoge = (int)CBRecoge.SelectedValue == 0 ? (int?)null : (int)CBRecoge.SelectedValue,
+                    Nota = txtNombre.Text.ToString().Trim(),
+                };
+                r = obj.SaveExtrasDeudor(extra).Result;
+            }
+            if (r > 0)
             {
                 MessageBox.Show("Guardado correctamante", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
@@ -218,6 +247,7 @@ namespace Mikrotik_Administrador.Catalogos
                     CBRecoge.SelectedIndex = 0;
                     break;
             }
+            Calcular();
         }
         public void Calcular()
         {

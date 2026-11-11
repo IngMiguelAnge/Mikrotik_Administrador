@@ -17,6 +17,7 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class HistorialPagosDeudores : Form
     {
+        public int IdExtra { get; set; }
         public int IdDeudor { get; set; }
         public int IdDeuda { get; set; }
         public int IdResponsable { get; set; }
@@ -55,10 +56,12 @@ namespace Mikrotik_Administrador.Catalogos
                 return;
             }
             PagarDeudores iniP = new PagarDeudores();
+            iniP.IdExtra = IdExtra;
             iniP.IdHistorial = 0;
             iniP.IdResponsable = IdResponsable;
             iniP.Cliente = Cliente;
             iniP.IdDeudor = IdDeudor;
+            iniP.IdDeuda = IdDeuda;
             iniP.ShowDialog();
             CalcularFaltante();
             Buscar();
@@ -66,8 +69,8 @@ namespace Mikrotik_Administrador.Catalogos
         public void CalcularFaltante()
         {
             AppRepository obj = new AppRepository();
-            //if (IdExtra == 0)
-            //{
+            if (IdExtra == 0)
+            {
                 var Deudasfaltantes = obj.GetFaltantesPagarbyIdDeudor(IdDeudor).Result.ToList();
                 if (IdDeuda != 0)
                 {
@@ -80,7 +83,7 @@ namespace Mikrotik_Administrador.Catalogos
                     decimal TotalHistorial = Pagos.Result.Where(x => x.Estatus == "Activo").Sum(x => x.Cantidad);
                     Faltante += item.Cantidad - TotalHistorial;
                 }
-            //}
+            }
         }
         public void CrearGridView()
         {
@@ -198,18 +201,18 @@ namespace Mikrotik_Administrador.Catalogos
             AppRepository obj = new AppRepository();
             try
             {
-                //if (IdExtra == 0)
-                //{
+                if (IdExtra == 0)
+                {
                     var Pagos = await obj.GetHistorialPagosDeudas(IdDeuda, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
                     var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosModel>();
                     dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
-                //}
-                //else
-                //{
-                //    var Pagos = await obj.GetHistorialPagosExtras(IdExtra, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue);
-                //    var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosExtrasModel>();
-                //    dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosExtrasModel>(listaFinal);
-                //}
+                }
+                else
+                {
+                    var Pagos = await obj.GetHistorialPagosExtras(IdExtra, txtReferencia.Text.Trim(), (int)NUDTicket.Value, (int)CBBanco.SelectedValue,true);
+                    var listaFinal = Pagos?.ToList() ?? new List<ListHistorialPagosModel>();
+                    dgvHistorialPagos.DataSource = new SortableBindingList<ListHistorialPagosModel>(listaFinal);
+                }
             }
             catch (Exception ex)
             {
@@ -247,7 +250,7 @@ namespace Mikrotik_Administrador.Catalogos
                         break;
                     case "btnEditar":
                         PagarDeudores iniP = new PagarDeudores();
-                        //iniP.IdExtra = IdExtra;
+                        iniP.IdExtra = IdExtra;
                         iniP.IdHistorial = Id;
                         iniP.IdDeuda = IdDeuda;
                         iniP.IdResponsable = IdResponsable;

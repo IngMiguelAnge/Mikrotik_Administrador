@@ -63,7 +63,6 @@ namespace Mikrotik_Administrador.Items
                         Longitud = deudor.Longitud,
                         Recogido = deudor.Recogido.ToUpper() == "SI" ? true : false,
                         Nota = deudor.Nota,
-                        Estatus = deudor.Estatus == "Activo" ? true : false
                     };
                     int resultado = await obj.SaveDeudoresbyName(Deudores);
                     if (resultado <= 0)

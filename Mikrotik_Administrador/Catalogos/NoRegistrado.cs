@@ -58,6 +58,7 @@ namespace Mikrotik_Administrador.Catalogos
             if(result > 0)
             {
                 MessageBox.Show("Guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else
