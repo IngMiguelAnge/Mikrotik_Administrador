@@ -298,6 +298,12 @@
     <Compile Include="Catalogos\Deudas.Designer.cs">
       <DependentUpon>Deudas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\PDFs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\PDFs.Designer.cs">
+      <DependentUpon>PDFs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\Extra.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -364,6 +370,7 @@
     <Compile Include="Catalogos\Prorrogas.Designer.cs">
       <DependentUpon>Prorrogas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Class\DocumentoPagoMensual.cs" />
     <Compile Include="Items\Cajas.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -663,6 +670,9 @@
     <EmbeddedResource Include="Catalogos\Deudas.resx">
       <DependentUpon>Deudas.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\PDFs.resx">
+      <DependentUpon>PDFs.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Extra.resx">
       <DependentUpon>Extra.cs</DependentUpon>
     </EmbeddedResource>
@@ -846,11 +856,14 @@
     <Content Include="Imagenes\google-maps.png" />
     <Content Include="Imagenes\history.png" />
     <Content Include="Imagenes\Information.png" />
-    <Content Include="Imagenes\LOGO MASTER SISTEM.png" />
+    <Content Include="Imagenes\LOGO MASTER SISTEM.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Imagenes\Lupa.png" />
     <Content Include="Imagenes\Mensualidad.png" />
     <Content Include="Imagenes\migration.png" />
     <Content Include="Imagenes\not-approved.png" />
+    <Content Include="Imagenes\pdf.png" />
     <Content Include="Imagenes\plan.png" />
     <Content Include="Imagenes\server.png" />
     <Content Include="Imagenes\user.png" />

@@ -73,12 +73,13 @@ namespace Mikrotik_Administrador
             this.flowClientes = new System.Windows.Forms.FlowLayoutPanel();
             this.btnInformacion = new System.Windows.Forms.Button();
             this.btnMensualidades = new System.Windows.Forms.Button();
+            this.btnNoRegistrados = new System.Windows.Forms.Button();
             this.grpHistoriales = new System.Windows.Forms.GroupBox();
             this.flowHistoriales = new System.Windows.Forms.FlowLayoutPanel();
             this.btnCambios = new System.Windows.Forms.Button();
             this.btnHistorial = new System.Windows.Forms.Button();
             this.btnExcel = new System.Windows.Forms.Button();
-            this.btnNoRegistrados = new System.Windows.Forms.Button();
+            this.btnPDF = new System.Windows.Forms.Button();
             this.panelSideMenu.SuspendLayout();
             this.panelSubmenuHistoriales.SuspendLayout();
             this.panelSubmenuCliente.SuspendLayout();
@@ -789,6 +790,27 @@ namespace Mikrotik_Administrador
             this.btnMensualidades.UseVisualStyleBackColor = false;
             this.btnMensualidades.Click += new System.EventHandler(this.btnMensualidades_Click);
             // 
+            // btnNoRegistrados
+            // 
+            this.btnNoRegistrados.BackColor = System.Drawing.Color.White;
+            this.btnNoRegistrados.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNoRegistrados.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
+            this.btnNoRegistrados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNoRegistrados.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnNoRegistrados.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.btnNoRegistrados.Image = ((System.Drawing.Image)(resources.GetObject("btnNoRegistrados.Image")));
+            this.btnNoRegistrados.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnNoRegistrados.Location = new System.Drawing.Point(348, 8);
+            this.btnNoRegistrados.Margin = new System.Windows.Forms.Padding(8);
+            this.btnNoRegistrados.Name = "btnNoRegistrados";
+            this.btnNoRegistrados.Size = new System.Drawing.Size(171, 66);
+            this.btnNoRegistrados.TabIndex = 2;
+            this.btnNoRegistrados.Text = "No Registrados";
+            this.btnNoRegistrados.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnNoRegistrados.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnNoRegistrados.UseVisualStyleBackColor = false;
+            this.btnNoRegistrados.Click += new System.EventHandler(this.btnNoRegistrados_Click);
+            // 
             // grpHistoriales
             // 
             this.grpHistoriales.AutoSize = true;
@@ -798,10 +820,10 @@ namespace Mikrotik_Administrador
             this.grpHistoriales.Location = new System.Drawing.Point(23, 431);
             this.grpHistoriales.Margin = new System.Windows.Forms.Padding(3, 3, 3, 15);
             this.grpHistoriales.Name = "grpHistoriales";
-            this.grpHistoriales.Size = new System.Drawing.Size(416, 119);
+            this.grpHistoriales.Size = new System.Drawing.Size(525, 119);
             this.grpHistoriales.TabIndex = 3;
             this.grpHistoriales.TabStop = false;
-            this.grpHistoriales.Text = "Historiales";
+            this.grpHistoriales.Text = "Historiales y documentos";
             // 
             // flowHistoriales
             // 
@@ -809,10 +831,11 @@ namespace Mikrotik_Administrador
             this.flowHistoriales.Controls.Add(this.btnCambios);
             this.flowHistoriales.Controls.Add(this.btnHistorial);
             this.flowHistoriales.Controls.Add(this.btnExcel);
+            this.flowHistoriales.Controls.Add(this.btnPDF);
             this.flowHistoriales.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowHistoriales.Location = new System.Drawing.Point(3, 33);
             this.flowHistoriales.Name = "flowHistoriales";
-            this.flowHistoriales.Size = new System.Drawing.Size(410, 83);
+            this.flowHistoriales.Size = new System.Drawing.Size(519, 83);
             this.flowHistoriales.TabIndex = 0;
             // 
             // btnCambios
@@ -878,26 +901,26 @@ namespace Mikrotik_Administrador
             this.btnExcel.UseVisualStyleBackColor = false;
             this.btnExcel.Click += new System.EventHandler(this.btnExcel_Click);
             // 
-            // btnNoRegistrados
+            // btnPDF
             // 
-            this.btnNoRegistrados.BackColor = System.Drawing.Color.White;
-            this.btnNoRegistrados.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnNoRegistrados.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
-            this.btnNoRegistrados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNoRegistrados.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnNoRegistrados.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
-            this.btnNoRegistrados.Image = ((System.Drawing.Image)(resources.GetObject("btnNoRegistrados.Image")));
-            this.btnNoRegistrados.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnNoRegistrados.Location = new System.Drawing.Point(348, 8);
-            this.btnNoRegistrados.Margin = new System.Windows.Forms.Padding(8);
-            this.btnNoRegistrados.Name = "btnNoRegistrados";
-            this.btnNoRegistrados.Size = new System.Drawing.Size(171, 66);
-            this.btnNoRegistrados.TabIndex = 2;
-            this.btnNoRegistrados.Text = "No Registrados";
-            this.btnNoRegistrados.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnNoRegistrados.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnNoRegistrados.UseVisualStyleBackColor = false;
-            this.btnNoRegistrados.Click += new System.EventHandler(this.btnNoRegistrados_Click);
+            this.btnPDF.BackColor = System.Drawing.Color.White;
+            this.btnPDF.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPDF.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(224)))), ((int)(((byte)(233)))));
+            this.btnPDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPDF.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnPDF.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(23)))), ((int)(((byte)(42)))));
+            this.btnPDF.Image = ((System.Drawing.Image)(resources.GetObject("btnPDF.Image")));
+            this.btnPDF.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnPDF.Location = new System.Drawing.Point(418, 8);
+            this.btnPDF.Margin = new System.Windows.Forms.Padding(8);
+            this.btnPDF.Name = "btnPDF";
+            this.btnPDF.Size = new System.Drawing.Size(93, 62);
+            this.btnPDF.TabIndex = 3;
+            this.btnPDF.Text = "PDFs";
+            this.btnPDF.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnPDF.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnPDF.UseVisualStyleBackColor = false;
+            this.btnPDF.Click += new System.EventHandler(this.PDF_Click);
             // 
             // Menu
             // 
@@ -996,5 +1019,6 @@ namespace Mikrotik_Administrador
         private System.Windows.Forms.Button btnHistorial;
         private System.Windows.Forms.Button btnExcel;
         private Button btnNoRegistrados;
+        private Button btnPDF;
     }
 }

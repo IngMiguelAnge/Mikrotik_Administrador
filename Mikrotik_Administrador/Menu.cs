@@ -334,5 +334,11 @@ namespace Mikrotik_Administrador
             nr.IdResponsable = IdResponsable;
             nr.Show();
         }
+
+        private void PDF_Click(object sender, EventArgs e)
+        {
+            PDFs ed = new PDFs();
+            ed.Show();
+        }
     }
 }
