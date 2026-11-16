@@ -370,6 +370,9 @@
     <Compile Include="Catalogos\Prorrogas.Designer.cs">
       <DependentUpon>Prorrogas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Class\DocumentoCobroTecnico.cs" />
+    <Compile Include="Class\DocumentoInstalacion.cs" />
+    <Compile Include="Class\DocumentoNotaServicio.cs" />
     <Compile Include="Class\DocumentoPagoMensual.cs" />
     <Compile Include="Items\Cajas.cs">
       <SubType>Form</SubType>

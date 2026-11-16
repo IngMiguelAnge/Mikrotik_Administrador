@@ -41,7 +41,7 @@
             this.btnImprimir.ForeColor = System.Drawing.Color.White;
             this.btnImprimir.Location = new System.Drawing.Point(313, 56);
             this.btnImprimir.Name = "btnImprimir";
-            this.btnImprimir.Size = new System.Drawing.Size(140, 38);
+            this.btnImprimir.Size = new System.Drawing.Size(140, 45);
             this.btnImprimir.TabIndex = 6;
             this.btnImprimir.Text = "Imprimir";
             this.btnImprimir.UseVisualStyleBackColor = false;
@@ -54,7 +54,10 @@
             this.cbTipo.FormattingEnabled = true;
             this.cbTipo.Items.AddRange(new object[] {
             "Seleccione",
-            "Mensualidades"});
+            "Mensualidades",
+            "Cobros tecnicos",
+            "Instalación",
+            "Nota de servicio"});
             this.cbTipo.Location = new System.Drawing.Point(34, 61);
             this.cbTipo.Name = "cbTipo";
             this.cbTipo.Size = new System.Drawing.Size(248, 33);
