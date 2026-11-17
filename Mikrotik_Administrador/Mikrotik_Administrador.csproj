@@ -370,6 +370,7 @@
     <Compile Include="Catalogos\Prorrogas.Designer.cs">
       <DependentUpon>Prorrogas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Class\ConversorMoneda.cs" />
     <Compile Include="Class\DocumentoCobroTecnico.cs" />
     <Compile Include="Class\DocumentoInstalacion.cs" />
     <Compile Include="Class\DocumentoNotaServicio.cs" />

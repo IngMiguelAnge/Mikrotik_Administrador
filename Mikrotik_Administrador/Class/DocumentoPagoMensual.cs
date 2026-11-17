@@ -341,10 +341,10 @@ namespace Mikrotik_Administrador.Class
                 col.Item().BorderLeft(1).BorderRight(1).BorderBottom(1).BorderColor(ColorPrimario)
                     .Height(36).Row(row =>
                     {
-                        row.RelativeItem().Padding(5).Column(c =>
+                        row.RelativeItem().Padding(3).Column(c =>
                         {
                             c.Item().Text("ANOTACIONES").FontSize(9).Bold();
-                            c.Item().Text(_datos.Anotaciones).FontSize(8).FontColor(Colors.Black);
+                            c.Item().Text(_datos.Anotaciones).FontSize(6).FontColor(Colors.Black);
                         });
 
                         row.ConstantItem(75).AlignBottom().PaddingBottom(5).AlignRight().PaddingRight(5)

@@ -186,8 +186,8 @@ namespace Mikrotik_Administrador.Catalogos
                     NombreCliente = "María López Hernández",
                     Lugar = "Col. Centro, Tlacotepec",
                     Telefono = "2371002030",
-                    CantidadConLetra = "TRESCIENTOS CINCUENTA PESOS 00/100 M.N.",
-                    Anotaciones = "Pago puntual correspondiente al paquete básico.",
+                    CantidadConLetra = ConversorMoneda.ConvertirALetras(350.00m),
+                    Anotaciones = string.Empty,
                     Detalles = new List<DetalleMensualidad>
                 {
                   new DetalleMensualidad { Cantidad = 1, Dia = 1, Mes = "ENERO", Anio = "2026", PrecioUnitario = 350.00m },
