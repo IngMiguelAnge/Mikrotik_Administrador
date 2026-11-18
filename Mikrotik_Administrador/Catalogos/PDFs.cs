@@ -189,14 +189,14 @@ namespace Mikrotik_Administrador.Catalogos
                     CantidadConLetra = ConversorMoneda.ConvertirALetras(350.00m),
                     Anotaciones = string.Empty,
                     Detalles = new List<DetalleMensualidad>
-                {
+                    {
                   new DetalleMensualidad { Cantidad = 1, Dia = 1, Mes = "ENERO", Anio = "2026", PrecioUnitario = 350.00m },
                   new DetalleMensualidad { Cantidad = 1, Dia = 1, Mes = "FEBRERO", Anio = "2026", PrecioUnitario = 350.00m },
                   new DetalleMensualidad { Cantidad = 1, Dia = 1, Mes = "MARZO", Anio = "2026", PrecioUnitario = 350.00m },
                   new DetalleMensualidad { Cantidad = 1, Dia = 1, Mes = "ABRIL", Anio = "2026", PrecioUnitario = 350.00m },
                   new DetalleMensualidad { Cantidad = 1, Dia = 1, Mes = "MAYO", Anio = "2026", PrecioUnitario = 350.00m },
                   new DetalleMensualidad { Cantidad = 1, Dia = 1, Mes = "JUNIO", Anio = "2026", PrecioUnitario = 350.00m }
-                }
+                     }
                 };
 
                 // Ruta opcional de tu logotipo en PNG/JPG

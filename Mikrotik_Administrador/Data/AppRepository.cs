@@ -3737,7 +3737,6 @@ namespace Mikrotik_Administrador.Data
                 Longitud = (string)reader["Longitud"],
             };
         }
-
         public async Task<bool> SaveUbicacion(UbicacionModel obj)
         {
             try
