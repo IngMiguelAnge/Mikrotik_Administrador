@@ -136,7 +136,7 @@ namespace Mikrotik_Administrador.Class
                             .Text("NOTA DE VENTA").FontSize(8).Bold().FontColor(Colors.White);
 
                         box.Item().Background(ColorFondoClaro).PaddingVertical(6).AlignCenter()
-                            .Text($"Nº  {_datos.Folio}")
+                            .Text($" {_datos.Folio}")
                             .FontSize(12).Bold().FontColor("#B22222");
                     });
 

@@ -9,7 +9,7 @@ namespace Mikrotik_Administrador.Class
 {
     public class DatosNotaServicio
     {
-        public string Folio { get; set; } = "2751";
+        public string Folio { get; set; } = "";
         public DateTime Fecha { get; set; } = DateTime.Now;
 
         // Datos de recepción y equipo

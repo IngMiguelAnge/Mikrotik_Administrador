@@ -333,7 +333,7 @@ namespace Mikrotik_Administrador.Items
                             Imagen = ImageToByteArray(),
                             IdUsuario = IdResponsable
                         };
-                        nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(item.FechaInicio.Month);
+                        nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(item.FechaInicio.Month).ToUpper();
                         ListMensualidades.Add(new DescripcionMensualidadesModel
                         {
                             Dia = item.DiaCorte,
@@ -385,7 +385,7 @@ namespace Mikrotik_Administrador.Items
                                 Imagen = ImageToByteArray(),
                                 IdUsuario = IdResponsable
                             };
-                            nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(mensualidad.FechaInicio.Month);
+                            nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(mensualidad.FechaInicio.Month).ToUpper();
 
                             ListMensualidades.Add(new DescripcionMensualidadesModel
                             {
@@ -445,7 +445,7 @@ namespace Mikrotik_Administrador.Items
                             Imagen = ImageToByteArray(),
                             IdUsuario = IdResponsable
                         };
-                        nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(ListaPagos.FirstOrDefault().FechaInicio.Month);
+                        nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(ListaPagos.FirstOrDefault().FechaInicio.Month).ToUpper();
                         ListMensualidades.Add(new DescripcionMensualidadesModel
                         {
                             Dia = ListaPagos.FirstOrDefault().DiaCorte,
@@ -489,7 +489,7 @@ namespace Mikrotik_Administrador.Items
                             Imagen = ImageToByteArray(),
                             IdUsuario = IdResponsable
                         };
-                        nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(ListaPagos.FirstOrDefault().FechaInicio.Month);
+                        nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(ListaPagos.FirstOrDefault().FechaInicio.Month).ToUpper();
                         ListMensualidades.Add(new DescripcionMensualidadesModel
                         {
                             Dia = ListaPagos.FirstOrDefault().DiaCorte,

@@ -51,7 +51,7 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 var datos = new DatosNotaServicio
                 {
-                    Folio = "2751",
+                    Folio = string.Empty,
                     Fecha = DateTime.Now,
                     Recibe = "Ing. Guillermo Martínez",
                     Marca = "HP",
@@ -90,7 +90,7 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 var datos = new DatosInstalacion
                 {
-                    Folio = "1951",
+                    Folio = string.Empty,
                     Fecha = DateTime.Now,
                     Instalador = "Juan Carlos Gómez",
                     NombreCliente = "Roberto Sánchez",
@@ -142,7 +142,7 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 var datos = new DatosCobroTecnico
                 {
-                    Folio = "2001",
+                    Folio = string.Empty,
                     Fecha = DateTime.Now,
                     Recibe = "I.S.C. Cruz Martínez",
                     NombreCliente = "Carlos Mendoza Pérez",
@@ -179,7 +179,7 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 var datos = new DatosRecibo
                 {
-                    Folio = "021902",
+                    Folio = string.Empty,
                     Fecha = DateTime.Now,
                     Monto = 350.00m,
                     Recibe = "Juan Pérez",
