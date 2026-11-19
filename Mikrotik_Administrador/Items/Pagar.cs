@@ -542,12 +542,12 @@ namespace Mikrotik_Administrador.Items
             DialogResult = DialogResult.OK;
             if(IdHistorial == 0)
             {
-                GenerarPDF(ListMensualidades);
+                GenerarPDFMensualidades(ListMensualidades);
             }   
             
             this.Close();
         }
-        public void GenerarPDF(List<DescripcionMensualidadesModel> ListMensualidades)
+        public void GenerarPDFMensualidades(List<DescripcionMensualidadesModel> ListMensualidades)
         {
             try
             {

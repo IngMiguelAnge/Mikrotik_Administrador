@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
@@ -1755,7 +1756,9 @@ namespace Mikrotik_Administrador.Catalogos
 
                             int ContadorPagos = -1;
                             int filaPagos = 2;
-
+                            int ContadorFolios = 0;
+                            int Folio = 0;
+                            DateTime FechaFolio = DateTime.Now;
                             foreach (var item in ListMensualidades)
                             {
                                 ContadorPagos += 1;
@@ -1800,6 +1803,15 @@ namespace Mikrotik_Administrador.Catalogos
                                             int rhp = obj.SaveHistorialPagos(HP).Result;
                                             if (rhp != 0)
                                             {
+                                                if(ContadorFolios == 0 || ContadorFolios == 6
+                                                    || FechaFolio != HP.FechaRecibido)
+                                                {
+                                                    ContadorFolios = 0;
+                                                    FechaFolio = HP.FechaRecibido;
+                                                    Folio = obj.GetUltimoFolio("Mensualidades").Result.Folio + 1;
+                                                }
+                                                var r = obj.UpdateFoliobyIdHistorial(rhp, "Mensualidades", Folio).Result;
+                                                ContadorFolios++;
                                                 wPagos.Cell(filaPagos, 1).Value = "Se guardó correctamente el pago con fecha " + itempagos.FechaRecibido.ToString() + " de la mensualidad con fecha " + item.FechaInicio.ToString() + " en el sistema";
                                                 wPagos.Cell(filaPagos, 2).Value = "Satisfactorio";
                                                 filaPagos++;
