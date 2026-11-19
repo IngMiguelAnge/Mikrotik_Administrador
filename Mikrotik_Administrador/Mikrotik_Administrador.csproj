@@ -393,6 +393,7 @@
     <Compile Include="Items\PagarDeudores.Designer.cs">
       <DependentUpon>PagarDeudores.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\DescripcionExtrasModel.cs" />
     <Compile Include="Model\DescripcionMensualidadesModel.cs" />
     <Compile Include="Model\ExtrasDeudorModel.cs" />
     <Compile Include="Model\FolioModel.cs" />

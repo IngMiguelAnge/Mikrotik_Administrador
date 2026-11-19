@@ -219,7 +219,7 @@
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(769, 651);
             this.panelTop.TabIndex = 0;
-            // 
+           // 
             // lblFaltante
             // 
             this.lblFaltante.AutoSize = true;

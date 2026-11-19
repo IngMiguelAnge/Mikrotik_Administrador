@@ -277,7 +277,8 @@ namespace Mikrotik_Administrador.Items
             AppRepository obj = new AppRepository();
             List<int> ListIdHistorial = new List<int>();
             List<int> ListIdHistorialExtra = new List<int>();
-            List<DescripcionMensualidadesModel> ListMensualidades = new List<DescripcionMensualidadesModel>();
+            List<DescripcionMensualidadesModel> ListMensualidadesImprimir = new List<DescripcionMensualidadesModel>();
+            List<DescripcionExtrasModel> ListExtrasImprimir = new List<DescripcionExtrasModel>();
             string ExtraNota = string.Empty;
             CultureInfo culturaEspanol = new CultureInfo("es-MX");
             string nombreMes = string.Empty;
@@ -308,6 +309,13 @@ namespace Mikrotik_Administrador.Items
                             IdUsuario = IdResponsable
                         };
                         var result = obj.SaveHistorialPagosExtras(sv, false).Result;
+                        var datosExtra = obj.GetExtrabyId(Extra.Id).Result;
+                        ListExtrasImprimir.Add(new DescripcionExtrasModel
+                        {
+                            Descripcion = datosExtra.Nombre,
+                            Precio = sv.Cantidad,
+                            IdHistorial = result
+                        });
                         ListIdHistorialExtra.Add(result);
                         ExtraNota += "Cobro extra " + Extra.Nombre + " con faltante a pagar: " +
                              " $" + sv.Cantidad.ToString() + Environment.NewLine;
@@ -336,7 +344,7 @@ namespace Mikrotik_Administrador.Items
                         
                         var result = obj.SaveHistorialPagos(sv).Result;
                         nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(item.FechaInicio.Month).ToUpper();
-                        ListMensualidades.Add(new DescripcionMensualidadesModel
+                        ListMensualidadesImprimir.Add(new DescripcionMensualidadesModel
                         {
                             Dia = item.DiaCorte,
                             Mes = nombreMes,
@@ -390,7 +398,7 @@ namespace Mikrotik_Administrador.Items
                             
                             var result2 = obj.SaveHistorialPagos(sv).Result;
                             nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(mensualidad.FechaInicio.Month).ToUpper();
-                            ListMensualidades.Add(new DescripcionMensualidadesModel
+                            ListMensualidadesImprimir.Add(new DescripcionMensualidadesModel
                             {
                                 Dia = mensualidad.DiaCorte,
                                 Mes = nombreMes,
@@ -451,7 +459,7 @@ namespace Mikrotik_Administrador.Items
                         
                         var result = obj.SaveHistorialPagos(sv).Result;
                         nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(ListaPagos.FirstOrDefault().FechaInicio.Month).ToUpper();
-                        ListMensualidades.Add(new DescripcionMensualidadesModel
+                        ListMensualidadesImprimir.Add(new DescripcionMensualidadesModel
                         {
                             Dia = ListaPagos.FirstOrDefault().DiaCorte,
                             Mes = nombreMes,
@@ -475,6 +483,13 @@ namespace Mikrotik_Administrador.Items
                             IdUsuario = IdResponsable
                         };
                         var result = obj.SaveHistorialPagosExtras(sv, false).Result;
+                        var datosExtra = obj.GetExtrabyId(IdExtra).Result;
+                        ListExtrasImprimir.Add(new DescripcionExtrasModel
+                        {
+                            Descripcion = datosExtra.Nombre,
+                            Precio = sv.Cantidad,
+                            IdHistorial = result
+                        });
                     }
                     ExtraNota = string.Empty;
                 }
@@ -497,7 +512,7 @@ namespace Mikrotik_Administrador.Items
                         
                         int res = obj.SaveHistorialPagos(sv).Result;
                         nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(ListaPagos.FirstOrDefault().FechaInicio.Month).ToUpper();
-                        ListMensualidades.Add(new DescripcionMensualidadesModel
+                        ListMensualidadesImprimir.Add(new DescripcionMensualidadesModel
                         {
                             Dia = ListaPagos.FirstOrDefault().DiaCorte,
                             Mes = nombreMes,
@@ -521,6 +536,13 @@ namespace Mikrotik_Administrador.Items
                             IdUsuario = IdResponsable
                         };
                         int res = obj.SaveHistorialPagosExtras(sv, false).Result;
+                        var datosExtra = obj.GetExtrabyId(IdExtra).Result;
+                        ListExtrasImprimir.Add(new DescripcionExtrasModel
+                        {
+                            Descripcion = datosExtra.Nombre,
+                            Precio = sv.Cantidad,
+                            IdHistorial = res
+                        });
                     }
                     ExtraNota = string.Empty;
                 }
@@ -540,12 +562,87 @@ namespace Mikrotik_Administrador.Items
 
             MessageBox.Show("Pago guardado correctamente");
             DialogResult = DialogResult.OK;
-            if(IdHistorial == 0)
+            if(IdHistorial == 0 && ListMensualidadesImprimir.Count > 0)
             {
-                GenerarPDFMensualidades(ListMensualidades);
+                GenerarPDFMensualidades(ListMensualidadesImprimir);
             }   
-            
+            if(IdHistorial == 0 && ListExtrasImprimir.Count > 0)
+            {
+                GenerarPDFExtras(ListExtrasImprimir);
+            }
             this.Close();
+        }
+        public void GenerarPDFExtras(List<DescripcionExtrasModel> ListExtras) 
+        {
+            try
+            {
+                int Paginas = 1;
+                int Contador = 1;
+                int Procesados = 0;
+                AppRepository obj = new AppRepository();
+                string rutaLogo = Path.Combine(Application.StartupPath, "Imagenes", "LOGO MASTER SISTEM.png");
+                string carpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Impresiones");
+                if (!Directory.Exists(carpeta)) Directory.CreateDirectory(carpeta);
+                var responsable = obj.GetUsuariosbyId(IdResponsable).Result;
+                var DatosServicio = obj.GetUsuariosMikrotiksById(IdUsuarioM).Result;
+                var DatosCliente = obj.GetClienteById(DatosServicio.IdCliente).Result;
+                var Lugar = obj.GetUbicacionByIds(DatosServicio.IdMikrotik, IdUsuarioM).Result;
+                int Folio = obj.GetUltimoFolio("Extras").Result.Folio + 1;
+                var datos = new DatosNotaServicio
+                {
+                    Folio = "E" + Folio.ToString(),
+                    Fecha = dtpFechaPago.Value,
+                    Cobra = responsable.Nombre,
+                    Marca = string.Empty,
+                    Modelo = string.Empty,
+                    Cliente = DatosCliente.Nombre,
+                    Servicio = DatosServicio.Nombre,
+                    Ciudad = Lugar != null ? Lugar.Direccion_Oficial : string.Empty,
+                    Telefono = DatosCliente.Telefono1,
+                    FechaEntrega = string.Empty,
+                };
+
+                foreach (var item in ListExtras)
+                {
+                    Procesados++;
+
+                    datos.Detalles.Add(new DetalleServicio
+                    {
+                        Cantidad = 1,
+                        Descripcion = item.Descripcion,
+                        PrecioUnitario = item.Precio
+                    });
+                    var r = obj.UpdateFoliobyIdHistorial(item.IdHistorial, "Extras", Folio).Result;
+                    datos.Total += item.Precio;
+
+                    // Al completar un lote de 6 o al llegar al último elemento de la lista
+                    if (Contador == 10 || Procesados == ListExtras.Count)
+                    {
+                        datos.CantidadConLetra = ConversorMoneda.ConvertirALetras(datos.Total);
+                        string rutaCompleta = Path.Combine(carpeta, $"Extra_{Paginas}.pdf");
+
+                        new DocumentoNotaServicio(datos, rutaLogo).GeneratePdf(rutaCompleta);
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(rutaCompleta) { UseShellExecute = true });
+
+                        // Reiniciar para el siguiente lote
+                        datos.Detalles.Clear();
+                        Folio = obj.GetUltimoFolio("Extras").Result.Folio + 1;
+                        datos.Folio = "E" + Folio.ToString();
+                        datos.Total = 0;
+                        Contador = 1;
+                        Paginas++;
+                    }
+                    else
+                    {
+                        Contador++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al generar el PDF: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
         public void GenerarPDFMensualidades(List<DescripcionMensualidadesModel> ListMensualidades)
         {
@@ -957,6 +1054,5 @@ namespace Mikrotik_Administrador.Items
 
         }
 
- 
     }
 }

@@ -13,12 +13,13 @@ namespace Mikrotik_Administrador.Class
         public DateTime Fecha { get; set; } = DateTime.Now;
 
         // Datos de recepción y equipo
-        public string Recibe { get; set; } = "";
+        public string Cobra { get; set; } = "";
         public string Marca { get; set; } = "";
         public string Modelo { get; set; } = "";
 
         // Datos del cliente
-        public string NombreCliente { get; set; } = "";
+        public string Cliente { get; set; } = "";
+        public string Servicio { get; set; } = "";
         public string Telefono { get; set; } = "";
         public string Ciudad { get; set; } = "";
 
@@ -134,7 +135,7 @@ namespace Mikrotik_Administrador.Class
                             .Text("NOTA DE VENTA").FontSize(8).Bold().FontColor(Colors.White);
 
                         box.Item().Background(ColorFondoClaro).PaddingVertical(5).AlignCenter()
-                            .Text($"Nº      {_datos.Folio}")
+                            .Text($"{_datos.Folio}")
                             .FontSize(12).Bold().FontColor("#B22222");
                     });
 
@@ -156,7 +157,7 @@ namespace Mikrotik_Administrador.Class
                         row.ConstantItem(165).PaddingHorizontal(4).AlignMiddle().Row(r =>
                         {
                             r.ConstantItem(42).Text("Recibe").Bold();
-                            r.RelativeItem().Text(_datos.Recibe).FontSize(8).FontColor(Colors.Black);
+                            r.RelativeItem().Text(_datos.Cobra).FontSize(8).FontColor(Colors.Black);
                         });
 
                         // 3 cajas de fecha en medio
@@ -186,18 +187,20 @@ namespace Mikrotik_Administrador.Class
                 col.Item().BorderLeft(1).BorderRight(1).BorderBottom(1).BorderColor(ColorPrimario)
                     .PaddingHorizontal(4).PaddingVertical(2.5f).Row(row =>
                     {
-                        row.ConstantItem(52).Text("Nombre:").Bold();
-                        row.RelativeItem().Text(_datos.NombreCliente).FontColor(Colors.Black);
+                        row.ConstantItem(52).Text("Cliente:").Bold();
+                        row.RelativeItem().Text(_datos.Cliente).FontColor(Colors.Black);
+                        row.ConstantItem(52).Text("Servicio:").Bold();
+                        row.RelativeItem().Text(_datos.Servicio).FontColor(Colors.Black);
                     });
 
                 // Fila 3: Teléfono y Ciudad
                 col.Item().BorderLeft(1).BorderRight(1).BorderBottom(1).BorderColor(ColorPrimario)
                     .Background(ColorFondoClaro).PaddingHorizontal(4).PaddingVertical(2.5f).Row(row =>
                     {
+                        row.ConstantItem(52).Text("Localidad:").Bold();
+                        row.RelativeItem().PaddingRight(10).Text(_datos.Ciudad).FontColor(Colors.Black);
                         row.ConstantItem(52).Text("Telefono:").Bold();
-                        row.RelativeItem(1.2f).Text(_datos.Telefono).FontColor(Colors.Black);
-                        row.ConstantItem(45).Text("Ciudad:").Bold();
-                        row.RelativeItem(1f).Text(_datos.Ciudad).FontColor(Colors.Black);
+                        row.ConstantItem(85).Text(_datos.Telefono).FontColor(Colors.Black);
                     });
             });
         }

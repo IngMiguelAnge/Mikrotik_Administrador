@@ -53,19 +53,28 @@ namespace Mikrotik_Administrador.Catalogos
                 {
                     Folio = "1",
                     Fecha = DateTime.Now,
-                    Recibe = "Ing. Guillermo Martínez",
-                    Marca = "HP",
-                    Modelo = "Pavilion 15",
-                    NombreCliente = "Laura Méndez Cruz",
+                    Cobra = "Ing. Guillermo Martínez",
+                    Marca = string.Empty,
+                    Modelo = string.Empty,
+                    Cliente = "Laura Méndez Cruz",
+                    Servicio = "Laura_Mendez",
                     Telefono = "2371024455",
-                    Ciudad = "Tlacotepec",
-                    CantidadConLetra = "CUATROCIENTOS CINCUENTA PESOS 00/100 M.N.",
+                    Ciudad = "Calle Aldama Poniente, San Salvador Huixcolotla, Puebla, 75490, México",
+                    CantidadConLetra = "DOS MIL CUATROCIENTOS CINCUENTA PESOS 00/100 M.N.",
                     FechaEntrega = "20/11/2026",
-                    Total = 450.00m,
+                    Total = 2450.00m,
                     Detalles = new List<DetalleServicio>
                     {
                         new DetalleServicio { Cantidad = 1, Descripcion = "Mantenimiento preventivo y limpieza interna", PrecioUnitario = 250.00m },
-                        new DetalleServicio { Cantidad = 1, Descripcion = "Cambio de pasta térmica", PrecioUnitario = 200.00m }
+                        new DetalleServicio { Cantidad = 1, Descripcion = "Cambio de pasta térmica", PrecioUnitario = 200.00m },
+                        new DetalleServicio { Cantidad = 1, Descripcion = "Mantenimiento preventivo y limpieza interna2", PrecioUnitario = 250.00m },
+                        new DetalleServicio { Cantidad = 1, Descripcion = "Mantenimiento preventivo y limpieza interna3", PrecioUnitario = 250.00m },
+                        new DetalleServicio { Cantidad = 1, Descripcion = "Mantenimiento preventivo y limpieza interna4", PrecioUnitario = 250.00m },
+                        new DetalleServicio { Cantidad = 1, Descripcion = "Mantenimiento preventivo y limpieza interna5", PrecioUnitario = 250.00m },
+                        new DetalleServicio { Cantidad = 1, Descripcion = "Mantenimiento preventivo y limpieza interna6", PrecioUnitario = 250.00m },
+                        new DetalleServicio { Cantidad = 1, Descripcion = "Mantenimiento preventivo y limpieza interna7", PrecioUnitario = 250.00m },
+                        new DetalleServicio { Cantidad = 1, Descripcion = "Mantenimiento preventivo y limpieza interna8", PrecioUnitario = 250.00m },
+                        new DetalleServicio { Cantidad = 1, Descripcion = "Mantenimiento preventivo y limpieza interna9", PrecioUnitario = 250.00m },
                     }
                 };
 

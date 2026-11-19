@@ -136,31 +136,30 @@ namespace Mikrotik_Administrador.Catalogos
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
+            DataGridViewButtonColumn btnStatus = new DataGridViewButtonColumn
+            {
+                Name = "btnStatus",
+                HeaderText = "Acción",
+                Text = "Cambiar Estatus",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVExtras.Columns.Add(btnStatus);
+            DataGridViewButtonColumn btnModificar = new DataGridViewButtonColumn
+            {
+                Name = "btnModificar",
+                HeaderText = "Acción",
+                Text = "Modificar",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVExtras.Columns.Add(btnModificar);
             if (Ocultar == false)
             {
-
-                DataGridViewButtonColumn btnStatus = new DataGridViewButtonColumn
-                {
-                    Name = "btnStatus",
-                    HeaderText = "Acción",
-                    Text = "Cambiar Estatus",
-                    UseColumnTextForButtonValue = true,
-                    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                    FlatStyle = FlatStyle.Flat,
-                    DefaultCellStyle = estiloBotones
-                };
-                DGVExtras.Columns.Add(btnStatus);
-                DataGridViewButtonColumn btnModificar = new DataGridViewButtonColumn
-                {
-                    Name = "btnModificar",
-                    HeaderText = "Acción",
-                    Text = "Modificar",
-                    UseColumnTextForButtonValue = true,
-                    AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                    FlatStyle = FlatStyle.Flat,
-                    DefaultCellStyle = estiloBotones
-                };
-                DGVExtras.Columns.Add(btnModificar);
                 DataGridViewButtonColumn btnHistorial = new DataGridViewButtonColumn
                 {
                     Name = "btnHistorial",
