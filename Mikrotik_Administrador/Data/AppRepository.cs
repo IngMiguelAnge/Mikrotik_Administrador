@@ -46,7 +46,6 @@ namespace Mikrotik_Administrador.Data
                 return false;
             }
         }
-
         public async Task<bool> UpdateDeudasNotaExtra(int Id, string NotaExtra, bool Extra)
         {
             try
@@ -181,10 +180,71 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-    
+
+        #endregion
+        #region Folios
+        public async Task<bool> UpdateFoliobyIdHistorial(int Id,string Tipo, int Folio)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UpdateFoliobyIdHistorial", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        cmd.Parameters.Add(new SqlParameter("@Tipo", Tipo));
+                        cmd.Parameters.Add(new SqlParameter("@Folio", Folio));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<FolioModel> GetUltimoFolio(string BuscarEn)
+        {
+            FolioModel result = new FolioModel();
+            List<FolioModel> list = new List<FolioModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetUltimoFolio", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@BuscarEn", BuscarEn));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToFolio(reader));
+                            }
+                            result = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return result;
+        }
+        private FolioModel MapToFolio(SqlDataReader reader)
+        {
+            return new FolioModel()
+            {
+                Folio = Convert.ToInt32(reader["Folio"])
+            };
+        }
+
         #endregion
         #region Deudas
-
         public async Task<bool> UpdateEstatusDeuda(int Id)
         {
             try
@@ -264,7 +324,6 @@ namespace Mikrotik_Administrador.Data
             }
             return list;
         }
-
         public async Task<DeudaModel> GetDeudabyId(int Id)
         {
             DeudaModel result = new DeudaModel();
@@ -2612,7 +2671,6 @@ namespace Mikrotik_Administrador.Data
         {
             return new UsuariosandPlanesModel()
             {
-                Identificador = (string)reader["Identificador"],
                 IdCliente = (int)reader["IdCliente"],
                 Cliente = (string)reader["Cliente"],
                 IdUser = (int)reader["IdUser"],

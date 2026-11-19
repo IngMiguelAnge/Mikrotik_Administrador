@@ -31,37 +31,10 @@ namespace Mikrotik_Administrador.Catalogos
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
-        {   
-            if(txtIdentificador.Text.Trim() != string.Empty)
-            {
-                DialogResult resultado = MessageBox.Show("El campo identificador tiene información, esto omitira todos los demas campos para busqueda. ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (resultado == DialogResult.No)
-                {
-                    return;
-                }
-                ValidarIdentificador();
-            }
+        {  
             Buscar();
         }
-        private void ValidarIdentificador()
-        {
-            // Patrón para la estructura "Cli" + número + "Us" + número
-            string patron = @"^CLI(\d+)US(\d+)$";
-
-            Match match = Regex.Match(txtIdentificador.Text.Trim().ToUpper(), patron);
-
-            if (match.Success)
-            {
-                // Extraer los valores capturados en los grupos de la expresión regular
-                IdCliente = int.Parse(match.Groups[1].Value);
-                IdUsuario = int.Parse(match.Groups[2].Value);
-            }
-            else
-            {
-                MessageBox.Show("La estructura del texto ingresado no es válida. Debe ser tipo 'CliXUsY' (ej. Cli1Us1).", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
-        }
+     
         public async void Buscar()
         {
             btnBuscar.Enabled = false;
@@ -113,16 +86,6 @@ namespace Mikrotik_Administrador.Catalogos
             estiloBotones.SelectionForeColor = System.Drawing.Color.White;
             estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
 
-
-            dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Identificador",
-                HeaderText = "Identificador",
-                DataPropertyName = "Identificador",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
             dgvClientes.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "IdCliente",

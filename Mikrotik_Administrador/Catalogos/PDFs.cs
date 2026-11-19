@@ -51,7 +51,7 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 var datos = new DatosNotaServicio
                 {
-                    Folio = string.Empty,
+                    Folio = "1",
                     Fecha = DateTime.Now,
                     Recibe = "Ing. Guillermo Martínez",
                     Marca = "HP",
@@ -90,7 +90,7 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 var datos = new DatosInstalacion
                 {
-                    Folio = string.Empty,
+                    Folio = "1",
                     Fecha = DateTime.Now,
                     Instalador = "Juan Carlos Gómez",
                     NombreCliente = "Roberto Sánchez",
@@ -142,7 +142,7 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 var datos = new DatosCobroTecnico
                 {
-                    Folio = string.Empty,
+                    Folio = "1",
                     Fecha = DateTime.Now,
                     Recibe = "I.S.C. Cruz Martínez",
                     NombreCliente = "Carlos Mendoza Pérez",
@@ -179,14 +179,15 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 var datos = new DatosRecibo
                 {
-                    Folio = string.Empty,
+                    Folio = "1",
                     Fecha = DateTime.Now,
-                    Monto = 350.00m,
-                    Recibe = "Juan Pérez",
-                    NombreCliente = "María López Hernández",
+                    Monto = 2100.00m,
+                    Cobra = "Administrador",
+                    Cliente = "Juan Perez",
+                    Servicio = "Juan_Perez",
                     Lugar = "Col. Centro, Tlacotepec",
                     Telefono = "2371002030",
-                    CantidadConLetra = ConversorMoneda.ConvertirALetras(350.00m),
+                    CantidadConLetra = ConversorMoneda.ConvertirALetras(2100.00m),
                     Anotaciones = string.Empty,
                     Detalles = new List<DetalleMensualidad>
                     {

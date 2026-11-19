@@ -2,6 +2,7 @@
 {
     public class DescripcionMensualidadesModel
     {
+        public int IdHistorial { get; set; }
         public int Dia { get; set; }
         public string Mes { get; set; }
         public string Anio { get; set; }

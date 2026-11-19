@@ -259,7 +259,7 @@ namespace Mikrotik_Administrador.Catalogos
             Extra extras = new Extra();
             extras.Id = 0;
             extras.IdDeudor = IdDeudor;
-            extras.IdUsuarioM = 0;
+            extras.IdUsuarioM = IdUsuarioM;
             extras.ShowDialog();
             Buscar();
         }

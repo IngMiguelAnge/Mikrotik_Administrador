@@ -333,15 +333,17 @@ namespace Mikrotik_Administrador.Items
                             Imagen = ImageToByteArray(),
                             IdUsuario = IdResponsable
                         };
+                        
+                        var result = obj.SaveHistorialPagos(sv).Result;
                         nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(item.FechaInicio.Month).ToUpper();
                         ListMensualidades.Add(new DescripcionMensualidadesModel
                         {
                             Dia = item.DiaCorte,
                             Mes = nombreMes,
                             Anio = item.FechaInicio.Year.ToString(),
-                            Precio = sv.Cantidad
+                            Precio = sv.Cantidad,
+                            IdHistorial = result
                         });
-                        var result = obj.SaveHistorialPagos(sv).Result;
                         ListIdHistorial.Add(result);
                         ExtraNota += "Mensualidad con fecha limite: " + item.FechaLimite.ToShortDateString()
                             + " $" + sv.Cantidad.ToString() + Environment.NewLine;
@@ -385,16 +387,17 @@ namespace Mikrotik_Administrador.Items
                                 Imagen = ImageToByteArray(),
                                 IdUsuario = IdResponsable
                             };
+                            
+                            var result2 = obj.SaveHistorialPagos(sv).Result;
                             nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(mensualidad.FechaInicio.Month).ToUpper();
-
                             ListMensualidades.Add(new DescripcionMensualidadesModel
                             {
                                 Dia = mensualidad.DiaCorte,
                                 Mes = nombreMes,
                                 Anio = mensualidad.FechaInicio.Year.ToString(),
-                                Precio = sv.Cantidad
+                                Precio = sv.Cantidad,
+                                IdHistorial = result2
                             });
-                            var result2 = obj.SaveHistorialPagos(sv).Result;
                             ListIdHistorial.Add(result2);
                             ExtraNota += "Mensualidad con fecha limite: " + mensualidad.FechaLimite.ToShortDateString()
                             + " $" + sv.Cantidad.ToString() + Environment.NewLine;
@@ -445,15 +448,17 @@ namespace Mikrotik_Administrador.Items
                             Imagen = ImageToByteArray(),
                             IdUsuario = IdResponsable
                         };
+                        
+                        var result = obj.SaveHistorialPagos(sv).Result;
                         nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(ListaPagos.FirstOrDefault().FechaInicio.Month).ToUpper();
                         ListMensualidades.Add(new DescripcionMensualidadesModel
                         {
                             Dia = ListaPagos.FirstOrDefault().DiaCorte,
                             Mes = nombreMes,
                             Anio = ListaPagos.FirstOrDefault().FechaInicio.Year.ToString(),
-                            Precio = sv.Cantidad
+                            Precio = sv.Cantidad,
+                            IdHistorial = result
                         });
-                        var result = obj.SaveHistorialPagos(sv).Result;
                     }
                     else
                     {
@@ -489,15 +494,17 @@ namespace Mikrotik_Administrador.Items
                             Imagen = ImageToByteArray(),
                             IdUsuario = IdResponsable
                         };
+                        
+                        int res = obj.SaveHistorialPagos(sv).Result;
                         nombreMes = culturaEspanol.DateTimeFormat.GetMonthName(ListaPagos.FirstOrDefault().FechaInicio.Month).ToUpper();
                         ListMensualidades.Add(new DescripcionMensualidadesModel
                         {
                             Dia = ListaPagos.FirstOrDefault().DiaCorte,
                             Mes = nombreMes,
                             Anio = ListaPagos.FirstOrDefault().FechaInicio.Year.ToString(),
-                            Precio = sv.Cantidad
+                            Precio = sv.Cantidad,
+                            IdHistorial = res
                         });
-                        int res = obj.SaveHistorialPagos(sv).Result;
                     }
                     else
                     {
@@ -533,12 +540,21 @@ namespace Mikrotik_Administrador.Items
 
             MessageBox.Show("Pago guardado correctamente");
             DialogResult = DialogResult.OK;
+            if(IdHistorial == 0)
+            {
+                GenerarPDF(ListMensualidades);
+            }   
+            
+            this.Close();
+        }
+        public void GenerarPDF(List<DescripcionMensualidadesModel> ListMensualidades)
+        {
             try
             {
                 int Paginas = 1;
                 int Contador = 1;
                 int Procesados = 0;
-
+                AppRepository obj = new AppRepository();
                 string rutaLogo = Path.Combine(Application.StartupPath, "Imagenes", "LOGO MASTER SISTEM.png");
                 string carpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Impresiones");
                 if (!Directory.Exists(carpeta)) Directory.CreateDirectory(carpeta);
@@ -546,12 +562,14 @@ namespace Mikrotik_Administrador.Items
                 var DatosServicio = obj.GetUsuariosMikrotiksById(IdUsuarioM).Result;
                 var DatosCliente = obj.GetClienteById(DatosServicio.IdCliente).Result;
                 var Lugar = obj.GetUbicacionByIds(DatosServicio.IdMikrotik, IdUsuarioM).Result;
+                int Folio = obj.GetUltimoFolio("Mensualidades").Result.Folio + 1;
                 var datos = new DatosRecibo
                 {
-                    Folio = string.Empty,
-                    Fecha = DateTime.Now,
-                    Recibe = responsable.Nombre,
-                    NombreCliente = DatosCliente.Nombre,
+                    Folio = "M" + Folio.ToString(),
+                    Fecha = dtpFechaPago.Value,
+                    Cobra = responsable.Nombre,
+                    Cliente = DatosCliente.Nombre,
+                    Servicio = DatosServicio.Nombre,
                     Lugar = Lugar != null ? Lugar.Direccion_Oficial : string.Empty,
                     Telefono = DatosCliente.Telefono1,
                     Anotaciones = string.Empty
@@ -569,7 +587,7 @@ namespace Mikrotik_Administrador.Items
                         Anio = item.Anio,
                         PrecioUnitario = item.Precio
                     });
-
+                    var r= obj.UpdateFoliobyIdHistorial(item.IdHistorial, "Mensualidades", Folio).Result;
                     datos.Monto += item.Precio;
 
                     // Al completar un lote de 6 o al llegar al último elemento de la lista
@@ -583,6 +601,8 @@ namespace Mikrotik_Administrador.Items
 
                         // Reiniciar para el siguiente lote
                         datos.Detalles.Clear();
+                        Folio = obj.GetUltimoFolio("Mensualidades").Result.Folio + 1;
+                        datos.Folio = "M" + Folio.ToString();
                         datos.Monto = 0;
                         Contador = 1;
                         Paginas++;
@@ -598,7 +618,6 @@ namespace Mikrotik_Administrador.Items
                 MessageBox.Show($"Error al generar el PDF: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            this.Close();
         }
         public async Task CalcularCostos(DateTime FechaInicio, DateTime FechaCorte)
         {

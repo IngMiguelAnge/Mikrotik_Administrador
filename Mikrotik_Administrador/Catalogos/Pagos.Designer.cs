@@ -33,9 +33,6 @@
             this.dgvClientes = new System.Windows.Forms.DataGridView();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtIdentificador = new System.Windows.Forms.TextBox();
-            this.lblIdentificador = new System.Windows.Forms.Label();
             this.txtUsuario = new System.Windows.Forms.TextBox();
             this.lblUsuario = new System.Windows.Forms.Label();
             this.txtCliente = new System.Windows.Forms.TextBox();
@@ -80,7 +77,7 @@
             this.dgvClientes.RowHeadersWidth = 51;
             this.dgvClientes.RowTemplate.Height = 30;
             this.dgvClientes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvClientes.Size = new System.Drawing.Size(1127, 218);
+            this.dgvClientes.Size = new System.Drawing.Size(1127, 293);
             this.dgvClientes.TabIndex = 0;
             this.dgvClientes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClientes_CellContentClick);
             // 
@@ -90,7 +87,7 @@
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBuscar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnBuscar.ForeColor = System.Drawing.Color.White;
-            this.btnBuscar.Location = new System.Drawing.Point(463, 131);
+            this.btnBuscar.Location = new System.Drawing.Point(467, 54);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(110, 38);
             this.btnBuscar.TabIndex = 13;
@@ -101,9 +98,6 @@
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.Color.White;
-            this.panelTop.Controls.Add(this.label2);
-            this.panelTop.Controls.Add(this.txtIdentificador);
-            this.panelTop.Controls.Add(this.lblIdentificador);
             this.panelTop.Controls.Add(this.txtUsuario);
             this.panelTop.Controls.Add(this.lblUsuario);
             this.panelTop.Controls.Add(this.txtCliente);
@@ -112,43 +106,13 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1167, 192);
+            this.panelTop.Size = new System.Drawing.Size(1167, 117);
             this.panelTop.TabIndex = 1;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.label2.Location = new System.Drawing.Point(250, 56);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(287, 25);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Ejemplo de identificador:  Cli1Us1";
-            // 
-            // txtIdentificador
-            // 
-            this.txtIdentificador.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtIdentificador.Location = new System.Drawing.Point(20, 47);
-            this.txtIdentificador.Name = "txtIdentificador";
-            this.txtIdentificador.Size = new System.Drawing.Size(200, 34);
-            this.txtIdentificador.TabIndex = 1;
-            // 
-            // lblIdentificador
-            // 
-            this.lblIdentificador.AutoSize = true;
-            this.lblIdentificador.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblIdentificador.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblIdentificador.Location = new System.Drawing.Point(21, 19);
-            this.lblIdentificador.Name = "lblIdentificador";
-            this.lblIdentificador.Size = new System.Drawing.Size(123, 25);
-            this.lblIdentificador.TabIndex = 0;
-            this.lblIdentificador.Text = "Identificador:";
             // 
             // txtUsuario
             // 
             this.txtUsuario.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtUsuario.Location = new System.Drawing.Point(225, 135);
+            this.txtUsuario.Location = new System.Drawing.Point(229, 58);
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(195, 34);
             this.txtUsuario.TabIndex = 6;
@@ -158,26 +122,26 @@
             this.lblUsuario.AutoSize = true;
             this.lblUsuario.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblUsuario.Location = new System.Drawing.Point(221, 105);
+            this.lblUsuario.Location = new System.Drawing.Point(225, 28);
             this.lblUsuario.Name = "lblUsuario";
             this.lblUsuario.Size = new System.Drawing.Size(82, 25);
             this.lblUsuario.TabIndex = 5;
             this.lblUsuario.Text = "Servicio:";
-            // 
+           // 
             // txtCliente
             // 
             this.txtCliente.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtCliente.Location = new System.Drawing.Point(10, 135);
+            this.txtCliente.Location = new System.Drawing.Point(14, 58);
             this.txtCliente.Name = "txtCliente";
             this.txtCliente.Size = new System.Drawing.Size(200, 34);
             this.txtCliente.TabIndex = 4;
-            // 
+             // 
             // lblCliente
             // 
             this.lblCliente.AutoSize = true;
             this.lblCliente.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.lblCliente.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
-            this.lblCliente.Location = new System.Drawing.Point(15, 105);
+            this.lblCliente.Location = new System.Drawing.Point(19, 28);
             this.lblCliente.Name = "lblCliente";
             this.lblCliente.Size = new System.Drawing.Size(75, 25);
             this.lblCliente.TabIndex = 3;
@@ -187,10 +151,10 @@
             // 
             this.panelContenedor.Controls.Add(this.dgvClientes);
             this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContenedor.Location = new System.Drawing.Point(0, 192);
+            this.panelContenedor.Location = new System.Drawing.Point(0, 117);
             this.panelContenedor.Name = "panelContenedor";
             this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
-            this.panelContenedor.Size = new System.Drawing.Size(1167, 258);
+            this.panelContenedor.Size = new System.Drawing.Size(1167, 333);
             this.panelContenedor.TabIndex = 2;
             // 
             // Pagos
@@ -225,8 +189,5 @@
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.TextBox txtCliente;
         private System.Windows.Forms.Label lblCliente;
-        private System.Windows.Forms.TextBox txtIdentificador;
-        private System.Windows.Forms.Label lblIdentificador;
-        private System.Windows.Forms.Label label2;
     }
 }
