@@ -156,7 +156,7 @@ namespace Mikrotik_Administrador.Class
                         // Recibe
                         row.ConstantItem(165).PaddingHorizontal(4).AlignMiddle().Row(r =>
                         {
-                            r.ConstantItem(42).Text("Recibe").Bold();
+                            r.ConstantItem(42).Text("Cobra:").Bold();
                             r.RelativeItem().Text(_datos.Cobra).FontSize(8).FontColor(Colors.Black);
                         });
 

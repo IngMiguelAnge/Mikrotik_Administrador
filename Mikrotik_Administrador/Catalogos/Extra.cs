@@ -54,34 +54,35 @@ namespace Mikrotik_Administrador.Catalogos
           
             if (Id != 0)
             {   
-                var Extra = obj.GetExtrabyId(Id).Result;
+                var Extra = IdDeudor== 0? obj.GetExtrabyId(Id).Result:null;
+                var ExtraDeudor = IdDeudor != 0? obj.GetExtrasDeudorbyId(Id).Result:null;
                 int index = CBTipo.FindStringExact(Extra.Tipo);
                 if (index != -1)
                 {
                     CBTipo.SelectedIndex = index;
                 }
-                txtNombre.Text = Extra.Nombre;
-                NUDCosto.Value = Extra.Costo;
-                NudDescuento.Value = Extra.Descuento;
-                CostoTotal = Extra.Total;
+                txtNombre.Text = IdDeudor == 0? Extra.Nombre: ExtraDeudor.Nombre;
+                NUDCosto.Value = IdDeudor == 0 ? Extra.Costo:ExtraDeudor.Costo;
+                NudDescuento.Value = IdDeudor == 0 ? Extra.Descuento: ExtraDeudor.Descuento;
+                CostoTotal = IdDeudor == 0 ? Extra.Total: ExtraDeudor.Total;
                 Calcular();
                 if (Extra.IdUsuarioRecibe != null)
-                CBRecibe.SelectedValue = Extra.IdUsuarioRecibe;
-                dtpFechaRecibido.Value = Extra.Fecha_Recibido ??
-                    DateTime.Now;
-                if (Extra.IdUsuarioRepara != null)
-                    CBRepara.SelectedValue = Extra.IdUsuarioRepara;
-                dtpFechaReparacion.Value = Extra.Fecha_Reparacion ??
-                    DateTime.Now;
-                if (Extra.IdUsuarioEntrega != null)
-                    CBEntrega.SelectedValue = Extra.IdUsuarioEntrega;
-                dtpFechaEntrega.Value = Extra.Fecha_Entregado ??
-                    DateTime.Now;
-                if (Extra.IdUsuarioRecoge != null)
-                    CBRecoge.SelectedValue = Extra.IdUsuarioRecoge;
-                dtpFechaEntrega.Value = Extra.Fecha_Recogido ??
-                    DateTime.Now;
-                txtNota.Text = Extra.Nota;
+                CBRecibe.SelectedValue = IdDeudor == 0 ? Extra.IdUsuarioRecibe:ExtraDeudor.IdUsuarioRecibe;
+                dtpFechaRecibido.Value = IdDeudor == 0 ? Extra.Fecha_Recibido ??
+                    DateTime.Now : ExtraDeudor.Fecha_Recibido ?? DateTime.Now;
+                if (IdDeudor == 0 ? Extra.IdUsuarioRepara != null : ExtraDeudor.IdUsuarioRepara != null)
+                    CBRepara.SelectedValue = IdDeudor == 0 ? Extra.IdUsuarioRepara : ExtraDeudor.IdUsuarioRepara;
+                dtpFechaReparacion.Value = IdDeudor == 0 ? Extra.Fecha_Reparacion ??
+                    DateTime.Now : ExtraDeudor.Fecha_Reparacion ?? DateTime.Now;
+                if (IdDeudor == 0 ? Extra.IdUsuarioEntrega != null : ExtraDeudor.IdUsuarioEntrega != null)
+                    CBEntrega.SelectedValue = IdDeudor == 0 ? Extra.IdUsuarioEntrega : ExtraDeudor.IdUsuarioEntrega;
+                dtpFechaEntrega.Value = IdDeudor == 0 ? Extra.Fecha_Entregado ??
+                    DateTime.Now : ExtraDeudor.Fecha_Entregado ?? DateTime.Now;
+                if (IdDeudor == 0 ? Extra.IdUsuarioRecoge != null : ExtraDeudor.IdUsuarioRecoge != null)
+                    CBRecoge.SelectedValue = IdDeudor == 0 ? Extra.IdUsuarioRecoge : ExtraDeudor.IdUsuarioRecoge;
+                dtpFechaRecogida.Value = IdDeudor == 0 ? Extra.Fecha_Recogido ??
+                    DateTime.Now : ExtraDeudor.Fecha_Recogido ?? DateTime.Now;
+                txtNota.Text = IdDeudor == 0 ? Extra.Nota : ExtraDeudor.Nota;
                
             }
             else

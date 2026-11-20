@@ -48,6 +48,7 @@
             this.NUDCantidad = new System.Windows.Forms.NumericUpDown();
             this.lblCantidadRecibida = new System.Windows.Forms.Label();
             this.lblTotalPagado = new System.Windows.Forms.Label();
+            this.lblFaltanteTotal = new System.Windows.Forms.Label();
             this.lblFaltante = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PBImagen)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -123,7 +124,7 @@
             this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(609, 575);
+            this.btnGuardar.Location = new System.Drawing.Point(609, 594);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(120, 38);
             this.btnGuardar.TabIndex = 11;
@@ -192,6 +193,7 @@
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.Color.White;
+            this.panelTop.Controls.Add(this.lblFaltante);
             this.panelTop.Controls.Add(this.lblTotalServicio);
             this.panelTop.Controls.Add(this.lblTotalVenta);
             this.panelTop.Controls.Add(this.btnExtras);
@@ -199,7 +201,7 @@
             this.panelTop.Controls.Add(this.NUDCantidad);
             this.panelTop.Controls.Add(this.lblCantidadRecibida);
             this.panelTop.Controls.Add(this.lblTotalPagado);
-            this.panelTop.Controls.Add(this.lblFaltante);
+            this.panelTop.Controls.Add(this.lblFaltanteTotal);
             this.panelTop.Controls.Add(this.btnGuardar);
             this.panelTop.Controls.Add(this.btnSubir);
             this.panelTop.Controls.Add(this.PBImagen);
@@ -215,7 +217,7 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(769, 627);
+            this.panelTop.Size = new System.Drawing.Size(769, 646);
             this.panelTop.TabIndex = 0;
             // 
             // lblTotalServicio
@@ -223,7 +225,7 @@
             this.lblTotalServicio.AutoSize = true;
             this.lblTotalServicio.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblTotalServicio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
-            this.lblTotalServicio.Location = new System.Drawing.Point(300, 480);
+            this.lblTotalServicio.Location = new System.Drawing.Point(299, 517);
             this.lblTotalServicio.Name = "lblTotalServicio";
             this.lblTotalServicio.Size = new System.Drawing.Size(337, 32);
             this.lblTotalServicio.TabIndex = 17;
@@ -234,7 +236,7 @@
             this.lblTotalVenta.AutoSize = true;
             this.lblTotalVenta.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblTotalVenta.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
-            this.lblTotalVenta.Location = new System.Drawing.Point(299, 432);
+            this.lblTotalVenta.Location = new System.Drawing.Point(298, 469);
             this.lblTotalVenta.Name = "lblTotalVenta";
             this.lblTotalVenta.Size = new System.Drawing.Size(311, 32);
             this.lblTotalVenta.TabIndex = 16;
@@ -299,27 +301,38 @@
             this.lblTotalPagado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
             this.lblTotalPagado.Location = new System.Drawing.Point(300, 391);
             this.lblTotalPagado.Name = "lblTotalPagado";
-            this.lblTotalPagado.Size = new System.Drawing.Size(391, 32);
+            this.lblTotalPagado.Size = new System.Drawing.Size(240, 32);
             this.lblTotalPagado.TabIndex = 12;
-            this.lblTotalPagado.Text = "Total mensualidad pagada: $0.00";
+            this.lblTotalPagado.Text = "Total pagado: $0.00";
+            // 
+            // lblFaltanteTotal
+            // 
+            this.lblFaltanteTotal.AutoSize = true;
+            this.lblFaltanteTotal.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblFaltanteTotal.ForeColor = System.Drawing.Color.Red;
+            this.lblFaltanteTotal.Location = new System.Drawing.Point(299, 562);
+            this.lblFaltanteTotal.Name = "lblFaltanteTotal";
+            this.lblFaltanteTotal.Size = new System.Drawing.Size(241, 32);
+            this.lblFaltanteTotal.TabIndex = 13;
+            this.lblFaltanteTotal.Text = "Total a pagar: $0.00";
             // 
             // lblFaltante
             // 
             this.lblFaltante.AutoSize = true;
             this.lblFaltante.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblFaltante.ForeColor = System.Drawing.Color.Red;
-            this.lblFaltante.Location = new System.Drawing.Point(300, 525);
+            this.lblFaltante.Location = new System.Drawing.Point(298, 432);
             this.lblFaltante.Name = "lblFaltante";
-            this.lblFaltante.Size = new System.Drawing.Size(241, 32);
-            this.lblFaltante.TabIndex = 13;
-            this.lblFaltante.Text = "Total a pagar: $0.00";
+            this.lblFaltante.Size = new System.Drawing.Size(275, 32);
+            this.lblFaltante.TabIndex = 18;
+            this.lblFaltante.Text = "Faltante a pagar: $0.00";
             // 
             // PagarDeudores
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(769, 625);
+            this.ClientSize = new System.Drawing.Size(769, 644);
             this.Controls.Add(this.panelTop);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -352,7 +365,7 @@
         private System.Windows.Forms.TextBox txtComentario;
         private System.Windows.Forms.Label lblMensaje2;
         private System.Windows.Forms.Panel panelTop;
-        private System.Windows.Forms.Label lblFaltante;
+        private System.Windows.Forms.Label lblFaltanteTotal;
         private System.Windows.Forms.Label lblTotalPagado;
         private System.Windows.Forms.Label lblCantidadRecibida;
         private System.Windows.Forms.NumericUpDown NUDCantidad;
@@ -360,5 +373,6 @@
         private System.Windows.Forms.Button btnExtras;
         private System.Windows.Forms.Label lblTotalVenta;
         private System.Windows.Forms.Label lblTotalServicio;
+        private System.Windows.Forms.Label lblFaltante;
     }
 }

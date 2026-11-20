@@ -885,6 +885,35 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
+        public async Task<ExtrasDeudorModel> GetExtrasDeudorbyId(int Id)
+        {
+            ExtrasDeudorModel Extra = new ExtrasDeudorModel();
+            List<ExtrasDeudorModel> list = new List<ExtrasDeudorModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetExtrasDeudorbyId", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToExtrasDeudor(reader));
+                            }
+                            Extra = list.Count() > 0 ? list[0] : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return Extra;
+        }
         public async Task<ExtrasModel> GetExtrabyId(int Id)
         {
             ExtrasModel Extra = new ExtrasModel();
