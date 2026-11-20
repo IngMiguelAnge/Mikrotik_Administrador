@@ -258,6 +258,7 @@ namespace Mikrotik_Administrador.Items
             {
                 ConfirmarPago confirmacion = new ConfirmarPago();
                 confirmacion.IsExtra = IdExtra == 0 ? false : true;
+                confirmacion.IsPagoDeudor = true;
                 confirmacion.Total = TotalFaltante;
                 if (TotalExtra > 0)
                 {

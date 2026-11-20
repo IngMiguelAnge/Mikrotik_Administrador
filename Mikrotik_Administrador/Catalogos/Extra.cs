@@ -153,7 +153,7 @@ namespace Mikrotik_Administrador.Catalogos
                     IdUsuarioRepara = (int)CBRepara.SelectedValue == 0 ? (int?)null : (int)CBRepara.SelectedValue,
                     IdUsuarioEntrega = (int)CBEntrega.SelectedValue == 0 ? (int?)null : (int)CBEntrega.SelectedValue,
                     IdUsuarioRecoge = (int)CBRecoge.SelectedValue == 0 ? (int?)null : (int)CBRecoge.SelectedValue,
-                    Nota = txtNombre.Text.ToString().Trim(),
+                    Nota = txtNota.Text.ToString().Trim(),
                 };
                 r = obj.SaveExtras(extra).Result;
             }
@@ -180,7 +180,7 @@ namespace Mikrotik_Administrador.Catalogos
                     IdUsuarioRepara = (int)CBRepara.SelectedValue == 0 ? (int?)null : (int)CBRepara.SelectedValue,
                     IdUsuarioEntrega = (int)CBEntrega.SelectedValue == 0 ? (int?)null : (int)CBEntrega.SelectedValue,
                     IdUsuarioRecoge = (int)CBRecoge.SelectedValue == 0 ? (int?)null : (int)CBRecoge.SelectedValue,
-                    Nota = txtNombre.Text.ToString().Trim(),
+                    Nota = txtNota.Text.ToString().Trim(),
                 };
                 r = obj.SaveExtrasDeudor(extra).Result;
             }
