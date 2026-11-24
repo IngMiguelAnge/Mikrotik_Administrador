@@ -936,6 +936,7 @@ namespace Mikrotik_Administrador
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Menu_FormClosing);
             this.Load += new System.EventHandler(this.Menu_Load);
             this.panelSideMenu.ResumeLayout(false);
             this.panelSubmenuHistoriales.ResumeLayout(false);

@@ -16,7 +16,6 @@ namespace Mikrotik_Administrador.Class
         public string NombreCliente { get; set; } = "";
         public string Telefono { get; set; } = "";
         public string Direccion { get; set; } = "";
-        public string Localidad { get; set; } = "";
         public string Modalidad { get; set; } = "";
         public string Paquete { get; set; } = "";
 
@@ -207,10 +206,8 @@ namespace Mikrotik_Administrador.Class
                 col.Item().BorderLeft(1).BorderRight(1).BorderBottom(1).BorderColor(ColorPrimario)
                     .Background(ColorFondoClaro).PaddingHorizontal(5).PaddingVertical(3).Row(row =>
                     {
-                        row.ConstantItem(52).Text("Dirección:").Bold();
-                        row.RelativeItem().Text(_datos.Direccion).FontColor(Colors.Black);
                         row.ConstantItem(52).Text("Localidad:").Bold();
-                        row.ConstantItem(150).Text(_datos.Localidad).FontColor(Colors.Black);
+                        row.RelativeItem().Text(_datos.Direccion).FontColor(Colors.Black);
                     });
 
                 // Fila 4: Instalación de internet modalidad y Paquete

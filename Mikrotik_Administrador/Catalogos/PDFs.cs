@@ -105,7 +105,6 @@ namespace Mikrotik_Administrador.Catalogos
                     NombreCliente = "Roberto Sánchez",
                     Telefono = "2371054890",
                     Direccion = "Calle Hidalgo #14",
-                    Localidad = "Tlacotepec",
                     Modalidad = "Comodato / Renta",
                     Paquete = "20 Megas Hogar",
 

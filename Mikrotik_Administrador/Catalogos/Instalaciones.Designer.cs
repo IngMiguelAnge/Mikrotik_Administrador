@@ -1,0 +1,183 @@
+﻿namespace Mikrotik_Administrador.Catalogos
+{
+    partial class Instalaciones
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.panelContenedor = new System.Windows.Forms.Panel();
+            this.DGVInstalaciones = new System.Windows.Forms.DataGridView();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.txtNombre = new System.Windows.Forms.TextBox();
+            this.lblNombre = new System.Windows.Forms.Label();
+            this.btnNuevo = new System.Windows.Forms.Button();
+            this.btnBuscar = new System.Windows.Forms.Button();
+            this.panelContenedor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DGVInstalaciones)).BeginInit();
+            this.panelTop.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // panelContenedor
+            // 
+            this.panelContenedor.Controls.Add(this.DGVInstalaciones);
+            this.panelContenedor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContenedor.Location = new System.Drawing.Point(0, 89);
+            this.panelContenedor.Name = "panelContenedor";
+            this.panelContenedor.Padding = new System.Windows.Forms.Padding(20);
+            this.panelContenedor.Size = new System.Drawing.Size(802, 356);
+            this.panelContenedor.TabIndex = 4;
+            // 
+            // DGVInstalaciones
+            // 
+            this.DGVInstalaciones.AllowUserToAddRows = false;
+            this.DGVInstalaciones.BackgroundColor = System.Drawing.Color.White;
+            this.DGVInstalaciones.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.DGVInstalaciones.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.DGVInstalaciones.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DGVInstalaciones.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            this.DGVInstalaciones.ColumnHeadersHeight = 35;
+            this.DGVInstalaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DGVInstalaciones.DefaultCellStyle = dataGridViewCellStyle8;
+            this.DGVInstalaciones.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DGVInstalaciones.EnableHeadersVisualStyles = false;
+            this.DGVInstalaciones.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.DGVInstalaciones.Location = new System.Drawing.Point(20, 20);
+            this.DGVInstalaciones.Name = "DGVInstalaciones";
+            this.DGVInstalaciones.RowHeadersVisible = false;
+            this.DGVInstalaciones.RowHeadersWidth = 51;
+            this.DGVInstalaciones.RowTemplate.Height = 30;
+            this.DGVInstalaciones.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DGVInstalaciones.Size = new System.Drawing.Size(762, 316);
+            this.DGVInstalaciones.TabIndex = 0;
+            // 
+            // panelTop
+            // 
+            this.panelTop.BackColor = System.Drawing.Color.White;
+            this.panelTop.Controls.Add(this.txtNombre);
+            this.panelTop.Controls.Add(this.lblNombre);
+            this.panelTop.Controls.Add(this.btnNuevo);
+            this.panelTop.Controls.Add(this.btnBuscar);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(802, 89);
+            this.panelTop.TabIndex = 3;
+            // 
+            // txtNombre
+            // 
+            this.txtNombre.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtNombre.Location = new System.Drawing.Point(19, 35);
+            this.txtNombre.Name = "txtNombre";
+            this.txtNombre.Size = new System.Drawing.Size(280, 34);
+            this.txtNombre.TabIndex = 1;
+            // 
+            // lblNombre
+            // 
+            this.lblNombre.AutoSize = true;
+            this.lblNombre.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblNombre.Location = new System.Drawing.Point(15, 9);
+            this.lblNombre.Name = "lblNombre";
+            this.lblNombre.Size = new System.Drawing.Size(85, 25);
+            this.lblNombre.TabIndex = 0;
+            this.lblNombre.Text = "Nombre:";
+            // 
+            // btnNuevo
+            // 
+            this.btnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnNuevo.ForeColor = System.Drawing.Color.White;
+            this.btnNuevo.Location = new System.Drawing.Point(482, 30);
+            this.btnNuevo.Name = "btnNuevo";
+            this.btnNuevo.Size = new System.Drawing.Size(120, 38);
+            this.btnNuevo.TabIndex = 4;
+            this.btnNuevo.Text = "Nuevo";
+            this.btnNuevo.UseVisualStyleBackColor = false;
+            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
+            // 
+            // btnBuscar
+            // 
+            this.btnBuscar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(42)))), ((int)(((byte)(107)))));
+            this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBuscar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.btnBuscar.ForeColor = System.Drawing.Color.White;
+            this.btnBuscar.Location = new System.Drawing.Point(348, 30);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(100, 38);
+            this.btnBuscar.TabIndex = 3;
+            this.btnBuscar.Text = "Buscar";
+            this.btnBuscar.UseVisualStyleBackColor = false;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            // 
+            // Instalaciones
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(802, 445);
+            this.Controls.Add(this.panelContenedor);
+            this.Controls.Add(this.panelTop);
+            this.Name = "Instalaciones";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.Instalaciones_Load);
+            this.panelContenedor.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DGVInstalaciones)).EndInit();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Panel panelContenedor;
+        private System.Windows.Forms.DataGridView DGVInstalaciones;
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Button btnNuevo;
+        private System.Windows.Forms.Button btnBuscar;
+        private System.Windows.Forms.TextBox txtNombre;
+        private System.Windows.Forms.Label lblNombre;
+    }
+}

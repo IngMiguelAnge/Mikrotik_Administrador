@@ -340,5 +340,14 @@ namespace Mikrotik_Administrador
             PDFs ed = new PDFs();
             ed.Show();
         }
+
+        private void Menu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                Application.Restart();
+                Environment.Exit(0);
+            }
+        }
     }
 }

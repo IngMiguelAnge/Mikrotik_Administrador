@@ -650,11 +650,23 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Id", obj.Id));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", obj.IdUsuarioM));
                         cmd.Parameters.Add(new SqlParameter("@IdUsuario", obj.IdUsuario));
-                        cmd.Parameters.Add(new SqlParameter("@Caja", obj.Caja));
-                        cmd.Parameters.Add(new SqlParameter("@Spliter", obj.Spliter));
-                        cmd.Parameters.Add(new SqlParameter("@Puerto", obj.Puerto));
-                        cmd.Parameters.Add(new SqlParameter("@Puerto_Interno", obj.Puerto_Interno));
                         cmd.Parameters.Add(new SqlParameter("@Fecha_Instalacion", obj.Fecha_Instalacion));
+                        cmd.Parameters.Add(new SqlParameter("@Modalidad", obj.Modalidad));
+                        cmd.Parameters.Add(new SqlParameter("@RB", obj.RB));
+                        cmd.Parameters.Add(new SqlParameter("@Antena", obj.Antena));
+                        cmd.Parameters.Add(new SqlParameter("@Cable", obj.Cable));
+                        cmd.Parameters.Add(new SqlParameter("@Router", obj.Router));
+                        cmd.Parameters.Add(new SqlParameter("@Cargador", obj.Cargador));
+                        cmd.Parameters.Add(new SqlParameter("@Tubo", obj.Tubo));
+                        cmd.Parameters.Add(new SqlParameter("@IP", obj.IP));
+                        cmd.Parameters.Add(new SqlParameter("@Sector", obj.Sector));
+                        cmd.Parameters.Add(new SqlParameter("@Caja", obj.Caja));
+                        cmd.Parameters.Add(new SqlParameter("@Puerto_Externo", obj.Puerto_Externo));
+                        cmd.Parameters.Add(new SqlParameter("@Spliter", obj.Spliter));
+                        cmd.Parameters.Add(new SqlParameter("@Puerto_Interno", obj.Puerto_Interno));
+                        cmd.Parameters.Add(new SqlParameter("@Latitud", obj.Latitud));
+                        cmd.Parameters.Add(new SqlParameter("@Longitud", obj.Longitud));
+                        cmd.Parameters.Add(new SqlParameter("@Total", obj.Total));
                         SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
                         {
                             Direction = System.Data.ParameterDirection.Output
@@ -662,8 +674,8 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(outputParam);
                         await sql.OpenAsync().ConfigureAwait(false);
                         await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        int idGenerado = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
-                        return idGenerado;
+                        int Folio = (outputParam.Value != DBNull.Value) ? Convert.ToInt32(outputParam.Value) : 0;
+                        return Folio;
                     }
                 }
             }
@@ -672,7 +684,7 @@ namespace Mikrotik_Administrador.Data
                 return 0;
             }
         }
-        public async Task<InstalacionModel> GetInstalacionbyIdUsuarioM(int IdUsuarioM)
+        public async Task<InstalacionModel> GetInstalacionbyId(int Id)
         {
             InstalacionModel Result = new InstalacionModel();
             List<InstalacionModel> list = new List<InstalacionModel>();
@@ -680,10 +692,10 @@ namespace Mikrotik_Administrador.Data
             {
                 using (SqlConnection sql = new SqlConnection(MikrotikConnection))
                 {
-                    using (SqlCommand cmd = new SqlCommand("GetInstalacionbyIdUsuarioM", sql))
+                    using (SqlCommand cmd = new SqlCommand("GetInstalacionbyId", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        cmd.Parameters.Add(new SqlParameter("@Id", Id));
                         await sql.OpenAsync().ConfigureAwait(false);
                         using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
                         {
@@ -707,12 +719,65 @@ namespace Mikrotik_Administrador.Data
             {
                 Id = (int)reader["Id"],
                 IdUsuarioM = (int)reader["IdUsuarioM"],
-                Puerto = (int)reader["Puerto"],
-                Caja = (string)reader["Caja"],
-                Spliter = (string)reader["Spliter"],
-                Puerto_Interno = (int)reader["Puerto_Interno"],
                 IdUsuario = (int)reader["IdUsuario"],
+                Folio = (string)reader["Folio"],
                 Fecha_Instalacion = (DateTime)reader["Fecha_Instalacion"],
+                Modalidad = (string)reader["Modalidad"],
+                RB = (string)reader["RB"],
+                Antena = (string)reader["Antena"],
+                Cable = (string)reader["Cable"],
+                Router = (string)reader["Router"],
+                Cargador = (string)reader["Cargador"],
+                Tubo = (string)reader["Tubo"],
+                IP = (string)reader["IP"],
+                Sector = (string)reader["Sector"],
+                Caja = (int)reader["Caja"],
+                Puerto_Externo = (string)reader["Puerto_Externo"],
+                Spliter = (int)reader["Spliter"],
+                Puerto_Interno = (int)reader["Puerto_Interno"],
+                Latitud = (string)reader["Latitud"],
+                Longitud = (string)reader["Longitud"],
+                Total = (decimal)reader["Total"],
+            };
+        }
+        public async Task<List<ListInstalacionesModel>> GetInstalacionesbyIdUsuarioM(int IdUsuarioM)
+        {
+            List<ListInstalacionesModel> list = new List<ListInstalacionesModel>();
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(MikrotikConnection))
+                {
+                    using (SqlCommand cmd = new SqlCommand("GetInstalacionesbyIdUsuarioM", sql))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@IdUsuarioM", IdUsuarioM));
+                        await sql.OpenAsync().ConfigureAwait(false);
+                        using (var reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
+                        {
+                            while (await reader.ReadAsync().ConfigureAwait(false))
+                            {
+                                list.Add(MapToListInstalaciones(reader));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return list;
+        }
+        private ListInstalacionesModel MapToListInstalaciones(SqlDataReader reader)
+        {
+            return new ListInstalacionesModel()
+            {
+                Id = (int)reader["Id"],
+                Folio = (string)reader["Folio"],
+                Fecha_Instalacion = (DateTime)reader["Fecha_Instalacion"],
+                Modalidad = (string)reader["Modalidad"],
+                Latitud = (string)reader["Latitud"],
+                Longitud = (string)reader["Longitud"],
+                Total = (decimal)reader["Total"],
             };
         }
         #endregion

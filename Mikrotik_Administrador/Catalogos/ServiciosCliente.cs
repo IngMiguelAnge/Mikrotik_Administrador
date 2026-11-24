@@ -311,8 +311,9 @@ namespace Mikrotik_Administrador
             switch (DGVServicios.Columns[e.ColumnIndex].Name)
             {
                 case "btnInstalacion":
-                    Instalacion inst = new Instalacion();
+                    Instalaciones inst = new Instalaciones();
                     inst.IdUsuarioM = Id;
+                    inst.IP = (string)DGVServicios.Rows[e.RowIndex].Cells["Address"].Value;
                     inst.ShowDialog();
                     break;
                 case "btnExtras":

@@ -298,6 +298,12 @@
     <Compile Include="Catalogos\Deudas.Designer.cs">
       <DependentUpon>Deudas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Catalogos\Instalaciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Catalogos\Instalaciones.Designer.cs">
+      <DependentUpon>Instalaciones.cs</DependentUpon>
+    </Compile>
     <Compile Include="Catalogos\PDFs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -676,6 +682,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\Deudas.resx">
       <DependentUpon>Deudas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Catalogos\Instalaciones.resx">
+      <DependentUpon>Instalaciones.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Catalogos\PDFs.resx">
       <DependentUpon>PDFs.cs</DependentUpon>

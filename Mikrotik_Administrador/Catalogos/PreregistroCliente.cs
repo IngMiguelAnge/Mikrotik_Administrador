@@ -41,6 +41,13 @@ namespace Mikrotik_Administrador.Catalogos
         private void btnLupa_Click(object sender, EventArgs e)
         {
             Mapa m = new Mapa();
+            if(txtLongitud.Text.Trim() == string.Empty 
+               ||
+               txtLatitud.Text.Trim() == string.Empty)
+            {
+                MessageBox.Show("Se requiere los datos de latitud y longitud", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             m.Latitud = txtLatitud.Text;
             m.Longitud = txtLongitud.Text;
             if (m.ShowDialog() == DialogResult.OK)
@@ -505,7 +512,13 @@ namespace Mikrotik_Administrador.Catalogos
                     MessageBox.Show("Por favor, completa todos los campos antes de guardar.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
+                if (txtLongitud.Text.Trim() == string.Empty
+              ||
+              txtLatitud.Text.Trim() == string.Empty)
+                {
+                    MessageBox.Show("Se requiere los datos de latitud y longitud", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 if (txtPassword.Visible && txtPassword.Text.Trim() == string.Empty)
                 {
                     MessageBox.Show("Por favor, ingresa un password para el plan seleccionado.", "Password requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);

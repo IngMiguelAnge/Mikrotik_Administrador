@@ -147,27 +147,27 @@ namespace Mikrotik_Administrador.Items
                         ListInstalacionesModel RInstalacion = new ListInstalacionesModel();
                         RInstalacion.Id = Id;
                         // 1. Extraer los datos principales de la fila
-                        RInstalacion.IdCliente = row.Cell(1).GetValue<int>();
-                        var cliente = obj.GetClienteById(RInstalacion.IdCliente).Result;
-                        RInstalacion.Cliente = cliente == null ? string.Empty : cliente.Nombre.ToString();
-                        RInstalacion.IdUsuarioM = row.Cell(3).GetValue<int>();
-                        var servicio = obj.GetUsuariosMikrotiksById(RInstalacion.IdUsuarioM).Result;
-                        RInstalacion.UsuarioM = servicio.Nombre == null ? string.Empty :
-                        servicio.IdCliente != RInstalacion.IdCliente ? "No coincide el cliente para el servicio" :
-                        servicio.Nombre.ToString();
-                        RInstalacion.IdUsuario = row.Cell(5).GetValue<int>();
-                        var Instalador = obj.GetUsuariosbyId(RInstalacion.IdUsuario).Result;
-                        RInstalacion.Instalador = Instalador == null ? string.Empty : 
-                            Instalador.IdTipo == 3 ?
-                            Instalador.Nombre.ToString(): string.Empty;
-                        RInstalacion.Puerto = row.Cell(7).GetValue<int>();
-                        RInstalacion.Caja = row.Cell(8).GetString().Trim();
-                        RInstalacion.Spliter = row.Cell(9).GetString().Trim();
-                        RInstalacion.PuertoInterno = row.Cell(10).GetValue<int>();
+                        //RInstalacion.IdCliente = row.Cell(1).GetValue<int>();
+                        //var cliente = obj.GetClienteById(RInstalacion.IdCliente).Result;
+                        //RInstalacion.Cliente = cliente == null ? string.Empty : cliente.Nombre.ToString();
+                        //RInstalacion.IdUsuarioM = row.Cell(3).GetValue<int>();
+                        //var servicio = obj.GetUsuariosMikrotiksById(RInstalacion.IdUsuarioM).Result;
+                        ////RInstalacion.UsuarioM = servicio.Nombre == null ? string.Empty :
+                        ////servicio.IdCliente != RInstalacion.IdCliente ? "No coincide el cliente para el servicio" :
+                        ////servicio.Nombre.ToString();
+                        ////RInstalacion.IdUsuario = row.Cell(5).GetValue<int>();
+                        ////var Instalador = obj.GetUsuariosbyId(RInstalacion.IdUsuario).Result;
+                        ////RInstalacion.Instalador = Instalador == null ? string.Empty : 
+                        ////    Instalador.IdTipo == 3 ?
+                        ////    Instalador.Nombre.ToString(): string.Empty;
+                        ////RInstalacion.Puerto = row.Cell(7).GetValue<int>();
+                        ////RInstalacion.Caja = row.Cell(8).GetString().Trim();
+                        ////RInstalacion.Spliter = row.Cell(9).GetString().Trim();
+                        ////RInstalacion.PuertoInterno = row.Cell(10).GetValue<int>();
                         string valorCelda = row.Cell(11).GetString().Trim();
                         if (DateTime.TryParse(valorCelda, out DateTime rfecha))
                         {
-                            RInstalacion.FechaInstalacion = rfecha;
+                            //RInstalacion.FechaInstalacion = rfecha;
                         }
                         else
                         {
@@ -177,7 +177,7 @@ namespace Mikrotik_Administrador.Items
 
                             if (DateTime.TryParse(fechaLimpiada, out rfecha))
                             {
-                                RInstalacion.FechaInstalacion = rfecha;
+                                //RInstalacion.FechaInstalacion = rfecha;
                             }
                             else
                             {
@@ -356,23 +356,23 @@ namespace Mikrotik_Administrador.Items
             AppRepository obj = new AppRepository();
             foreach(var item in listInstalaciones)
             {
-                if(item.Caja == string.Empty || item.Spliter == string.Empty
-                    || item.UsuarioM == string.Empty || item.Cliente == string.Empty
-                    || item.Puerto == 0 || item.PuertoInterno == 0 || item.Instalador == string.Empty
-                    || item.UsuarioM == "No coincide el cliente para el servicio")
-                {
-                    MessageBox.Show("Revisar la fila " + item.Id + " los datos estan incompletos o no existen", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    break;
-                }
+                //if(item.Caja == string.Empty || item.Spliter == string.Empty
+                //    || item.UsuarioM == string.Empty || item.Cliente == string.Empty
+                //    || item.Puerto == 0 || item.PuertoInterno == 0 || item.Instalador == string.Empty
+                //    || item.UsuarioM == "No coincide el cliente para el servicio")
+                //{
+                //    MessageBox.Show("Revisar la fila " + item.Id + " los datos estan incompletos o no existen", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //    break;
+                //}
                InstalacionModel model = new InstalacionModel();
                 model.Id = 0;
-                model.Spliter = item.Spliter;
-                model.IdUsuario = item.IdUsuario;
-                model.IdUsuarioM = item.IdUsuarioM;
-                model.Puerto_Interno = item.PuertoInterno;
-                model.Puerto = item.Puerto;
-                model.Caja = item.Caja;
-                model.Fecha_Instalacion = item.FechaInstalacion;                
+                ////model.Spliter = item.Spliter;
+                ////model.IdUsuario = item.IdUsuario;
+                ////model.IdUsuarioM = item.IdUsuarioM;
+                ////model.Puerto_Interno = item.PuertoInterno;
+                ////model.Puerto = item.Puerto;
+                ////model.Caja = item.Caja;
+                ////model.Fecha_Instalacion = item.FechaInstalacion;                
                await obj.SaveInstalacion(model);
                MessageBox.Show("Excel guardado exitosamente", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
