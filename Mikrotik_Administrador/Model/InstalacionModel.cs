@@ -25,5 +25,6 @@ namespace Mikrotik_Administrador.Items
         public string Latitud { get; set; }
         public string Longitud { get; set; }
         public decimal Total { get; set; }
+        public string Nota { get; set; }
     }
 }

@@ -308,6 +308,7 @@ namespace Mikrotik_Administrador
                 {
                     case "Mensualidades":
                         MensualidadesMultiples mm = new MensualidadesMultiples();
+                        mm.IdResponsable = IdResponsable;
                         mm.Show();
                         break;
                     case "Deudores":

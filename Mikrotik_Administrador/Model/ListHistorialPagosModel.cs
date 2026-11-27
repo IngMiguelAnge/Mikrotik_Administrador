@@ -11,6 +11,7 @@ namespace Mikrotik_Administrador.Model
         public string Banco { get; set; }
         public string Referencia { get; set; }
         public string Responsable { get; set; }
+        public string Comentario {  get; set; }
 
     }
 }

@@ -82,6 +82,7 @@ namespace Mikrotik_Administrador.Catalogos
                 txtLatitud.Text = RInstalacion.Latitud;
                 txtLongitud.Text = RInstalacion.Longitud;
                 NUDTotal.Value = RInstalacion.Total;
+                txtNota.Text = RInstalacion.Nota;
             }
         }
 
@@ -134,7 +135,8 @@ namespace Mikrotik_Administrador.Catalogos
                 Puerto_Interno = (int)NUDPuertoInterno.Value,
                 Latitud = txtLatitud.Text.Trim(),
                 Longitud = txtLongitud.Text.Trim(),
-                Total = NUDTotal.Value
+                Total = NUDTotal.Value,
+                Nota = txtNota.Text.Trim(),
             };
             AppRepository ap = new AppRepository();
             var r = ap.SaveInstalacion(Ins).Result; //Esta vez se obtiene el folio y no el id

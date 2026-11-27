@@ -4,7 +4,6 @@ namespace Mikrotik_Administrador.Model
 {
     public class UsuariosandPlanesModel
     {
-        public string Identificador { get; set; }
         public int IdCliente { get; set; }
         public string Cliente { get; set; }
         public int IdUser { get; set; }

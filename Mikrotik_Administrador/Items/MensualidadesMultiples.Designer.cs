@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnCargar = new System.Windows.Forms.Button();
             this.panelContenedor = new System.Windows.Forms.Panel();
             this.DGVClientes = new System.Windows.Forms.DataGridView();
@@ -45,6 +45,11 @@
             this.lblUsuario = new System.Windows.Forms.Label();
             this.btnAtras = new System.Windows.Forms.Button();
             this.btnConfirmar = new System.Windows.Forms.Button();
+            this.cbTodos = new System.Windows.Forms.CheckBox();
+            this.RBMikrotiks = new System.Windows.Forms.RadioButton();
+            this.RBMensualidades = new System.Windows.Forms.RadioButton();
+            this.RBCajas = new System.Windows.Forms.RadioButton();
+            this.lblBuscar = new System.Windows.Forms.Label();
             this.panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVClientes)).BeginInit();
             this.SuspendLayout();
@@ -82,24 +87,24 @@
             this.DGVClientes.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.DGVClientes.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.DGVClientes.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DGVClientes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DGVClientes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.DGVClientes.ColumnHeadersHeight = 35;
             this.DGVClientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.DGVClientes.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(242)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.DGVClientes.DefaultCellStyle = dataGridViewCellStyle10;
             this.DGVClientes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DGVClientes.EnableHeadersVisualStyles = false;
             this.DGVClientes.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -150,6 +155,7 @@
             // 
             this.CBTodosMikrotiks.AutoSize = true;
             this.CBTodosMikrotiks.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.CBTodosMikrotiks.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
             this.CBTodosMikrotiks.Location = new System.Drawing.Point(250, 40);
             this.CBTodosMikrotiks.Name = "CBTodosMikrotiks";
             this.CBTodosMikrotiks.Size = new System.Drawing.Size(287, 29);
@@ -173,6 +179,7 @@
             this.CBMikrotiks.Name = "CBMikrotiks";
             this.CBMikrotiks.Size = new System.Drawing.Size(200, 33);
             this.CBMikrotiks.TabIndex = 1;
+            this.CBMikrotiks.SelectedIndexChanged += new System.EventHandler(this.CBMikrotiks_SelectedIndexChanged);
             // 
             // lblMensaje
             // 
@@ -248,12 +255,79 @@
             this.btnConfirmar.Visible = false;
             this.btnConfirmar.Click += new System.EventHandler(this.btnConfirmar_Click);
             // 
+            // cbTodos
+            // 
+            this.cbTodos.AutoSize = true;
+            this.cbTodos.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cbTodos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.cbTodos.Location = new System.Drawing.Point(799, 162);
+            this.cbTodos.Name = "cbTodos";
+            this.cbTodos.Size = new System.Drawing.Size(178, 29);
+            this.cbTodos.TabIndex = 25;
+            this.cbTodos.Text = "Seleccionar todos";
+            this.cbTodos.UseVisualStyleBackColor = true;
+            this.cbTodos.CheckedChanged += new System.EventHandler(this.cbTodos_CheckedChanged);
+            // 
+            // RBMikrotiks
+            // 
+            this.RBMikrotiks.AutoSize = true;
+            this.RBMikrotiks.Checked = true;
+            this.RBMikrotiks.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.RBMikrotiks.Location = new System.Drawing.Point(781, 37);
+            this.RBMikrotiks.Name = "RBMikrotiks";
+            this.RBMikrotiks.Size = new System.Drawing.Size(110, 29);
+            this.RBMikrotiks.TabIndex = 26;
+            this.RBMikrotiks.TabStop = true;
+            this.RBMikrotiks.Text = "Mikrotiks";
+            this.RBMikrotiks.UseVisualStyleBackColor = true;
+            this.RBMikrotiks.CheckedChanged += new System.EventHandler(this.RBMikrotiks_CheckedChanged);
+            // 
+            // RBMensualidades
+            // 
+            this.RBMensualidades.AutoSize = true;
+            this.RBMensualidades.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.RBMensualidades.Location = new System.Drawing.Point(781, 74);
+            this.RBMensualidades.Name = "RBMensualidades";
+            this.RBMensualidades.Size = new System.Drawing.Size(155, 29);
+            this.RBMensualidades.TabIndex = 27;
+            this.RBMensualidades.Text = "Mensualidades";
+            this.RBMensualidades.UseVisualStyleBackColor = true;
+            this.RBMensualidades.CheckedChanged += new System.EventHandler(this.RBMensualidades_CheckedChanged);
+            // 
+            // RBCajas
+            // 
+            this.RBCajas.AutoSize = true;
+            this.RBCajas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.RBCajas.Location = new System.Drawing.Point(781, 112);
+            this.RBCajas.Name = "RBCajas";
+            this.RBCajas.Size = new System.Drawing.Size(78, 29);
+            this.RBCajas.TabIndex = 28;
+            this.RBCajas.Text = "Cajas";
+            this.RBCajas.UseVisualStyleBackColor = true;
+            this.RBCajas.CheckedChanged += new System.EventHandler(this.RBCajas_CheckedChanged);
+            // 
+            // lblBuscar
+            // 
+            this.lblBuscar.AutoSize = true;
+            this.lblBuscar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblBuscar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblBuscar.Location = new System.Drawing.Point(776, 9);
+            this.lblBuscar.Name = "lblBuscar";
+            this.lblBuscar.Size = new System.Drawing.Size(96, 25);
+            this.lblBuscar.TabIndex = 29;
+            this.lblBuscar.Text = "Buscar en:";
+            // 
             // MensualidadesMultiples
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1288, 511);
+            this.Controls.Add(this.lblBuscar);
+            this.Controls.Add(this.RBCajas);
+            this.Controls.Add(this.RBMensualidades);
+            this.Controls.Add(this.RBMikrotiks);
+            this.Controls.Add(this.cbTodos);
             this.Controls.Add(this.btnConfirmar);
             this.Controls.Add(this.btnAtras);
             this.Controls.Add(this.txtUsuario);
@@ -299,5 +373,10 @@
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Button btnAtras;
         private System.Windows.Forms.Button btnConfirmar;
+        private System.Windows.Forms.CheckBox cbTodos;
+        private System.Windows.Forms.RadioButton RBMikrotiks;
+        private System.Windows.Forms.RadioButton RBMensualidades;
+        private System.Windows.Forms.RadioButton RBCajas;
+        private System.Windows.Forms.Label lblBuscar;
     }
 }

@@ -70,6 +70,8 @@
             this.btnGuardar = new System.Windows.Forms.Button();
             this.txtPuertoExterno = new System.Windows.Forms.TextBox();
             this.btnLupa = new System.Windows.Forms.Button();
+            this.lblNota = new System.Windows.Forms.Label();
+            this.txtNota = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.NUDCaja)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDSpliter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUDPuertoInterno)).BeginInit();
@@ -529,12 +531,34 @@
             this.btnLupa.UseVisualStyleBackColor = true;
             this.btnLupa.Click += new System.EventHandler(this.btnLupa_Click);
             // 
+            // lblNota
+            // 
+            this.lblNota.AutoSize = true;
+            this.lblNota.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblNota.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(112)))), ((int)(((byte)(115)))), ((int)(((byte)(126)))));
+            this.lblNota.Location = new System.Drawing.Point(28, 237);
+            this.lblNota.Name = "lblNota";
+            this.lblNota.Size = new System.Drawing.Size(57, 25);
+            this.lblNota.TabIndex = 43;
+            this.lblNota.Text = "Nota:";
+            // 
+            // txtNota
+            // 
+            this.txtNota.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtNota.Location = new System.Drawing.Point(28, 263);
+            this.txtNota.Multiline = true;
+            this.txtNota.Name = "txtNota";
+            this.txtNota.Size = new System.Drawing.Size(280, 220);
+            this.txtNota.TabIndex = 44;
+            // 
             // Instalacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1281, 495);
+            this.Controls.Add(this.lblNota);
+            this.Controls.Add(this.txtNota);
             this.Controls.Add(this.btnLupa);
             this.Controls.Add(this.txtPuertoExterno);
             this.Controls.Add(this.lblCaja);
@@ -633,5 +657,7 @@
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.TextBox txtPuertoExterno;
         private System.Windows.Forms.Button btnLupa;
+        private System.Windows.Forms.Label lblNota;
+        private System.Windows.Forms.TextBox txtNota;
     }
 }

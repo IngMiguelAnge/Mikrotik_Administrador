@@ -667,6 +667,7 @@ namespace Mikrotik_Administrador.Data
                         cmd.Parameters.Add(new SqlParameter("@Latitud", obj.Latitud));
                         cmd.Parameters.Add(new SqlParameter("@Longitud", obj.Longitud));
                         cmd.Parameters.Add(new SqlParameter("@Total", obj.Total));
+                        cmd.Parameters.Add(new SqlParameter("@Nota", obj.Nota));
                         SqlParameter outputParam = new SqlParameter("@VResp", System.Data.SqlDbType.Int)
                         {
                             Direction = System.Data.ParameterDirection.Output
@@ -738,6 +739,7 @@ namespace Mikrotik_Administrador.Data
                 Latitud = (string)reader["Latitud"],
                 Longitud = (string)reader["Longitud"],
                 Total = (decimal)reader["Total"],
+                Nota = (string)reader["Nota"],
             };
         }
         public async Task<List<ListInstalacionesModel>> GetInstalacionesbyIdUsuarioM(int IdUsuarioM)
@@ -4695,8 +4697,9 @@ namespace Mikrotik_Administrador.Data
                 Cliente = (string)reader["Cliente"],
                 IdUsuarioM = (int)reader["IdUsuarioM"],
                 Usuario = (string)reader["Usuario"],
+                IP = (string)reader["IP"],
                 Mikrotik = (string)reader["Mikrotik"],
-                Estatus = (string)reader["Estatus"],
+                PlanOriginal = (string)reader["PlanOriginal"],
             };
         }
         #endregion

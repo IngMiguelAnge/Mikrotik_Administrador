@@ -1,4 +1,5 @@
-﻿using Mikrotik_Administrador.Catalogos;
+﻿using ClosedXML.Excel;
+using Mikrotik_Administrador.Catalogos;
 using Mikrotik_Administrador.Data;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
@@ -105,7 +106,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "Id",
                 DataPropertyName = "Id",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
@@ -114,7 +115,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "Cliente",
                 DataPropertyName = "Nombre",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
@@ -123,7 +124,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "Estatus",
                 DataPropertyName = "Estatus",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
             DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
@@ -132,7 +133,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "TotalServicios",
                 DataPropertyName = "TotalServicios",
                 ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
                 SortMode = DataGridViewColumnSortMode.Automatic
             });
             DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn
@@ -141,7 +142,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "Acción",
                 Text = "Editar",
                 UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
@@ -152,7 +153,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "Acción",
                 Text = "Cambiar Estatus",
                 UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
@@ -163,7 +164,7 @@ namespace Mikrotik_Administrador
                 HeaderText = "Acción",
                 Text = "Servicios",
                 UseColumnTextForButtonValue = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
                 FlatStyle = FlatStyle.Flat,
                 DefaultCellStyle = estiloBotones
             };
@@ -250,6 +251,6 @@ namespace Mikrotik_Administrador
             m.IdResponsable = IdResponsable;
             m.ShowDialog();
             CargarClientes();
-        }
+        }     
     }
 }
