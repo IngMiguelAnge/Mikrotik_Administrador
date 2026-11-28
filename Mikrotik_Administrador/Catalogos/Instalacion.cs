@@ -23,12 +23,12 @@ namespace Mikrotik_Administrador.Catalogos
 {
     public partial class Instalacion : Form
     {
+        public InstalacionModel InstalacionporExcel {  get; set; }
         public int Id { get; set; }
         public int IdUsuarioM { get; set; }
         public string IP { get; set; }
         private string calleEncontrada;
         GMarkerGoogle marcador;
-        GMapOverlay capaMarcadores;
         public Instalacion()
         {
             InitializeComponent();
@@ -52,7 +52,8 @@ namespace Mikrotik_Administrador.Catalogos
             RBAntena.Checked = true;
             if (Id == 0)
                 return;
-            var RInstalacion = obj.GetInstalacionbyId(Id).Result;
+            var RInstalacion = InstalacionporExcel != null?
+                InstalacionporExcel : obj.GetInstalacionbyId(Id).Result;
             if (RInstalacion != null)
             {
                 CBInstalador.SelectedValue = RInstalacion.IdUsuario;
@@ -83,6 +84,8 @@ namespace Mikrotik_Administrador.Catalogos
                 txtLongitud.Text = RInstalacion.Longitud;
                 NUDTotal.Value = RInstalacion.Total;
                 txtNota.Text = RInstalacion.Nota;
+                if(InstalacionporExcel != null)
+                   btnGuardar.Visible = false;
             }
         }
 

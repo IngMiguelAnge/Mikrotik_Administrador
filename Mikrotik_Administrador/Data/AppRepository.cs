@@ -774,6 +774,7 @@ namespace Mikrotik_Administrador.Data
             return new ListInstalacionesModel()
             {
                 Id = (int)reader["Id"],
+                IdUsuarioM = (int)reader["IdUsuarioM"],
                 Folio = (string)reader["Folio"],
                 Fecha_Instalacion = (DateTime)reader["Fecha_Instalacion"],
                 Modalidad = (string)reader["Modalidad"],

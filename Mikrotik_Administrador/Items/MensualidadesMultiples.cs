@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Mikrotik_Administrador.Data;
+using Mikrotik_Administrador.Items;
 using Mikrotik_Administrador.Model;
 using Mikrotik_Administrador.Settings;
 using System;
@@ -18,6 +19,8 @@ namespace Mikrotik_Administrador.Catalogos
     public partial class MensualidadesMultiples : Form
     {
         public int IdResponsable { get; set; }
+        private List<ListInstalacionesModel> ListInstalaciones = new List<ListInstalacionesModel>();
+        private List<InstalacionModel> ListInstalacion = new List<InstalacionModel>();
         private List<TiempoCambioModel> ListCambios = new List<TiempoCambioModel>();
         private List<MensualidadModel> ListMensualidades = new List<MensualidadModel>();
         private List<HistorialPagosModel> ListHistorialPagos = new List<HistorialPagosModel>();
@@ -50,11 +53,7 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
-            if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
-            {
-                MessageBox.Show("Por favor, selecciona un Mikrotik.");
-                return;
-            }
+
             if (txtCliente.Text.Trim() == "")
             {
                 DialogResult resultado = MessageBox.Show("Ha dejado el campo vacio, esto buscara a todos los clientes pero puede demorar ¿Quiere continuar?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -66,7 +65,15 @@ namespace Mikrotik_Administrador.Catalogos
             btnConfirmar.Visible = false;
             btnAtras.Visible = false;
             if(RBMikrotiks.Checked)
-            CargarClientes();
+            {
+                if (CBMikrotiks.SelectedValue.ToString() == "0" && CBTodosMikrotiks.Checked == false)
+                {
+                    MessageBox.Show("Por favor, selecciona un Mikrotik.");
+                    return;
+                }
+                CargarClientes();
+            }
+          
             if(RBMensualidades.Checked)
             CargarTablaClientes();
         }
@@ -399,6 +406,79 @@ namespace Mikrotik_Administrador.Catalogos
             }
 
         }
+        private static decimal EvaluarPagoCelda(ClosedXML.Excel.IXLCell celda, string textoCelda)
+        {
+            // 1. Si la celda ya es numérica o tiene fórmula evaluada por Excel/ClosedXML
+            if (celda.DataType == ClosedXML.Excel.XLDataType.Number)
+            {
+                return celda.GetValue<decimal>();
+            }
+
+            if (celda.HasFormula && celda.CachedValue.IsNumber)
+            {
+                return Convert.ToDecimal(celda.CachedValue.GetNumber());
+            }
+
+            string limpio = (textoCelda ?? string.Empty).Trim();
+            if (limpio.StartsWith("="))
+            {
+                limpio = limpio.Substring(1).Trim();
+            }
+
+            if (string.IsNullOrWhiteSpace(limpio))
+            {
+                return 0m;
+            }
+
+            // 2. Si contiene "+", sumamos cada parte (ej. "150+150" o "100 + 50 + 25")
+            if (limpio.Contains("+"))
+            {
+                string[] partes = limpio.Split('+');
+                decimal suma = 0m;
+                bool algunaParteValida = false;
+
+                foreach (string parte in partes)
+                {
+                    string parteLimpia = parte.Trim();
+                    if (string.IsNullOrEmpty(parteLimpia)) continue;
+
+                    if (decimal.TryParse(
+                        parteLimpia,
+                        System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.CurrentCulture,
+                        out decimal valorParte) ||
+                        decimal.TryParse(
+                        parteLimpia,
+                        System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out valorParte))
+                    {
+                        suma += valorParte;
+                        algunaParteValida = true;
+                    }
+                }
+
+                return algunaParteValida ? suma : 0m;
+            }
+
+            // 3. Si es un solo número (ej. "300" o "300.50")
+            if (decimal.TryParse(
+                limpio,
+                System.Globalization.NumberStyles.Any,
+                System.Globalization.CultureInfo.CurrentCulture,
+                out decimal valorUnico) ||
+                decimal.TryParse(
+                limpio,
+                System.Globalization.NumberStyles.Any,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out valorUnico))
+            {
+                return valorUnico;
+            }
+
+            // 4. Si es "OJO", "P" o cualquier texto no numérico, devuelve 0
+            return 0m;
+        }
         private async Task CargarDatosExcelAsync(string rutaArchivo)
         {
             int filaCambios = 0;
@@ -410,7 +490,8 @@ namespace Mikrotik_Administrador.Catalogos
             btnCargar.Enabled = false;
             BtnBuscar.Enabled = false;
             btnDescargar.Enabled = false;
-
+            ListInstalaciones = new List<ListInstalacionesModel>();
+            ListInstalacion = new List<InstalacionModel>();
             try
             {
                 await Task.Run(() =>
@@ -422,6 +503,7 @@ namespace Mikrotik_Administrador.Catalogos
                         AppRepository obj = new AppRepository();
 
                         int IdMensualidad = 1;
+                        int IdInstalacion = 1;
                         foreach (var row in wsCambios.RowsUsed())
                         {
                             if (primeraFila)
@@ -474,27 +556,17 @@ namespace Mikrotik_Administrador.Catalogos
                                 string textoCelda = celda.GetFormattedString().Trim();
                                 string textoMayus = textoCelda.ToUpperInvariant();
                                 string comentario = celda.HasComment ? (celda.GetComment().Text ?? string.Empty).Trim() : string.Empty;
-
+                                decimal pagoEvaluado = EvaluarPagoCelda(celda, textoCelda);
                                 bool tieneComentarioEnCero = textoCelda == "0" && !string.IsNullOrWhiteSpace(comentario);
                                 bool esMarcaEspecial = textoMayus == "OJO" || textoMayus == "P";
-                                bool esNumeroDistintoDeCero = decimal.TryParse(
-                                    textoCelda,
-                                    System.Globalization.NumberStyles.Any,
-                                    System.Globalization.CultureInfo.CurrentCulture,
-                                    out decimal valorNumerico
-                                ) && valorNumerico != 0m;
+                                bool esNumeroDistintoDeCero = pagoEvaluado != 0m;
                                 bool esMesDeSuspension = fechaSusp.HasValue &&
                             fechaSusp.Value.Year == Anio &&
                             fechaSusp.Value.Month == i;
                                 if (!string.IsNullOrWhiteSpace(textoCelda) && (esNumeroDistintoDeCero || tieneComentarioEnCero || esMarcaEspecial))
                                 {
                                     // Si es número válido usa ese número; si es "OJO", "P" o texto no numérico, queda en 0m
-                                    decimal Pago = decimal.TryParse(
-                                        textoCelda,
-                                        System.Globalization.NumberStyles.Any,
-                                        System.Globalization.CultureInfo.CurrentCulture,
-                                        out decimal pagoParseado
-                                    ) ? pagoParseado : 0m;
+                                    decimal Pago = pagoEvaluado;
                                     DateTime fechaInicio = (Instalacion.Year == Anio && Instalacion.Month == i)
                                     ? Instalacion
                                     : ObtenerFechaCorteMes(Anio, i, DiaCorte);
@@ -507,6 +579,11 @@ namespace Mikrotik_Administrador.Catalogos
                                     else if (fechaSusp.HasValue && fechaLimite > fechaSusp.Value)
                                     {
                                         fechaLimite = fechaSusp.Value;
+                                    }
+                                    if(ListMensualidades.Where(c => c.IdUsuarioM == IdUsuarioM
+                                    && c.FechaInicio == fechaInicio).Count() > 0)
+                                    {
+                                        continue;
                                     }
                                     MensualidadModel LMensualidades = new MensualidadModel()
                                     {
@@ -557,34 +634,44 @@ namespace Mikrotik_Administrador.Catalogos
                                 : "Pendiente"
                             };
                             ListClientes.Add(cliente);
-
-                            ////var item = new RegistroMensualidad
-                            ////{
-                            ////    FechaSuspension = LeerFecha(row.Cell(21)),
-                            ////    Telefono = LeerTexto(row.Cell(22)),
-                            ////    IdInstalador = LeerInt(row.Cell(23)),
-                            ////    Instalador = LeerTexto(row.Cell(24)),
-                            ////    FechaInstalacionTexto = LeerTexto(row.Cell(25)),
-                            ////    Modalidad = LeerTexto(row.Cell(26)),
-
-                            ////    Rb = LeerTexto(row.Cell(27)),
-                            ////    Antena = LeerTexto(row.Cell(28)),
-                            ////    Cable = LeerTexto(row.Cell(29)),
-                            ////    Router = LeerTexto(row.Cell(30)),
-                            ////    Cargador = LeerTexto(row.Cell(31)),
-                            ////    Tubo = LeerTexto(row.Cell(32)),
-                            ////    Ip = LeerTexto(row.Cell(33)),
-                            ////    Sector = LeerTexto(row.Cell(34)),
-                            ////    Caja = LeerTexto(row.Cell(35)),
-                            ////    PuertoExterno = LeerTexto(row.Cell(36)),
-                            ////    Spliter = LeerTexto(row.Cell(37)),
-                            ////    PuertoInterno = LeerTexto(row.Cell(38)),
-                            ////    Latitud = LeerDoubleNullable(row.Cell(39)),
-                            ////    Longitud = LeerDoubleNullable(row.Cell(40)),
-                            ////    TotalCobrado = LeerDecimal(row.Cell(41))
-                            ////};
-
-                            ////registros.Add(item);
+                            ListInstalacionesModel ListaInstalaciones = new ListInstalacionesModel()
+                            {
+                                Id = IdInstalacion,
+                                IdUsuarioM = IdUsuarioM,
+                                Folio = "F"+ IdInstalacion.ToString(),
+                                Fecha_Instalacion = Instalacion,
+                                Modalidad = row.Cell(28).GetValue<string>().ToUpper(),
+                                Latitud = row.Cell(41).GetValue<string>(),
+                                Longitud = row.Cell(42).GetValue<string>(),
+                                Total = Convert.ToDecimal(row.Cell(43).GetValue<decimal>()),
+                            };
+                            ListInstalaciones.Add(ListaInstalaciones);
+                            InstalacionModel Inst = new InstalacionModel()
+                            {
+                                Id = IdInstalacion,
+                                IdUsuarioM = IdUsuarioM,
+                                IdUsuario = row.Cell(24).GetValue<int>(),
+                                Folio = "F" + IdInstalacion.ToString(),
+                                Fecha_Instalacion = Instalacion,
+                                Nota = row.Cell(27).GetValue<string>(),
+                                Modalidad = row.Cell(28).GetValue<string>().ToUpper(),
+                                RB = row.Cell(29).GetValue<string>(),
+                                Antena = row.Cell(30).GetValue<string>(),
+                                Cable = row.Cell(31).GetValue<string>(),
+                                Router = row.Cell(32).GetValue<string>(),
+                                Cargador = row.Cell(33).GetValue<string>(),
+                                Tubo = row.Cell(34).GetValue<string>(),
+                                IP = row.Cell(35).GetValue<string>(),
+                                Sector = row.Cell(36).GetValue<string>(),
+                                Caja = row.Cell(37).GetValue<int>(),
+                                Puerto_Externo = row.Cell(38).GetValue<string>(),
+                                Spliter = row.Cell(39).GetValue<int>(),
+                                Puerto_Interno = row.Cell(40).GetValue<int>(),
+                                Latitud = row.Cell(41).GetValue<string>(),
+                                Longitud = row.Cell(42).GetValue<string>(),
+                                Total = row.Cell(43).GetValue<decimal>(),
+                            };
+                            ListInstalacion.Add(Inst);                     
                         }
                     }
                 });
@@ -737,7 +824,12 @@ namespace Mikrotik_Administrador.Catalogos
                         (!string.IsNullOrWhiteSpace(txtUsuario.Text.Trim()) &&
                          !string.IsNullOrEmpty(x.Usuario) &&
                          x.Usuario.IndexOf(txtUsuario.Text.Trim(), StringComparison.OrdinalIgnoreCase) >= 0)
-                    ).ToList();
+                                       ||
+                                      ( cbTodos.Checked == false &&
+                        (!string.IsNullOrWhiteSpace(CBMikrotiks.Text.Trim()) &&
+                         !string.IsNullOrEmpty(x.Mikrotik) &&
+                         x.Mikrotik.IndexOf(CBMikrotiks.Text.Trim(), StringComparison.OrdinalIgnoreCase) >= 0))
+                         ).ToList();
             DGVClientes.DataSource = new SortableBindingList<UsuariosandPlanesModel>(listaFinal);
             if (DGVClientes.Columns["IdCliente"] != null)
                 DGVClientes.Columns["IdCliente"].Visible = false;
@@ -865,11 +957,21 @@ namespace Mikrotik_Administrador.Catalogos
                 DefaultCellStyle = estiloBotones
             };
             DGVClientes.Columns.Add(btnMensualidad);
-
+            DataGridViewButtonColumn btnInstalacion = new DataGridViewButtonColumn
+            {
+                Name = "btnInstalacion",
+                HeaderText = "Acción",
+                Text = "Instalacion",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVClientes.Columns.Add(btnInstalacion);
             DGVClientes.AllowUserToAddRows = false;
         }
 
-        private async void DGVClientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void DGVClientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
             try
@@ -877,6 +979,21 @@ namespace Mikrotik_Administrador.Catalogos
                 DGVClientes.Enabled = false;
                 switch (DGVClientes.Columns[e.ColumnIndex].Name)
                 {
+                    case "btnModificarInstalacion":
+                        var IdIns = Convert.ToInt32(DGVClientes.Rows[e.RowIndex].Cells["Id"].Value);
+                        Instalacion Ins = new Instalacion();
+                        Ins.InstalacionporExcel = ListInstalacion.Where(x=> x.Id == IdIns).FirstOrDefault();
+                        Ins.Id = IdIns;
+                        Ins.IdUsuarioM = 0;
+                        Ins.IP = string.Empty;
+                        Ins.ShowDialog();
+                        break;
+                    case "btnInstalacion":
+                        int idUsuarioM1 = (int)DGVClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
+                        btnAtras.Visible = true;
+                        Opcion = 1;
+                        CrearTablaInstalaciones(idUsuarioM1);
+                        break;
                     case "btnMensualidad":
                         string Mensualidad = (string)DGVClientes.Rows[e.RowIndex].Cells["Mensualidad"].Value;
                         IdUsuarioMRevision = (int)DGVClientes.Rows[e.RowIndex].Cells["IdUser"].Value;
@@ -929,152 +1046,6 @@ namespace Mikrotik_Administrador.Catalogos
                         CrearTablaHistorial();
 
                         break;
-
-                    case "btnVerDetalles":
-                        try
-                        {
-                            DateTime desde = Convert.ToDateTime(DGVClientes.Rows[e.RowIndex].Cells["FechaInicio"].Value);
-                            DateTime hasta = Convert.ToDateTime(DGVClientes.Rows[e.RowIndex].Cells["FechaLimite"].Value);
-                            decimal costoTotalMensualidad = Convert.ToDecimal(DGVClientes.Rows[e.RowIndex].Cells["Mensualidad"].Value);
-
-                            // 1. Filtrar eventos (cambios temporales o suspensiones) que se cruzan con este período
-                            var detalles = ListCambios.Where(x => x.IdUsuarioM == IdUsuarioMRevision
-                                                                && x.FechaInicio <= hasta
-                                                                && x.FechaFin >= desde
-                                                                && x.Modo == "Temporal")
-                                                     .OrderBy(x => x.FechaInicio)
-                                                     .ToList();
-
-                            ListDestalles = new List<ListDetallesMensualidadModel>();
-                            AppRepository objRepo = new AppRepository();
-
-                            // Obtener el plan base vigente al inicio de este período
-                            var planBasePeriodo = await objRepo.GetPlanByIdUsuarioM(IdUsuarioMRevision);
-                            int idPlanActual = planBasePeriodo != null ? planBasePeriodo.Id : 0;
-                            string nombrePlanActual = planBasePeriodo != null ? planBasePeriodo.Nombre : "Plan Base";
-                            decimal precioPlanActual = planBasePeriodo != null ? planBasePeriodo.Precio : 0m;
-
-                            // Si hay un cambio previo que afecte el inicio, buscamos su plan original
-                            var cambioAnterior = ListCambios
-                                .Where(x => x.IdUsuarioM == IdUsuarioMRevision && x.FechaFin < desde)
-                                .OrderByDescending(x => x.FechaFin)
-                                .FirstOrDefault();
-
-                            if (cambioAnterior != null)
-                            {
-                                var planAnt = await objRepo.GetPlanById(cambioAnterior.IdPlanOriginal);
-                                if (planAnt != null)
-                                {
-                                    nombrePlanActual = planAnt.Nombre;
-                                    precioPlanActual = planAnt.Precio;
-                                }
-                            }
-
-                            DateTime cursor = desde;
-
-                            // 2. Recorrer de forma continua desde la fecha 'desde' hasta la fecha 'hasta'
-                            foreach (var cambio in detalles)
-                            {
-                                // Si hay un espacio libre antes de que empiece este cambio, pertenece al plan base actual
-                                if (cursor < cambio.FechaInicio)
-                                {
-                                    DateTime finTramoBase = cambio.FechaInicio.AddDays(-1);
-                                    if (finTramoBase > hasta) finTramoBase = hasta;
-
-                                    if (cursor <= finTramoBase)
-                                    {
-                                        int diasBase = (int)(finTramoBase - cursor).TotalDays + 1;
-                                        decimal costoBase = RedondearMontoFinanciero(diasBase * (precioPlanActual / 30.0m));
-
-                                        ListDestalles.Add(new ListDetallesMensualidadModel
-                                        {
-                                            Id = 0,
-                                            FechaInicio = cursor,
-                                            FechaFin = finTramoBase,
-                                            Estatus = "Activo",
-                                            Plan = nombrePlanActual,
-                                            Costo = costoBase
-                                        });
-                                    }
-                                    cursor = cambio.FechaInicio;
-                                }
-
-                                // Acotar el rango del cambio dentro de los límites del período de la mensualidad
-                                DateTime inicioCambioEfectivo = cursor > cambio.FechaInicio ? cursor : cambio.FechaInicio;
-                                DateTime finCambioEfectivo = hasta < cambio.FechaFin ? hasta : cambio.FechaFin;
-
-                                if (inicioCambioEfectivo <= finCambioEfectivo)
-                                {
-                                    int diasCambio = (int)(finCambioEfectivo - inicioCambioEfectivo).TotalDays + 1;
-                                    var planNuevo = await objRepo.GetPlanById(cambio.IdPlan);
-                                    decimal precioPlanNuevo = planNuevo != null ? planNuevo.Precio : 0m;
-                                    decimal costoCambio = RedondearMontoFinanciero(diasCambio * (precioPlanNuevo / 30.0m));
-
-                                    ListDestalles.Add(new ListDetallesMensualidadModel
-                                    {
-                                        Id = cambio.Id,
-                                        FechaInicio = inicioCambioEfectivo,
-                                        FechaFin = finCambioEfectivo,
-                                        Estatus = cambio.Estatus,
-                                        Plan = cambio.Plan,
-                                        Costo = costoCambio
-                                    });
-
-                                    cursor = finCambioEfectivo.AddDays(1);
-                                }
-
-                                // Actualizar el plan base posterior según el IdPlanOriginal de este cambio
-                                var planOrigCambio = await objRepo.GetPlanById(cambio.IdPlanOriginal);
-                                if (planOrigCambio != null)
-                                {
-                                    nombrePlanActual = planOrigCambio.Nombre;
-                                    precioPlanActual = planOrigCambio.Precio;
-                                }
-                            }
-
-                            // 3. Si queda tiempo después del último cambio hasta llegar a la fecha límite ('hasta')
-                            if (cursor <= hasta)
-                            {
-                                DateTime fechaFinTramoFinal = hasta;
-
-                                if (cursor <= fechaFinTramoFinal)
-                                {
-                                    // Validamos si abarca el mes completo sin interrupciones para aplicar el precio fijo exacto
-                                    bool esMesCompleto = (cursor == desde && fechaFinTramoFinal == hasta && ListDestalles.Count == 0);
-
-                                    decimal costoFinal;
-                                    if (esMesCompleto)
-                                    {
-                                        // Respeta los 300 cerrados de la mensualidad sin alterarse por meses de 31 días
-                                        costoFinal = precioPlanActual;
-                                    }
-                                    else
-                                    {
-                                        int diasFinales = (int)(fechaFinTramoFinal - cursor).TotalDays;
-                                        if (diasFinales <= 0) diasFinales = 1;
-                                        costoFinal = RedondearMontoFinanciero(diasFinales * (precioPlanActual / 30.0m));
-                                    }
-
-                                    ListDestalles.Add(new ListDetallesMensualidadModel
-                                    {
-                                        Id = 0,
-                                        FechaInicio = cursor,
-                                        FechaFin = fechaFinTramoFinal,
-                                        Estatus = "Activo",
-                                        Plan = nombrePlanActual,
-                                        Costo = costoFinal
-                                    });
-                                }
-                            }
-
-                            Opcion = 2;
-                            CrearTablaDetalles();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Error al cargar el detalle: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        break;
                     default:
                         break;
                 }
@@ -1087,6 +1058,12 @@ namespace Mikrotik_Administrador.Catalogos
             {
                 DGVClientes.Enabled = true;
             }
+        }
+        public void CrearTablaInstalaciones(int IdUsuarioM)
+        {
+            CrearGridViewInstalaciones();
+            var listaFinal = ListInstalaciones?.ToList() ?? new List<ListInstalacionesModel>();
+            DGVClientes.DataSource = new SortableBindingList<ListInstalacionesModel>(listaFinal);
         }
         public void CrearTablaDetalles()
         {
@@ -1105,6 +1082,110 @@ namespace Mikrotik_Administrador.Catalogos
             CrearGridViewMensualidades();
             var listaFinal = ListM?.ToList() ?? new List<ListMensualidadesModel>();
             DGVClientes.DataSource = new SortableBindingList<ListMensualidadesModel>(listaFinal);
+        }
+        public void CrearGridViewInstalaciones()
+        {
+            DGVClientes.Columns.Clear();
+            DGVClientes.AutoGenerateColumns = false;
+            DGVClientes.EnableHeadersVisualStyles = false;
+            // --- ESTILO DE LOS TÍTULOS (HEADERS) CON TU AZUL LOGO ---
+            DGVClientes.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            DGVClientes.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            DGVClientes.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+
+            // --- ESTILO GENERAL DE LAS CELDAS DE TEXTO ---
+            DGVClientes.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9.5F);
+            DGVClientes.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(194, 196, 205);
+            DGVClientes.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+
+            // --- ESTILO EXCLUSIVO PARA LOS BOTONES DENTRO DEL GRID ---
+            System.Windows.Forms.DataGridViewCellStyle estiloBotones = new System.Windows.Forms.DataGridViewCellStyle();
+            estiloBotones.BackColor = System.Drawing.Color.FromArgb(43, 80, 196);
+            estiloBotones.ForeColor = System.Drawing.Color.White;
+            estiloBotones.SelectionBackColor = System.Drawing.Color.FromArgb(20, 34, 110);
+            estiloBotones.SelectionForeColor = System.Drawing.Color.White;
+            estiloBotones.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "Id",
+                DataPropertyName = "Id",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Folio",
+                HeaderText = "Folio",
+                DataPropertyName = "Folio",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Fecha_Instalacion",
+                HeaderText = "Fecha de instalación",
+                DataPropertyName = "Fecha_Instalacion",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Modalidad",
+                HeaderText = "Modalidad",
+                DataPropertyName = "Modalidad",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Latitud",
+                HeaderText = "Latitud",
+                DataPropertyName = "Latitud",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Longitud",
+                HeaderText = "Longitud",
+                DataPropertyName = "Longitud",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic
+            });
+            DGVClientes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Total",
+                HeaderText = "Total",
+                DataPropertyName = "Total",
+                ReadOnly = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                SortMode = DataGridViewColumnSortMode.Automatic,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Format = "C2", // Aplica formato de moneda local (ej: $120.00 o $120.50)
+                    FormatProvider = new System.Globalization.CultureInfo("es-MX") // Forzado a pesos mexicanos
+                }
+            });
+            DataGridViewButtonColumn btnModificarInstalacion = new DataGridViewButtonColumn
+            {
+                Name = "btnModificarInstalacion",
+                HeaderText = "Acción",
+                Text = "Modificar",
+                UseColumnTextForButtonValue = true,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                FlatStyle = FlatStyle.Flat,
+                DefaultCellStyle = estiloBotones
+            };
+            DGVClientes.Columns.Add(btnModificarInstalacion);
+            DGVClientes.AllowUserToAddRows = false;
         }
         public void CrearGridViewDetalles()
         {
@@ -1767,20 +1848,29 @@ namespace Mikrotik_Administrador.Catalogos
 
         private void RBMikrotiks_CheckedChanged(object sender, EventArgs e)
         {
+            if (RBMikrotiks.Checked == false)
+                return;
             RBCajas.Checked = false;
             RBMensualidades.Checked = false;
+            RBMikrotiks.Checked = true;
         }
 
         private void RBMensualidades_CheckedChanged(object sender, EventArgs e)
         {
+            if (RBMensualidades.Checked == false)
+                return;
             RBCajas.Checked = false;
             RBMikrotiks.Checked = false;
+            RBMensualidades.Checked = true;
         }
 
         private void RBCajas_CheckedChanged(object sender, EventArgs e)
         {
+            if (RBCajas.Checked == false)
+                return;
             RBMikrotiks.Checked = false;
             RBMensualidades.Checked = false;
+            RBCajas.Checked = true;
         }
     }
 }

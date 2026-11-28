@@ -138,10 +138,10 @@
             this.CBModalidad.FormattingEnabled = true;
             this.CBModalidad.Items.AddRange(new object[] {
             "Seleccione",
-            "Migración",
-            "Instalación",
-            "Recomendación",
-            "Promoción"});
+            "MIGRACIÓN",
+            "INSTALACIÓN",
+            "RECOMENDACIÓN",
+            "PROMOCIÓN"});
             this.CBModalidad.Location = new System.Drawing.Point(28, 177);
             this.CBModalidad.Name = "CBModalidad";
             this.CBModalidad.Size = new System.Drawing.Size(280, 33);

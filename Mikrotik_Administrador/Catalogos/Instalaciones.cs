@@ -35,6 +35,7 @@ namespace Mikrotik_Administrador.Catalogos
         private void btnNuevo_Click(object sender, EventArgs e)
         {
             Instalacion Ins = new Instalacion();
+            Ins.InstalacionporExcel = null;
             Ins.Id = 0;
             Ins.IdUsuarioM = IdUsuarioM;
             Ins.IP = IP;
@@ -129,15 +130,6 @@ namespace Mikrotik_Administrador.Catalogos
             });
             DGVInstalaciones.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "Latitud",
-                HeaderText = "Latitud",
-                DataPropertyName = "Latitud",
-                ReadOnly = true,
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-                SortMode = DataGridViewColumnSortMode.Automatic
-            });
-            DGVInstalaciones.Columns.Add(new DataGridViewTextBoxColumn
-            {
                 Name = "Longitud",
                 HeaderText = "Longitud",
                 DataPropertyName = "Longitud",
@@ -173,5 +165,23 @@ namespace Mikrotik_Administrador.Catalogos
             DGVInstalaciones.AllowUserToAddRows = false;
         }
 
+        private void DGVInstalaciones_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            var Id = DGVInstalaciones.Rows[e.RowIndex].Cells["Id"].Value;
+
+            switch (DGVInstalaciones.Columns[e.ColumnIndex].Name)
+            {
+                case "btnModificar":
+                    Instalacion Ins = new Instalacion();
+                    Ins.InstalacionporExcel = null;
+                    Ins.Id = Convert.ToInt32(Id);
+                    Ins.IdUsuarioM = IdUsuarioM;
+                    Ins.IP = IP;
+                    Ins.ShowDialog();
+                    Buscar();
+                    break;
+            }
+        }
     }
 }
